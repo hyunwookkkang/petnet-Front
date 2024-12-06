@@ -57,13 +57,11 @@ const ViewTopicsCard = ({category}) => {
       onClick={() => openTopicInfo(topic.topicId)}
     >
       <li className="topic-section-item">
-        <strong>
-          제목: {topic.title}
-        </strong>
+        <strong>{topic.title}</strong>
         <br/>
         작성일: {topicAddDateHandler(topic)}
         <br/>
-        작성자: {topic.authorId}
+        작성자: {topic.author.userId}
         <br/>
         댓글수: {topic.commentCount}
       </li>
@@ -79,16 +77,9 @@ const ViewTopicsCard = ({category}) => {
             <Card.Body>
 
               <Card.Title className="section-title">
-                BootStrap Card사용 
-                <br/>
-                Main.css의 MyPage CSS사용
-                <br/>
-                View Topics Card
-                <br/>
                 { topicCategory }
               </Card.Title>
 
-              <br/>
               {/* topics 배열을 순회하며 각 topic을 출력 */}
               { topicsCardView }
 
