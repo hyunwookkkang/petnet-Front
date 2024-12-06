@@ -1,0 +1,30 @@
+/* 화면 너비가 768px 이하일 때 */
+@media screen and (max-width: 768px) {
+    body {
+      font-size: 14px;
+    }
+  
+    .section {
+      padding: 10px;
+    }
+  
+    .app-title {
+      font-size: 18px;
+    }
+  }
+  
+  /* 화면 너비가 480px 이하일 때 */
+  @media screen and (max-width: 480px) {
+    body {
+      font-size: 12px;
+    }
+  
+    .section {
+      padding: 8px;
+    }
+  
+    .app-title {
+      font-size: 16px;
+    }
+  }
+  
