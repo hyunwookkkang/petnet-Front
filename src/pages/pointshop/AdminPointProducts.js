@@ -133,11 +133,36 @@ const PointShopAdminPage = () => {
     },
     {
       field: 'Delete',
-      headerName:'상품 삭제',
+      headerName: '상품 삭제',
       width: 150,
       renderCell: (params) => (
         <button
-          //onClick={() => navigate('/put-point-product/${params.row.productId')}//상품 수정
+          onClick={async () => {
+            const productId = params.row.productId; // 현재 행의 상품 ID 가져오기
+            const confirmDelete = window.confirm(`${params.row.productName}를 삭제하시겠습니까?`); // 삭제 확인
+            if (confirmDelete) {
+              try {
+                const response = await fetch(
+                  `http://192.168.0.40:8000/api/pointshop/pointProducts/Admin/${productId}`,
+                  {
+                    method: 'DELETE',
+                  }
+                );
+                if (response.ok) {
+                  alert('상품이 성공적으로 삭제되었습니다.');
+                  // 데이터 새로고침
+                  setProducts((prevProducts) =>
+                    prevProducts.filter((product) => product.productId !== productId)
+                  );
+                } else {
+                  alert('상품 삭제 실패.');
+                }
+              } catch (error) {
+                console.error('Error:', error);
+                alert('error');
+              }
+            }
+          }}
           style={{
             backgroundColor: '#FF7826',
             color: '#FFF',
@@ -145,13 +170,12 @@ const PointShopAdminPage = () => {
             padding: '5px 10px',
             cursor: 'pointer',
             borderRadius: '5px',
-            
           }}
-          >
-             포인트 상품 삭제
-          </button>
+        >
+          포인트 상품 삭제
+        </button>
       ),
-    },
+    }
   ];
 
   return (

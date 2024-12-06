@@ -30,6 +30,7 @@ import PointProducts from "./pages/pointshop/PointProducts";
 import GetPointProduct from "./pages/pointshop/GetPointProduct";
 import AdminPointProducts from "./pages/pointshop/AdminPointProducts";
 import AdminAddPointProduct from "./pages/pointshop/AdminAddPointProduct"
+import GetGifticons from "./pages/pointshop/GetGifticons";
 
 
 function App() {
@@ -87,6 +88,7 @@ function App() {
           <Route path="/point-product-management" element={<AdminPointProducts/>}/>
           <Route path="/get-point-product/:productId" element={<GetPointProduct/>}/>
           <Route path="/point-product-management/AdminAddPointProduct" element={<AdminAddPointProduct/>}/>
+          <Route path="/gifticons" element={<GetGifticons/>}/>
           {/* END : pointshop-page */}
 
           {/* START : cashbook-page */}
