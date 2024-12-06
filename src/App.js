@@ -25,6 +25,10 @@ import UpdateUser from "./pages/user/UpdateUser";
 import MapMain from "./pages/map/MapMain";
 import PlaceMap from "./pages/map/place/PlaceMap";
 import PlaceInfo from "./pages/map/place/PlaceInfo";
+import PointShopMain from "./pages/pointshop/PointShopMain";
+import PointProducts from "./pages/pointshop/PointProducts";
+import GetPointProduct from "./pages/pointshop/GetPointProduct";
+import AdminPointProducts from "./pages/pointshop/AdminPointProducts";
 
 
 
@@ -78,6 +82,10 @@ function App() {
           {/* END : community-page */}
 
           {/* START : pointshop-page */}
+          <Route path="/pointProducts" element={<PointProducts/>}/>
+          <Route path="/pointProducts/:productId" element={<GetPointProduct/>}/>
+          <Route path="/point-product-management" element={<AdminPointProducts/>}/>
+          <Route path="/get-point-product/:productId" element={<GetPointProduct/>}/>
           {/* END : pointshop-page */}
 
           {/* START : cashbook-page */}

@@ -1,0 +1,43 @@
+.option-box {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 170px;
+    height: 150px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .option-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .point-shop {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .points-display {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  
+
+  .pointProduct {
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    gap: 20px;
+    padding: 20px; /* 내부 여백 추가 */
+    border: 2px solid black; /* 검정색 테두리 */
+    border-radius: 10px; /* 모서리를 둥글게 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+    margin: 20px auto; /* 중앙 정렬 */
+    max-width: 800px; /* 최대 너비 */
+  }
