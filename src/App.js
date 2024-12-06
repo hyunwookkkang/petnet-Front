@@ -25,6 +25,7 @@ import UpdateUser from "./pages/user/UpdateUser";
 import MapMain from "./pages/map/MapMain";
 import PlaceMap from "./pages/map/place/PlaceMap";
 import PlaceInfo from "./pages/map/place/PlaceInfo";
+import CommunityMain from "./pages/community/CommunityMain";
 
 
 
@@ -47,7 +48,7 @@ function App() {
           {/* <Route path="/url" element={<js파일이름 />} /> */}
           <Route path="/map-main" element={<MapMain />} />
           <Route path="/component-main" element={<UsingComponent />} />
-          {/* <Route path="/community-main" element={<CommunityMain />} /> */}
+          <Route path="/community" element={<CommunityMain />} />
           {/* <Route path="/shop-main" element={<ShopMain />} /> */}
           {/* <Route path="/pointshop-page" element={<PointShopMain />} /> */}
           {/* <Route path="/cashbook-page" element={<CashbookMain />} /> */}

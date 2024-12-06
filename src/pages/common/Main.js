@@ -33,7 +33,11 @@ function Main() {
           <p>오늘의 할인상품은? 클릭해서 확인하기!</p>
         </div>
 
-        <div className="section">
+        <div 
+          className="section"
+          onClick={() => handleNavigation("/community")} // 커뮤니티 네비게이션
+          style={{ cursor: "pointer" }}
+        >
           <h2>커뮤니티</h2>
           <p>이거 뭐가 좋아요? 궁금할 땐 모두와 함께 이야기해봐요!</p>
         </div>
