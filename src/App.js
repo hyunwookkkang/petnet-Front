@@ -29,7 +29,7 @@ import PointShopMain from "./pages/pointshop/PointShopMain";
 import PointProducts from "./pages/pointshop/PointProducts";
 import GetPointProduct from "./pages/pointshop/GetPointProduct";
 import AdminPointProducts from "./pages/pointshop/AdminPointProducts";
-
+import AdminAddPointProduct from "./pages/pointshop/AdminAddPointProduct"
 
 
 function App() {
@@ -86,6 +86,7 @@ function App() {
           <Route path="/pointProducts/:productId" element={<GetPointProduct/>}/>
           <Route path="/point-product-management" element={<AdminPointProducts/>}/>
           <Route path="/get-point-product/:productId" element={<GetPointProduct/>}/>
+          <Route path="/point-product-management/AdminAddPointProduct" element={<AdminAddPointProduct/>}/>
           {/* END : pointshop-page */}
 
           {/* START : cashbook-page */}

@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridFilterOperator } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom'; // 페이지 이동에 사용
+import "../../styles/pointshop/point.css";
+import StorefrontIcon from '@mui/icons-material/Storefront';
 
-// 커스텀 연산자 정의 (Between 연산자)
+
+
+
+
 const betweenOperator: GridFilterOperator<any, number> = {
   label: 'Between',
   value: 'between',
@@ -87,12 +92,12 @@ const PointShopAdminPage = () => {
     },
     { field: 'brandCategory', headerName: '브랜드 카테고리', width: 200 },
     {
-      field: 'actions',
-      headerName: 'Actions',
+      field: 'Detail',
+      headerName: '상품 상세정보',
       width: 150,
       renderCell: (params) => (
         <button
-          onClick={() => navigate(`/get-point-product/${params.row.productId}`)} // 상세 페이지로 이동
+          onClick={() => navigate(`/get-point-product/${params.row.productId}`)} // 상세 정보
           style={{
             backgroundColor: '#FF7826',
             color: '#FFF',
@@ -102,15 +107,87 @@ const PointShopAdminPage = () => {
             borderRadius: '5px',
           }}
         >
-          상세 보기
+          상세 정보 조회
         </button>
+      ),
+    },
+    {
+      field: 'Put',
+      headerName:'상품 수정',
+      width: 150,
+      renderCell: (params) => (
+        <button
+          //onClick={() => navigate('/put-point-product/${params.row.productId')}//상품 수정
+          style={{
+            backgroundColor: '#FF7826',
+            color: '#FFF',
+            border: 'none',
+            padding: '5px 10px',
+            cursor: 'pointer',
+            borderRadius: '5px',
+          }}
+          >
+            포인트 상품 수정
+          </button>
+      ),
+    },
+    {
+      field: 'Delete',
+      headerName:'상품 삭제',
+      width: 150,
+      renderCell: (params) => (
+        <button
+          //onClick={() => navigate('/put-point-product/${params.row.productId')}//상품 수정
+          style={{
+            backgroundColor: '#FF7826',
+            color: '#FFF',
+            border: 'none',
+            padding: '5px 10px',
+            cursor: 'pointer',
+            borderRadius: '5px',
+            
+          }}
+          >
+             포인트 상품 삭제
+          </button>
       ),
     },
   ];
 
   return (
+
     <div style={{ padding: '20px', backgroundColor: '#FFF5EF', border: '2px solid #FF7826' }}>
       <h1 style={{ textAlign: 'center', color: '#FF7826' }}>포인트 상품 관리</h1>
+      <div
+          style={{
+            display: 'flex', // Flexbox 사용
+            justifyContent: 'space-between', // 양쪽 정렬
+            alignItems: 'center', // 세로 정렬
+            padding: '10px 0', // 상하 여백
+        }}>
+          {/* 왼쪽 공간 */}
+          <div style={{ flex: 8 }}>
+            {/* 비어있는 공간 또는 다른 요소 배치 가능 */}
+          </div>
+    
+          {/* 오른쪽 버튼 */}
+          <div style={{ flex: 2 }}>
+            <div onClick={() => navigate('AdminAddPointProduct')}
+              style={{
+                backgroundColor: '#FF7826',
+                color: '#FFF',
+                border: 'none',
+                padding: '10px 20px',
+                cursor: 'pointer',
+                borderRadius: '5px',
+                textAlign: 'center', // 텍스트 정렬(가운데로 가짐)
+                width: '200px',
+              }}
+            >
+              포인트 상품 추가
+            </div>
+          </div>
+        </div>
       {loading ? (
         <p>상품 정보를 불러오는 중입니다...</p>
       ) : (
@@ -119,7 +196,7 @@ const PointShopAdminPage = () => {
             rows={products}
             columns={columns}
             pageSize={10}
-            getRowId={(row) => row.productId} // 고유 ID
+            getRowId={(row) => row.productId} 
           />
         </div>
       )}
