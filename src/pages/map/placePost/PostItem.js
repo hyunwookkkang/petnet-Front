@@ -1,6 +1,4 @@
-//react
 import React from "react";
-//css
 import "../../../styles/place/PostItem.css";
 
 const PostItem = ({ post, isUserPost, onEdit, onDelete }) => (
@@ -8,13 +6,12 @@ const PostItem = ({ post, isUserPost, onEdit, onDelete }) => (
     {/* Header */}
     <div className="post-header">
       <strong>{post.nickname}</strong>
-      {/* <span>작성일: {post.createdAt}</span> 필요시 각자 주석치거나 넣으세영*/}
       <span>방문일: {post.visitDate}</span>
     </div>
 
     {/* Images */}
     <div className="post-images">
-      {post.images.map((image, index) => (
+      {(post.images || []).map((image, index) => (
         <img key={index} src={image} alt={`리뷰 이미지 ${index + 1}`} className="post-image" />
       ))}
     </div>

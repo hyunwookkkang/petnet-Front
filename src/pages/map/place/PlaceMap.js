@@ -4,6 +4,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { Container, ButtonGroup, Button } from "react-bootstrap";
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
 
+
 const PlaceMap = () => {
   const [places, setPlaces] = useState([]);
   const [filteredPlaces, setFilteredPlaces] = useState([]);
@@ -83,6 +84,46 @@ const PlaceMap = () => {
       })
       .catch((error) => console.error("Error fetching places:", error));
   };
+
+  // //offset몇번째 부터 보여줄것인가? limit 10개까지
+  // const fetchPlaces = (offeset = 0) => {
+  //   axios
+  //   .get(`/api/map/places`,{
+  //     params: {
+  //       offset,
+  //       limitL10,
+  //       latitude: userLocation.lat,
+  //       longitude: userLocation.lng,
+  //       category: category === "전체" ? "" : category,
+  //     },
+  //   })
+  //   .then((response) => {
+  //     const data = response.data;
+  //     if (data.length === 0) {
+  //       setHasMore(false);
+  //     } else {
+  //       setPlaces((prevPlaces) => [...prevPlaces, ...data]);        
+  //       setFilteredPlaces((prevPlaces) => [...prevPlaces, ...data]);
+        
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.error('에러났시우', error);
+  //   });
+  // };
+
+  /*prevPlaces -> 이전상태(상태업데이트시 최신 상태)
+  [...prevPlaces] -> prevPlaces 배열을 복사해서 새로운 배열만듬
+  ...data -> 배열 합치기
+  /===>prevPlaces와 data모든 항목이 포함된 새로운 배열 반환
+  */
+        /*
+        왜 쓸까엽
+        --> 상태 변경시 새 배열을 만들어서 리렌더링을 하면 원본 수정안하고 새배열만들어서 react가 상태변화 감지하고 컴포넌트 업뎃함
+        ---> prevPlaces는 setPlaces가 호출될 때 상태의 최신 값을 참조하게됩니당
+        ----> 여러 번 상태 업뎃발생하면 새로운 상태를 정확하게 업뎃할 수 있어옹
+        */
+        
 
   // Google Maps에 마커 업데이트
   useEffect(() => {
