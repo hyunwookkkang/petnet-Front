@@ -117,7 +117,7 @@ const PointShopAdminPage = () => {
       width: 150,
       renderCell: (params) => (
         <button
-          //onClick={() => navigate('/put-point-product/${params.row.productId')}//상품 수정
+          onClick={() => navigate(`/put-point-product/${params.row.productId}`)} // 상품수정
           style={{
             backgroundColor: '#FF7826',
             color: '#FFF',

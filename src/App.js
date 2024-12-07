@@ -30,8 +30,9 @@ import PointProducts from "./pages/pointshop/PointProducts";
 import GetPointProduct from "./pages/pointshop/GetPointProduct";
 import AdminPointProducts from "./pages/pointshop/AdminPointProducts";
 import AdminAddPointProduct from "./pages/pointshop/AdminAddPointProduct"
-import GetGifticons from "./pages/pointshop/GetGifticons";
-
+import AdminUpdatePointProduct from "./pages/pointshop/AdminUpdatePointProduct"
+import GifticonManigement from "./pages/pointshop/GifticonManigement"
+import GetPointLog from "./pages/pointshop/GetPointLog"
 
 function App() {
   //const userRole = 1; // 관리자: 0 또는 1, 일반 사용자: 2
@@ -87,8 +88,10 @@ function App() {
           <Route path="/pointProducts/:productId" element={<GetPointProduct/>}/>
           <Route path="/point-product-management" element={<AdminPointProducts/>}/>
           <Route path="/get-point-product/:productId" element={<GetPointProduct/>}/>
+          <Route path="/put-point-product/:productId" element={<AdminUpdatePointProduct/>}/>
           <Route path="/point-product-management/AdminAddPointProduct" element={<AdminAddPointProduct/>}/>
-          <Route path="/gifticons" element={<GetGifticons/>}/>
+          <Route path="/gifticons" element={<GifticonManigement/>}/>
+          <Route path="/pointLog" element={<GetPointLog/>}/>
           {/* END : pointshop-page */}
 
           {/* START : cashbook-page */}
