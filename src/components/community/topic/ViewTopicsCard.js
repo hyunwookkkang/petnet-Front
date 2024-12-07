@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Container, Card } from "react-bootstrap";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
@@ -18,7 +18,6 @@ const ViewTopicsCard = ({category}) => {
 
   const [topicCategory, setTopicCategory] = useState();
 
-
   useEffect(() => {
     switch(search.category) {
       case '1': setTopicCategory('잡담'); break;
@@ -26,13 +25,8 @@ const ViewTopicsCard = ({category}) => {
       case '3': setTopicCategory('후기'); break;
       default: setTopicCategory('???');
     }
-  }, []);
+  }, [search.category]);
 
-  
-  const openTopicInfo = (topicId) => {
-    // useNavigate
-    console.log("open topic info : ", topicId)
-  }
   
   // 로딩 중일 때 표시할 메시지
   if (loading) {
@@ -44,27 +38,22 @@ const ViewTopicsCard = ({category}) => {
     return <div>Error: {error}</div>;
   }
 
-  // add_date -> yyyy-mm-dd hh:mm:dd
-  const topicAddDateHandler = (topic) => { 
-    return topic.addDateYMD + " " + topic.addDateHMS; 
-  }
-
   const topicsCardView = topics.map((topic) => (
 
-    <ul 
-      key={topic.topicId}
-      className="list-unstyled" 
-      onClick={() => openTopicInfo(topic.topicId)}
-    >
-      <li className="topic-section-item">
-        <strong>{topic.title}</strong>
-        <br/>
-        작성일: {topicAddDateHandler(topic)}
-        <br/>
-        작성자: {topic.author.userId}
-        <br/>
-        댓글수: {topic.commentCount}
-      </li>
+    <ul className="list-unstyled" key={topic.topicId}>
+
+      <Link className="link-unstyled" to={`/topicInfo/${topic.topicId}`}>
+        <li className="topic-section-item">
+          <strong>{topic.title}</strong>
+          <br/>
+          작성일: {topic.addDateStr}
+          <br/>
+          작성자: {topic.author.userId}
+          <br/>
+          댓글수: {topic.commentCount}
+        </li>
+      </Link>
+      
     </ul>
 
   ));
@@ -73,18 +62,18 @@ const ViewTopicsCard = ({category}) => {
 
     <Container fluid className="mt-4 content-wrapper">
 
-          <Card className="topic-section">
-            <Card.Body>
+      <Card className="topic-section">
+        <Card.Body>
 
-              <Card.Title className="section-title">
-                { topicCategory }
-              </Card.Title>
+          <Card.Title className="section-title">
+            { topicCategory }
+          </Card.Title>
 
-              {/* topics 배열을 순회하며 각 topic을 출력 */}
-              { topicsCardView }
+          {/* topics 배열을 순회하며 각 topic을 출력 */}
+          { topicsCardView }
 
-            </Card.Body>
-          </Card>
+        </Card.Body>
+      </Card>
 
     </Container>
 

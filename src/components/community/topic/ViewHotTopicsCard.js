@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Link } from 'react-router-dom';
 import { Container, Card } from "react-bootstrap";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
@@ -9,13 +9,6 @@ import useFetchHotTopics from "./useFetchHotTopics";
 const ViewHotTopicsCard = () => {
 
   const { topics, loading, error } = useFetchHotTopics();
-  
-
-  const openTopicInfo = (topicId) => {
-    // useNavigate
-    console.log("open topic info : ", topicId)
-  }
-  
   
   // 로딩 중일 때 표시할 메시지
   if (loading) {
@@ -27,29 +20,24 @@ const ViewHotTopicsCard = () => {
     return <div>Error: {error}</div>;
   }
 
-  // add_date -> yyyy-mm-dd hh:mm:dd
-  const topicAddDateHandler = (topic) => { 
-    return topic.addDateYMD + " " + topic.addDateHMS; 
-  }
-
   const topicsCardView = topics.map((topic) => (
 
-    <ul 
-      key={topic.topicId}
-      className="list-unstyled" 
-      onClick={() => openTopicInfo(topic.topicId)}
-    >
-      <li className="topic-section-item">
-        <strong>
-          [{topic.categoryStr}] {topic.title}
-        </strong>
-        <br/>
-        작성일: {topicAddDateHandler(topic)}
-        <br/>
-        작성자: {topic.author.userId}
-        <br/>
-        댓글수: {topic.commentCount}
-      </li>
+    <ul className="list-unstyled" key={topic.topicId}>
+
+      <Link className="link-unstyled" to={`/topicInfo/${topic.topicId}`}>
+        <li className="topic-section-item" >
+          <strong>
+            [{topic.categoryStr}] {topic.title}
+          </strong>
+          <br/>
+          작성일: {topic.addDateStr}
+          <br/>
+          작성자: {topic.author.userId}
+          <br/>
+          댓글수: {topic.commentCount}
+        </li>
+      </Link>
+
     </ul>
 
   ));

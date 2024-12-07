@@ -6,7 +6,7 @@ import "../../../styles/Main.css"; // 기존 스타일 재사용
 function useFetchTopics(search) {
 
   // 상태 관리: topics(주제 리스트), loading(로딩 상태), error(에러 상태)
-  const [topics, setTopics] = useState([]);
+  const [topics, setTopics] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 

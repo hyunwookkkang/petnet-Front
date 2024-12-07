@@ -26,6 +26,7 @@ import MapMain from "./pages/map/MapMain";
 import PlaceMap from "./pages/map/place/PlaceMap";
 import PlaceInfo from "./pages/map/place/PlaceInfo";
 import CommunityMain from "./pages/community/CommunityMain";
+import GetTopicInfo from "./pages/community/topic/GetTopicInfo";
 
 
 
@@ -76,6 +77,7 @@ function App() {
           {/* END : shop-page */}
 
           {/* START : community-page */}
+          <Route path="/topicInfo/:topicId" element={<GetTopicInfo />} />
           {/* END : community-page */}
 
           {/* START : pointshop-page */}
