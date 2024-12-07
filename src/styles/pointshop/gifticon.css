@@ -1,0 +1,30 @@
+/* gifticon.css */
+
+.gifticon-container {
+    padding: 20px;
+    background-color: #FFF5EF;
+    border: 2px solid #FF7826;
+    border-radius: 10px;
+  }
+  
+  .gifticon-title {
+    color: #FF7826;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .gifticon-details {
+    margin-top: 20px;
+    line-height: 1.8;
+  }
+  
+  .gifticon-image {
+    width: 300px;
+    height: 300px;
+    margin: 10px;
+    border-radius: 10px;
+    border: 1px solid #FF7826;
+  }
+  

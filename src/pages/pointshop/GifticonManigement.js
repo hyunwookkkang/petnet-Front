@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // 상세 페이지 이동에 사용
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const GifticonManagement = () => {
@@ -8,6 +9,7 @@ const GifticonManagement = () => {
   const [products, setProducts] = useState({});
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState(""); // 버튼 선택 상태 관리 ("logs" or "list")
+  const navigate = useNavigate(); // 상세 페이지로 이동
 
   // Fetch Gifticon Logs
   const fetchGifticonLog = async () => {
@@ -80,9 +82,9 @@ const GifticonManagement = () => {
   // 버튼 클릭 시 데이터 가져오기
   const handleViewChange = (viewType) => {
     setView(viewType);
-    if (viewType === "logs") {
+    if (viewType === "list") {
       fetchGifticonLog();
-    } else if (viewType === "list") {
+    } else if (viewType === "logs") {
       fetchGifticons();
     }
   };
@@ -91,11 +93,11 @@ const GifticonManagement = () => {
     <div className="container mt-4">
       <h1 className="text-center mb-4">기프티콘 관리</h1>
       <div className="d-flex justify-content-center mb-4">
-        <button className="btn btn-primary mx-2" onClick={() => handleViewChange("logs")}>
-          사용한 기프티콘 보기
+        <button className="btn btn-secondary mx-2" onClick={() => handleViewChange("logs")}>  
+          사용전
         </button>
-        <button className="btn btn-secondary mx-2" onClick={() => handleViewChange("list")}>
-          전체 기프티콘 보기
+        <button className="btn btn-primary mx-2" onClick={() => handleViewChange("list")}>  
+          사용후
         </button>
       </div>
       {loading ? (
@@ -106,7 +108,7 @@ const GifticonManagement = () => {
         </div>
       ) : (
         <div className="row">
-          {view === "logs" &&
+          {view === "list" &&
             gifticonsLog.map((gifticon) => {
               const product = products[gifticon.productId];
               const imageUrl = product?.imageIds?.[0]
@@ -128,13 +130,18 @@ const GifticonManagement = () => {
                         <strong>유효 기간:</strong> {gifticon.validityDate} <br />
                         <strong>상품 ID:</strong> {gifticon.productId}
                       </p>
-                      <button className="btn btn-primary w-100">상세보기</button>
+                      <button
+                        className="btn btn-primary w-100"
+                        onClick={() => navigate(`/gifticons/${gifticon.voucherId}`)}
+                      >
+                        상세보기
+                      </button>
                     </div>
                   </div>
                 </div>
               );
             })}
-          {view === "list" &&
+          {view === "logs" &&
             gifticons.map((gifticon) => {
               const product = products[gifticon.productId];
               const imageUrl = product?.imageIds?.[0]
@@ -156,7 +163,12 @@ const GifticonManagement = () => {
                         <strong>유효 기간:</strong> {gifticon.validityDate} <br />
                         <strong>상품 ID:</strong> {gifticon.productId}
                       </p>
-                      <button className="btn btn-primary w-100">상세보기</button>
+                      <button
+                        className="btn btn-primary w-100"
+                        onClick={() => navigate(`/gifticons/${gifticon.voucherId}`)}
+                      >
+                        상세보기
+                      </button>
                     </div>
                   </div>
                 </div>
