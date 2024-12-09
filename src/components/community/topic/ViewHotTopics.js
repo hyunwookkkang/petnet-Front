@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from 'react-router-dom';
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
-import useFetchHotTopics from "./useFetchHotTopics";
+import useFetchHotTopics from "./useFetchGetHotTopics";
 
 
 const ViewHotTopics = () => {
@@ -24,7 +24,7 @@ const ViewHotTopics = () => {
 
     <div key={topic.topicId}>
 
-      <Link className="link-unstyled" to={`/topicInfo/${topic.topicId}`}>
+      <Link className="link-unstyled" to={`/getTopic/${topic.topicId}`}>
         <h2>제목: {topic.title}</h2>
         <p>작성일: {topic.addDateStr}</p>
         <p>작성자: {topic.authorId}</p>

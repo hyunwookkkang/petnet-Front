@@ -1,23 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 import "../../../styles/community/TopicInfo.css";
-import useFetchTopicInfo from "../../../components/community/topic/useFetchTopicInfo";
+import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
+import axios from "axios";
+import { useUser } from "../../../components/contexts/UserContext";
 
 const GetTopicInfo = () => {
+  
+  const { topicId } = useParams(); // URL에서 topicId를 추출 (수정 시에 필요)
 
-  // URL에서 placeId 추출
-  const { topicId } = useParams();
+  const { topic, loading, error } = useFetchTopicInfo(topicId); // 페이지 초기화
 
-  // 페이지 초기화
-  const { topic, loading, error } = useFetchTopicInfo(topicId);
+  const { userId } = useUser(); // 사용자 ID 가져오기
 
-  // 로그인 = 작성자? 확인
-  const isAuthor = true; //checkOwner(topic.author.userId);
+  const [isAuthor, setIsAutor] = useState(false); // 로그인 = 작성자? 확인
 
   useEffect(() => {
-  }, []);
+    if (topic) {
+      // 조회수 증가 axios patch 요청 보내기
+      const fetchIncreaseViewCount = async () => {
+        await axios.patch(`http://localhost:8000/api/topics/${topic.topicId}`)
+          .catch(err => {
+            console.log('axios fetch IncreaseViewCount error : ', err);
+          });
+      };
+      fetchIncreaseViewCount();
+      
+      setIsAutor(topic.author.userId !== userId);
+    }
+  }, [topic, userId]);
   
   // 로딩 중일 때 표시할 메시지
   if (loading) {
@@ -67,9 +80,13 @@ const GetTopicInfo = () => {
         <span className="post-author">{topic.author.nickname}</span>
         { isAuthor ? (
           <div>
-            <button onClick={onEdit}>수정</button>
+            <Link to={`/editTopic/${topicId}`}>
+              <button onClick={onEdit}>수정</button>
+            </Link>
             &nbsp;
-            <button onClick={onDelete}>삭제</button>
+            <Link to={{ pathname: "/topicDelete", state: topic }}>
+              <button onClick={onDelete}>삭제</button>
+            </Link>
           </div>
         ) : "" }
       </div>
@@ -78,9 +95,9 @@ const GetTopicInfo = () => {
       <div className="post-meta">
         <div className="post-dates">
           <p>등록: {topic.addDateStr}</p>
-          {(topic.updateDate == null) ? "" : 
-            (<p>수정: {topic.updateDateStr}</p>)
-          }
+          { topic.updateDate ? (
+            <p>수정: {topic.updateDateStr}</p>
+          ) : "" }
         </div>
         <p className="post-views">조회수: {topic.viewCount}</p>
       </div>

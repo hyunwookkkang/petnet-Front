@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Container, Card } from "react-bootstrap";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
-import useFetchTopics from "./useFetchTopics";
+import useFetchTopics from "./useFetchGetTopics";
 
 
 const ViewTopicsCard = ({category}) => {
@@ -42,7 +42,7 @@ const ViewTopicsCard = ({category}) => {
 
     <ul className="list-unstyled" key={topic.topicId}>
 
-      <Link className="link-unstyled" to={`/topicInfo/${topic.topicId}`}>
+      <Link className="link-unstyled" to={`/getTopic/${topic.topicId}`}>
         <li className="topic-section-item">
           <strong>{topic.title}</strong>
           <br/>

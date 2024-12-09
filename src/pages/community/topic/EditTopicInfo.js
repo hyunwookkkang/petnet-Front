@@ -1,137 +1,176 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from 'react-router-dom';
 
-// chat-gpt ver
-// not routed
+import { useUser } from "../../../components/contexts/UserContext";
+import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
+import useFetchAddTopic from "../../../components/community/topic/useFetchAddTopic";
+import useFetchUpdateTopic from "../../../components/community/topic/useFetchUpdateTopic";
+//import "../../../styles/community/TopicForm.css"; // 폼 스타일을 위한 추가 스타일 시트 (옵션)
 
-function PostForm({ onSubmit }) {
-  const [topic, setTopic] = useState({
-    categoryStr: '',
-    title: '',
-    content: '',
-    hashtags: [],
-  });
-  const [loading, setLoading] = useState(false);
+const EditTopicInfo = () => {
 
-  const { topicId } = useParams(); // URL에서 topicId를 추출
-  const navigate = useNavigate(); // 페이지 이동을 위한 navigate 함수
+  const navigate = useNavigate();
 
-  // 컴포넌트가 마운트되었을 때 수정인 경우 기존 데이터를 불러오기
+  const { topicId } = useParams(null); // URL에서 topicId를 추출 (수정 시에 필요)
+
+  const { topic, loading, error } = useFetchTopicInfo(topicId); // 페이지 초기화
+  const { fetchAddTopic, addLoading, addError } = useFetchAddTopic(); // submit-add
+  const { fetchUpdateTopic, updateLoading, updateError } = useFetchUpdateTopic(); // submit-update
+
+  const { userId } = useUser(''); // 사용자 ID 가져오기
+
+  const [category, setCategory] = useState('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [hashtags, setHashtags] = useState([]);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [isDownloadable, setIsDownloadable] = useState(false);
+
+  const [isAuthor, setIsAutor] = useState(false); // 로그인 = 작성자? 확인
+
   useEffect(() => {
-    if (topicId) {
-      setLoading(true);
-      // 여기서 서버에서 데이터를 불러오는 요청을 해야 합니다.
-      fetch(`/api/topics/${topicId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setTopic({
-            categoryStr: data.categoryStr,
-            title: data.title,
-            content: data.content,
-            hashtags: data.hashtags,
-          });
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error(err);
-          setLoading(false);
-        });
+    if (topic) {
+      setTitle(topic.title);
+      setCategory(topic.category);
+      setContent(topic.content);
+      setHashtags(topic.hashtags);
+      setImageFiles(topic.imageFiles);
+      setIsDownloadable(topic.isDownloadable);
+      setIsAutor(topic.author.userId === userId);
     }
-  }, [topicId]);
+  }, [topic, userId]);
 
-  // 폼 제출 처리
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setLoading(true);
+  
+  const setContentHandler = (e) => {
+    
+  }
 
-    // onSubmit을 통해 부모 컴포넌트로 데이터를 전송
-    onSubmit(topic)
-      .then(() => {
-        setLoading(false);
-        navigate(`/topic/${topicId ? topicId : 'new'}`); // 성공 시 상세 페이지로 이동
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
+  const appendHashtagHandler = (e) => {
+
+  }
+  const removeHashtagHandler = (e) => {
+
+  }
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    
+    
+    const newTopic = {
+      'topicId': topicId,
+      'author': { 'userId': userId },
+      'category': category,
+      'title': title,
+      'content': content,
+      'hashtags': hashtags,
+      'imageFiles': imageFiles,
+      'isDownloadable': isDownloadable
+    };
+
+    //setLoading(true);
+
+    const submitTopic = topic ? fetchUpdateTopic : fetchAddTopic;
+    try {
+      await submitTopic(newTopic);  // 선택된 함수 실행 (updateTopic 또는 addTopic)
+    } 
+    catch(err) {
+      console.log(err);
+    }
   };
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setTopic({
-      ...topic,
-      [name]: value,
-    });
-  };
+  if ((error && topicId) || addError || updateError) {
+    return <div>Error: {error || addError || updateError}</div>;
+  }
 
-  const handleHashtagChange = (event) => {
-    const { value } = event.target;
-    setTopic({
-      ...topic,
-      hashtags: value.split(',').map((tag) => tag.trim()),
-    });
-  };
+  if (isAuthor) {
+    return <div>Error: you are not author</div>;
+  }
+
+  if (loading || addLoading || updateLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className="post-form">
-      <h2>{topicId ? 'Edit Post' : 'Create New Post'}</h2>
-      <form onSubmit={handleSubmit}>
-        {/* 카테고리 */}
-        <div>
-          <label htmlFor="categoryStr">Category</label>
-          <input
-            type="text"
-            id="categoryStr"
-            name="categoryStr"
-            value={topic.categoryStr}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
 
-        {/* 제목 */}
-        <div>
-          <label htmlFor="title">Title</label>
+    <div className="topic-form">
+      <h2>{topic ? '게시글 수정' : '새 게시글 작성'}</h2>
+
+      {/* {error && <div className="error-message">{error}</div>} */}
+
+      <form onSubmit={submitHandler}>
+        {/* 제목 입력 */}
+        <div className="form-group">
+          <label htmlFor="title">제목</label>
           <input
             type="text"
             id="title"
-            name="title"
-            value={topic.title}
-            onChange={handleInputChange}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             required
           />
         </div>
 
-        {/* 본문 */}
-        <div>
-          <label htmlFor="content">Content</label>
+        {/* 카테고리 선택 */}
+        <div className="form-group">
+          <label htmlFor="category">카테고리</label>
+          <input
+            type="text"
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            required
+          />
+        </div>
+
+        {/* 내용 입력 */}
+        <div className="form-group">
+          <label htmlFor="content">내용</label>
           <textarea
             id="content"
-            name="content"
-            value={topic.content}
-            onChange={handleInputChange}
+            value={content}
+            onChange={(e) => setContent/*Handler*/(e.target.value)}
             required
           ></textarea>
         </div>
 
-        {/* 해시태그 */}
-        <div>
-          <label htmlFor="hashtags">Hashtags (comma separated)</label>
+        {/* 해시태그 입력 */}
+        <div className="form-group">
+          <label htmlFor="hashtags">해시태그</label>
           <input
             type="text"
             id="hashtags"
-            name="hashtags"
-            value={topic.hashtags.join(', ')}
-            onChange={handleHashtagChange}
+            value={hashtags}
+            onChange={(e) => setHashtags/*Handler*/(e.target.value)}
+            placeholder="#태그 #입력"
           />
         </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Saving...' : 'Save Post'}
-        </button>
+          {/* 첨부파일 저장 */}
+          <input
+            type="hidden"
+            id="imageFiles"
+            value={imageFiles}
+          />
+
+        {/* 제출 버튼 */}
+        <div className="form-actions">
+          { topic ? (
+            <button type="submit" disabled={loading}>
+            '수정하기' 
+            </button>
+          ) : (
+            <button type="submit" disabled={loading}>
+              '게시하기'
+            </button>
+          )}
+        </div>
+
       </form>
     </div>
+    
   );
-}
 
-export default PostForm;
+};
+
+export default EditTopicInfo;

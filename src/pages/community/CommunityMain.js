@@ -6,6 +6,7 @@ import SearchBar from "../../components/common/searchBar/SearchBar";
 import ViewTopics from "../../components/community/topic/ViewTopics";
 import ViewAllTopics from "../../components/community/topic/ViewAllTopics";
 import ViewHotTopics from "../../components/community/topic/ViewHotTopics";
+import { Link } from "react-router-dom";
 
 
 const CommunityMain = () => {
@@ -20,10 +21,8 @@ const CommunityMain = () => {
     keyword: ''
   });
 
-
   useEffect(() => {
-    switch (topicTab) 
-    {
+    switch (topicTab) {
       case 'all': setTopicsComponent(<ViewAllTopics />); break;
       case 'hot': setTopicsComponent(<ViewHotTopics />); break;
       default: setTopicsComponent(<ViewTopics search={search}/>); 
@@ -50,7 +49,12 @@ const CommunityMain = () => {
 
     <Container>
       
-      <SearchBar searchTopics={searchTopics}/>
+      <div>
+        <SearchBar searchTopics={searchTopics} />
+        <Link to={`/editTopic`}>
+          <button>게시글 작성</button>
+        </Link>
+      </div>
 
       <ButtonGroup className="button-group">
         <Button className="button-click" onClick={() => categoryChangehandler('all')}>전체</Button>
