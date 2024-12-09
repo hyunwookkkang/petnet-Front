@@ -19,7 +19,13 @@ const Favorites = () => {
 
   // 즐겨찾기 목록 가져오기
   useEffect(() => {
+    if (userId === null) {
+      // UserContext가 아직 초기화되지 않았을 때 대기
+      return;
+    }
+
     if (!userId) {
+      // userId가 존재하지 않는 경우
       setError("로그인이 필요합니다."); // 로그인이 필요한 경우 처리
       alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
       navigate("/login");
@@ -94,7 +100,7 @@ const Favorites = () => {
 
   return (
     <div className="container mt-4">
-      <h3 className="text-center mb-4">🐾 {nickname}님의 즐겨찾기 목록 🐾</h3>
+      <h3 className="text-center mb-4">🐾 {nickname || "회원"}님의 즐겨찾기 목록 🐾</h3>
       <Button
         className="button-click"
         onClick={() => {
