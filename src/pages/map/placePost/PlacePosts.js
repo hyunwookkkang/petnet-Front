@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useUser } from "../../../components/contexts/UserContext";
 import PostModal from "./PostModal";
 import PostItem from "./PostItem";
 import "../../../styles/place/PlacePosts.css";
+import { useNavigate } from "react-router-dom";
 
 const PlacePosts = ({ placeId }) => {
+  const {userId, nickname} = useUser(); //사용자Id가져오기
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]); // 리뷰 목록
   const [place, setPlace] = useState(null); // 장소 정보
   const [updatePost, setUpdatePost] = useState(null); // 수정할 리뷰
@@ -15,7 +19,7 @@ const PlacePosts = ({ placeId }) => {
   }); // 새 리뷰
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
   const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지
-
+  const [erro, setError] = useState(null);
   // 장소 데이터 Fetch
   useEffect(() => {
     const fetchPlace = async () => {
@@ -32,6 +36,18 @@ const PlacePosts = ({ placeId }) => {
 
   // 리뷰 데이터 Fetch
   useEffect(() => {
+    if(userId === null){
+      //userId불러오기
+      return;
+    }
+
+    if (!userId) {
+      setError("로그인이 필요합니다."); // 에러 상태
+      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      navigate("/login"); // 로그인 페이지로 리다이렉트
+      return;
+    }
+
     const fetchPosts = async () => {
       try {
         const response = await axios.get(`/api/map/placePosts/${placeId}`);

@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/Main.css";
 
 const MyMainPage = () => {
+
   const userInfo = {
     nickname: "토리",
     userId: "tori0628",

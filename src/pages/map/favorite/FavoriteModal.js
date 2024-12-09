@@ -1,29 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
   const [formData, setFormData] = useState({
-    name: favorite?.name || "",
-    isPublic: favorite?.isPublic || true,
+    favoriteName: favorite?.favoriteName || "",
+    isPublic: favorite?.isPublic || 0,
+    maxListCount: favorite?.maxListCount || "",
   });
+
+  useEffect(() => {
+    if (favorite) {
+      setFormData({
+        favoriteName: favorite.favoriteName,
+        isPublic: favorite.isPublic,
+        maxListCount: favorite.maxListCount || "",
+      });
+    } else {
+      setFormData({
+        favoriteName: "",
+        isPublic: 0,
+        maxListCount: "",
+      });
+    }
+  }, [favorite]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "isPublic" ? value === "true" : value,
+      [name]: name === "isPublic" ? parseInt(value, 10) : value,
     }));
   };
 
   const handleSubmit = () => {
+    if (!formData.favoriteName.trim()) {
+      alert("즐겨찾기 이름을 입력해주세요.");
+      return;
+    }
     onSubmit(formData);
-    onClose();
   };
 
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>{favorite ? "즐겨찾기 수정하기" : "즐겨찾기 추가하기"}</Modal.Title>
+        <Modal.Title>
+          {favorite ? "즐겨찾기 수정하기" : "즐겨찾기 추가하기"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -31,8 +53,8 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
             <Form.Label>즐겨찾기 이름</Form.Label>
             <Form.Control
               type="text"
-              name="name"
-              value={formData.name}
+              name="favoriteName"
+              value={formData.favoriteName}
               onChange={handleChange}
               placeholder="즐겨찾기 이름을 입력하세요"
               required
@@ -46,8 +68,8 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
                 type="radio"
                 label="공개"
                 name="isPublic"
-                value={true}
-                checked={formData.isPublic === true}
+                value={1}
+                checked={formData.isPublic === 1}
                 onChange={handleChange}
               />
               <Form.Check
@@ -55,12 +77,22 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
                 type="radio"
                 label="비공개"
                 name="isPublic"
-                value={false}
-                checked={formData.isPublic === false}
+                value={0}
+                checked={formData.isPublic === 0}
                 onChange={handleChange}
               />
             </div>
           </Form.Group>
+          {/* <Form.Group className="mb-3">
+            <Form.Label>최대 리스트 개수</Form.Label>
+            <Form.Control
+              type="number"
+              name="maxListCount"
+              value={formData.maxListCount}
+              onChange={handleChange}
+              placeholder="최대 리스트 개수를 입력하세요"
+            />
+          </Form.Group> */}
         </Form>
       </Modal.Body>
       <Modal.Footer>

@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { IconButton } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-function LikeButton() {
+function LikeButton({onClick}) {
   const [liked, setLiked] = useState(false);
 
   // 좋아요 상태 토글 함수
   const handleLikeToggle = () => {
     setLiked(!liked);
+    if(onClick){
+      onClick();
+    }
   };
 
   return (

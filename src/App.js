@@ -4,6 +4,9 @@ import Main from "./pages/common/Main";
 import MyMainPage from "./pages/common/MyMainPage";
 import AdminMainPage from "./pages/common/AdminMainPage";
 
+//userId상태값 유지
+import { UserProvider } from "./components/contexts/UserContext";
+
 import Navigation from "./components/common/navigationBar/Navigation";
 import TopNavigation from "./components/common/navigationBar/TopNavigation";
 import BasicSpeedDial from "./components/common/dial/BasicSpeedDial";
@@ -25,6 +28,7 @@ import UpdateUser from "./pages/user/UpdateUser";
 import MapMain from "./pages/map/MapMain";
 import PlaceMap from "./pages/map/place/PlaceMap";
 import PlaceInfo from "./pages/map/place/PlaceInfo";
+import Favorites from "./pages/map/favorite/Favorites";
 
 
 
@@ -33,7 +37,9 @@ function App() {
 
   return (
     
-    <Router>
+    <UserProvider>
+      {/* 최상단 userId 상태값 공유 */}
+      <Router>
       {/* 상단 nav 고정 */}
       <TopNavigation />
       
@@ -67,6 +73,7 @@ function App() {
           {/* START : map-page */}
           <Route path="/placeMap" element={<PlaceMap />} />
           <Route path="/place/:placeId" element={<PlaceInfo />} />
+          <Route path="/placeFavorite" element={<Favorites />} />
           {/* <Route path="/places" element={<PlaceMap />} /> */}
           {/* <Route path="/placeInfo" element={<PlaceInfo />} /> */}
           {/* END : map-page */}
@@ -90,6 +97,7 @@ function App() {
       {/* SpeedDial */}``
       <BasicSpeedDial />
     </Router>
+    </UserProvider>
   );
 }
 

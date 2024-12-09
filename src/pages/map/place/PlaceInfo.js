@@ -10,12 +10,16 @@ import PlaceImage from "./PlaceImage";
 import LikeButton from "../../../components/common/button/LikeButton";
 //css
 import "../../../styles/place/Place.css";
+//component
+import FavoriteModal from "../favorite/FavoriteModal";
+
 
 
 const PlaceInfo = () => {
   const { placeId } = useParams(); // URL에서 placeId 추출
   const [place, setPlace] = useState(null);
   const [activeTab, setActiveTab] = useState("info"); // 탭 상태
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     
@@ -29,6 +33,10 @@ const PlaceInfo = () => {
     return <div>Loading...</div>;
   }
 
+  const handleLikeClick =()=>{
+    setShowModal(true);
+  }
+
   
 
   return (
@@ -40,14 +48,20 @@ const PlaceInfo = () => {
           
         </Col> */}
       
-
-
       <Row className="mb-4">
         <Col>
           <Card className="place-button-box">
           <Card.Body style={{ padding: '3px' }}>
               < div className="like-button-container">
-                <LikeButton />
+                <LikeButton onClick={handleLikeClick}/>
+                <FavoriteModal
+                  show={showModal}
+                  onClose={() => setShowModal(false)}
+                  onSubmit={(selectedFavorite) => {
+                  console.log("선택된 즐겨찾기:", selectedFavorite);
+                  setShowModal(false);
+                  }}
+                />
               </div>
               <PlaceImage />
                   {/* <Image
