@@ -43,9 +43,21 @@ import GetPointLog from "./pages/pointshop/GetPointLog"
 import GetGifticon from "./pages/pointshop/GetGifticon"
 import GetQuizs from "./pages/pointshop/GetQuizs"
 import GetPointQuiz from "./pages/pointshop/GetPointQuiz"
+
 import CommunityMain from "./pages/community/CommunityMain";
 
-
+////////////////////////////////////가계부//////////////////////////////////////////////////
+import CashbookMain from "./pages/cashbook/CashbookMain";
+import AddExpenseLog from "./pages/cashbook/AddExpenseLog";
+import GetExpensesLog from "./pages/cashbook/GetExpensesLog";
+import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
+import SlideDrawer from "./components/cashbook/SlideDrawer";
+import GetExpenseLog from "./pages/cashbook/GetExpenseLog"; // 지출 내역 조회 컴포넌트
+import GetCalendarDashboard from "./pages/cashbook/GetCalendarDashboard";
+import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
+import SearchExpenses from "./pages/cashbook/SearchExpenses";
+import AddExpenseAuto from "./components/cashbook/AddExpenseAuto";
+///////////////////////////////////////////////////////////////////////////////////////
 
 function App() {
   //const userRole = 1; // 관리자: 0 또는 1, 일반 사용자: 2
@@ -116,6 +128,25 @@ function App() {
           {/* END : pointshop-page */}
 
           {/* START : cashbook-page */}
+          <Route path="/cashbook" element={<CashbookMain />} />
+          <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
+          <Route
+            path="/GetCalendarsDashboard"
+            element={<GetCalendarsDashboard />}
+          />
+          <Route path="/SlideDrawer" element={<SlideDrawer />} />
+          <Route path="/AddExpenseAuto" element={<AddExpenseAuto />} />
+          <Route path="/AddExpenseLog" element={<AddExpenseLog />} />
+          <Route path="/GetExpenseLog/:expenseId" element={<GetExpenseLog />} />
+          <Route
+            path="/GetstatisticsDashboards"
+            element={<GetstatisticsDashboards />}
+          />
+          <Route
+            path="/GetCalendarDashboard"
+            element={<GetCalendarDashboard />}
+          />
+          <Route path="/SearchExpenses" element={<SearchExpenses />} />
           {/* END : cashbook-page */}
 
         </Routes>
