@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import { useNavigate } from 'react-router-dom';
 import "../../styles/pointshop/point.css";
+import { useUser } from "../../components/contexts/UserContext";
 
 const UserPointLogPage = () => {
   const [pointLogs, setPointLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentApi, setCurrentApi] = useState('getPointLog'); // 현재 API 상태
   const [userPoint, setUserPoint] = useState(null);
+  const { userId } = useUser(); // UserContext에서 userId 가져오기
+  const navigate = useNavigate();
 
-  const apiEndpoints = {
-    getPointLog: 'http://192.168.0.40:8000/api/pointshop/point/user01/getPointLog',
-    getPointAddLog: 'http://192.168.0.40:8000/api/pointshop/point/user01/getPointAddLog',
-    getPointUpdateLog: 'http://192.168.0.40:8000/api/pointshop/point/user01/getPointUpdateLog',
-  };
+  const apiEndpoints = (userId) => ({
+    getPointLog: `http://192.168.0.40:8000/api/pointshop/point/${userId}/getPointLog`,
+    getPointAddLog: `http://192.168.0.40:8000/api/pointshop/point/${userId}/getPointAddLog`,
+    getPointUpdateLog: `http://192.168.0.40:8000/api/pointshop/point/${userId}/getPointUpdateLog`,
+  });
 
   // 이유 매핑
   const reasonMapping = {
@@ -28,10 +32,16 @@ const UserPointLogPage = () => {
 
   // Fetch point logs based on the selected API
   useEffect(() => {
+    if (!userId) {
+      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      navigate("/login"); // 로그인 페이지로 리디렉션
+      return;
+    }
+
     const fetchPointLogs = async () => {
       try {
         setLoading(true); // 로딩 상태 시작
-        const response = await fetch(apiEndpoints[currentApi]);
+        const response = await fetch(apiEndpoints(userId)[currentApi]);
         if (!response.ok) {
           throw new Error('Failed to fetch point logs.');
         }
@@ -54,13 +64,19 @@ const UserPointLogPage = () => {
     };
 
     fetchPointLogs();
-  }, [currentApi]); // currentApi가 변경될 때마다 데이터 재호출
+  }, [currentApi, userId]); // currentApi나 userId가 변경될 때마다 데이터 재호출
 
   // Fetch user point
   useEffect(() => {
+    if (!userId) {
+      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      navigate("/login");
+      return;
+    }
+
     const fetchUserPoint = async () => {
       try {
-        const response = await fetch('http://192.168.0.40:8000/api/pointshop/point/user01/getUserPoint');
+        const response = await fetch(`http://192.168.0.40:8000/api/pointshop/point/${userId}/getUserPoint`);
         if (!response.ok) {
           throw new Error('Failed to fetch user point.');
         }
@@ -72,7 +88,7 @@ const UserPointLogPage = () => {
     };
 
     fetchUserPoint();
-  }, []);
+  }, [userId]);
 
   // Define DataGrid columns
   const columns = [
