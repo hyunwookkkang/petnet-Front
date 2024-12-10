@@ -14,18 +14,6 @@ const GetPointProduct = () => {
 
   // 상품 상세 정보 가져오기
   useEffect(() => {
-    const fetchProductDetail = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`http://192.168.0.40:8000/api/pointshop/pointProducts/${productId}`);
-        setProduct(response.data);
-      } catch (error) {
-        console.error('Error fetching product details:', error);
-        setError("상품 정보를 가져오는 중 오류가 발생했습니다.");
-      } finally {
-        setLoading(false);
-      }
-    };
 
     // 유저 ID 확인
     if (userId === null) {
@@ -41,7 +29,22 @@ const GetPointProduct = () => {
     }
 
     fetchProductDetail();
-  }, [productId, userId]); // userId를 의존성에 추가
+  }, [userId, productId]); // userId를 의존성에 추가
+
+    const fetchProductDetail = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`http://192.168.0.40:8000/api/pointshop/pointProducts/${productId}`);
+        setProduct(response.data);
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+        setError("상품 정보를 가져오는 중 오류가 발생했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    
 
   // 구매 버튼 클릭 시 처리
   const handlePurchase = async () => {
