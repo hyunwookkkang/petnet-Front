@@ -19,6 +19,11 @@ const Favorites = () => {
 
   // 즐겨찾기 목록 가져오기
   useEffect(() => {
+    if(userId === null){
+      //userId불러오기
+      return;
+    }
+    
     if (!userId) {
       setError("로그인이 필요합니다."); // 로그인이 필요한 경우 처리
       alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
@@ -120,7 +125,7 @@ const Favorites = () => {
               <ButtonGroup>
                 <Button
                   className="button-click"
-                  onClick={() => navigate(`/favorites/${favorite.favoriteId}`)} // 상세보기 이동
+                  onClick={() => navigate(`/placeFavorite/${favorite.favoriteId}`)} // 상세보기 이동
                 >
                   상세보기
                 </Button>

@@ -29,6 +29,7 @@ import MapMain from "./pages/map/MapMain";
 import PlaceMap from "./pages/map/place/PlaceMap";
 import PlaceInfo from "./pages/map/place/PlaceInfo";
 import Favorites from "./pages/map/favorite/Favorites";
+import FavoriteInfo from "./pages/map/favorite/FavoriteInfo";
 
 
 
@@ -74,6 +75,8 @@ function App() {
           <Route path="/placeMap" element={<PlaceMap />} />
           <Route path="/place/:placeId" element={<PlaceInfo />} />
           <Route path="/placeFavorite" element={<Favorites />} />
+          <Route path="/placeFavorite/:favoriteId" element={<FavoriteInfo />} />
+
           {/* <Route path="/places" element={<PlaceMap />} /> */}
           {/* <Route path="/placeInfo" element={<PlaceInfo />} /> */}
           {/* END : map-page */}
