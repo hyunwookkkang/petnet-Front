@@ -45,7 +45,7 @@ const FavoriteInfo = () => {
 
     return (
         <div className="container mt-4">
-        <h3 className="text-center mb-4">즐겨찾기 ID: {favoriteId}</h3>
+        {/* <h3 className="text-center mb-4">즐겨찾기 이름: {favorite.favoriteName}</h3> */}
         <ListGroup>
             {places.map((place) => (
             <ListGroup.Item
