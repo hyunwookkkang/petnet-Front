@@ -30,6 +30,19 @@ import PlaceMap from "./pages/map/place/PlaceMap";
 import PlaceInfo from "./pages/map/place/PlaceInfo";
 import Favorites from "./pages/map/favorite/Favorites";
 
+//현욱
+import PointShopMain from "./pages/pointshop/PointShopMain";
+import PointProducts from "./pages/pointshop/PointProducts";
+import GetPointProduct from "./pages/pointshop/GetPointProduct";
+import AdminPointProducts from "./pages/pointshop/AdminPointProducts";
+import AdminAddPointProduct from "./pages/pointshop/AdminAddPointProduct"
+import AdminUpdatePointProduct from "./pages/pointshop/AdminUpdatePointProduct"
+import GifticonManigement from "./pages/pointshop/GifticonManigement"
+import GetPointLog from "./pages/pointshop/GetPointLog"
+import GetGifticon from "./pages/pointshop/GetGifticon"
+import GetQuizs from "./pages/pointshop/GetQuizs"
+import GetPointQuiz from "./pages/pointshop/GetPointQuiz"
+
 
 
 function App() {
@@ -85,6 +98,17 @@ function App() {
           {/* END : community-page */}
 
           {/* START : pointshop-page */}
+          <Route path="/pointProducts" element={<PointProducts/>}/>
+          <Route path="/pointProducts/:productId" element={<GetPointProduct/>}/>
+          <Route path="/point-product-management" element={<AdminPointProducts/>}/>
+          <Route path="/get-point-product/:productId" element={<GetPointProduct/>}/>
+          <Route path="/put-point-product/:productId" element={<AdminUpdatePointProduct/>}/>
+          <Route path="/point-product-management/AdminAddPointProduct" element={<AdminAddPointProduct/>}/>
+          <Route path="/gifticons" element={<GifticonManigement/>}/>
+          <Route path="/pointLog" element={<GetPointLog/>}/>
+          <Route path="/gifticons/:gifticonId" element={<GetGifticon/>}/>
+          <Route path="/quiz-management" element={<GetQuizs/>}/>
+          <Route path="/pointQuiz"  element={<GetPointQuiz/>}/>
           {/* END : pointshop-page */}
 
           {/* START : cashbook-page */}
