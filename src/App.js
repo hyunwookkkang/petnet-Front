@@ -28,6 +28,8 @@ import CommunityMain from "./pages/community/CommunityMain";
 import GetTopicInfo from "./pages/community/topic/GetTopicInfo";
 import EditTopicInfo from "./pages/community/topic/EditTopicInfo";
 import { UserProvider } from "./components/contexts/UserContext";
+import GetScrapTopics from "./pages/community/topic/GetScrapTopics";
+import GetMyTopics from "./pages/community/topic/GetMyTopics";
 
 
 function App() {
@@ -80,6 +82,8 @@ function App() {
             <Route path="/editTopic" element={<EditTopicInfo />} />
             <Route path="/editTopic/:topicId" element={<EditTopicInfo />} />
             <Route path="/getTopic/:topicId" element={<GetTopicInfo />} />
+            <Route path="/getMyTopics" element={<GetMyTopics />} />
+            <Route path="/getScraps" element={<GetScrapTopics />} />
             {/* END : community-page */}
 
             {/* START : pointshop-page */}

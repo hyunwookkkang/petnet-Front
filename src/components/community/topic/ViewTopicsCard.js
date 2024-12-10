@@ -9,14 +9,12 @@ import useFetchTopics from "./useFetchGetTopics";
 const ViewTopicsCard = ({category}) => {
 
   const search = { 
-    category: category, 
-    condition: '', 
-    keyword: '' 
+    category: category
   }
 
   const { topics, loading, error } = useFetchTopics(search);
 
-  const [topicCategory, setTopicCategory] = useState();
+  const [topicCategory, setTopicCategory] = useState('');
 
   useEffect(() => {
     switch(search.category) {

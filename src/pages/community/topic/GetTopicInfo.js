@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from 'react-router-dom';
+import axios from "axios";
+
+import { useUser } from "../../../components/contexts/UserContext";
+import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 import "../../../styles/community/TopicInfo.css";
-import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
-import axios from "axios";
-import { useUser } from "../../../components/contexts/UserContext";
 
 const GetTopicInfo = () => {
   
@@ -28,7 +29,7 @@ const GetTopicInfo = () => {
       };
       fetchIncreaseViewCount();
       
-      setIsAutor(topic.author.userId !== userId);
+      setIsAutor(topic.author.userId === userId);
     }
   }, [topic, userId]);
   
@@ -47,10 +48,6 @@ const GetTopicInfo = () => {
     console.log("share topic ", topic.topicId)
   }
 
-  const onEdit = () => {
-    console.log("update topic ", topic.topicId)
-  }
-
   const onDelete = () => {
     console.log("delete topic ", topic.topicId)
   }
@@ -59,7 +56,7 @@ const GetTopicInfo = () => {
     console.log("report topic ", topic.topicId)
   }
 
-  <Link to={`/comments/${topicId}`}>link to the topic's comments</Link>
+  // <Link to={`/comments/${topicId}`}>link to the topic's comments</Link>
 
   return (
 
@@ -81,7 +78,7 @@ const GetTopicInfo = () => {
         { isAuthor ? (
           <div>
             <Link to={`/editTopic/${topicId}`}>
-              <button onClick={onEdit}>수정</button>
+              <button>수정</button>
             </Link>
             &nbsp;
             <Link to={{ pathname: "/topicDelete", state: topic }}>
@@ -103,7 +100,7 @@ const GetTopicInfo = () => {
       </div>
 
       {/* 게시글 본문 */}
-      <div className="post-content">{topic.content}</div>
+      <div dangerouslySetInnerHTML={{ __html: topic.content }}/>
 
       {/* 좋아요 / 싫어요 버튼 */}
       <div className="post-feedback">

@@ -34,7 +34,7 @@ const ViewHotTopicsCard = () => {
           <br/>
           작성자: {topic.author.userId}
           <br/>
-          댓글수: {topic.commentCount}
+          좋아요수: {topic.likeCount}
         </li>
       </Link>
 
