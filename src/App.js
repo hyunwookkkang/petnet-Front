@@ -66,6 +66,17 @@ import SearchExpenses from "./pages/cashbook/SearchExpenses";
 import AddExpenseAuto from "./components/cashbook/AddExpenseAuto";
 ///////////////////////////////////////////////////////////////////////////////////////
 
+import Products from "./pages/shop/product/Products";
+import ProductInfo from "./pages/shop/product/ProductInfo";
+import ProductImage from "./pages/shop/product/ProductImage";
+import Carts from "./pages/shop/product/Carts";
+import AddPurchase from "./pages/shop/purchase/AddPurchase";
+
+
+
+
+
+
 function App() {
   //const userRole = 1; // 관리자: 0 또는 1, 일반 사용자: 2
 
@@ -97,6 +108,10 @@ function App() {
             <Route path="/my" element={<MyMainPage />} />
             <Route path="/admin" element={<AdminMainPage />} />
             {/* END : user, admin 페이지*/}
+            {/* START : user, admin 페이지 */}
+            <Route path="/my" element={<MyMainPage />} />
+            <Route path="/admin" element={<AdminMainPage />} />
+            {/* END : user, admin 페이지*/}
 
           {/* START : 사용자 로그인 페이지 */}
           <Route path="/login" element={<Login />} />
@@ -119,6 +134,14 @@ function App() {
           {/* END : map-page */}
 
             {/* START : shop-page */}
+            <Route path="/shop/products" element={<Products />} />
+            <Route path="/shop/products/:productId" element={<ProductInfo/>} />
+            <Route path="/shop/proudcts/:productId/image" element={<ProductImage />} />
+
+            <Route path="/shop/products/cart/:userId" element={<Carts/>} />
+
+            <Route path="/shop/purchase" element={<AddPurchase />} />
+
             {/* END : shop-page */}
 
             {/* START : community-page */}

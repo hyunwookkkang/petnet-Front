@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
@@ -56,6 +57,9 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
         <Modal.Title>
           {favorite ? "즐겨찾기 수정하기" : "즐겨찾기 추가하기"}
         </Modal.Title>
+        <Modal.Title>
+          {favorite ? "즐겨찾기 수정하기" : "즐겨찾기 추가하기"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -63,6 +67,8 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
             <Form.Label>즐겨찾기 이름</Form.Label>
             <Form.Control
               type="text"
+              name="favoriteName"
+              value={formData.favoriteName}
               name="favoriteName"
               value={formData.favoriteName}
               onChange={handleChange}
@@ -80,6 +86,8 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
                 name="isPublic"
                 value={1}
                 checked={formData.isPublic === 1}
+                value={1}
+                checked={formData.isPublic === 1}
                 onChange={handleChange}
               />
               <Form.Check
@@ -87,6 +95,8 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
                 type="radio"
                 label="비공개"
                 name="isPublic"
+                value={0}
+                checked={formData.isPublic === 0}
                 value={0}
                 checked={formData.isPublic === 0}
                 onChange={handleChange}
