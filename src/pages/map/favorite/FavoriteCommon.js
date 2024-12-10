@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const fetchFavorites = async (userId) => {
-    const response = await axios.get(`/api/map/favorites/${userId}`);
+    const response = await axios.get(`/api/map/favorites`);
     return response.data;
 };
 

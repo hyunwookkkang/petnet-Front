@@ -3,41 +3,51 @@ import { Modal, Button, Form } from "react-bootstrap";
 
 const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
   const [formData, setFormData] = useState({
-    favoriteName: favorite?.favoriteName || "",
-    isPublic: favorite?.isPublic || 0,
-    maxListCount: favorite?.maxListCount || "",
+    favoriteName: "",
+    isPublic: 0,
+    maxListCount: "",
   });
 
+  // favorite 값 변경 시 초기화
   useEffect(() => {
-    if (favorite) {
-      setFormData({
-        favoriteName: favorite.favoriteName,
-        isPublic: favorite.isPublic,
-        maxListCount: favorite.maxListCount || "",
-      });
-    } else {
-      setFormData({
-        favoriteName: "",
-        isPublic: 0,
-        maxListCount: "",
-      });
-    }
+    setFormData({
+      favoriteName: favorite?.favoriteName || "",
+      isPublic: favorite?.isPublic || 0,
+      maxListCount: favorite?.maxListCount || "",
+    });
   }, [favorite]);
 
+  // 입력 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "isPublic" ? parseInt(value, 10) : value,
+      [name]:
+        name === "isPublic"
+          ? parseInt(value, 10) // 공개 여부는 정수로 변환
+          : name === "maxListCount"
+          ? value === "" // 숫자 필드가 비어 있을 경우
+            ? ""
+            : parseInt(value, 10) || 0 // 숫자로 변환하거나 기본값 0
+          : value, // 그 외 문자열
     }));
   };
 
+  // 폼 제출 핸들러
   const handleSubmit = () => {
     if (!formData.favoriteName.trim()) {
       alert("즐겨찾기 이름을 입력해주세요.");
       return;
     }
-    onSubmit(formData);
+    if (formData.maxListCount !== "" && formData.maxListCount <= 0) {
+      alert("최대 리스트 개수는 1 이상이어야 합니다.");
+      return;
+    }
+    const dataToSubmit = {
+      ...formData,
+      favoriteId: favorite?.favoriteId || null, // 수정 시 favoriteId 포함
+    };
+    onSubmit(dataToSubmit);
   };
 
   return (
@@ -91,6 +101,7 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
               value={formData.maxListCount}
               onChange={handleChange}
               placeholder="최대 리스트 개수를 입력하세요"
+              min="1"
             />
           </Form.Group> */}
         </Form>
