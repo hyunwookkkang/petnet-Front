@@ -30,6 +30,7 @@ import PlaceMap from "./pages/map/place/PlaceMap";
 import PlaceInfo from "./pages/map/place/PlaceInfo";
 import Favorites from "./pages/map/favorite/Favorites";
 import FavoriteInfo from "./pages/map/favorite/FavoriteInfo";
+import PlaceSearch from "./pages/map/placeSearch/PlaceSearch";
 
 
 
@@ -76,6 +77,8 @@ function App() {
           <Route path="/place/:placeId" element={<PlaceInfo />} />
           <Route path="/placeFavorite" element={<Favorites />} />
           <Route path="/placeFavorite/:favoriteId" element={<FavoriteInfo />} />
+          <Route path="/placeSearch" element={<PlaceSearch />} />
+
 
           {/* <Route path="/places" element={<PlaceMap />} /> */}
           {/* <Route path="/placeInfo" element={<PlaceInfo />} /> */}
