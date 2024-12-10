@@ -1,5 +1,5 @@
 //react
-import React from "react";
+import React, { useState } from "react";
 //react bootstrap
 import { Container, Row, Col, Image } from "react-bootstrap";
 
@@ -9,7 +9,7 @@ const Places = ({ places }) => {
   const [hasMore, setHasMore] = useState(true); // 무한 스크롤 true
   const [map, setMap] = useState(null); // Google Map 객체
   const [category, setCategory] = useState("전체"); // 현재 선택된 카테고리
-  const [userLocation, setUserLocation] = useState({ lat: 37.5665, lng: 126.9780 }); // 사용자 위치 (기본값: 서울)
+  const [userLocation, setUserLocation] = useState([]); // 사용자 위치 (기본값: 서울)
 
   if (!places || places.length === 0) {
     return <p>장소 데이터가 없습니다.</p>;

@@ -29,6 +29,9 @@ import PlaceMap from "./pages/map/place/PlaceMap";
 import PlaceInfo from "./pages/map/place/PlaceInfo";
 import Favorites from "./pages/map/favorite/Favorites";
 import FavoriteInfo from "./pages/map/favorite/FavoriteInfo";
+import PlaceSearch from "./pages/map/placeSearch/PlaceSearch";
+import AddPlace from "./pages/map/admin/AddPlace";
+import GetMyPlacePosts from "./pages/map/user/GetMyPlacePosts";
 
 //현욱
 import PointShopMain from "./pages/pointshop/PointShopMain";
@@ -81,21 +84,25 @@ function App() {
             <Route path="/admin" element={<AdminMainPage />} />
             {/* END : user, admin 페이지*/}
 
-            {/* START : 사용자 로그인 페이지 */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Singup />} />
-            <Route path="/updateUser" element={<UpdateUser />} />
-            {/* END : 사용자 로그인 페이지 */}
+          {/* START : 사용자 로그인 페이지 */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Singup />} />
+          <Route path="/updateUser" element={<UpdateUser />} />
+          {/* END : 사용자 로그인 페이지 */}
 
 
-            {/* START : map-page */}
-            <Route path="/placeMap" element={<PlaceMap />} />
-            <Route path="/place/:placeId" element={<PlaceInfo />} />
-            <Route path="/placeFavorite" element={<Favorites />} />
-            <Route path="/placeFavorite/:favoriteId" element={<FavoriteInfo />} />
-            {/* <Route path="/places" element={<PlaceMap />} /> */}
-            {/* <Route path="/placeInfo" element={<PlaceInfo />} /> */}
-            {/* END : map-page */}
+          {/* START : map-page */}
+          <Route path="/placeMap" element={<PlaceMap />} />
+          <Route path="/place/:placeId" element={<PlaceInfo />} />
+          <Route path="/placeFavorite" element={<Favorites />} />
+          <Route path="/placeFavorite/:favoriteId" element={<FavoriteInfo />} />
+          <Route path="/placeSearch" element={<PlaceSearch />} />
+          <Route path="/addPlace" element={<AddPlace />} />
+          <Route path="/my/placeposts" element={<GetMyPlacePosts />} />
+
+          {/* <Route path="/places" element={<PlaceMap />} /> */}
+          {/* <Route path="/placeInfo" element={<PlaceInfo />} /> */}
+          {/* END : map-page */}
 
             {/* START : shop-page */}
             {/* END : shop-page */}

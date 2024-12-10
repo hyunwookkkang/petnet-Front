@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Row, Col, Card, Tabs, Tab, ButtonGroup } from "react-bootstrap";
+import { Container, Row, Col, Card, Tabs, Tab, ButtonGroup, Button } from "react-bootstrap";
 import LikeButton from "../../../components/common/button/LikeButton";
 import AddFavoriteItemModal from "../favorite/AddFavoriteItemModal";
 import axios from "axios";
 import PlacePosts from "../placePost/PlacePosts";
 import PlaceImage from "./PlaceImage";
-
+import "../../../styles/Main.css";
 const PlaceInfo = () => {
   const { placeId } = useParams(); // URL에서 placeId 추출
   const [place, setPlace] = useState(null); // 장소 정보 상태
@@ -66,6 +66,34 @@ const PlaceInfo = () => {
           </Card>
         </Col>
       </Row>
+
+      
+        <Button className="button-click">
+          <div>
+            내부입장 <br/>
+            {place.inPlaceAcptPosblAt}
+          </div>
+        </Button>
+        <Button className="button-click">
+          <div>
+            외부입장 <br/>
+            {place.outPlaceAcptPosblAt}
+          </div>
+        </Button> 
+        <Button className="button-click">
+          <div>
+            입장제한 <br/>
+            {place.entrnPosblPetSizeValue}
+          </div>
+        </Button>
+        <Button className="button-click">
+          <div>
+            주차 <br/>
+            {place.parkngPosblAt}
+          </div>
+        </Button>
+      
+      
 
       {/* 탭 구성 */}
       <Tabs

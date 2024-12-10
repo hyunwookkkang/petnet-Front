@@ -7,10 +7,11 @@ import "../../../styles/place/PlacePosts.css";
 import { useNavigate } from "react-router-dom";
 
 const PlacePosts = ({ placeId }) => {
-  const {userId, nickname} = useUser(); //사용자Id가져오기
+  const { userId, nickname } = useUser(); // 사용자 ID 및 닉네임 가져오기
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]); // 리뷰 목록
   const [place, setPlace] = useState(null); // 장소 정보
+  const [nicknameMap, setNicknameMap] = useState({}); // userId와 nickname 매핑
   const [updatePost, setUpdatePost] = useState(null); // 수정할 리뷰
   const [newPost, setNewPost] = useState({
     content: "",
@@ -19,7 +20,8 @@ const PlacePosts = ({ placeId }) => {
   }); // 새 리뷰
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
   const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지
-  const [erro, setError] = useState(null);
+  const [error, setError] = useState(null);
+
   // 장소 데이터 Fetch
   useEffect(() => {
     const fetchPlace = async () => {
@@ -34,10 +36,25 @@ const PlacePosts = ({ placeId }) => {
     fetchPlace();
   }, [placeId]);
 
+  // 닉네임 가져오기 함수
+  const fetchNickname = async (authorId) => {
+    if (nicknameMap[authorId]) return; // 이미 닉네임이 있는 경우 호출하지 않음
+    try {
+      const response = await axios.get(`/api/user/nickname`, {
+        params: { userId: authorId },
+      });
+      setNicknameMap((prev) => ({
+        ...prev,
+        [authorId]: response.data.nickname, // 닉네임 매핑
+      }));
+    } catch (error) {
+      console.error(`Error fetching nickname for userId ${authorId}:`, error);
+    }
+  };
+
   // 리뷰 데이터 Fetch
   useEffect(() => {
-    if(userId === null){
-      //userId불러오기
+    if (userId === null) {
       return;
     }
 
@@ -51,14 +68,19 @@ const PlacePosts = ({ placeId }) => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(`/api/map/placePosts/${placeId}`);
-        setPosts(response.data); // 리뷰 목록 저장
+        const fetchedPosts = response.data;
+
+        // 닉네임 가져오기 (작성자 ID 기반)
+        fetchedPosts.forEach((post) => fetchNickname(post.author_id));
+
+        setPosts(fetchedPosts); // 리뷰 목록 저장
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
     };
 
     fetchPosts();
-  }, [placeId]);
+  }, [placeId, userId, navigate]);
 
   // 이미지 업로드 핸들러
   const handleImageUpload = async (e) => {
@@ -72,7 +94,6 @@ const PlacePosts = ({ placeId }) => {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      // 응답 데이터가 배열인지 확인 후 처리
       const imageIds = Array.isArray(response.data) ? response.data : [];
       const imageUrls = imageIds.map((id) => `/api/images/${id}`);
       setNewPost((prev) => ({ ...prev, images: [...prev.images, ...imageUrls] }));
@@ -104,7 +125,6 @@ const PlacePosts = ({ placeId }) => {
         },
       });
 
-      // 성공 시 데이터 업데이트
       if (updatePost) {
         setPosts((prev) =>
           prev.map((p) => (p.id === updatePost.id ? response.data : p))
@@ -113,7 +133,6 @@ const PlacePosts = ({ placeId }) => {
         setPosts((prev) => [response.data, ...prev]);
       }
 
-      // 초기화
       setUpdatePost(null);
       setNewPost({ content: "", visitDate: "", images: [] });
       setIsModalOpen(false);
@@ -146,12 +165,10 @@ const PlacePosts = ({ placeId }) => {
         }}
         onSubmit={handlePostSubmit}
       >
-        {/* 장소 이름 */}
         <p>
           <strong>장소 이름:</strong> {place ? place.fcltyNm : "정보 없음"}
         </p>
 
-        {/* 방문 날짜 입력 */}
         <div>
           <label htmlFor="visitDate">방문 날짜:</label>
           <input
@@ -167,7 +184,6 @@ const PlacePosts = ({ placeId }) => {
           />
         </div>
 
-        {/* 리뷰 내용 입력 */}
         <textarea
           className="review-textarea"
           value={updatePost ? updatePost.content : newPost.content}
@@ -181,7 +197,6 @@ const PlacePosts = ({ placeId }) => {
           required
         />
 
-        {/* 이미지 업로드 */}
         <div className="review-images">
           <label htmlFor="imageUpload" className="image-upload-label">
             이미지 추가:
@@ -209,8 +224,11 @@ const PlacePosts = ({ placeId }) => {
         {posts.map((post) => (
           <PostItem
             key={post.id}
-            post={post}
-            isUserPost={false}
+            post={{
+              ...post,
+              nickname: nicknameMap[post.author_id] || "닉네임 로딩 중...",
+            }}
+            isUserPost={post.author_id === userId}
             onEdit={(id) => {
               setUpdatePost(posts.find((p) => p.id === id));
               setIsModalOpen(true);

@@ -1,11 +1,11 @@
 import React from "react";
 import "../../../styles/place/PostItem.css";
 
-const PostItem = ({ post, isUserPost, onEdit, onDelete, nickname }) => (
+const PostItem = ({ post, isUserPost, onEdit, onDelete }) => (
   <div className="post-item">
     {/* Header */}
     <div className="post-header">
-      <strong>작성자: {post.nickname}</strong>
+      <strong>작성자Id: {post.authorId || "닉네임 로딩 중..."}</strong>
       <span>방문일: {post.visitDate}</span>
     </div>
 
@@ -33,4 +33,4 @@ const PostItem = ({ post, isUserPost, onEdit, onDelete, nickname }) => (
   </div>
 );
 
-export default PostItem;
+export default PostItem; 
