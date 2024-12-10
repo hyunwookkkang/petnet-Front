@@ -19,13 +19,7 @@ const Favorites = () => {
 
   // 즐겨찾기 목록 가져오기
   useEffect(() => {
-    if (userId === null) {
-      // UserContext가 아직 초기화되지 않았을 때 대기
-      return;
-    }
-
     if (!userId) {
-      // userId가 존재하지 않는 경우
       setError("로그인이 필요합니다."); // 로그인이 필요한 경우 처리
       alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
       navigate("/login");
@@ -52,7 +46,10 @@ const Favorites = () => {
   // 즐겨찾기 저장
   const handleSaveFavorite = async (favoriteData) => {
     try {
-      const updatedFavorite = await saveFavorite(favoriteData, userId); // 공통 로직 호출
+      const updatedFavorite = favoriteData.favoriteId
+        ? await saveFavorite(favoriteData, userId) // 수정
+        : await saveFavorite({ ...favoriteData, userId }); // 새로 저장
+
       setFavorites((prevFavorites) =>
         favoriteData.favoriteId
           ? prevFavorites.map((fav) =>
@@ -119,7 +116,7 @@ const Favorites = () => {
                 즐겨찾기 이름: {favorite.favoriteName}{" "}
                 {favorite.isPublic ? "🌟 공개" : "🔒 비공개"}
               </Card.Title>
-              <Card.Text>저장된 장소 {favorite.itemCount}개</Card.Text>
+              <Card.Text>저장된 장소 {favorite.itemCount || 0}개</Card.Text>
               <ButtonGroup>
                 <Button
                   className="button-click"
