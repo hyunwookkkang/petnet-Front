@@ -8,71 +8,80 @@ const GetPointProduct = () => {
   const { productId } = useParams(); // URL에서 productId를 가져옵니다.
   const [product, setProduct] = useState(null); // 상품 정보를 저장할 상태 변수
   const [loading, setLoading] = useState(true); // 로딩 상태
-  const { userId } = useUser(null); // 로그인한 사용자 정보 가져오기
+  const { userId } = useUser(); // UserContext에서 userId 가져오기
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); // 에러 상태
 
   // 상품 상세 정보 가져오기
   useEffect(() => {
-
     const fetchProductDetail = async () => {
       try {
+        setLoading(true);
         const response = await axios.get(`http://192.168.0.40:8000/api/pointshop/pointProducts/${productId}`);
         setProduct(response.data);
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching product details:', error);
+        setError("상품 정보를 가져오는 중 오류가 발생했습니다.");
+      } finally {
         setLoading(false);
       }
     };
 
+    // 유저 ID 확인
+    if (userId === null) {
+      console.log("UserContext 초기화 중...");
+      return; // userId가 초기화되지 않았다면 대기
+    }
+
+    if (!userId) {
+      console.log("로그인하지 않은 사용자입니다.");
+      // 로그인하지 않은 경우에도 상품 정보를 조회할 수 있도록 허용
+    } else {
+      console.log(`로그인된 사용자 ID: ${userId}`);
+    }
+
     fetchProductDetail();
-  }, [productId]);
+  }, [productId, userId]); // userId를 의존성에 추가
 
   // 구매 버튼 클릭 시 처리
   const handlePurchase = async () => {
-
-    if(userId === null){
-      //userId불러오기
-      return;
-    }
-    
     if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate('/login');
+      alert("구매하려면 로그인이 필요합니다.");
+      navigate("/login"); // 로그인 페이지로 리디렉션
       return;
     }
-  
+
     try {
-      const formData = new FormData(); // FormData 객체 생성
-      formData.append("userId", userId); // userId 추가
-  
       await axios.post(
         `http://192.168.0.40:8000/api/pointshop/pointProducts/${productId}`,
-        formData, // FormData 객체 전송
+        { userId },
         {
-          headers: {
-            'Content-Type': 'multipart/form-data', // Content-Type 설정
-          },
+          headers: { 'Content-Type': 'application/json' },
         }
       );
-  
       alert("구매가 완료되었습니다!");
-      navigate('/pointProducts'); // 성공 시 포인트 상품 페이지로 이동
+      navigate("/pointProducts"); // 포인트 상품 목록으로 이동
     } catch (error) {
-      console.error('Error purchasing product:', error); // 에러 출력
+      console.error('Error purchasing product:', error);
       alert("구매에 실패했습니다. 다시 시도해 주세요.");
     }
   };
 
+  // 로딩 중 화면
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!product) {
-    return <div>상품 정보를 가져올 수 없습니다.</div>;
+  // 에러 화면
+  if (error) {
+    return (
+      <div className="text-center">
+        <p>{error}</p>
+      </div>
+    );
   }
 
+  // 상품 상세 정보 렌더링
   return (
     <div
       className="pointProduct"
@@ -95,7 +104,7 @@ const GetPointProduct = () => {
           style={{ width: '100%', height: 'auto' }}
         />
       )}
-      <div style={{ textAlign: 'center' }}> {/* 텍스트 부분 */}
+      <div style={{ textAlign: 'center' }}>
         <p style={{ fontSize: '40px' }}>{product.productName}</p>
         <p style={{ fontSize: '20px' }}>가격: {product.price} 포인트</p>
         <p style={{ fontSize: '20px' }}>브랜드: {product.brandCategory}</p>
@@ -108,7 +117,7 @@ const GetPointProduct = () => {
         </div>
         <button
           className="button-click"
-          onClick={handlePurchase}
+          onClick={handlePurchase} // 구매 버튼 클릭 이벤트
           style={{
             backgroundColor: '#FF7826',
             color: 'white',

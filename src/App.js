@@ -68,7 +68,7 @@ function App() {
           <Route path="/component-main" element={<UsingComponent />} />
           {/* <Route path="/community-main" element={<CommunityMain />} /> */}
           {/* <Route path="/shop-main" element={<ShopMain />} /> */}
-          {/* <Route path="/pointshop-page" element={<PointShopMain />} /> */}
+          <Route path="/pointshop-page" element={<PointShopMain />} /> 
           {/* <Route path="/cashbook-page" element={<CashbookMain />} /> */}
           {/* END : 각자 서브기능 메인페이지 끝 */}
 

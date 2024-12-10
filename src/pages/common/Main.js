@@ -21,7 +21,11 @@ function Main() {
       <img src={dogCatImage} alt="귀여워" className="section-image"/>
 
       <div className="sections">
-        <div className="section">
+        <div
+          className="section"
+          onClick={() => handleNavigation("/pointshop-page")} // 장소지도로 네비게이션
+          style={{ cursor: "pointer" }}
+        >
           <h2>포인트 상점</h2>
           <p>포인트 상점</p>
         </div>
