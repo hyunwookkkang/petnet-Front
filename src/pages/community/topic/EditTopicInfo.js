@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useUser } from "../../../components/contexts/UserContext";
 import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
 import useFetchAddTopic from "../../../components/community/topic/useFetchAddTopic";
 import useFetchUpdateTopic from "../../../components/community/topic/useFetchUpdateTopic";
+import QuillTopicEditor from "../../../components/community/topic/QuillTopicEditor";
 //import "../../../styles/community/TopicForm.css"; // 폼 스타일을 위한 추가 스타일 시트 (옵션)
 
 const EditTopicInfo = () => {
 
   const navigate = useNavigate();
+  const quillRef = useRef();
 
   const { topicId } = useParams(null); // URL에서 topicId를 추출 (수정 시에 필요)
 
@@ -29,6 +31,8 @@ const EditTopicInfo = () => {
   const [isAuthor, setIsAutor] = useState(false); // 로그인 = 작성자? 확인
 
   useEffect(() => {
+    console.log("userId",userId);
+
     if (topic) {
       setTitle(topic.title);
       setCategory(topic.category);
@@ -38,25 +42,21 @@ const EditTopicInfo = () => {
       setIsDownloadable(topic.isDownloadable);
       setIsAutor(topic.author.userId === userId);
     }
-  }, [topic, userId]);
+  }, [topic, userId, navigate]);
 
-  
-  const setContentHandler = (e) => {
-    
-  }
 
   const appendHashtagHandler = (e) => {
 
   }
+
   const removeHashtagHandler = (e) => {
 
   }
 
-  const submitHandler = async (e) => {
+  const topicSubmitHandler = async (e) => {
     e.preventDefault();
+    console.log("userId",userId);
 
-    
-    
     const newTopic = {
       'topicId': topicId,
       'author': { 'userId': userId },
@@ -70,14 +70,16 @@ const EditTopicInfo = () => {
 
     //setLoading(true);
 
+    // prev topic exist => update / prev topic not exist => add
     const submitTopic = topic ? fetchUpdateTopic : fetchAddTopic;
     try {
-      await submitTopic(newTopic);  // 선택된 함수 실행 (updateTopic 또는 addTopic)
+      await submitTopic(newTopic);
     } 
     catch(err) {
       console.log(err);
     }
   };
+
 
   if ((error && topicId) || addError || updateError) {
     return <div>Error: {error || addError || updateError}</div>;
@@ -98,27 +100,29 @@ const EditTopicInfo = () => {
 
       {/* {error && <div className="error-message">{error}</div>} */}
 
-      <form onSubmit={submitHandler}>
+      <form onSubmit={topicSubmitHandler}>
         {/* 제목 입력 */}
         <div className="form-group">
-          <label htmlFor="title">제목</label>
+          <label htmlFor="title"></label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            placeholder="제목"
             required
           />
         </div>
 
         {/* 카테고리 선택 */}
         <div className="form-group">
-          <label htmlFor="category">카테고리</label>
+          <label htmlFor="category"></label>
           <input
             type="text"
             id="category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
+            placeholder="카테고리"
             required
           />
         </div>
@@ -126,12 +130,12 @@ const EditTopicInfo = () => {
         {/* 내용 입력 */}
         <div className="form-group">
           <label htmlFor="content">내용</label>
-          <textarea
-            id="content"
-            value={content}
-            onChange={(e) => setContent/*Handler*/(e.target.value)}
-            required
-          ></textarea>
+          <QuillTopicEditor 
+            id="content" 
+            quillRef={quillRef} 
+            htmlContent={content} 
+            setHtmlContent={setContent} 
+          />
         </div>
 
         {/* 해시태그 입력 */}
