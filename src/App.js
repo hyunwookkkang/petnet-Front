@@ -17,7 +17,6 @@ import UsingComponent from "./components/common/UsingComponent";
   예시 ---> import JS이름 from "./pages -> 폴더1/shop -> 폴더2/ShopMain -> js파일";
 */
 
-// import CommunityMain from "./pages/community/CommunityMain";   //Community
 // import ShopMain from "./pages/shop/ShopMain";                  //Shop
 // import PointShopMain from "./pages/pointshop/PointShopMain";        //Shop
 // import ShopPage from "./pages/ShopMain";                       //Shop
@@ -30,6 +29,9 @@ import PlaceMap from "./pages/map/place/PlaceMap";
 import PlaceInfo from "./pages/map/place/PlaceInfo";
 import Favorites from "./pages/map/favorite/Favorites";
 import FavoriteInfo from "./pages/map/favorite/FavoriteInfo";
+import PlaceSearch from "./pages/map/placeSearch/PlaceSearch";
+import AddPlace from "./pages/map/admin/AddPlace";
+import GetMyPlacePosts from "./pages/map/user/GetMyPlacePosts";
 
 //현욱
 import PointShopMain from "./pages/pointshop/PointShopMain";
@@ -45,6 +47,11 @@ import GetQuizs from "./pages/pointshop/GetQuizs"
 import GetPointQuiz from "./pages/pointshop/GetPointQuiz"
 
 import CommunityMain from "./pages/community/CommunityMain";
+import GetTopicInfo from "./pages/community/topic/GetTopicInfo";
+import EditTopicInfo from "./pages/community/topic/EditTopicInfo";
+import GetScrapTopics from "./pages/community/topic/GetScrapTopics";
+import GetMyTopics from "./pages/community/topic/GetMyTopics";
+
 
 ////////////////////////////////////가계부//////////////////////////////////////////////////
 import CashbookMain from "./pages/cashbook/CashbookMain";
@@ -63,7 +70,7 @@ function App() {
   //const userRole = 1; // 관리자: 0 또는 1, 일반 사용자: 2
 
   return (
-    
+
     <UserProvider>
       {/* 최상단 userId 상태값 공유 */}
       <Router>
@@ -76,20 +83,20 @@ function App() {
           {/* 메인 페이지 */}
           <Route path="/" element={<Main />} />
 
-          {/* START : 각자 서브기능 메인페이지 */}
-          {/* <Route path="/url" element={<js파일이름 />} /> */}
-          <Route path="/map-main" element={<MapMain />} />
-          <Route path="/component-main" element={<UsingComponent />} />
-          <Route path="/community" element={<CommunityMain />} />
-          {/* <Route path="/shop-main" element={<ShopMain />} /> */}
-          <Route path="/pointshop-page" element={<PointShopMain />} /> 
-          {/* <Route path="/cashbook-page" element={<CashbookMain />} /> */}
-          {/* END : 각자 서브기능 메인페이지 끝 */}
+            {/* START : 각자 서브기능 메인페이지 */}
+            {/* <Route path="/url" element={<js파일이름 />} /> */}
+            <Route path="/map-main" element={<MapMain />} />
+            <Route path="/component-main" element={<UsingComponent />} />
+            <Route path="/community" element={<CommunityMain />} />
+            {/* <Route path="/shop-main" element={<ShopMain />} /> */}
+            <Route path="/pointshop-page" element={<PointShopMain />} /> 
+            {/* <Route path="/cashbook-page" element={<CashbookMain />} /> */}
+            {/* END : 각자 서브기능 메인페이지 끝 */}
 
-          {/* START : user, admin 페이지 */}
-          <Route path="/my" element={<MyMainPage />} />
-          <Route path="/admin" element={<AdminMainPage />} />
-          {/* END : user, admin 페이지*/}
+            {/* START : user, admin 페이지 */}
+            <Route path="/my" element={<MyMainPage />} />
+            <Route path="/admin" element={<AdminMainPage />} />
+            {/* END : user, admin 페이지*/}
 
           {/* START : 사용자 로그인 페이지 */}
           <Route path="/login" element={<Login />} />
@@ -97,36 +104,49 @@ function App() {
           <Route path="/updateUser" element={<UpdateUser />} />
           {/* END : 사용자 로그인 페이지 */}
 
+
           {/* START : map-page */}
           <Route path="/placeMap" element={<PlaceMap />} />
           <Route path="/place/:placeId" element={<PlaceInfo />} />
           <Route path="/placeFavorite" element={<Favorites />} />
           <Route path="/placeFavorite/:favoriteId" element={<FavoriteInfo />} />
+          <Route path="/placeSearch" element={<PlaceSearch />} />
+          <Route path="/addPlace" element={<AddPlace />} />
+          <Route path="/my/placeposts" element={<GetMyPlacePosts />} />
 
           {/* <Route path="/places" element={<PlaceMap />} /> */}
           {/* <Route path="/placeInfo" element={<PlaceInfo />} /> */}
           {/* END : map-page */}
 
-          {/* START : shop-page */}
-          {/* END : shop-page */}
+            {/* START : shop-page */}
+            {/* END : shop-page */}
 
-          {/* START : community-page */}
-          {/* END : community-page */}
+            {/* START : community-page */}
+            <Route path="/editTopic" element={<EditTopicInfo />} />
+            <Route path="/editTopic/:topicId" element={<EditTopicInfo />} />
+            <Route path="/getTopic/:topicId" element={<GetTopicInfo />} />
+            <Route path="/getMyTopics" element={<GetMyTopics />} />
+            <Route path="/getScraps" element={<GetScrapTopics />} />
+            {/* END : community-page */}
 
-          {/* START : pointshop-page */}
-          <Route path="/pointProducts" element={<PointProducts/>}/>
-          <Route path="/pointProducts/:productId" element={<GetPointProduct/>}/>
-          <Route path="/point-product-management" element={<AdminPointProducts/>}/>
-          <Route path="/get-point-product/:productId" element={<GetPointProduct/>}/>
-          <Route path="/put-point-product/:productId" element={<AdminUpdatePointProduct/>}/>
-          <Route path="/point-product-management/AdminAddPointProduct" element={<AdminAddPointProduct/>}/>
-          <Route path="/gifticons" element={<GifticonManigement/>}/>
-          <Route path="/pointLog" element={<GetPointLog/>}/>
-          <Route path="/gifticons/:gifticonId" element={<GetGifticon/>}/>
-          <Route path="/quiz-management" element={<GetQuizs/>}/>
-          <Route path="/pointQuiz"  element={<GetPointQuiz/>}/>
-          {/* END : pointshop-page */}
+            {/* START : pointshop-page */}
+            <Route path="/pointProducts" element={<PointProducts/>}/>
+            <Route path="/pointProducts/:productId" element={<GetPointProduct/>}/>
+            <Route path="/point-product-management" element={<AdminPointProducts/>}/>
+            <Route path="/get-point-product/:productId" element={<GetPointProduct/>}/>
+            <Route path="/put-point-product/:productId" element={<AdminUpdatePointProduct/>}/>
+            <Route path="/point-product-management/AdminAddPointProduct" element={<AdminAddPointProduct/>}/>
+            <Route path="/gifticons" element={<GifticonManigement/>}/>
+            <Route path="/pointLog" element={<GetPointLog/>}/>
+            <Route path="/gifticons/:gifticonId" element={<GetGifticon/>}/>
+            <Route path="/quiz-management" element={<GetQuizs/>}/>
+            <Route path="/pointQuiz"  element={<GetPointQuiz/>}/>
+            {/* END : pointshop-page */}
 
+            {/* START : cashbook-page */}
+            {/* END : cashbook-page */}
+          </Routes>
+        </div>
           {/* START : cashbook-page */}
           <Route path="/cashbook" element={<CashbookMain />} />
           <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
@@ -152,10 +172,11 @@ function App() {
         </Routes>
       </div>
         {/*하단 Nav 고정*/}
-      <Navigation />
-      {/* SpeedDial */}``
-      <BasicSpeedDial />
-    </Router>
+        <Navigation />
+        {/* SpeedDial */}
+        <BasicSpeedDial />
+
+      </Router>
     </UserProvider>
   );
 }

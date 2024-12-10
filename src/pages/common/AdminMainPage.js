@@ -62,7 +62,7 @@ const AdminMainPage = () => {
                 <Card.Title className="section-title">지도</Card.Title>
                 <ul className="list-unstyled">
                   <li className="section-item">
-                    <a href="/map-registration">지도등록</a>
+                    <a href="/addPlace">장소등록</a>
                   </li>
                 </ul>
               </Card.Body>

@@ -226,3 +226,8 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
+.link-unstyled {
+  text-decoration: none;
+  color: inherit; /* 기본 색상 유지 */
+}
+

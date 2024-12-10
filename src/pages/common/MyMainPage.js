@@ -3,11 +3,14 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom"; // Link 추가
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/Main.css";
+import { useUser } from "../../components/contexts/UserContext";
 
 const MyMainPage = () => {
-
+  
+  const { userId } = useUser();
+  
   const userInfo = {
-    nickname: "토리",
+    nickname: userId,
     userId: "tori0628",
     points: 1500, // 내 보유 포인트
   };
@@ -109,13 +112,16 @@ const MyMainPage = () => {
                 <Card.Title className="section-title">커뮤니티</Card.Title>
                 <ul className="list-unstyled">
                   <li className="section-item">
-                    <Link to="/my/posts">내가 쓴 게시글 보기</Link>
+                    <Link to="/getScraps">내 스크랩 게시글 보기</Link>
                   </li>
                   <li className="section-item">
-                    <Link to="/my/comments">내가 쓴 댓글 보기</Link>
+                    <Link to="/getMyTopics">내가 쓴 게시글 보기</Link>
                   </li>
                   <li className="section-item">
-                    <Link to="/my/scraps">내 스크랩 게시글 보기</Link>
+                    <Link to="/getMyComments">내가 쓴 댓글 보기</Link>
+                  </li>
+                  <li className="section-item">
+                    <Link to="/getMyReports">내가 보낸 신고 보기</Link>
                   </li>
                 </ul>
               </Card.Body>
@@ -143,7 +149,7 @@ const MyMainPage = () => {
                 <Card.Title className="section-title">지도</Card.Title>
                 <ul className="list-unstyled">
                   <li className="section-item">
-                    <Link to="/my/map-reviews">내가 쓴 장소리뷰 보기</Link>
+                    <Link to="/my/placeposts">내가 쓴 장소리뷰 보기</Link>
                   </li>
                   <li className="section-item">
                     <Link to="/my/favorites">나의 즐겨찾기 보기</Link>
