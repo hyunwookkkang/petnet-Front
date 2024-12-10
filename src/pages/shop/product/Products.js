@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useLocation, Link } from "react-router-dom";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { Container, Row, Col } from "react-bootstrap";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import CardActions from "@mui/material/CardActions";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import IconButton from '@mui/material/IconButton';
+import Typography from "@mui/material/Typography";
+import React, { useEffect, useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { Link, useLocation } from "react-router-dom";
 
 const Products = () => {
   const location = useLocation();
@@ -99,7 +97,7 @@ const Products = () => {
           {products.map((product) => (
             <Col xs={12} sm={6} md={4} lg={3} key={product.productId} style={{ paddingLeft: 0, paddingRight: 0 }}>
               <Link
-                to={`/products/${product.productId}`}
+                to={`/shop/products/${product.productId}`}
                 style={{ textDecoration: "none" }}
               >
                 <Card sx={{ display: "flex", flexDirection: "column", height: "100%" }}>

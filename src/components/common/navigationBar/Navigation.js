@@ -14,7 +14,7 @@ function Navigation() {
       <NavLink to="/map-main" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
         지도
       </NavLink>
-      <NavLink to="/shop" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+      <NavLink to="/shop/products" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
         상점
       </NavLink>
 

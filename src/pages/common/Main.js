@@ -28,7 +28,10 @@ function Main() {
           <p>이번 달 막내한테 얼마나 썼을까? 클릭해서 확인하기!</p>
         </div>
 
-        <div className="section">
+        <div 
+          className="section"
+          onClick={() => handleNavigation("/shop/products")}
+          style={{ cursor: "pointer"}}>
           <h2>쇼핑몰</h2>
           <p>오늘의 할인상품은? 클릭해서 확인하기!</p>
         </div>
