@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Link } from 'react-router-dom';
+
+import useFetchHotTopics from "./useFetchGetHotTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
-import useFetchHotTopics from "./useFetchHotTopics";
 
 
 const ViewHotTopics = () => {
@@ -20,18 +21,19 @@ const ViewHotTopics = () => {
     return <div>Error: {error}</div>;
   }
 
-  // add_date -> yyyy-mm-dd hh:mm:dd
-  const topicAddDateHandler = (topic) => { 
-    return topic.addDateYMD + " " + topic.addDateHMS; 
-  }
-
   const topicsView = topics.map((topic) => (
+
     <div key={topic.topicId}>
-      <h2>제목: {topic.title}</h2>
-      <p>작성일: {topicAddDateHandler(topic)}</p>
-      <p>작성자: {topic.authorId}</p>
-      <p>댓글수: {topic.commentCount}</p>
+
+      <Link className="link-unstyled" to={`/getTopic/${topic.topicId}`}>
+        <h2>제목: {topic.title}</h2>
+        <p>작성일: {topic.addDateStr}</p>
+        <p>작성자: {topic.author.userId}</p>
+        <p>좋아요수: {topic.likeCount}</p>
+      </Link>
+
     </div>
+
   ));
 
   return (

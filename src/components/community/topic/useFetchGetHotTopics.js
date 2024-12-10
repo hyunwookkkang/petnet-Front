@@ -3,32 +3,20 @@ import { useEffect, useState } from "react";
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 
 
-function useFetchTopics(search) {
+function useFetchGetHotTopics() {
 
   // 상태 관리: topics(주제 리스트), loading(로딩 상태), error(에러 상태)
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { category, condition, keyword } = search;
-
   // useEffect를 사용하여 컴포넌트가 마운트될 때 API 호출
   useEffect(() => {
   
     // 비동기 함수로 API 호출
-    const fetchTopics = async () => {
+    const fetchHotTopics = async () => {
       try {
-        // const request = new URL(`http://localhost:8000/api/topics`);
-        // const params = new URLSearchParams();
-        // params.append("searchCategory1", search.category);
-        // params.append("searchCondition", search.condition);
-        // params.append("searchkeyword", search.keyword);
-        // request.search = params.toString();
-
-        const request = `http://localhost:8000/api/topics`
-                      + `?searchCategory1=${category}`
-                      + `&searchCondition=${condition}`
-                      + `&searchKeyword=${keyword}`;
+        const request = `http://localhost:8000/api/topics/hot`;
 
         const response = await fetch(request);
         
@@ -45,11 +33,11 @@ function useFetchTopics(search) {
       }
     };
 
-    fetchTopics(); // API 호출 실행
+    fetchHotTopics(); // API 호출 실행
 
-  }, [category, condition, keyword]);
+  }, []);
 
   return { topics, loading, error }
 }
 
-export default useFetchTopics;
+export default useFetchGetHotTopics;
