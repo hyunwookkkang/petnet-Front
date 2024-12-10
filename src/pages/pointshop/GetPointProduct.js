@@ -52,6 +52,7 @@ const GetPointProduct = () => {
       alert("구매하려면 로그인이 필요합니다.");
       navigate("/login"); // 로그인 페이지로 리디렉션
       return;
+      
     }
 
     try {
