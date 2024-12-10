@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Main.css";
+import dogCatImage from './파비콘이 될 놈.png';
 
 function Main() {
   const navigate = useNavigate();
@@ -17,8 +18,14 @@ function Main() {
       {/* 콘텐츠를 네비게이션 아래로 배치 */}
       <div className="content-wrapper"></div>
 
+      <img src={dogCatImage} alt="귀여워" className="section-image"/>
+
       <div className="sections">
-        <div className="section">
+        <div
+          className="section"
+          onClick={() => handleNavigation("/pointshop-page")} // 장소지도로 네비게이션
+          style={{ cursor: "pointer" }}
+        >
           <h2>포인트 상점</h2>
           <p>포인트 상점</p>
         </div>

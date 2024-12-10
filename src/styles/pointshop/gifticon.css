@@ -1,0 +1,38 @@
+/* gifticon.css */
+
+.gifticon-container {
+  padding: 20px;
+  background-color: #FFF5EF;
+  border: 2px solid #FF7826;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.gifticon-title {
+  color: #FF7826;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.gifticon-details {
+  margin-top: 20px;
+  line-height: 1.8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gifticon-image {
+  width: 300px; /* 이미지 너비 */
+  height: auto; /* 이미지 높이를 비율에 맞게 조정 */
+  max-height: 300px; /* 최대 높이를 설정 */
+  margin: 10px auto;
+  border-radius: 10px;
+  border: 1px solid #FF7826;
+  object-fit: contain; /* 이미지가 잘리지 않도록 조정 */
+  background-color: #FFF5EF; /* 이미지가 작을 경우 배경색 추가 */
+}

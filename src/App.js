@@ -4,6 +4,9 @@ import Main from "./pages/common/Main";
 import MyMainPage from "./pages/common/MyMainPage";
 import AdminMainPage from "./pages/common/AdminMainPage";
 
+//userId상태값 유지
+import { UserProvider } from "./components/contexts/UserContext";
+
 import Navigation from "./components/common/navigationBar/Navigation";
 import TopNavigation from "./components/common/navigationBar/TopNavigation";
 import BasicSpeedDial from "./components/common/dial/BasicSpeedDial";
@@ -25,6 +28,21 @@ import UpdateUser from "./pages/user/UpdateUser";
 import MapMain from "./pages/map/MapMain";
 import PlaceMap from "./pages/map/place/PlaceMap";
 import PlaceInfo from "./pages/map/place/PlaceInfo";
+import Favorites from "./pages/map/favorite/Favorites";
+import FavoriteInfo from "./pages/map/favorite/FavoriteInfo";
+
+//현욱
+import PointShopMain from "./pages/pointshop/PointShopMain";
+import PointProducts from "./pages/pointshop/PointProducts";
+import GetPointProduct from "./pages/pointshop/GetPointProduct";
+import AdminPointProducts from "./pages/pointshop/AdminPointProducts";
+import AdminAddPointProduct from "./pages/pointshop/AdminAddPointProduct"
+import AdminUpdatePointProduct from "./pages/pointshop/AdminUpdatePointProduct"
+import GifticonManigement from "./pages/pointshop/GifticonManigement"
+import GetPointLog from "./pages/pointshop/GetPointLog"
+import GetGifticon from "./pages/pointshop/GetGifticon"
+import GetQuizs from "./pages/pointshop/GetQuizs"
+import GetPointQuiz from "./pages/pointshop/GetPointQuiz"
 import CommunityMain from "./pages/community/CommunityMain";
 
 
@@ -34,7 +52,9 @@ function App() {
 
   return (
     
-    <Router>
+    <UserProvider>
+      {/* 최상단 userId 상태값 공유 */}
+      <Router>
       {/* 상단 nav 고정 */}
       <TopNavigation />
       
@@ -50,7 +70,7 @@ function App() {
           <Route path="/component-main" element={<UsingComponent />} />
           <Route path="/community" element={<CommunityMain />} />
           {/* <Route path="/shop-main" element={<ShopMain />} /> */}
-          {/* <Route path="/pointshop-page" element={<PointShopMain />} /> */}
+          <Route path="/pointshop-page" element={<PointShopMain />} /> 
           {/* <Route path="/cashbook-page" element={<CashbookMain />} /> */}
           {/* END : 각자 서브기능 메인페이지 끝 */}
 
@@ -68,6 +88,9 @@ function App() {
           {/* START : map-page */}
           <Route path="/placeMap" element={<PlaceMap />} />
           <Route path="/place/:placeId" element={<PlaceInfo />} />
+          <Route path="/placeFavorite" element={<Favorites />} />
+          <Route path="/placeFavorite/:favoriteId" element={<FavoriteInfo />} />
+
           {/* <Route path="/places" element={<PlaceMap />} /> */}
           {/* <Route path="/placeInfo" element={<PlaceInfo />} /> */}
           {/* END : map-page */}
@@ -79,6 +102,17 @@ function App() {
           {/* END : community-page */}
 
           {/* START : pointshop-page */}
+          <Route path="/pointProducts" element={<PointProducts/>}/>
+          <Route path="/pointProducts/:productId" element={<GetPointProduct/>}/>
+          <Route path="/point-product-management" element={<AdminPointProducts/>}/>
+          <Route path="/get-point-product/:productId" element={<GetPointProduct/>}/>
+          <Route path="/put-point-product/:productId" element={<AdminUpdatePointProduct/>}/>
+          <Route path="/point-product-management/AdminAddPointProduct" element={<AdminAddPointProduct/>}/>
+          <Route path="/gifticons" element={<GifticonManigement/>}/>
+          <Route path="/pointLog" element={<GetPointLog/>}/>
+          <Route path="/gifticons/:gifticonId" element={<GetGifticon/>}/>
+          <Route path="/quiz-management" element={<GetQuizs/>}/>
+          <Route path="/pointQuiz"  element={<GetPointQuiz/>}/>
           {/* END : pointshop-page */}
 
           {/* START : cashbook-page */}
@@ -91,6 +125,7 @@ function App() {
       {/* SpeedDial */}``
       <BasicSpeedDial />
     </Router>
+    </UserProvider>
   );
 }
 

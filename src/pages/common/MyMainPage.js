@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/Main.css";
 
 const MyMainPage = () => {
+
   const userInfo = {
     nickname: "토리",
     userId: "tori0628",
@@ -128,7 +129,7 @@ const MyMainPage = () => {
                 <Card.Title className="section-title">기프티콘샵</Card.Title>
                 <ul className="list-unstyled">
                   <li className="section-item">
-                    <Link to="/my/gifticons">기프티콘 목록</Link>
+                    <Link to="/gifticons">기프티콘 목록</Link>
                   </li>
                 </ul>
               </Card.Body>

@@ -21,6 +21,11 @@ function MapMain() {
     navigate("/placeInfo");
 
   }
+  const handleNavigationToFavorite =()=>{
+    console.log('Place Info');
+    navigate("/placeFavorite");
+
+  }
 
   // handleSearch 함수 -> 검색 API를 호출 | 사용자 입력값 처리 
   // searchValue.trim()을 사용하여 공백만 입력된 경우를 처리
@@ -49,8 +54,8 @@ function MapMain() {
           <div className="option-box" onClick={handleNavigationToMap} style={{ cursor: "pointer" }}>
             동반지도
           </div>
-          <div className="option-box">내 즐겨찾기</div>
-          
+          <div className="option-box" onClick={handleNavigationToFavorite} style={{ cursor: "pointer" }}>
+            내 즐겨찾기</div>
         </div>
 
         {/* 안됭 ---> 장소목록테스트 */}
@@ -70,3 +75,5 @@ function MapMain() {
 }
 
 export default MapMain;
+
+//fnfffkff
