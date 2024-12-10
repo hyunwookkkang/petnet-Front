@@ -45,7 +45,6 @@ import GetPointQuiz from "./pages/pointshop/GetPointQuiz"
 import CommunityMain from "./pages/community/CommunityMain";
 import GetTopicInfo from "./pages/community/topic/GetTopicInfo";
 import EditTopicInfo from "./pages/community/topic/EditTopicInfo";
-import { UserProvider } from "./components/contexts/UserContext";
 import GetScrapTopics from "./pages/community/topic/GetScrapTopics";
 import GetMyTopics from "./pages/community/topic/GetMyTopics";
 
