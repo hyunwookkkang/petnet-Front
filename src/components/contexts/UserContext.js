@@ -5,43 +5,47 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [userId, setUserId] = useState(null);
-  const [nickname, setNickname] = useState(null); 
+  const [nickname, setNickname] = useState(null);
   const [myPoint, setMyPoint] = useState(0);
-  const [userRole, setUserRole] = useState(null); //userRole 추가
+  const [userRole, setUserRole] = useState(null);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.post(
+        "/api/users/test",
+        {},
+        { withCredentials: true }
+      );
+      console.log("Fetched User Data:", response.data);
+
+      if (response.data) {
+        setUserId(response.data.userId);
+        setNickname(response.data.nickname);
+        setMyPoint(response.data.myPoint);
+        setUserRole(response.data.role);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      setUserId(null);
+      setNickname(null);
+      setMyPoint(0);
+      setUserRole(null);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.post("/api/users/test",      
-          {}, 
-          { withCredentials: true });
-          console.log("Fetched User Data:", response.data);
-          setUserId(response.data.userId); //userId 설정
-          setNickname(response.data.nickname); //nickname 설정
-          setMyPoint(response.data.myPoint);  //myPoint 설정
-          setUserRole(response.data.role);
-        
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        //인증 실패시 초기화
-        setUserId(null);
-        setNickname(null);
-        setMyPoint(0);
-        setUserRole(null);
-      }
-    };
-
     fetchUserData();
   }, []);
 
   return (
-    <UserContext.Provider value={{ userId, nickname, myPoint, userRole }}>
+    <UserContext.Provider value={{ userId, nickname, myPoint, userRole, fetchUserData }}>
       {children}
     </UserContext.Provider>
   );
 };
 
 export const useUser = () => useContext(UserContext);
+
 
 /*
 전제흐름

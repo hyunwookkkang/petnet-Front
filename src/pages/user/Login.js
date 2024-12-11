@@ -2,12 +2,15 @@ import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import { useUser } from "../../components/contexts/UserContext";
 import axios from "axios";
+
 
 function Login() {
   const [userId, setUserId] = useState(""); // 사용자 ID
   const [password, setPassword] = useState(""); // 비밀번호
   const navigate = useNavigate();
+  const { fetchUserData } = useUser(); // fetchUserData 함수 가져오기
 
   // 로그인 요청
   const handleLogin = async (e) => {
@@ -25,6 +28,10 @@ function Login() {
 
       if (response.status === 200) {
         alert("로그인되었습니다");
+        console.log("로그인성공");
+
+        // 로그인 성공 후 사용자 데이터 가져오기
+        await fetchUserData();
         navigate("/"); // 홈으로 이동
       }
     } catch (error) {
