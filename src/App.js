@@ -55,16 +55,16 @@ import GetScrapTopics from "./pages/community/topic/GetScrapTopics";
 import GetMyTopics from "./pages/community/topic/GetMyTopics";
 
 // 가계부 관련 페이지
-import CashbookMain from "./pages/cashbook/CashbookMain";
-import AddExpenseLog from "./pages/cashbook/AddExpenseLog";
-import GetExpensesLog from "./pages/cashbook/GetExpensesLog";
-import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
-import SlideDrawer from "./components/cashbook/SlideDrawer";
-import GetExpenseLog from "./pages/cashbook/GetExpenseLog";
-import GetCalendarDashboard from "./pages/cashbook/GetCalendarDashboard";
-import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
-import SearchExpenses from "./pages/cashbook/SearchExpenses";
-import AddExpenseAuto from "./components/cashbook/AddExpenseAuto";
+// import CashbookMain from "./pages/cashbook/CashbookMain";
+// import AddExpenseLog from "./pages/cashbook/AddExpenseLog";
+// import GetExpensesLog from "./pages/cashbook/GetExpensesLog";
+// import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
+// import SlideDrawer from "./components/cashbook/SlideDrawer";
+// import GetExpenseLog from "./pages/cashbook/GetExpenseLog";
+// import GetCalendarDashboard from "./pages/cashbook/GetCalendarDashboard";
+// import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
+// import SearchExpenses from "./pages/cashbook/SearchExpenses";
+// import AddExpenseAuto from "./components/cashbook/AddExpenseAuto";
 
 // Admin 관련 페이지 (잘못된 경로 수정)
 import AdminMainPage from "./pages/common/AdminMainPage";
@@ -145,7 +145,7 @@ function App() {
             {/* END : pointshop-page */}
 
             {/* START : cashbook-page */}
-            {/* END : cashbook-page */}
+            {/* 
             <Route path="/cashbook" element={<CashbookMain />} />
             <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
             <Route path="/GetCalendarsDashboard" element={<GetCalendarsDashboard />} />
@@ -156,30 +156,8 @@ function App() {
             <Route path="/GetstatisticsDashboards" element={<GetstatisticsDashboards />} />
             <Route path="/GetCalendarDashboard" element={<GetCalendarDashboard />} />
             <Route path="/SearchExpenses" element={<SearchExpenses />} />
+             */}
             {/* END : cashbook-page */}
-
-            {/* START : cashbook-page */}
-          <Route path="/cashbook" element={<CashbookMain />} />
-          <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
-          <Route
-            path="/GetCalendarsDashboard"
-            element={<GetCalendarsDashboard />}
-          />
-          <Route path="/SlideDrawer" element={<SlideDrawer />} />
-          <Route path="/AddExpenseAuto" element={<AddExpenseAuto />} />
-          <Route path="/AddExpenseLog" element={<AddExpenseLog />} />
-          <Route path="/GetExpenseLog/:expenseId" element={<GetExpenseLog />} />
-          <Route
-            path="/GetstatisticsDashboards"
-            element={<GetstatisticsDashboards />}
-          />
-          <Route
-            path="/GetCalendarDashboard"
-            element={<GetCalendarDashboard />}
-          />
-          <Route path="/SearchExpenses" element={<SearchExpenses />} />
-          {/* END : cashbook-page */}
-
 
           </Routes>
         </div>
