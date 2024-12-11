@@ -56,6 +56,9 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
         <Modal.Title>
           {favorite ? "즐겨찾기 수정하기" : "즐겨찾기 추가하기"}
         </Modal.Title>
+        <Modal.Title>
+          {favorite ? "즐겨찾기 수정하기" : "즐겨찾기 추가하기"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
