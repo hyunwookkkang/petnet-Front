@@ -1,8 +1,14 @@
 import React from "react";
 import { NavLink } from "react-router-dom"; // NavLink 사용
 import "../../../styles/Navigation.css";
+import { useUser } from "../../contexts/UserContext";
 
 function Navigation() {
+  const { userRole } = useUser();
+
+  console.log("UserRole: ", userRole);
+
+
   return (
     <nav className="navigation">
       <NavLink to="/" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
@@ -14,28 +20,31 @@ function Navigation() {
       <NavLink to="/map-main" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
         지도
       </NavLink>
-      <NavLink to="/shop" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+      <NavLink to="/shop/products" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
         상점
       </NavLink>
 
-      <NavLink to="/my" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
+      {/* <NavLink to="/my" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
         MY
       </NavLink>
       <NavLink to="/admin" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
         admin
-      </NavLink>
+      </NavLink> */}
        {/* userRole에 따라 다른 메뉴 표시 */}
-      {/* {userRole === 2 ? (
+      {userRole === "2" ? (
         <NavLink to="/my" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
           MY
         </NavLink>
-        ) : (
+        ) : userRole === "0" || userRole === "1" ? (
         <NavLink to="/admin" className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}>
           관리자
         </NavLink>
-      )} */}
+      ) : null}
+
+
     </nav>
   );
+
 }
 
 export default Navigation;
