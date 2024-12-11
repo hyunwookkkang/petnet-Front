@@ -157,10 +157,33 @@ function App() {
             <Route path="/GetCalendarDashboard" element={<GetCalendarDashboard />} />
             <Route path="/SearchExpenses" element={<SearchExpenses />} /> */}
             {/* END : cashbook-page */}
+
+            {/* START : cashbook-page */}
+          <Route path="/cashbook" element={<CashbookMain />} />
+          <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
+          <Route
+            path="/GetCalendarsDashboard"
+            element={<GetCalendarsDashboard />}
+          />
+          <Route path="/SlideDrawer" element={<SlideDrawer />} />
+          <Route path="/AddExpenseAuto" element={<AddExpenseAuto />} />
+          <Route path="/AddExpenseLog" element={<AddExpenseLog />} />
+          <Route path="/GetExpenseLog/:expenseId" element={<GetExpenseLog />} />
+          <Route
+            path="/GetstatisticsDashboards"
+            element={<GetstatisticsDashboards />}
+          />
+          <Route
+            path="/GetCalendarDashboard"
+            element={<GetCalendarDashboard />}
+          />
+          <Route path="/SearchExpenses" element={<SearchExpenses />} />
+          {/* END : cashbook-page */}
+
+
           </Routes>
         </div>
-        
-        {/* 하단 Nav 고정 */}
+        {/*하단 Nav 고정*/}
         <Navigation />
         {/* SpeedDial */}
         <BasicSpeedDial />
