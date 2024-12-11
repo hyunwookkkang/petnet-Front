@@ -68,8 +68,6 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
               type="text"
               name="favoriteName"
               value={formData.favoriteName}
-              name="favoriteName"
-              value={formData.favoriteName}
               onChange={handleChange}
               placeholder="즐겨찾기 이름을 입력하세요"
               required
@@ -85,8 +83,6 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
                 name="isPublic"
                 value={1}
                 checked={formData.isPublic === 1}
-                value={1}
-                checked={formData.isPublic === 1}
                 onChange={handleChange}
               />
               <Form.Check
@@ -94,8 +90,6 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
                 type="radio"
                 label="비공개"
                 name="isPublic"
-                value={0}
-                checked={formData.isPublic === 0}
                 value={0}
                 checked={formData.isPublic === 0}
                 onChange={handleChange}

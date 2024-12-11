@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Main from "./pages/common/Main";
 import MyMainPage from "./pages/common/MyMainPage";
+//import AdminMainPage from "./pages/common/AdminMainPage";
 
 //userId상태값 유지
 import { UserProvider } from "./components/contexts/UserContext";

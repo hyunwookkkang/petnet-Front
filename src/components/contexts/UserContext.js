@@ -5,39 +5,47 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [userId, setUserId] = useState(null);
-  const [nickname, setNickname] = useState(null); //추가
-  const [myPoint, setMyPoint] = useState(0);  //추가
+  const [nickname, setNickname] = useState(null);
+  const [myPoint, setMyPoint] = useState(0);
+  const [userRole, setUserRole] = useState(null);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.post(
+        "/api/users/test",
+        {},
+        { withCredentials: true }
+      );
+      console.log("Fetched User Data:", response.data);
+
+      if (response.data) {
+        setUserId(response.data.userId);
+        setNickname(response.data.nickname);
+        setMyPoint(response.data.myPoint);
+        setUserRole(response.data.role);
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      setUserId(null);
+      setNickname(null);
+      setMyPoint(0);
+      setUserRole(null);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.post("/api/users/test",      
-          {}, 
-          { withCredentials: true });
-        setUserId(response.data.userId); //userId 설정
-        setNickname(response.data.nickname); //nickname 설정
-        setMyPoint(response.data.myPoint);  //myPoint 설정
-        
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        //인증 실패시 초기화
-        setUserId(null);
-        setNickname(null);
-        setMyPoint(0);
-      }
-    };
-
     fetchUserData();
   }, []);
 
   return (
-    <UserContext.Provider value={{ userId, nickname, myPoint }}>
+    <UserContext.Provider value={{ userId, nickname, myPoint, userRole, fetchUserData }}>
       {children}
     </UserContext.Provider>
   );
 };
 
 export const useUser = () => useContext(UserContext);
+
 
 /*
 전제흐름
@@ -70,5 +78,8 @@ const { userId } = useUser();
 --> 로그인 상태체크(로그인페이지로 네비게이션 위한)부터하면 에러왕창나요
 --> userId를 먼저 불어와주고 로그인체크로 넘어가주세요
 --> 예시는 Favorite.js에 있습니다.
+
+2021.12.11
+4. UserRole추가했습니다.
 
 */
