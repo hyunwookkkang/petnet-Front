@@ -32,6 +32,7 @@ function Login() {
 
         // 로그인 성공 후 사용자 데이터 가져오기
         await fetchUserData();
+        
         navigate("/"); // 홈으로 이동
       }
     } catch (error) {
