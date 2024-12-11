@@ -169,8 +169,7 @@ function App() {
           <Route path="/SearchExpenses" element={<SearchExpenses />} />
           {/* END : cashbook-page */}
 
-        </Routes>
-      </div>
+
         {/*하단 Nav 고정*/}
         <Navigation />
         {/* SpeedDial */}
