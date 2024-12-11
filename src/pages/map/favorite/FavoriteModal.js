@@ -96,17 +96,6 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
               />
             </div>
           </Form.Group>
-          {/* <Form.Group className="mb-3">
-            <Form.Label>최대 리스트 개수</Form.Label>
-            <Form.Control
-              type="number"
-              name="maxListCount"
-              value={formData.maxListCount}
-              onChange={handleChange}
-              placeholder="최대 리스트 개수를 입력하세요"
-              min="1"
-            />
-          </Form.Group> */}
         </Form>
       </Modal.Body>
       <Modal.Footer>
