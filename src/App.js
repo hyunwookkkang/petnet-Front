@@ -157,13 +157,8 @@ function App() {
             <Route path="/GetCalendarDashboard" element={<GetCalendarDashboard />} />
             <Route path="/SearchExpenses" element={<SearchExpenses />} />
             {/* END : cashbook-page */}
-          </Routes>
-        </div>
-        
-        {/* 하단 Nav 고정 */}
-          </Routes>
-        </div>
-          {/* START : cashbook-page */}
+
+            {/* START : cashbook-page */}
           <Route path="/cashbook" element={<CashbookMain />} />
           <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
           <Route
@@ -186,6 +181,8 @@ function App() {
           {/* END : cashbook-page */}
 
 
+          </Routes>
+        </div>
         {/*하단 Nav 고정*/}
         <Navigation />
         {/* SpeedDial */}

@@ -8,7 +8,7 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 
 
 
-const betweenOperator: GridFilterOperator<any, number> = {
+const betweenOperator = {
   label: 'Between',
   value: 'between',
   getApplyFilterFn: (filterItem) => {
