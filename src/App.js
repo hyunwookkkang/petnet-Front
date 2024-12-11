@@ -1,4 +1,5 @@
 import React from "react";
+import './App.css'; 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Main from "./pages/common/Main";
 import MyMainPage from "./pages/common/MyMainPage";
