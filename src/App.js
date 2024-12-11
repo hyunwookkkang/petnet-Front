@@ -159,7 +159,7 @@ function App() {
             {/* END : cashbook-page */}
 
             {/* START : cashbook-page */}
-          <Route path="/cashbook" element={<CashbookMain />} />
+          {/* <Route path="/cashbook" element={<CashbookMain />} />
           <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
           <Route
             path="/GetCalendarsDashboard"
@@ -178,7 +178,7 @@ function App() {
             element={<GetCalendarDashboard />}
           />
           <Route path="/SearchExpenses" element={<SearchExpenses />} />
-          {/* END : cashbook-page */}
+          END : cashbook-page */}
 
 
           </Routes>
