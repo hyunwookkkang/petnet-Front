@@ -21,6 +21,9 @@ function Main() {
       <img src={dogCatImage} alt="귀여워" className="section-image"/>
 
       <div className="sections">
+        <div>
+          <h2>♤ ♧ † £ ¢ ♤ ♧ † £ ¢ ♤ ♧ † £ ¢</h2>
+        </div>
         <div
           className="section"
           onClick={() => handleNavigation("/pointshop-page")} // 장소지도로 네비게이션

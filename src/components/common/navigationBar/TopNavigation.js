@@ -1,10 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom"; // React Router의 useNavigate 가져오기
-import { CiLogin } from "react-icons/ci"; // 로그아웃 아이콘
+import { CiLogin } from "react-icons/ci"; // 로그인 아이콘
+import { CiLogout } from "react-icons/ci"; //로그아웃 아이콘
 import { SlActionUndo } from "react-icons/sl"; // 뒤로가기 아이콘
 import "../../../styles/Navigation.css"; // 네비게이션 CSS
+import axios from "axios";
+import { useUser } from "../../contexts/UserContext";
 
 function TopNavigation() {
+  const {userId} = useUser();
   const navigate = useNavigate();
   const [isHidden, setIsHidden] = useState(false); // 숨김 상태 관리
   const [lastScrollY, setLastScrollY] = useState(0); // 마지막 스크롤 위치
@@ -21,8 +25,20 @@ function TopNavigation() {
   };
 
   // 로그인
-  const handleNavigation = (path) => {
+  const handleNavigationToLogin = (path) => {
     navigate(path);
+  };
+
+  // 로그아웃
+  const handleLogout = async () =>{
+    try {
+      await axios.post("/api/users/logout", {}, { withCredentials: true });
+      alert("로그아웃되었습니다.");
+      navigate("/"); // 로그아웃 후 메인페이지로이동
+    } catch (error) {
+      console.error("로그아웃 중 오류 발생:", error);
+      alert("로그아웃에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   // 스크롤 이벤트 처리
@@ -68,14 +84,23 @@ function TopNavigation() {
         <h1 className="app-title" onClick={handleNavigateToMain}>
           펫 넷
         </h1>
-
-        {/* 로그인 버튼 */}
-        <div
-          className="notification-icon"
-          onClick={() => handleNavigation("/login")}
-        >
-          <CiLogin size={24} />
+        {userId ? (
+          <div
+              className="notification-icon"
+              onClick={handleLogout}
+            >
+              <CiLogout size={24} />
+          </div>
+          ):(
+          <div
+            className="notification-icon"
+            onClick={() => handleNavigationToLogin("/login")}
+          >
+          <CiLogin size={26} />
         </div>
+        )}
+
+
       </header>
 
       {/* 메인 콘텐츠 */}
