@@ -22,7 +22,7 @@ function Main() {
 
       <div className="sections">
         <div>
-          <h2>♤ ♧ † £ ¢</h2>
+          <h2>♤ ♧ † £ ¢ ♤ ♧ † £ ¢ ♤ ♧ † £ ¢</h2>
         </div>
         <div
           className="section"
