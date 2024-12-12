@@ -1,8 +1,10 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
-import { Modal, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import "../../../styles/Navigation.css";
+import "../../../styles/common/Button.css";
+import NavLoginModal from "../login/NavLoginModal";
 
 function Navigation() {
   const { userId, userRole } = useUser(); // userId와 userRole 가져오기
@@ -63,8 +65,29 @@ function Navigation() {
         ) : null}
       </nav>
 
+      <NavLoginModal
+        show = {showAlert} 
+        onHide = {() => setShowAlert(false)}
+        title = "로그인 필요"
+        body = {<div>
+                로그인이 필요한 서비스입니다.<br/> 로그인 화면으로 이동합니다.
+              </div>}
+        footer = {
+          <Button
+            className="modal-button"
+            style={{backgroundColor: "#feb98e", border: "none"}}
+            onClick={() => {
+              setShowAlert(false);
+              navigate("/login");
+            }}
+          >
+            확인
+          </Button>
+        }
+      />
+
       {/* 경고창 모달 */}
-      <Modal show={showAlert} onHide={() => setShowAlert(false)} centered>
+      {/* <Modal show={showAlert} onHide={() => setShowAlert(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>로그인 필요</Modal.Title>
         </Modal.Header>
@@ -89,7 +112,7 @@ function Navigation() {
             확인
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </>
   );
 }
