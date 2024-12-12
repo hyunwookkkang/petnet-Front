@@ -43,7 +43,7 @@ const PointProducts = () => {
     <div
       style={{
         padding: "0px",
-        background: "linear-gradient(to bottom, #fdf2e9, #fbe0cc)",
+        background: "linear-gradient(135deg, #FFFFFF, #EDEDED)",
       }}
     >
       <h1
@@ -71,7 +71,7 @@ const PointProducts = () => {
               width: "calc(33% - 0px)", // 한 줄에 3개씩 배치
               cursor: "pointer",
               border: "1px solid #ddd",
-              borderRadius: "10px",
+              borderRadius: "1px",//모서리
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
               overflow: "hidden",
               backgroundColor: "#fff",
@@ -107,7 +107,7 @@ const PointProducts = () => {
                 style={{
                   fontSize: "0.9rem",
                   fontWeight: "bold",
-                  color: "#888",
+                  color: "#777",
                   margin: "0 0 5px 0",
                 }}
               >
@@ -132,7 +132,7 @@ const PointProducts = () => {
                 style={{
                   fontSize: "1rem",
                   fontWeight: "bold",
-                  color: "#FF7F50",
+                  color: "#FF6347",
                   margin: "0",
                 }}
               >

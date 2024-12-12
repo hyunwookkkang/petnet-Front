@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -12,7 +10,6 @@ const GifticonManagement = () => {
   const [gifticonsLog, setGifticonsLog] = useState([]);
   const [gifticons, setGifticons] = useState([]);
   const [products, setProducts] = useState({});
-  const [hoveredId, setHoveredId] = useState(null);
   const navigate = useNavigate(); // 상세 페이지로 이동
   const { userId } = useUser(); // UserContext에서 userId 가져오기
 
@@ -23,11 +20,6 @@ const GifticonManagement = () => {
       navigate("/login"); // 로그인 페이지로 리디렉션
     }
   }, [userId, navigate]);
-
-  const radios = [
-    { name: '사용 전', value: 'logs' },
-    { name: '사용 후', value: 'list' },
-  ];
 
   const fetchData = async (viewType) => {
     if (!userId) {
@@ -45,8 +37,6 @@ const GifticonManagement = () => {
       }
 
       const gifticonData = response.data;
-      console.log(`${viewType === 'logs' ? '사용 전' : '사용 후'} 데이터:`, gifticonData);
-
       const productRequests = gifticonData.map((gifticon) =>
         axios
           .get(`/api/pointshop/pointProducts/${gifticon.productId}`)
@@ -77,11 +67,6 @@ const GifticonManagement = () => {
     }
   };
 
-  const handleToggleChange = (value) => {
-    setRadioValue(value);
-    fetchData(value); // 선택된 옵션에 따라 데이터 로드
-  };
-
   useEffect(() => {
     if (userId) {
       fetchData('logs'); // 기본적으로 "사용 전" 데이터를 가져옴
@@ -99,29 +84,32 @@ const GifticonManagement = () => {
   return (
     <div className="container mt-4">
       <h1 className="text-center mb-4">기프티콘 관리</h1>
-      <div className="d-flex justify-content-center mb-4">
-        <ButtonGroup>
-          {radios.map((radio, idx) => (
-            <ToggleButton
-              key={idx}
-              id={`radio-${idx}`}
-              type="radio"
-              name="radio"
-              value={radio.value}
-              checked={radioValue === radio.value}
-              onChange={(e) => handleToggleChange(e.currentTarget.value)}
-              style={{
-                backgroundColor: radioValue === radio.value ? '#FD9251' : '#feb98e',
-                color: '#FFFFFF',
-                borderColor: '#FD9251',
-                fontWeight: 'bold',
-              }}
-            >
-              {radio.name}
-            </ToggleButton>
-          ))}
-        </ButtonGroup>
-      </div>
+      <ul className="nav nav-pills nav-fill">
+        <li className="nav-item">
+          <a
+            className={`nav-link ${radioValue === 'logs' ? 'active' : ''}`}
+            onClick={() => {
+              setRadioValue('logs');
+              fetchData('logs');
+            }}
+            href="#"
+          >
+            사용 전
+          </a>
+        </li>
+        <li className="nav-item">
+          <a
+            className={`nav-link ${radioValue === 'list' ? 'active' : ''}`}
+            onClick={() => {
+              setRadioValue('list');
+              fetchData('list');
+            }}
+            href="#"
+          >
+            사용 후
+          </a>
+        </li>
+      </ul>
       {loading ? (
         <div className="text-center">
           <div className="spinner-border text-primary" role="status">
@@ -144,7 +132,7 @@ const GifticonManagement = () => {
                       className="card h-100"
                       style={{
                         backgroundColor: '#FFF5EF',
-                        border: '2px solid #FF7826',
+                        border: '2px solid #FEBE98',
                         borderRadius: '10px',
                       }}
                     >
@@ -166,9 +154,9 @@ const GifticonManagement = () => {
                         <button
                           className="btn w-100"
                           style={{
-                            backgroundColor: '#FF9251',
+                            backgroundColor: '#FEBE98',
                             color: '#FFFFFF',
-                            borderColor: '#FF7826',
+                            borderColor: '#ECB392',
                             fontWeight: 'bold',
                           }}
                           onClick={() => navigate(`/gifticons/${gifticon.voucherId}`)}
@@ -197,7 +185,7 @@ const GifticonManagement = () => {
                       className="card h-100"
                       style={{
                         backgroundColor: '#FFF5EF',
-                        border: '2px solid #FF7826',
+                        border: '2px solid #FEBE98',
                         borderRadius: '10px',
                       }}
                     >
@@ -220,9 +208,9 @@ const GifticonManagement = () => {
                         <button
                           className="btn w-100"
                           style={{
-                            backgroundColor: '#FF9251',
-                            color: '#FFFFFF',
-                            borderColor: '#FF7826',
+                            backgroundColor: '#FEBE98',
+                            color: '#FFFFFF',  
+                            borderColor: '#ECB392',
                             fontWeight: 'bold',
                           }}
                           onClick={() => navigate(`/gifticons/${gifticon.voucherId}`)}
