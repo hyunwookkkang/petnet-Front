@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useUser } from "../../components/contexts/UserContext";
+import { Container, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import "../../styles/common/Card.css";
 
 const GifticonManagement = () => {
   const [radioValue, setRadioValue] = useState('logs'); // 'logs' or 'list'
@@ -82,34 +84,42 @@ const GifticonManagement = () => {
   }
 
   return (
-    <div className="container mt-4">
+    <Container>
       <h1 className="text-center mb-4">기프티콘 관리</h1>
-      <ul className="nav nav-pills nav-fill">
-        <li className="nav-item">
-          <a
-            className={`nav-link ${radioValue === 'logs' ? 'active' : ''}`}
+      <div className="d-flex justify-content-center mb-4">
+        <div className="nav nav-pills">
+          <button
+            className="btn mx-2"
+            style={{
+              backgroundColor: radioValue === 'logs' ? 'transparent' : 'white',
+              color: radioValue === 'logs' ? 'black' : '#FF6347 ',
+              border: 'none',
+              fontWeight: 'bold'
+            }}
             onClick={() => {
               setRadioValue('logs');
               fetchData('logs');
             }}
-            href="#"
           >
             사용 전
-          </a>
-        </li>
-        <li className="nav-item">
-          <a
-            className={`nav-link ${radioValue === 'list' ? 'active' : ''}`}
+          </button>
+          <button
+            className="btn mx-2"
+            style={{
+              backgroundColor: radioValue === 'list' ? 'transparent' : 'white',
+              color: radioValue === 'list' ? 'black' : '#FF6347 ',
+              border: 'none',
+              fontWeight: 'bold'
+            }}
             onClick={() => {
               setRadioValue('list');
               fetchData('list');
             }}
-            href="#"
           >
             사용 후
-          </a>
-        </li>
-      </ul>
+          </button>
+        </div>
+      </div>
       {loading ? (
         <div className="text-center">
           <div className="spinner-border text-primary" role="status">
@@ -118,116 +128,48 @@ const GifticonManagement = () => {
         </div>
       ) : (
         <div className="row">
-          {radioValue === 'logs' &&
-            (gifticonsLog.length > 0 ? (
-              gifticonsLog.map((gifticon) => {
-                const product = products[gifticon.productId];
-                const imageUrl = product?.imageIds?.[0]
-                  ? `/api/images/${product.imageIds[0]}`
-                  : "https://via.placeholder.com/150";
+          {(radioValue === 'logs' ? gifticonsLog : gifticons).map((gifticon) => {
+            const product = products[gifticon.productId];
+            const imageUrl = product?.imageIds?.[0]
+              ? `/api/images/${product.imageIds[0]}`
+              : "https://via.placeholder.com/150";
 
-                return (
-                  <div className="col-md-4 mb-4" key={gifticon.voucherId}>
-                    <div
-                      className="card h-100"
-                      style={{
-                        backgroundColor: '#FFF5EF',
-                        border: '2px solid #FEBE98',
-                        borderRadius: '10px',
-                      }}
-                    >
-                      <img
-                        src={imageUrl}
-                        className="card-img-top"
-                        alt={product?.productName || "상품 이미지"}
-                        style={{ height: "200px", objectFit: "cover", borderRadius: "10px 10px 0 0" }}
-                      />
-                      <div className="card-body">
-                        <h5 className="card-title" style={{ color: '#FF7826', fontWeight: 'bold' }}>
-                          {product?.productName || "상품명 없음"}
-                        </h5>
-                        <p className="card-text" style={{ color: '#666' }}>
-                          <strong>브랜드:</strong> {product?.brandCategory || "브랜드 없음"}<br />
-                          <strong>바코드 번호:</strong> {gifticon.barcodeNumber}<br />
-                          <strong>유효 기간:</strong> {gifticon.validityDate}
-                        </p>
-                        <button
-                          className="btn w-100"
-                          style={{
-                            backgroundColor: '#FEBE98',
-                            color: '#FFFFFF',
-                            borderColor: '#ECB392',
-                            fontWeight: 'bold',
-                          }}
-                          onClick={() => navigate(`/gifticons/${gifticon.voucherId}`)}
-                        >
-                          상세보기
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <p>표시할 데이터가 없습니다.</p>
-            ))}
-          {radioValue === 'list' &&
-            (gifticons.length > 0 ? (
-              gifticons.map((gifticon) => {
-                const product = products[gifticon.productId];
-                const imageUrl = product?.imageIds?.[0]
-                  ? `/api/images/${product.imageIds[0]}`
-                  : "https://via.placeholder.com/150";
-
-                return (
-                  <div className="col-md-4 mb-4" key={gifticon.voucherId}>
-                    <div
-                      className="card h-100"
-                      style={{
-                        backgroundColor: '#FFF5EF',
-                        border: '2px solid #FEBE98',
-                        borderRadius: '10px',
-                      }}
-                    >
-                      <img
-                        src={imageUrl}
-                        className="card-img-top"
-                        alt={product?.productName || "상품 이미지"}
-                        style={{ height: "200px", objectFit: "cover", borderRadius: "10px 10px 0 0" }}
-                      />
-                      <div className="card-body">
-                        <h5 className="card-title" style={{ color: '#FF7826', fontWeight: 'bold' }}>
-                          {product?.productName || "상품명 없음"}
-                        </h5>
-                        <p className="card-text" style={{ color: '#666' }}>
-                          <strong>브랜드:</strong> {product?.brandCategory || "브랜드 없음"}<br />
-                          <strong>바코드 번호:</strong> {gifticon.barcodeNumber}<br />
-                          <strong>유효 기간:</strong> {gifticon.validityDate}<br />
-                          <strong>사용 날짜:</strong> {gifticon.expirationDate || "N/A"}
-                        </p>
-                        <button
-                          className="btn w-100"
-                          style={{
-                            backgroundColor: '#FEBE98',
-                            color: '#FFFFFF',  
-                            borderColor: '#ECB392',
-                            fontWeight: 'bold',
-                          }}
-                          onClick={() => navigate(`/gifticons/${gifticon.voucherId}`)}
-                        >
-                          상세보기
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <p>표시할 데이터가 없습니다.</p>
-            ))}
+            return (
+              <Card 
+                key={gifticon.voucherId} 
+                className="common-card" 
+                onClick={() => navigate(`/gifticons/${gifticon.voucherId}`)}
+                style={{ cursor: "pointer" }}
+              >
+                <CardMedia
+                  component="img"
+                  sx={{ width: 151 }}
+                  image={imageUrl}
+                  alt={product?.productName || "상품 이미지"}
+                />
+                <CardContent>
+                  <Typography component="div" variant="h5" className="common-content common-title">
+                    {product?.productName || "상품명 없음"}
+                  </Typography>
+                  <Typography variant="subtitle1" color="#777" className="common-content common-title">
+                    브랜드: {product?.brandCategory || "브랜드 없음"}
+                  </Typography>
+                  {radioValue === 'logs' ? (
+                    <Typography variant="subtitle1" color="text.secondary" className="common-content common-title">
+                      {gifticon.validityDate} 까지 사용가능
+                    </Typography>
+                  ) : (
+                    <Typography variant="subtitle1" color="text.secondary" className="common-content common-title">
+                      사용 날짜: {gifticon.expirationDate || "N/A"}
+                    </Typography>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
-    </div>
+    </Container>
   );
 };
 

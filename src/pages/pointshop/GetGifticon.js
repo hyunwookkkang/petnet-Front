@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useUser } from "../../components/contexts/UserContext";
 
 const GetGifticon = () => {
@@ -59,69 +59,69 @@ const GetGifticon = () => {
   };
 
   if (loading) {
-    return <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '1.2rem' }}>기프티콘 상세 정보를 불러오는 중입니다...</div>;
+    return <div style={{ textAlign: "center", marginTop: "20px", fontSize: "1.2rem" }}>기프티콘 상세 정보를 불러오는 중입니다...</div>;
   }
 
   if (!gifticon || !product) {
-    return <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '1.2rem', color: '#FF6347' }}>기프티콘 정보를 찾을 수 없습니다.</div>;
+    return <div style={{ textAlign: "center", marginTop: "20px", fontSize: "1.2rem", color: "#FF6347" }}>기프티콘 정보를 찾을 수 없습니다.</div>;
   }
 
   return (
     <div
       style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #f8f8f8, #ececec)',
-        padding: '20px',
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #f8f8f8, #ececec)",
+        padding: "20px",
       }}
     >
       <div
         style={{
-          width: '100%',
-          maxWidth: '500px',
-          background: '#fff',
-          borderRadius: '15px',
-          overflow: 'hidden',
-          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.1)',
-          textAlign: 'center',
+          width: "100%",
+          maxWidth: "500px",
+          background: "#fff",
+          borderRadius: "15px",
+          overflow: "hidden",
+          boxShadow: "0 8px 30px rgba(0, 0, 0, 0.1)",
+          textAlign: "center",
         }}
       >
         <h1
           style={{
-            fontSize: '1.8rem',
-            fontWeight: 'bold',
-            color: '#FF6347',
-            margin: '20px 0',
+            fontSize: "1.8rem",
+            fontWeight: "bold",
+            color: "#FF6347",
+            margin: "20px 0",
           }}
         >
           기프티콘 상세 정보
         </h1>
 
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
           {gifticon.imageIds.map((imageId) => (
             <img
               key={imageId}
               src={`http://192.168.0.40:8000/api/images/${imageId}`}
               alt={`기프티콘 이미지 ${imageId}`}
               style={{
-                width: '300px',
-                height: 'auto',
-                borderRadius: '10px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                width: "300px",
+                height: "auto",
+                borderRadius: "10px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
               }}
             />
           ))}
         </div>
 
-        <div style={{ padding: '20px', textAlign: 'left', fontSize: '1rem', lineHeight: '1.8', color: '#333' }}>
+        <div style={{ padding: "20px", textAlign: "center", fontSize: "1rem", lineHeight: "1.8", color: "#333" }}>
           <p><strong>상품명:</strong> {product.productName}</p>
           <p><strong>가격:</strong> {product.price} 포인트</p>
           <p><strong>유효 기한:</strong> {gifticon.validityDate}</p>
           <p><strong>구입 날짜:</strong> {gifticon.addDate}</p>
-          <p><strong>사용 여부:</strong> {gifticon.isUsed ? '사용 완료' : '사용 가능'}</p>
-          {gifticon.isUsed && <p><strong>사용 날짜:</strong> {gifticon.expirationDate || 'N/A'}</p>}
+          <p><strong>사용 여부:</strong> {gifticon.isUsed ? "사용 완료" : "사용 가능"}</p>
+          {gifticon.isUsed && <p><strong>사용 날짜:</strong> {gifticon.expirationDate || "N/A"}</p>}
           <p><strong>바코드 번호:</strong> {gifticon.barcodeNumber}</p>
         </div>
 
@@ -129,20 +129,20 @@ const GetGifticon = () => {
           <button
             onClick={handleUpdateGifticon}
             style={{
-              width: '90%',
-              backgroundColor: '#FF6347',
-              color: '#fff',
-              border: 'none',
-              padding: '15px',
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              margin: '20px 0',
-              borderRadius: '10px',
-              transition: 'all 0.3s ease',
+              width: "90%",
+              backgroundColor: "#FF6347",
+              color: "#fff",
+              border: "none",
+              padding: "15px",
+              fontSize: "1rem",
+              fontWeight: "bold",
+              cursor: "pointer",
+              margin: "20px 0",
+              borderRadius: "10px",
+              transition: "all 0.3s ease",
             }}
-            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#EEA092')}
-            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#FF6347')}
+            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#EEA092")}
+            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#FF6347")}
           >
             기프티콘 사용하기
           </button>
