@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from 'react-router-dom';
+import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import axios from "axios";
 
 import { useUser } from "../../../components/contexts/UserContext";
@@ -7,6 +8,8 @@ import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTo
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 import "../../../styles/community/TopicInfo.css";
+import '../../../styles/community/quill.snow.css'; // quill editor font size
+import TopicVoteButton from "../../../components/community/topic/TopicVoteButton";
 
 const GetTopicInfo = () => {
   
@@ -22,9 +25,9 @@ const GetTopicInfo = () => {
     if (topic) {
       // 조회수 증가 axios patch 요청 보내기
       const fetchIncreaseViewCount = async () => {
-        await axios.patch(`http://localhost:8000/api/topics/${topic.topicId}`)
+        await axios.patch(`/api/topics/${topic.topicId}`)
           .catch(err => {
-            console.log('axios fetch IncreaseViewCount error : ', err);
+            console.log('axios fetch increase view count error : ', err);
           });
       };
       fetchIncreaseViewCount();
@@ -104,8 +107,8 @@ const GetTopicInfo = () => {
 
       {/* 좋아요 / 싫어요 버튼 */}
       <div className="post-feedback">
-        <button /*onClick={onLike}*/>👍 좋아요 ({topic.likeCount})</button>
-        <button /*onClick={onDislike}*/>👎 싫어요 ({topic.dislikeCount})</button>
+        <TopicVoteButton topicId={topicId} voteCount={topic.likeCount} isLike={true}/>
+        <TopicVoteButton topicId={topicId} voteCount={topic.dislikeCount} isLike={false}/>
       </div>
 
       {/* 해시태그 */}
@@ -124,8 +127,8 @@ const GetTopicInfo = () => {
       {/* 첨부파일 및 기타 버튼 */}
       <div className="post-extras">
         <button /*onClick={downloadFiles}*/>첨부파일 다운로드</button>
-        <button /*onClick={onToggleScrap}*/>스크랩 추가/취소</button>
-        <button onClick={onReport}>게시글 신고</button>
+        <button /*onClick={onToggleScrap}*/>스크랩</button>
+        <button onClick={onReport}>신고</button>
       </div>
 
       {/* 댓글 */}

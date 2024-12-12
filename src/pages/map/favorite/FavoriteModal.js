@@ -56,9 +56,9 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
         <Modal.Title>
           {favorite ? "즐겨찾기 수정하기" : "즐겨찾기 추가하기"}
         </Modal.Title>
-        <Modal.Title>
+        {/* <Modal.Title>
           {favorite ? "즐겨찾기 수정하기" : "즐겨찾기 추가하기"}
-        </Modal.Title>
+        </Modal.Title> */}
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -96,17 +96,6 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
               />
             </div>
           </Form.Group>
-          {/* <Form.Group className="mb-3">
-            <Form.Label>최대 리스트 개수</Form.Label>
-            <Form.Control
-              type="number"
-              name="maxListCount"
-              value={formData.maxListCount}
-              onChange={handleChange}
-              placeholder="최대 리스트 개수를 입력하세요"
-              min="1"
-            />
-          </Form.Group> */}
         </Form>
       </Modal.Body>
       <Modal.Footer>

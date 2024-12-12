@@ -25,7 +25,7 @@ function useFetchGetTopics(search) {
         // params.append("searchkeyword", search.keyword);
         // request.search = params.toString();
 
-        const request = `http://localhost:8000/api/topics`
+        const request = `/api/topics`
                       + `?searchCategory1=${category}`
                       + `&searchCondition=${condition}`
                       + `&searchKeyword=${keyword}`;
