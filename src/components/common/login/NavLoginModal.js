@@ -5,9 +5,9 @@ function NavLoginModal({ show, onHide, title, body, footer }) {
     return (
         <Modal show={show} onHide={onHide} centered>
         <Modal.Header closeButton>
-            <Modal.Title>{title}</Modal.Title>
+            <Modal.Title><h2>{title}</h2></Modal.Title>
         </Modal.Header>
-        <Modal.Body >{body}</Modal.Body>
+        <Modal.Body ><h3>{body}</h3></Modal.Body>
         <Modal.Footer>{footer}</Modal.Footer>
         </Modal>
     );

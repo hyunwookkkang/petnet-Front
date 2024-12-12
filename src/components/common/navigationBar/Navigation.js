@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useUser } from "../../contexts/UserContext";
 import { Button } from "react-bootstrap";
 import "../../../styles/Navigation.css";
+import "../../../styles/common/Button.css";
 import NavLoginModal from "../login/NavLoginModal";
 
 function Navigation() {
@@ -68,17 +69,13 @@ function Navigation() {
         show = {showAlert} 
         onHide = {() => setShowAlert(false)}
         title = "로그인 필요"
-        body = "로그인이 필요한 서비스입니다. 로그인 화면으로 이동합니다."
+        body = {<div>
+                로그인이 필요한 서비스입니다.<br/> 로그인 화면으로 이동합니다.
+              </div>}
         footer = {
           <Button
-            style={{
-              backgroundColor: "#feb98e",
-              border: "none",
-              color: "white",
-              fontWeight: "bold",
-              padding: "10px 20px",
-              borderRadius: "5px",
-            }}
+            className="modal-button"
+            style={{backgroundColor: "#feb98e", border: "none"}}
             onClick={() => {
               setShowAlert(false);
               navigate("/login");
