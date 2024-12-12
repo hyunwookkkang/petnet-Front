@@ -15,6 +15,7 @@ import UsingComponent from "./components/common/UsingComponent";
 
 // Shop 관련 페이지
 import Products from "./pages/shop/product/Products";
+import AddProduct from "./pages/shop/product/AddProduct";
 import ProductInfo from "./pages/shop/product/ProductInfo";
 import ProductImage from "./pages/shop/product/ProductImage";
 import Carts from "./pages/shop/product/Carts";
@@ -80,6 +81,7 @@ import GetMyTopics from "./pages/community/topic/GetMyTopics";
 // Admin 관련 페이지 (잘못된 경로 수정)
 import AdminMainPage from "./pages/common/AdminMainPage";
 
+
 function App() {
   //const userRole = 1; // 관리자: 0 또는 1, 일반 사용자: 2
 
@@ -127,6 +129,7 @@ function App() {
 
             {/* START : shop-page */}
             <Route path="/shop/products" element={<Products />} />
+            <Route path="/shop/products/add" element={<AddProduct />} />
             <Route path="/shop/products/:productId" element={<ProductInfo/>} />
             <Route path="/shop/products/:productId/image" element={<ProductImage />} />
             <Route path="/shop/products/cart/:userId" element={<Carts/>} />
