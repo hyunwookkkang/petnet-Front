@@ -33,7 +33,6 @@ const GetScrapTopics = () => {
       const response = await fetchGetScrapTopics(userId);
       setTopics(response || []);
     };
-    
     fetchTopics();
     
   }, [fetchGetScrapTopics, userId, navigate]);

@@ -54,6 +54,7 @@ import GetTopicInfo from "./pages/community/topic/GetTopicInfo";
 import EditTopicInfo from "./pages/community/topic/EditTopicInfo";
 import GetScrapTopics from "./pages/community/topic/GetScrapTopics";
 import GetMyTopics from "./pages/community/topic/GetMyTopics";
+import SearchTopics from "./pages/community/topic/SearchTopics";
 
 // 가계부 관련 페이지
 // import CashbookMain from "./pages/cashbook/CashbookMain";
@@ -139,6 +140,7 @@ function App() {
             <Route path="/getTopic/:topicId" element={<GetTopicInfo />} />
             <Route path="/getMyTopics" element={<GetMyTopics />} />
             <Route path="/getScraps" element={<GetScrapTopics />} />
+            <Route path="/searchTopics" element={<SearchTopics />} />
             {/* END : community-page */}
 
             {/* START : pointshop-page */}
