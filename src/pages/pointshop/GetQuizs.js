@@ -18,7 +18,7 @@ const GetQuizs = () => {
   // API에서 퀴즈 데이터 가져오기
   const fetchQuizzes = async () => {
     try {
-      const response = await axios.get('http://192.168.0.40:8000/api/pointshop/quizs');
+      const response = await axios.get('/api/pointshop/quizs');
       setQuizzes(response.data); // 서버에서 받아온 데이터를 상태에 반영
     } catch (error) {
       console.error('Error fetching quizzes:', error);
@@ -33,7 +33,7 @@ const GetQuizs = () => {
   // 새 퀴즈 추가
   const handleSaveQuiz = async () => {
     try {
-      await axios.post('http://192.168.0.40:8000/api/pointshop/quizs', {
+      await axios.post('/api/pointshop/quizs', {
         quizContent: newQuiz.quizContent,
         quizOption1: newQuiz.quizOption1,
         quizOption2: newQuiz.quizOption2,
@@ -59,7 +59,7 @@ const GetQuizs = () => {
   // 수정된 퀴즈 저장
   const handleUpdateQuiz = async () => {
     try {
-      await axios.put(`http://192.168.0.40:8000/api/pointshop/quizs/${editingQuiz.quizId}`, {
+      await axios.put(`/api/pointshop/quizs/${editingQuiz.quizId}`, {
         quizContent: editingQuiz.quizContent,
         quizOption1: editingQuiz.quizOption1,
         quizOption2: editingQuiz.quizOption2,
@@ -77,7 +77,7 @@ const GetQuizs = () => {
   // 퀴즈 삭제
   const handleDeleteQuiz = async (quizId) => {
     try {
-      await axios.delete(`http://192.168.0.40:8000/api/pointshop/quizs/${quizId}`);
+      await axios.delete(`/api/pointshop/quizs/${quizId}`);
       fetchQuizzes(); // 삭제 후 데이터 새로고침
     } catch (error) {
       console.error('Error deleting quiz:', error);

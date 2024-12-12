@@ -39,9 +39,9 @@ const GifticonManagement = () => {
     try {
       let response;
       if (viewType === 'logs') {
-        response = await axios.post('http://192.168.0.40:8000/api/pointshop/gifticons', { userId });
+        response = await axios.post('/api/pointshop/gifticons', { userId });
       } else if (viewType === 'list') {
-        response = await axios.post('http://192.168.0.40:8000/api/pointshop/gifticons/gifticonLog', { userId });
+        response = await axios.post('/api/pointshop/gifticons/gifticonLog', { userId });
       }
 
       const gifticonData = response.data;
@@ -49,7 +49,7 @@ const GifticonManagement = () => {
 
       const productRequests = gifticonData.map((gifticon) =>
         axios
-          .get(`http://192.168.0.40:8000/api/pointshop/pointProducts/${gifticon.productId}`)
+          .get(`/api/pointshop/pointProducts/${gifticon.productId}`)
           .catch((error) => {
             console.error(`Error fetching product for ID ${gifticon.productId}:`, error);
             return null;
@@ -135,7 +135,7 @@ const GifticonManagement = () => {
               gifticonsLog.map((gifticon) => {
                 const product = products[gifticon.productId];
                 const imageUrl = product?.imageIds?.[0]
-                  ? `http://192.168.0.40:8000/api/images/${product.imageIds[0]}`
+                  ? `/api/images/${product.imageIds[0]}`
                   : "https://via.placeholder.com/150";
 
                 return (
@@ -188,7 +188,7 @@ const GifticonManagement = () => {
               gifticons.map((gifticon) => {
                 const product = products[gifticon.productId];
                 const imageUrl = product?.imageIds?.[0]
-                  ? `http://192.168.0.40:8000/api/images/${product.imageIds[0]}`
+                  ? `/api/images/${product.imageIds[0]}`
                   : "https://via.placeholder.com/150";
 
                 return (

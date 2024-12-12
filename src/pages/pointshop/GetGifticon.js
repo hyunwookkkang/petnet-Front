@@ -22,7 +22,7 @@ const GetGifticon = () => {
 
       try {
         console.log(`Fetching gifticon details for ID: ${gifticonId}`);
-        const response = await axios.get(`http://192.168.0.40:8000/api/pointshop/gifticons/${gifticonId}`);
+        const response = await axios.get(`/api/pointshop/gifticons/${gifticonId}`);
         const gifticonData = response.data;
 
         // userId가 일치하지 않을 경우 메인 페이지로 이동
@@ -36,7 +36,7 @@ const GetGifticon = () => {
 
         // Fetch the product details using productId from the gifticon
         if (gifticonData?.productId) {
-          const productResponse = await axios.get(`http://192.168.0.40:8000/api/pointshop/pointProducts/${gifticonData.productId}`);
+          const productResponse = await axios.get(`/api/pointshop/pointProducts/${gifticonData.productId}`);
           setProduct(productResponse.data);
         }
       } catch (error) {
@@ -53,7 +53,7 @@ const GetGifticon = () => {
 
   const handleUpdateGifticon = async () => {
     try {
-      await axios.patch(`http://192.168.0.40:8000/api/pointshop/gifticons/${gifticonId}`);
+      await axios.patch(`/api/pointshop/gifticons/${gifticonId}`);
       alert("${product.productName} 기프티콘을 사용하셨습니다!");
       navigate("/gifticons"); // 업데이트 후 기프티콘 목록으로 이동
     } catch (error) {

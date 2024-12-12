@@ -26,7 +26,7 @@ const PointProducts = () => {
     setLoading(true);
     try {
       const brandQuery = brands.length ? `?brand=${brands.join(',')}` : '';
-      const response = await axios.get(`http://192.168.0.40:8000/api/pointshop/pointProducts${brandQuery}`);
+      const response = await axios.get(`/api/pointshop/pointProducts${brandQuery}`);
       setPointProducts(response.data);
       setLoading(false);
     } catch (error) {
@@ -94,7 +94,7 @@ const PointProducts = () => {
             <Card style={{ backgroundColor: '#FFE2D0', width: '18rem' }} key={product.productId}>
               <Card.Img
                 variant="top"
-                src={`http://192.168.0.40:8000/api/images/${product.imageIds}`}
+                src={`/api/images/${product.imageIds}`}
                 alt={product.productName || "상품 이미지"}
                 style={{ height: '200px', objectFit: 'cover' }}
               />

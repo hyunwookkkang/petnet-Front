@@ -27,7 +27,7 @@ const GetPointQuiz = () => {
 
     try {
       const response = await axios.get(
-        `http://192.168.0.40:8000/api/pointshop/quizs/getRandomQuizs`,
+        `/api/pointshop/quizs/getRandomQuizs`,
         {
           params: { userId }, // userId를 쿼리 파라미터로 전달
         }
@@ -67,7 +67,7 @@ const GetPointQuiz = () => {
       }));
 
       const response = await axios.post(
-        "http://192.168.0.40:8000/api/pointshop/quizs/submit",
+        "/api/pointshop/quizs/submit",
         {
           userId,
           submittedAnswers,
@@ -104,8 +104,6 @@ const GetPointQuiz = () => {
           <tr>
             <th>번호</th>
             <th>퀴즈 문제</th>
-            <th>보기</th>
-            <th>정답 선택</th>
             {showResults && <th>결과</th>}
           </tr>
         </thead>
@@ -113,29 +111,21 @@ const GetPointQuiz = () => {
           {quizzes.map((quiz, index) => (
             <tr key={quiz.quizId}>
               <td>{index + 1}</td>
-              <td>{quiz.quizContent}</td>
               <td>
+                <div>{quiz.quizContent}</div>
                 {[1, 2, 3, 4].map((num) => (
-                  <div key={num}>
-                    {num}. {quiz[`quizOption${num}`]}
-                  </div>
+                  <Form.Check
+                    type="radio"
+                    id={`quiz-${quiz.quizId}-option-${num}`}
+                    key={num}
+                    name={`quiz-${quiz.quizId}`}
+                    label={`${num}. ${quiz[`quizOption${num}`]}`}
+                    value={num}
+                    checked={userAnswers[quiz.quizId] === num}
+                    onChange={() => handleAnswerChange(quiz.quizId, num)}
+                    disabled={showResults}
+                  />
                 ))}
-              </td>
-              <td>
-                <Form.Select
-                  value={userAnswers[quiz.quizId] || ""}
-                  onChange={(e) =>
-                    handleAnswerChange(quiz.quizId, parseInt(e.target.value))
-                  }
-                  disabled={showResults}
-                >
-                  <option value="">답 선택</option>
-                  {[1, 2, 3, 4].map((num) => (
-                    <option key={num} value={num}>
-                      {num}번
-                    </option>
-                  ))}
-                </Form.Select>
               </td>
               {showResults && (
                 <td>
@@ -166,10 +156,7 @@ const GetPointQuiz = () => {
               다시 도전
             </Button>
           ) : null}
-          <Button
-            variant="success"
-            onClick={() => navigate("/pointLog")}
-          >
+          <Button variant="success" onClick={() => navigate("/pointLog")}>
             종료
           </Button>
         </div>

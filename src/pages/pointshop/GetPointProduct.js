@@ -34,7 +34,7 @@ const GetPointProduct = () => {
     const fetchProductDetail = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://192.168.0.40:8000/api/pointshop/pointProducts/${productId}`);
+        const response = await axios.get(`/api/pointshop/pointProducts/${productId}`);
         setProduct(response.data);
       } catch (error) {
         console.error('Error fetching product details:', error);
@@ -57,7 +57,7 @@ const GetPointProduct = () => {
 
     try {
       await axios.post(
-        `http://192.168.0.40:8000/api/pointshop/pointProducts/${productId}`,
+        `/api/pointshop/pointProducts/${productId}`,
         { userId },
         {
           headers: { 'Content-Type': 'application/json' },
@@ -103,7 +103,7 @@ const GetPointProduct = () => {
       <h1 style={{ textAlign: 'center' }}>포인트 상품 상세</h1>
       {product.imageIds && (
         <img
-          src={`http://192.168.0.40:8000/api/images/${product.imageIds}`}
+          src={`/api/images/${product.imageIds}`}
           alt={product.productName}
           style={{ width: '100%', height: 'auto' }}
         />

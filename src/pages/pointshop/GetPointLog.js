@@ -13,9 +13,9 @@ const UserPointLogPage = () => {
   const navigate = useNavigate();
 
   const apiEndpoints = (userId) => ({
-    getPointLog: `http://192.168.0.40:8000/api/pointshop/point/${userId}/getPointLog`,
-    getPointAddLog: `http://192.168.0.40:8000/api/pointshop/point/${userId}/getPointAddLog`,
-    getPointUpdateLog: `http://192.168.0.40:8000/api/pointshop/point/${userId}/getPointUpdateLog`,
+    getPointLog: `/api/pointshop/point/${userId}/getPointLog`,
+    getPointAddLog: `/api/pointshop/point/${userId}/getPointAddLog`,
+    getPointUpdateLog: `/api/pointshop/point/${userId}/getPointUpdateLog`,
   });
 
   // 이유 매핑
@@ -76,7 +76,7 @@ const UserPointLogPage = () => {
 
     const fetchUserPoint = async () => {
       try {
-        const response = await fetch(`http://192.168.0.40:8000/api/pointshop/point/${userId}/getUserPoint`);
+        const response = await fetch(`/api/pointshop/point/${userId}/getUserPoint`);
         if (!response.ok) {
           throw new Error('Failed to fetch user point.');
         }
