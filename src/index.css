@@ -12,3 +12,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Toast 컨테이너 텍스트와 아이콘 색상 수정 */
+.Toastify__toast--success {
+  color: #febe98; /* 텍스트 색상 */
+}
+
+.Toastify__toast--error {
+  color: #febe98; /* 에러 메시지의 텍스트 색상 */
+}
+
+/* 진행 바 색상 */
+.Toastify__progress-bar--success {
+  background-color: #febe98; /* 성공 메시지의 진행 바 색상 */
+}
+
+.Toastify__progress-bar--error {
+  background-color: #febe98; /* 에러 메시지의 진행 바 색상 */
+}
+
+.Toastify__toast {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif !important; /* 전역 폰트 강제 적용 */
+}
