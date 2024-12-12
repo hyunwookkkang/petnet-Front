@@ -37,7 +37,6 @@ const EditTopicInfo = () => {
   const [required, setRequired] = useState('');
 
   useEffect(() => {
-    console.log(userId);
     if (!userId) {
       alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
       navigate("/login"); // 로그인 페이지로 리다이렉트
@@ -65,7 +64,7 @@ const EditTopicInfo = () => {
     setHashtags(prevHahstag => prevHahstag.filter(i => i !== tag));
   }
 
-  const topicSubmitHandler = async (e) => {
+  const submitTopicHandler = async (e) => {
     e.preventDefault();
 
     // 에디터 내용이 비어있는지 확인
@@ -94,8 +93,8 @@ const EditTopicInfo = () => {
     // prev topic exist => update / prev topic not exist => add
     const submitTopic = topic ? fetchUpdateTopic : fetchAddTopic;
     try {
-      await submitTopic(newTopic);
-      navigate(-1);
+      const resTopic = await submitTopic(newTopic);
+      navigate(`/getTopic/${resTopic.topicId}`);
     } 
     catch(err) {
       console.log(err);
@@ -122,7 +121,7 @@ const EditTopicInfo = () => {
 
         {/* {error && <div className="error-message">{error}</div>} */}
 
-        <Form onSubmit={topicSubmitHandler}>
+        <Form onSubmit={submitTopicHandler}>
 
           <div className="d-flex w-100">
             {/* 카테고리 선택 */}

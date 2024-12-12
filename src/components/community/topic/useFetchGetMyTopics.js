@@ -16,7 +16,7 @@ function useFetchGetMyTopics() {
     const { category = '', condition = '', keyword = '' } = search || {};
 
     // set query string
-    const request = `http://localhost:8000/api/topics/mine/${userId}`
+    const request = `/api/topics/mine/${userId}`
                   + `?searchCategory1=${category}`
                   + `&searchCondition=${condition}`
                   + `&searchKeyword=${keyword}`;
