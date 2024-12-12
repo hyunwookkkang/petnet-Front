@@ -49,8 +49,7 @@ function PointShopMain() {
         </div>
       </div>
 
-      {/* 내 포인트 표시 */}
-      <div className="points-display">1500P</div>
+      
     </div>
   );
 }
