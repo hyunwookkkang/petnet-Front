@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaThumbsUp } from 'react-icons/fa';
+import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { Snackbar } from '@mui/material';
 import { Grow } from '@mui/material';
 
@@ -54,25 +54,23 @@ const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
     }
 
     setLoading(true);
-    try {
-      if (isVoted) {
-        setVotedMessage(true);
-      }
-      else {
-        fetchAddVote(vote);
-        if (errorGet || errorAdd) {
-          setErrorMessage(true);
-        } else {
-          setVotedCount(votedCount + 1);
-          setIsVoted(true);
-        }
-      }
-    } 
-    catch(err) {
-      console.log(err);
-    }
-    finally{
+    if (isVoted) {
+      setVotedMessage(true);
       setLoading(false);
+    }
+    else {
+      fetchAddVote(vote)
+        .then(() => {
+          setIsVoted(true);
+          setVotedCount(votedCount + 1);
+        })
+        .catch((err) => {
+          console.log(err);
+          setErrorMessage(true);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
 
@@ -84,8 +82,11 @@ const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
           onClick={() => voteTopic()}
           disabled={loading || loadingGet || loadingAdd}
         > 
-          <FaThumbsUp/> 
-          {isLike ? ' 좋아요 ' : ' 싫어요 '} 
+          { isLike ? (
+            <><FaThumbsUp/> 좋아요 </>
+          ) : (
+            <><FaThumbsDown/> 싫어요 </>
+          )} 
           ({votedCount}) 
         </button>
 

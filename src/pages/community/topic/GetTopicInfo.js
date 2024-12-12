@@ -10,6 +10,7 @@ import "../../../styles/Main.css"; // 기존 스타일 재사용
 import "../../../styles/community/TopicInfo.css";
 import '../../../styles/community/quill.snow.css'; // quill editor font size
 import TopicVoteButton from "../../../components/community/topic/TopicVoteButton";
+import TopicScrapButton from "../../../components/community/topic/TopicScrapButton";
 
 const GetTopicInfo = () => {
   
@@ -127,8 +128,8 @@ const GetTopicInfo = () => {
       {/* 첨부파일 및 기타 버튼 */}
       <div className="post-extras">
         <button /*onClick={downloadFiles}*/>첨부파일 다운로드</button>
-        <button /*onClick={onToggleScrap}*/>스크랩</button>
-        <button onClick={onReport}>신고</button>
+        <TopicScrapButton topicId={topicId}/>
+        <button /*onClick={onReport}*/>신고</button>
       </div>
 
       {/* 댓글 */}

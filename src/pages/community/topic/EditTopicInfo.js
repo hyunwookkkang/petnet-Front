@@ -99,6 +99,14 @@ const EditTopicInfo = () => {
     catch(err) {
       console.log(err);
     }
+
+    // submitTopic(newTopic)
+    // .then((response) => {
+    //   navigate(`/getTopic/${response.data.topicId}`);
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // })
   };
 
   if ((topicId && error) || addError || updateError) {
