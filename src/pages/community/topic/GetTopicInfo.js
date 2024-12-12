@@ -108,9 +108,7 @@ const GetTopicInfo = () => {
       {/* 좋아요 / 싫어요 버튼 */}
       <div className="post-feedback">
         <TopicVoteButton topicId={topicId} voteCount={topic.likeCount} isLike={true}/>
-        <button /*onClick={onDislike}*/>
-          <FaThumbsDown/> 싫어요 ({topic.dislikeCount})
-        </button>
+        <TopicVoteButton topicId={topicId} voteCount={topic.dislikeCount} isLike={false}/>
       </div>
 
       {/* 해시태그 */}

@@ -13,10 +13,10 @@ function useFetchAddVote() {
     // 상태 초기화
     setLoading(true);
     setError(null);
-    
+
     try {
-      // axios로 add 요청 보내기
-      const response = await axios.post(`/api/votes`, vote)
+      // axios로 post 요청 보내기
+      const response = await axios.post(`/api/votes`, vote);
       return response.data;
     } 
     catch (err) {

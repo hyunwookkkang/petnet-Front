@@ -13,13 +13,13 @@ function useFetchGetVote() {
     // 상태 초기화
     setLoading(true);
     setError(null);
-    const { userId='', topicId='', commentId='', isLike='' } = vote || {};
+    const { userId='', targetTopicId='', targetCommentId='', isLike='' } = vote || {};
 
     // set query string
     const request = `/api/votes`
                   + `?userId=${userId}`
-                  + `&targetTopicId=${topicId}`
-                  + `&targetCommentId=${commentId}`
+                  + `&targetTopicId=${targetTopicId}`
+                  + `&targetCommentId=${targetCommentId}`
                   + `&isLike=${isLike}`;
     try {
       // axios로 get 요청 보내기
