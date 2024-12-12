@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from 'react-router-dom';
-import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import axios from "axios";
 
 import { useUser } from "../../../components/contexts/UserContext";
+import TopicVoteButton from "../../../components/community/topic/TopicVoteButton";
+import TopicScrapButton from "../../../components/community/topic/TopicScrapButton";
 import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 import "../../../styles/community/TopicInfo.css";
 import '../../../styles/community/quill.snow.css'; // quill editor font size
-import TopicVoteButton from "../../../components/community/topic/TopicVoteButton";
-import TopicScrapButton from "../../../components/community/topic/TopicScrapButton";
 
 const GetTopicInfo = () => {
   
@@ -54,10 +53,6 @@ const GetTopicInfo = () => {
 
   const onDelete = () => {
     console.log("delete topic ", topic.topicId)
-  }
-
-  const onReport = () => {
-    console.log("report topic ", topic.topicId)
   }
 
   // <Link to={`/comments/${topicId}`}>link to the topic's comments</Link>
@@ -108,8 +103,8 @@ const GetTopicInfo = () => {
 
       {/* 좋아요 / 싫어요 버튼 */}
       <div className="post-feedback">
-        <TopicVoteButton topicId={topicId} voteCount={topic.likeCount} isLike={true}/>
-        <TopicVoteButton topicId={topicId} voteCount={topic.dislikeCount} isLike={false}/>
+        <TopicVoteButton topicId={topic.topicId} voteCount={topic.likeCount} isLike={true}/>
+        <TopicVoteButton topicId={topic.topicId} voteCount={topic.dislikeCount} isLike={false}/>
       </div>
 
       {/* 해시태그 */}
@@ -128,7 +123,7 @@ const GetTopicInfo = () => {
       {/* 첨부파일 및 기타 버튼 */}
       <div className="post-extras">
         <button /*onClick={downloadFiles}*/>첨부파일 다운로드</button>
-        <TopicScrapButton topicId={topicId}/>
+        <TopicScrapButton topicId={topic.topicId}/>
         <button /*onClick={onReport}*/>신고</button>
       </div>
 

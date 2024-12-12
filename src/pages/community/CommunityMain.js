@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Container, ButtonGroup, Button } from "react-bootstrap";
 
-import "../../styles/Main.css"; // 기존 스타일 재사용
 import SearchBar from "../../components/common/searchBar/SearchBar";
 import ViewTopics from "../../components/community/topic/ViewTopics";
 import ViewAllTopics from "../../components/community/topic/ViewAllTopics";
 import ViewHotTopics from "../../components/community/topic/ViewHotTopics";
-import { Link } from "react-router-dom";
 
+import "../../styles/Main.css"; // 기존 스타일 재사용
 
 const CommunityMain = () => {
 
@@ -27,12 +27,7 @@ const CommunityMain = () => {
       case 'hot': setTopicsComponent(<ViewHotTopics />); break;
       default: setTopicsComponent(<ViewTopics search={search}/>); 
     }
-  }, [search, topicTab]); // search & topicTab 변경될 때마다 실행
-
-
-  const searchTopics = (searching) => { 
-    setSearch(searching);
-  }
+  }, [search, topicTab]);
   
   const categoryChangehandler = (tab) => {
     if (!Number.isNaN(tab)) {
@@ -44,7 +39,11 @@ const CommunityMain = () => {
     setTopicTab(tab);
   }
 
+  const searchTopics = (searching) => { 
+    setSearch(searching);
+  }
   
+
   return (
 
     <Container>

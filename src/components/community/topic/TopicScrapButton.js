@@ -15,9 +15,9 @@ const TopicScrapButton = ({ topicId }) => {
 
   const { userId } = useUser();
 
-  const { fetchGetScrap, loading: loadingGet, error: errorGet } = useFetchGetScrap();
-  const { fetchAddScrap, loading: loadingAdd, error: errorAdd } = useFetchAddScrap();
-  const { fetchDeleteScrap, loading: loadingDel, error: errorDel } = useFetchDeleteScrap();
+  const { fetchGetScrap, loading: loadingGet/*, error: errorGet*/ } = useFetchGetScrap();
+  const { fetchAddScrap, loading: loadingAdd/*, error: errorAdd*/ } = useFetchAddScrap();
+  const { fetchDeleteScrap, loading: loadingDel/*, error: errorDel*/ } = useFetchDeleteScrap();
   
   const [loading, setLoading] = useState(false);
   const [sracpMessage, setScrapMessage] = useState(false);
@@ -43,7 +43,7 @@ const TopicScrapButton = ({ topicId }) => {
 
     setLoading(true);
 
-    // scrap <=> not scrap
+    // scrap <=> unscrap
     const fetchScrap = isScrap ? fetchDeleteScrap : fetchAddScrap;    
 
     fetchScrap(userId, topicId)

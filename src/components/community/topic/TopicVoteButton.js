@@ -14,8 +14,8 @@ const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
 
   const { userId } = useUser();
 
-  const { fetchGetVote, loading: loadingGet, error: errorGet } = useFetchGetVote();
-  const { fetchAddVote, loading: loadingAdd, error: errorAdd } = useFetchAddVote();
+  const { fetchGetVote, loading: loadingGet/*, error: errorGet*/ } = useFetchGetVote();
+  const { fetchAddVote, loading: loadingAdd/*, error: errorAdd*/ } = useFetchAddVote();
   
   const [loading, setLoading] = useState(false);
   const [votedMessage, setVotedMessage] = useState(false);

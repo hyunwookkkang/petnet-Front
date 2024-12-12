@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
-import { Alert, Button, Container, Form } from "react-bootstrap";
+import { Alert, Button, Container, Dropdown, Form, ListGroup } from "react-bootstrap";
 import AddIcon from '@mui/icons-material/Add';
 
 import { useUser } from "../../../components/contexts/UserContext";
+import TopicQuillEditor from "../../../components/community/topic/TopicQuillEditor";
+import HashtagChip from "../../../components/community/topic/HashtagChip";
 import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
 import useFetchAddTopic from "../../../components/community/topic/useFetchAddTopic";
 import useFetchUpdateTopic from "../../../components/community/topic/useFetchUpdateTopic";
-import TopicQuillEditor from "../../../components/community/topic/TopicQuillEditor";
-import HashtagChip from "../../../components/community/topic/HashtagChip";
+import useFetchGetHashtags from "../../../components/community/topic/useFetchGetHashtags";
 
 import "../../../styles/Main.css";
-import "../../../styles/community/EidtTopic.css";
+import "../../../styles/community/EditTopic.css";
+import "../../../styles/community/AutoComplete.css";
 
 const EditTopicInfo = () => {
 
@@ -22,8 +24,9 @@ const EditTopicInfo = () => {
   const { userId } = useUser(''); // 사용자 ID 가져오기
 
   const { topic, loading, error } = useFetchTopicInfo(topicId); // 페이지 초기화
-  const { fetchAddTopic, addLoading, addError } = useFetchAddTopic(); // submit-add
-  const { fetchUpdateTopic, updateLoading, updateError } = useFetchUpdateTopic(); // submit-update
+  const { fetchAddTopic, addLoading, addError } = useFetchAddTopic();
+  const { fetchUpdateTopic, updateLoading, updateError } = useFetchUpdateTopic();
+  const { fetchGetHashtags, /*loading: tagloading, error: tagError*/ } = useFetchGetHashtags();
 
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
@@ -34,6 +37,7 @@ const EditTopicInfo = () => {
 
   const [isAuthor, setIsAutor] = useState(false); // 로그인 = 작성자? 확인
   const [hashtagTemp, setHashtagTemp] = useState('');
+  const [tagSuggestions, setTagSuggestions] = useState([]); // 해시태그 자동완성
   const [required, setRequired] = useState('');
 
   useEffect(() => {
@@ -58,10 +62,27 @@ const EditTopicInfo = () => {
   const appendHashtag = () => {
     setHashtags(prevHahstag => [...prevHahstag, hashtagTemp]);
     setHashtagTemp('');
+    getHahstagSuggestions('');
   }
 
   const removeHashtag = (tag) => {
     setHashtags(prevHahstag => prevHahstag.filter(i => i !== tag));
+  }
+
+  const getHahstagSuggestions = async (keyword) => {
+    if (!keyword.trim()) {
+      setTagSuggestions([]);
+      return;
+    }
+
+    try {
+      const resHashTags = await fetchGetHashtags(keyword);
+      setTagSuggestions(resHashTags);
+    } 
+    catch (err) {
+      console.error(err);
+      setTagSuggestions([]);
+    }
   }
 
   const submitTopicHandler = async (e) => {
@@ -99,14 +120,6 @@ const EditTopicInfo = () => {
     catch(err) {
       console.log(err);
     }
-
-    // submitTopic(newTopic)
-    // .then((response) => {
-    //   navigate(`/getTopic/${response.data.topicId}`);
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // })
   };
 
   if ((topicId && error) || addError || updateError) {
@@ -187,22 +200,39 @@ const EditTopicInfo = () => {
 
           <br/>
           {/* 해시태그 입력 */}
-          <Form.Group className="d-flex">
+          <Form.Group className="d-flex position-relative">
+
             <Form.Label></Form.Label>
             <Form.Control 
               id="input-hashtag" 
               type="text" 
               placeholder="해시태그 입력" 
               value={hashtagTemp} 
-              onChange={(e) => setHashtagTemp(e.target.value)} 
+              onChange={(e) => {
+                setHashtagTemp(e.target.value);
+                getHahstagSuggestions(e.target.value);
+              }} 
               style={{ width: '250px' }} 
             />
+            
+            <ListGroup className="dropdown-suggestions">
+              {tagSuggestions.map((tagSuggestion, index) => (
+                <ListGroup.Item
+                  key={index}
+                  onClick={() => setHashtagTemp(tagSuggestion)}
+                >
+                  {tagSuggestion}
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+
             <Button 
               className="ms-2 addTag-btn"
-              onClick={() => appendHashtag()}
-            >
+              onClick={() => {appendHashtag()}}
+            > 
               <AddIcon fontSize="small" />
             </Button>
+            
           </Form.Group>
           
           <br/>
