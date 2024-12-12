@@ -1,36 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import ToggleButton from 'react-bootstrap/ToggleButton';
-import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const PointProducts = () => {
   const [pointProducts, setPointProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedBrands, setSelectedBrands] = useState([]);
   const navigate = useNavigate();
-  const [hoveredId, setHoveredId] = useState(null);
 
-  const brandOptions = [
-    { name: 'CU', value: 'CU' },
-    { name: 'GS25', value: 'GS25' },
-    { name: '이마트24', value: '이마트24' },
-  ];
-
-  const fetchPointProducts = async (brands = []) => {
+  const fetchPointProducts = async () => {
     setLoading(true);
     try {
-      const brandQuery = brands.length ? `?brand=${brands.join(',')}` : '';
-      const response = await axios.get(`/api/pointshop/pointProducts${brandQuery}`);
+      const response = await axios.get("/api/pointshop/pointProducts");
       setPointProducts(response.data);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching point products:', error);
+      console.error("Error fetching point products:", error);
       setLoading(false);
     }
   };
@@ -39,86 +24,123 @@ const PointProducts = () => {
     fetchPointProducts();
   }, []);
 
-  const handleBrandChange = (brands) => {
-    setSelectedBrands(brands);
-    fetchPointProducts(brands);
-  };
-
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          textAlign: "center",
+          padding: "50px",
+          fontSize: "1.5rem",
+          color: "#888",
+        }}
+      >
+        로딩 중입니다...
+      </div>
+    );
   }
 
   return (
-    <div className="pointProducts" style={{ padding: '20px' }}>
-      <h1 className="points-display" style={{ display: 'flex', fontSize: '60px', justifyContent: 'center' }}>포인트 상점</h1>
-      <div className="brand-filter" style={{ marginBottom: '20px' }}>
-        <Row>
-          {brandOptions.map((brand) => (
-            <Col xs={4} key={brand.value}> 
-              <ToggleButtonGroup
-                type="checkbox"
-                value={selectedBrands}
-                onChange={handleBrandChange}
-                style={{ width: '100%' }}
-              >
-                <ToggleButton
-                  id={`brand-${brand.value}`}
-                  value={brand.value}
-                  style={{
-                    backgroundColor: selectedBrands.includes(brand.value) ? '#FFBD94' : 'transparent',
-                    color: selectedBrands.includes(brand.value) ? '#FFFFFF' : '#FFBD94',
-                    border: `2px solid #FFBD94`,
-                    fontWeight: selectedBrands.includes(brand.value) ? 'bold' : 'normal',
-                    width: '100%' // 버튼 너비를 Col의 크기만큼 설정
-                  }}
-                >
-                  {brand.name}
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Col>
-          ))}
-        </Row>
-      </div>
-      <div
+    <div
+      style={{
+        padding: "0px",
+        background: "linear-gradient(135deg, #FFFFFF, #EDEDED)",
+      }}
+    >
+      <h1
         style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: '20px',
+          textAlign: "center",
+          fontSize: "2rem",
+          marginBottom: "20px",
+          color: "#FF7F50",
         }}
       >
-        {pointProducts.length === 0 ? (
-          <p>상품이 없습니다.</p>
-        ) : (
-          pointProducts.map((product) => (
-            <Card style={{ backgroundColor: '#FFE2D0', width: '18rem' }} key={product.productId}>
-              <Card.Img
-                variant="top"
+        포인트 상점
+      </h1>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "0px", // 카드 간의 간격
+          justifyContent: "space-between", // 카드 사이의 공간 균등 배치
+        }}
+      >
+        {pointProducts.map((product) => (
+          <div
+            key={product.productId}
+            style={{
+              width: "calc(33% - 0px)", // 한 줄에 3개씩 배치
+              cursor: "pointer",
+              border: "1px solid #ddd",
+              borderRadius: "1px",//모서리
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              overflow: "hidden",
+              backgroundColor: "#fff",
+              transition: "transform 0.2s ease-in-out",
+            }}
+            onClick={() => navigate(`/pointProducts/${product.productId}`)}
+          >
+            {/* 상품 이미지 */}
+            <div
+              style={{
+                height: "200px",
+                overflow: "hidden",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img
                 src={`/api/images/${product.imageIds}`}
-                alt={product.productName || "상품 이미지"}
-                style={{ height: '200px', objectFit: 'cover' }}
+                alt={product.productName}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
               />
-              <Card.Body>
-                <Card.Title>{product.productName}</Card.Title>
-                <Card.Text>
-                  <strong>가격:</strong> {product.price} 포인트<br />
-                  <strong>브랜드:</strong> {product.brandCategory}
-                </Card.Text>
-                <Button
-                  style={{
-                    backgroundColor: hoveredId === product.productId ? '#FD9251' : '#feb98e',
-                    borderColor: hoveredId === product.productId ? '#ffa07a' : '#feb98e',
-                  }}
-                  onMouseEnter={() => setHoveredId(product.productId)}
-                  onMouseLeave={() => setHoveredId(null)}
-                  onClick={() => navigate(`/pointProducts/${product.productId}`)}
-                >
-                  구매하러 가기
-                </Button>
-              </Card.Body>
-            </Card>
-          ))
-        )}
+            </div>
+
+            {/* 상품 정보 */}
+            <div style={{ padding: "10px" }}>
+              {/* 브랜드명 */}
+              <p
+                style={{
+                  fontSize: "0.9rem",
+                  fontWeight: "bold",
+                  color: "#777",
+                  margin: "0 0 5px 0",
+                }}
+              >
+                {product.brandCategory}
+              </p>
+
+              {/* 상품명 */}
+              <h3
+                style={{
+                  fontSize: "1.1rem",
+                  fontWeight: "bold",
+                  margin: "0 0 10px 0",
+                  color: "#333",
+                  lineHeight: "1.2",
+                }}
+              >
+                {product.productName}
+              </h3>
+
+              {/* 포인트 가격 */}
+              <p
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  color: "#FF6347",
+                  margin: "0",
+                }}
+              >
+                {product.price} 포인트
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
