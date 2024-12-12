@@ -1,7 +1,7 @@
 .modal-button {
-    background-color: "#feb98e";
-    border: "none";
-    color: "white";
+    background-color: "#feb98e" !important;
+    border: "none" !important;
+    color: "white" !important;
     font-weight: "bold";
     padding: "10px 20px";
     border-radius: "5px";

@@ -150,7 +150,7 @@ const PlacePosts = ({ placeId }) => {
     <div className="place-posts">
       {/* 리뷰 작성 버튼 */}
       <div className="post-actions">
-        <button onClick={handleAddReview}>리뷰 작성</button>
+        <button style={{backgroundColor: "#FF6347", border: "none"}} onClick={handleAddReview}>리뷰 작성</button>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
 

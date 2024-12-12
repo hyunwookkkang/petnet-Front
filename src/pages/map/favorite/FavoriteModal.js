@@ -84,6 +84,7 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
                 value={1}
                 checked={formData.isPublic === 1}
                 onChange={handleChange}
+                style={{ accentColor: '#FF6347' }}
               />
               <Form.Check
                 inline
@@ -93,16 +94,28 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
                 value={0}
                 checked={formData.isPublic === 0}
                 onChange={handleChange}
+                style={{ accentColor: '#FF6347' }}
               />
             </div>
           </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button 
+        style={{
+            backgroundColor: "#DCDCDC",
+            color: "#fff",
+            border: "none"
+          }} onClick={onClose}>
           취소
         </Button>
-        <Button variant="primary" onClick={handleSubmit}>
+        <Button  
+        style={{
+            backgroundColor: "#ff6347",
+            color: "#fff",
+            border: "none"
+          }}
+          onClick={handleSubmit}>
           {favorite ? "수정하기" : "추가하기"}
         </Button>
       </Modal.Footer>
