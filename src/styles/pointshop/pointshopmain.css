@@ -1,0 +1,106 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.point-shop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  /* background: linear-gradient(135deg, #f9e4b7, #f7b1a1); */
+  background: linear-gradient(135deg, #FFFFFF, #FEBE98);
+  margin: 0;
+}
+
+.shop-title {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.options-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.option-card {
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0; /* 기본 상태: 투명 */
+  transform: translateY(20px); /* 기본 상태: 살짝 아래 */
+  animation: none; /* 초기 상태에서는 애니메이션 없음 */
+}
+
+.option-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  animation: fadeIn 0.5s ease forwards; /* 부드러운 페이드 인 효과 */
+}
+
+.option-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.highlight {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(45deg);
+  transition: all 0.5s;
+  z-index: 0;
+}
+
+.highlight-hover {
+  top: 0%;
+  left: 0%;
+}
+
+.card-content {
+  position: relative;
+  z-index: 1;
+}
+
+.option-text-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.option-icon {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+.option-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.option-description {
+  font-size: 14px;
+  color: #666;
+}
