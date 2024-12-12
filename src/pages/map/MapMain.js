@@ -59,14 +59,14 @@ function MapMain() {
             onClick={handleNavigationToMap}
             style={{ cursor: "pointer" }}
           >
-            동반지도
+            <h1>동반지도</h1>
           </div>
           <div
             className="option-box"
             onClick={handleNavigationToFavorite}
             style={{ cursor: "pointer" }}
           >
-            내 즐겨찾기
+            <h1>내 즐겨찾기</h1>
           </div>
         </div>
 

@@ -15,7 +15,7 @@ function useFetchUpdateTopic() {
     setUpdateError(null);
 
     // axios로 put 요청 보내기
-    await axios.put(`http://localhost:8000/api/topics`, newTopic)
+    await axios.put(`/api/topics`, newTopic)
       .then(response => {
         return response.data; // 받아온 데이터를 저장
       })

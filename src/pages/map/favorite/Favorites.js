@@ -5,6 +5,7 @@ import { useUser } from "../../../components/contexts/UserContext";
 import FavoriteModal from "./FavoriteModal";
 import DeleteModal from "./DeleteModal";
 import { fetchFavorites, saveFavorite, deleteFavorite } from "./FavoriteCommon"; // 공통 로직
+import "../../../styles/Main.css";
 
 const Favorites = () => {
   const { userId, nickname } = useUser(); // UserContext에서 userId와 nickname 가져오기
@@ -115,10 +116,10 @@ const Favorites = () => {
 
       <div className="sections">
         {favorites.map((favorite) => (
-          <Card key={favorite.favoriteId} className="mb-3">
+          <Card key={favorite.favoriteId} className="section">
             <Card.Body>
               <Card.Title>
-                즐겨찾기 이름: {favorite.favoriteName}{" "}
+                즐겨찾기 이름: {favorite.favoriteName}{" "} <br/>
                 {favorite.isPublic ? "🌟 공개" : "🔒 비공개"}
               </Card.Title>
               <Card.Text>저장된 장소 {favorite.itemCount || 0}개</Card.Text>

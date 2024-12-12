@@ -6,6 +6,8 @@ import { SlActionUndo } from "react-icons/sl"; // 뒤로가기 아이콘
 import "../../../styles/Navigation.css"; // 네비게이션 CSS
 import axios from "axios";
 import { useUser } from "../../contexts/UserContext";
+import { showSuccessToast, showErrorToast } from "../alert/CommonToast";
+
 
 function TopNavigation() {
   const {userId} = useUser();
@@ -33,11 +35,11 @@ function TopNavigation() {
   const handleLogout = async () =>{
     try {
       await axios.post("/api/users/logout", {}, { withCredentials: true });
-      alert("로그아웃되었습니다.");
+      showSuccessToast("로그아웃되었습니다.");
       navigate("/"); // 로그아웃 후 메인페이지로이동
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
-      alert("로그아웃에 실패했습니다. 다시 시도해주세요.");
+      showErrorToast("로그아웃에 실패했습니다. 다시 시도해주세요.");
     }
   };
 

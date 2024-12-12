@@ -15,7 +15,7 @@ function useFetchAddTopic() {
     setAddError(null);
 
     // axios로 post 요청 보내기
-    await axios.post(`http://localhost:8000/api/topics`, newTopic)
+    await axios.post(`/api/topics`, newTopic)
       .then(response => {
         return response.data; // 받아온 데이터를 저장
       })

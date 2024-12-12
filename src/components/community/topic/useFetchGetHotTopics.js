@@ -16,7 +16,7 @@ function useFetchGetHotTopics() {
     // 비동기 함수로 API 호출
     const fetchHotTopics = async () => {
       try {
-        const request = `http://localhost:8000/api/topics/hot`;
+        const request = `/api/topics/hot`;
 
         const response = await fetch(request);
         

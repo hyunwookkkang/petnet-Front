@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Container, ButtonGroup, Button } from "react-bootstrap";
 import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import "../../../styles/common/Font.css";
+import "../../../styles/common/Card.css";
+
 
 const PlaceMap = ({ dbFcltyNm }) => {
   const [places, setPlaces] = useState([]);
@@ -192,7 +195,7 @@ const PlaceMap = ({ dbFcltyNm }) => {
                 key={index}
                 style={{ textDecoration: "none" }}
               >
-                <Card key={index} sx={{ display: "flex", mb: 3 }}>
+                <Card key={index} sx={{ display: "flex", mb: 3 }} className="common-card">
                   <CardMedia
                     component="img"
                     sx={{ width: 151 }}
@@ -201,13 +204,13 @@ const PlaceMap = ({ dbFcltyNm }) => {
                   />
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <CardContent>
-                      <Typography component="div" variant="h5">
-                        {place.fcltyNm}
+                      <Typography component="div" variant="h5"  className="common-content common-title">
+                        <h3>{place.fcltyNm}</h3>
                       </Typography>
-                      <Typography variant="subtitle1" color="text.secondary">
+                      <Typography variant="subtitle1" color="text.secondary" className="common-content common-title">
                         운영시간: {place.operTime}
                       </Typography>
-                      <Typography variant="subtitle1" color="text.secondary">
+                      <Typography variant="subtitle1" color="text.secondary"  className="common-content common-title">
                         거리: ~{(place.distance || 0).toFixed(1)}km
                       </Typography>
                     </CardContent>
