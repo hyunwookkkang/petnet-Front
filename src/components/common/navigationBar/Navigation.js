@@ -4,7 +4,7 @@ import { useUser } from "../../contexts/UserContext";
 import { Button } from "react-bootstrap";
 import "../../../styles/Navigation.css";
 import "../../../styles/common/Button.css";
-import NavLoginModal from "../login/NavLoginModal";
+import CommonModal from "../modal/CommonModal";
 
 function Navigation() {
   const { userId, userRole } = useUser(); // userId와 userRole 가져오기
@@ -65,7 +65,7 @@ function Navigation() {
         ) : null}
       </nav>
 
-      <NavLoginModal
+      <CommonModal
         show = {showAlert} 
         onHide = {() => setShowAlert(false)}
         title = "로그인 필요"

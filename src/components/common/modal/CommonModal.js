@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 
-function NavLoginModal({ show, onHide, title, body, footer }) {
+function CommonModal({ show, onHide, title, body, footer }) {
     return (
         <Modal show={show} onHide={onHide} centered>
         <Modal.Header closeButton>
@@ -13,4 +13,4 @@ function NavLoginModal({ show, onHide, title, body, footer }) {
     );
 }
 
-export default NavLoginModal;
+export default CommonModal;
