@@ -65,7 +65,7 @@ body {
 @media (max-width: 768px) {
   .container {
     max-width: 100%;
-    padding: 0 10px; /* 좌우 여백 축소 */
+    padding: 0 0px; /* 좌우 여백 축소 */
   }
   .top-navigation,
   .navigation {
