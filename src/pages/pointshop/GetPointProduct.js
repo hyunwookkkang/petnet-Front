@@ -4,7 +4,7 @@ import axios from "axios";
 import "../../styles/common/Button.css"; // .modal-button 클래스 포함
 import { useUser } from "../../components/contexts/UserContext";
 import CommonModal from "../../components/common/modal/CommonModal";
-
+import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
 const GetPointProduct = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -45,11 +45,11 @@ const GetPointProduct = () => {
           headers: { "Content-Type": "application/json" },
         }
       );
-      alert("구매가 완료되었습니다!");
+      showSuccessToast("구매가 완료되었습니다!");
       navigate("/pointProducts");
     } catch (error) {
       console.error("Error purchasing product:", error);
-      alert("구매에 실패했습니다. 다시 시도해 주세요.");
+      showErrorToast("구매에 실패했습니다. 다시 시도해 주세요.");
     }
   };
 

@@ -8,10 +8,10 @@ import CommonModal from "../../components/common/modal/CommonModal";
 const GetPointLog = () => {
   const [pointLogs, setPointLogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentApi, setCurrentApi] = useState('getPointLog'); // 현재 API 상태
+  const [currentApi, setCurrentApi] = useState('getPointLog');
   const [userPoint, setUserPoint] = useState(null);
-  const [showAlert, setShowAlert] = useState(false); // 모달 상태
-  const { userId } = useUser(); // UserContext에서 userId 가져오기
+  const [showAlert, setShowAlert] = useState(false);
+  const { userId } = useUser();
   const navigate = useNavigate();
 
   const apiEndpoints = (userId) => ({
@@ -20,7 +20,6 @@ const GetPointLog = () => {
     getPointUpdateLog: `/api/pointshop/point/${userId}/getPointUpdateLog`,
   });
 
-  // 이유 매핑
   const reasonMapping = {
     0: '이벤트 발생',
     1: '장소 리뷰',
@@ -32,25 +31,23 @@ const GetPointLog = () => {
     8: '상품 구매',
   };
 
-  // Fetch point logs based on the selected API
   useEffect(() => {
     if (!userId) {
-      setShowAlert(true); // 모달 표시
+      setShowAlert(true);
       return;
     }
 
     const fetchPointLogs = async () => {
       try {
-        setLoading(true); // 로딩 상태 시작
+        setLoading(true);
         const response = await fetch(apiEndpoints(userId)[currentApi]);
         if (!response.ok) {
           throw new Error('Failed to fetch point logs.');
         }
         const data = await response.json();
 
-        // 날짜 형식 변환 및 이유 매핑
         const formattedData = data.map((log, index) => ({
-          id: index + 1, // 순번 추가
+          id: index + 1,
           ...log,
           reason: reasonMapping[log.reason] || `알 수 없음(${log.reason})`,
           pointLogDate: new Date(log.pointLogDate).toISOString().replace('T', ' ').substring(0, 19),
@@ -60,17 +57,16 @@ const GetPointLog = () => {
       } catch (error) {
         console.error(error);
       } finally {
-        setLoading(false); // 로딩 상태 종료
+        setLoading(false);
       }
     };
 
     fetchPointLogs();
-  }, [currentApi, userId]); // currentApi나 userId가 변경될 때마다 데이터 재호출
+  }, [currentApi, userId]);
 
-  // Fetch user point
   useEffect(() => {
     if (!userId) {
-      setShowAlert(true); // 모달 표시
+      setShowAlert(true);
       return;
     }
 
@@ -90,7 +86,6 @@ const GetPointLog = () => {
     fetchUserPoint();
   }, [userId]);
 
-  // Define DataGrid columns
   const columns = [
     { field: 'id', headerName: '순번', width: 100 },
     { field: 'reason', headerName: '이유', width: 200 },
@@ -99,70 +94,53 @@ const GetPointLog = () => {
   ];
 
   return (
-    <div style={{ padding: '20px', backgroundColor: '#FFF5EF', border: '2px solid #FF7826' }}>
+    <div style={{ padding: '20px', background: '#FFFFFF', borderRadius: '10px', boxShadow: '0 5px 20px rgba(0, 0, 0, 0.15)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 style={{ color: '#FF7826' }}>포인트 내역</h1>
+        <h1 style={{ color: '#FEBE98', fontSize: '2.2rem', fontWeight: 'bold' }}>포인트 내역</h1>
         <div style={{
-          backgroundColor: '#FF7826',
-          color: '#FFF',
-          padding: '10px 20px',
+          backgroundColor: '#FFFFFF',
+          color: '#FEBE98 ',
+          padding: '12px 20px',
           borderRadius: '5px',
           fontWeight: 'bold',
+          boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)',
         }}>
-          현재 포인트: {userPoint !== null ? userPoint : '불러오는 중...'}
+         <h5> 현재 포인트: {userPoint !== null ? userPoint : '불러오는 중...'}</h5>
         </div>
       </div>
-      <div style={{ marginBottom: '20px' }}>
-        <button
-          onClick={() => setCurrentApi('getPointLog')}
-          style={{
-            marginRight: '10px',
-            backgroundColor: currentApi === 'getPointLog' ? '#FF7826' : '#FFF',
-            color: currentApi === 'getPointLog' ? '#FFF' : '#FF7826',
-            padding: '10px 20px',
-            borderRadius: '5px',
-            border: '1px solid #FF7826',
-            cursor: 'pointer',
-          }}
-        >
-          전체 로그
-        </button>
-        <button
-          onClick={() => setCurrentApi('getPointAddLog')}
-          style={{
-            marginRight: '10px',
-            backgroundColor: currentApi === 'getPointAddLog' ? '#FF7826' : '#FFF',
-            color: currentApi === 'getPointAddLog' ? '#FFF' : '#FF7826',
-            padding: '10px 20px',
-            borderRadius: '5px',
-            border: '1px solid #FF7826',
-            cursor: 'pointer',
-          }}
-        >
-          적립 로그
-        </button>
-        <button
-          onClick={() => setCurrentApi('getPointUpdateLog')}
-          style={{
-            backgroundColor: currentApi === 'getPointUpdateLog' ? '#FF7826' : '#FFF',
-            color: currentApi === 'getPointUpdateLog' ? '#FFF' : '#FF7826',
-            padding: '10px 20px',
-            borderRadius: '5px',
-            border: '1px solid #FF7826',
-            cursor: 'pointer',
-          }}
-        >
-          사용 로그
-        </button>
+      <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+        {['getPointLog', 'getPointAddLog', 'getPointUpdateLog'].map((type, idx) => (
+          <button
+            key={type}
+            onClick={() => setCurrentApi(type)}
+            style={{
+              flex: 1,
+              backgroundColor: currentApi === type ? '#FEBE98' : '#FFFFFF',
+              color: currentApi === type ? '#FFFFFF' : '#FEBE98',
+              padding: '10px',
+              borderRadius: '8px',
+              border: `2px solid ${currentApi === type ? '#FEBE98' : '#EDEDED'}`,
+              fontWeight: 'bold',
+              boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+          >
+            {idx === 0 ? '전체 로그' : idx === 1 ? '적립 로그' : '사용 로그'}
+          </button>
+        ))}
       </div>
       {loading ? (
-        <p>포인트 내역을 불러오는 중입니다...</p>
+        <div style={{ textAlign: 'center', padding: '20px', fontSize: '1.2rem', color: '#DCDCDC' }}>
+          포인트 내역을 불러오는 중입니다...
+        </div>
       ) : (
-        <div style={{ height: 600, width: '100%' }}>
+        <div style={{ height: 600, width: '100%', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 5px 15px rgba(0, 0, 0, 0.15)', background: '#FFFFFF' }}>
           <DataGrid
             rows={pointLogs}
             columns={columns}
             pageSize={10}
+            style={{ backgroundColor: '#FFFFFF', border: 'none' }}
           />
         </div>
       )}
@@ -177,7 +155,7 @@ const GetPointLog = () => {
         body={<div>로그인이 필요한 서비스입니다.<br /> 로그인 화면으로 이동합니다.</div>}
         footer={
           <button
-            style={{ backgroundColor: "#feb98e", border: "none", padding: "10px 20px", borderRadius: "5px" }}
+            style={{ backgroundColor: "#FF6347", color: "#FFFFFF", border: "none", padding: "10px 20px", borderRadius: "5px", fontWeight: "bold", cursor: "pointer" }}
             onClick={() => {
               setShowAlert(false);
               navigate("/login");
