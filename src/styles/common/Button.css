@@ -7,3 +7,13 @@
     border-radius: 5px; /* 따옴표 없이 사용 */
     cursor: pointer; /* 따옴표 없이 사용 */
 }
+
+.modal-button-negative {
+    background-color: #DCDCDC !important; /* 색상값에 따옴표 없이 사용 */
+    border: none !important; /* "none"을 따옴표 없이 사용 */
+    color: white !important; /* 색상값에 따옴표 없이 사용 */
+    font-weight: bold; /* 따옴표 없이 사용 */
+    padding: 10px 20px; /* 따옴표 없이 사용 */
+    border-radius: 5px; /* 따옴표 없이 사용 */
+    cursor: pointer; /* 따옴표 없이 사용 */
+}

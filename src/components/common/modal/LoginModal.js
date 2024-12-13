@@ -28,7 +28,6 @@ const LoginModal = ({showModal, setShowModal, message, required}) => {
         <div style={{ display: 'flex', gap: '10px' }}>
           <Button
             className="modal-button"
-            style={{backgroundColor: "#FEBE98", border: "none"}}
             onClick={() => {
               setShowModal(false);
               navigate("/login");
@@ -39,8 +38,7 @@ const LoginModal = ({showModal, setShowModal, message, required}) => {
           
           { !required && (
             <Button
-              className="modal-button"
-              style={{backgroundColor: "#DCDCDC", border: "none"}}
+              className="modal-button-negative"
               onClick={() => setShowModal(false)}
             >
               닫기
