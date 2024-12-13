@@ -84,14 +84,16 @@ function App() {
   //const userRole = 1; // 관리자: 0 또는 1, 일반 사용자: 2
 
   return (
+  <div className="container">
     <UserProvider>
       {/* 최상단 userId 상태값 공유 */}
       <Router>
         {/* 상단 nav 고정 */}
         <TopNavigation />
+
+        <div className="main-content">
         
         {/* 페이지 콘텐츠 영역에 여백을 추가해 상단/하단 네비게이션이 겹치지 않도록 처리 */}
-        <div className="main-content"> {/* 여기에 여백을 추가하는 wrapper div 추가 */}
           <Routes>
             {/* 메인 페이지 */}
             <Route path="/" element={<Main />} />
@@ -194,15 +196,16 @@ function App() {
              */}
             {/* END : cashbook-page */}
 
-
           </Routes>
-        </div>
+          </div>
         {/*하단 Nav 고정*/}
         <Navigation />
         {/* SpeedDial */}
         {/* <BasicSpeedDial /> */}
       </Router>
     </UserProvider>
+    </div>
+
   );
 }
 

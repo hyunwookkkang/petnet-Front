@@ -3,19 +3,21 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import "../../styles/pointshop/point.css";
 import { useUser } from "../../components/contexts/UserContext";
+import CommonModal from "../../components/common/modal/CommonModal";
 
-const UserPointLogPage = () => {
+const GetPointLog = () => {
   const [pointLogs, setPointLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentApi, setCurrentApi] = useState('getPointLog'); // 현재 API 상태
   const [userPoint, setUserPoint] = useState(null);
+  const [showAlert, setShowAlert] = useState(false); // 모달 상태
   const { userId } = useUser(); // UserContext에서 userId 가져오기
   const navigate = useNavigate();
 
   const apiEndpoints = (userId) => ({
-    getPointLog: `http://192.168.0.40:8000/api/pointshop/point/${userId}/getPointLog`,
-    getPointAddLog: `http://192.168.0.40:8000/api/pointshop/point/${userId}/getPointAddLog`,
-    getPointUpdateLog: `http://192.168.0.40:8000/api/pointshop/point/${userId}/getPointUpdateLog`,
+    getPointLog: `/api/pointshop/point/${userId}/getPointLog`,
+    getPointAddLog: `/api/pointshop/point/${userId}/getPointAddLog`,
+    getPointUpdateLog: `/api/pointshop/point/${userId}/getPointUpdateLog`,
   });
 
   // 이유 매핑
@@ -33,8 +35,7 @@ const UserPointLogPage = () => {
   // Fetch point logs based on the selected API
   useEffect(() => {
     if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리디렉션
+      setShowAlert(true); // 모달 표시
       return;
     }
 
@@ -69,14 +70,13 @@ const UserPointLogPage = () => {
   // Fetch user point
   useEffect(() => {
     if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
+      setShowAlert(true); // 모달 표시
       return;
     }
 
     const fetchUserPoint = async () => {
       try {
-        const response = await fetch(`http://192.168.0.40:8000/api/pointshop/point/${userId}/getUserPoint`);
+        const response = await fetch(`/api/pointshop/point/${userId}/getUserPoint`);
         if (!response.ok) {
           throw new Error('Failed to fetch user point.');
         }
@@ -166,8 +166,29 @@ const UserPointLogPage = () => {
           />
         </div>
       )}
+
+      <CommonModal
+        show={showAlert}
+        onHide={() => {
+          setShowAlert(false);
+          navigate("/login");
+        }}
+        title="로그인 필요"
+        body={<div>로그인이 필요한 서비스입니다.<br /> 로그인 화면으로 이동합니다.</div>}
+        footer={
+          <button
+            style={{ backgroundColor: "#feb98e", border: "none", padding: "10px 20px", borderRadius: "5px" }}
+            onClick={() => {
+              setShowAlert(false);
+              navigate("/login");
+            }}
+          >
+            확인
+          </button>
+        }
+      />
     </div>
   );
 };
 
-export default UserPointLogPage;
+export default GetPointLog;

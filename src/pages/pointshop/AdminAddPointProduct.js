@@ -41,7 +41,7 @@ const AdminAddPointProduct = () => {
     bodyData.append('imageFiles', formData.imageFiles); // 이미지 파일 추가
 
     try {
-      const response = await fetch('http://192.168.0.40:8000/api/pointshop/pointProducts/Admin', {
+      const response = await fetch('/api/pointshop/pointProducts/Admin', {
         method: 'POST',
         body: bodyData,
       });

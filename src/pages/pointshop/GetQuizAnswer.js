@@ -11,7 +11,7 @@ const QuizSubmission = () => {
   const fetchQuizzes = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.0.40:8000/api/pointshop/quizs/getRandomQuizs?userId=user01"
+        "/api/pointshop/quizs/getRandomQuizs?userId=user01"
       );
       setQuizzes(response.data);
     } catch (error) {
