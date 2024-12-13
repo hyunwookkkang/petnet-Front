@@ -40,6 +40,12 @@ function MapMain() {
     navigate(`/placeSearch?query=${value.trim()}`);
   }
 
+  // 검색 버튼 시 검색 페이지 이동
+  const handleNavigationToPlaceSearch = () => {
+    console.log("Navigating to Place Info");
+    navigate("/placeSearch");
+  };
+
   return (
     <div className="places-map-page">
       {/* 콘텐츠를 네비게이션 아래로 배치 */}
@@ -47,7 +53,7 @@ function MapMain() {
         {/* 검색 바 */}
         <SearchBar
           placeholder="오늘은 어디를 갈까?"
-          onSearch={(value) => handleSearch(value)}
+          onSearch={(value) => handleNavigationToPlaceSearch(value)}
         />
         <br />
         <br />

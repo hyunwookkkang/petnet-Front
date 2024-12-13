@@ -8,7 +8,7 @@ const StyledAlert = styled(Alert)(({ theme }) => ({
     top: theme.spacing(2),
     right: theme.spacing(2),
     zIndex: 1300,
-    backgroundColor: "#febe98", // 사용자 정의 색상
+    backgroundColor: "#febe98", 
     color: "#000", // 텍스트 색상 (가독성 향상)
     }));
 

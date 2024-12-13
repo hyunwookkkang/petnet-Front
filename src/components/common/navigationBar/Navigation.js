@@ -6,6 +6,17 @@ import "../../../styles/Navigation.css";
 import "../../../styles/common/Button.css";
 import CommonModal from "../modal/CommonModal";
 
+//NavBarIcons
+import HomeIcon from '@mui/icons-material/Home';  // home
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';  //commu
+import MapIcon from '@mui/icons-material/Map';  //map
+import StorefrontIcon from '@mui/icons-material/Storefront';  //store
+import PersonIcon from '@mui/icons-material/Person'; //MY
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';  //admin
+
+
+
+
 function Navigation() {
   const { userId, userRole } = useUser(); // userId와 userRole 가져오기
   const navigate = useNavigate();
@@ -26,25 +37,45 @@ function Navigation() {
           to="/"
           className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
         >
-          홈
+          <div style={{ textAlign: "center" }}>
+              <HomeIcon style={{ fontSize: "24px" }} /> 
+              <div style={{ fontSize: "12px", marginTop: "4px" }}>
+                홈
+              </div> 
+          </div>
         </NavLink>
         <NavLink
           to="/community"
           className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
         >
-          커뮤니티
+          <div style={{ textAlign: "center" }}>
+              <LocalLibraryIcon style={{ fontSize: "24px" }} /> 
+              <div style={{ fontSize: "12px", marginTop: "4px" }}>
+                커뮤니티
+              </div> 
+            </div>
         </NavLink>
         <NavLink
           to="/map-main"
           className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
         >
-          지도
+          <div style={{ textAlign: "center" }}>
+              <MapIcon style={{ fontSize: "24px" }} /> 
+              <div style={{ fontSize: "12px", marginTop: "4px" }}>
+                지도
+              </div>
+            </div>
         </NavLink>
         <NavLink
           to="/shop/products"
           className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
         >
-          상점
+          <div style={{ textAlign: "center" }}>
+              <StorefrontIcon style={{ fontSize: "24px" }} /> 
+              <div style={{ fontSize: "12px", marginTop: "4px" }}>
+                상점
+              </div>
+          </div>
         </NavLink>
 
         {userRole === "2" || userRole === null ? (
@@ -53,14 +84,24 @@ function Navigation() {
             onClick={handleMyClick} // 클릭 이벤트로 경고 처리
             style={{ cursor: "pointer" }}
           >
-            MY
+            <div style={{ textAlign: "center" }}>
+              <PersonIcon style={{ fontSize: "24px" }} /> 
+              <div style={{ fontSize: "12px", marginTop: "4px" }}>
+                MY
+              </div> 
+            </div>
           </span>
         ) : userRole === "0" || userRole === "1" ? (
           <NavLink
             to="/admin"
             className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
           >
-            관리자
+            <div style={{ textAlign: "center" }}>
+              <AdminPanelSettingsIcon style={{ fontSize: "24px" }} /> 
+              <div style={{ fontSize: "12px", marginTop: "4px" }}>
+                관리자
+              </div> 
+            </div>
           </NavLink>
         ) : null}
       </nav>
@@ -85,34 +126,6 @@ function Navigation() {
           </Button>
         }
       />
-
-      {/* 경고창 모달 */}
-      {/* <Modal show={showAlert} onHide={() => setShowAlert(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>로그인 필요</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          로그인이 필요한 서비스입니다. 로그인 화면으로 이동합니다.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            style={{
-              backgroundColor: "#feb98e",
-              border: "none",
-              color: "white",
-              fontWeight: "bold",
-              padding: "10px 20px",
-              borderRadius: "5px",
-            }}
-            onClick={() => {
-              setShowAlert(false);
-              navigate("/login"); // 로그인 화면으로 이동
-            }}
-          >
-            확인
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
     </>
   );
 }

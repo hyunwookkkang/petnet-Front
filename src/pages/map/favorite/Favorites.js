@@ -6,6 +6,7 @@ import FavoriteModal from "./FavoriteModal";
 import DeleteModal from "./DeleteModal";
 import { fetchFavorites, saveFavorite, deleteFavorite } from "./FavoriteCommon"; // 공통 로직
 import "../../../styles/Main.css";
+import { showErrorToast } from "../../../components/common/alert/CommonToast";
 
 const Favorites = () => {
   const { userId, nickname } = useUser(); // UserContext에서 userId와 nickname 가져오기
@@ -27,7 +28,7 @@ const Favorites = () => {
     
     if (!userId) {
       setError("로그인이 필요합니다."); // 로그인이 필요한 경우 처리
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      showErrorToast("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
       navigate("/login");
       return;
     }
@@ -66,7 +67,7 @@ const Favorites = () => {
       setIsFavoriteModalOpen(false); // 모달 닫기
     } catch (error) {
       console.error("즐겨찾기 저장 오류:", error);
-      alert("즐겨찾기 저장 중 오류가 발생했습니다.");
+      showErrorToast("즐겨찾기 저장 중 오류가 발생했습니다.");
     }
   };
 
@@ -80,7 +81,7 @@ const Favorites = () => {
       setIsDeleteModalOpen(false); // 모달 닫기
     } catch (error) {
       console.error("즐겨찾기 삭제 오류:", error);
-      alert("즐겨찾기 삭제 중 오류가 발생했습니다.");
+      showErrorToast("즐겨찾기 삭제 중 오류가 발생했습니다.");
     }
   };
 

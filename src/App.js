@@ -10,7 +10,7 @@ import { UserProvider } from "./components/contexts/UserContext";
 
 import Navigation from "./components/common/navigationBar/Navigation";
 import TopNavigation from "./components/common/navigationBar/TopNavigation";
-import BasicSpeedDial from "./components/common/dial/BasicSpeedDial";
+//import BasicSpeedDial from "./components/common/dial/BasicSpeedDial";
 import UsingComponent from "./components/common/UsingComponent";
 
 // Shop 관련 페이지
@@ -200,7 +200,7 @@ function App() {
         {/*하단 Nav 고정*/}
         <Navigation />
         {/* SpeedDial */}
-        <BasicSpeedDial />
+        {/* <BasicSpeedDial /> */}
       </Router>
     </UserProvider>
   );

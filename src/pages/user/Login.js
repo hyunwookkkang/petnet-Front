@@ -3,11 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import axios from "axios";
 import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
+import { useUser } from "../../components/contexts/UserContext";
 
 function Login() {
   const [userId, setUserId] = useState(""); // 사용자 ID
   const [password, setPassword] = useState(""); // 비밀번호
   const navigate = useNavigate();
+  const { fetchUserData } = useUser();
+
 
   // 로그인 요청
   const handleLogin = async (e) => {
@@ -27,6 +30,9 @@ function Login() {
         showSuccessToast("로그인되었습니다!");
 
         console.log("로그인 성공");
+
+        await fetchUserData(); 
+        
         navigate("/"); // 홈으로 이동
       }
     } catch (error) {

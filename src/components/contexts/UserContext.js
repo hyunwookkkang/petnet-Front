@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
+
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -8,6 +9,9 @@ export const UserProvider = ({ children }) => {
   const [nickname, setNickname] = useState(null);
   const [myPoint, setMyPoint] = useState(0);
   const [userRole, setUserRole] = useState(null);
+  const [username, setUserName] = useState(null);
+  const [birthDate, setBirthDate] = useState(null);
+
 
   const fetchUserData = async () => {
     try {
@@ -23,6 +27,9 @@ export const UserProvider = ({ children }) => {
         setNickname(response.data.nickname);
         setMyPoint(response.data.myPoint);
         setUserRole(response.data.role);
+        setUserName(response.data.username);
+        setBirthDate(response.data.birthDate);
+
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -30,6 +37,8 @@ export const UserProvider = ({ children }) => {
       setNickname(null);
       setMyPoint(0);
       setUserRole(null);
+      setUserName(null);
+      setBirthDate(null);
     }
   };
 
@@ -38,7 +47,7 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ userId, nickname, myPoint, userRole, fetchUserData }}>
+    <UserContext.Provider value={{ userId, nickname, myPoint, userRole, username, birthDate, fetchUserData }}>
       {children}
     </UserContext.Provider>
   );
