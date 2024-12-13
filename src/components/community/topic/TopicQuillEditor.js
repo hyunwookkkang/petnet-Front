@@ -1,6 +1,6 @@
 import React, { useMemo, memo } from 'react'
-// import styles from './quillEditor.module.css';
 import ReactQuill from 'react-quill'; 
+
 import 'react-quill/dist/quill.snow.css'; // react-quill과 css파일 import 하기
 import '../../../styles/community/QuillEditor.css';
 

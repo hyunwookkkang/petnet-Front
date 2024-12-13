@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
-import { Container, Form } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
-import SearchBar from "../../../components/common/searchBar/SearchBar";
+import TopicSearchBar from "../../../components/community/topic/TopicSearchBar";
 import useFetchGetTopics from "../../../components/community/topic/useFetchGetTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
@@ -10,13 +10,9 @@ import "../../../styles/Main.css"; // 기존 스타일 재사용
 
 const SearchTopics = () => {
 
-  const { fetchGetTopics, loading, error } = useFetchGetTopics();
+  const { fetchGetTopics, error } = useFetchGetTopics();
 
   const [topics, setTopics] = useState([]);
-
-  const [category, setCategory] = useState('');
-  const [condition, setCondition] = useState('');
-  const [keyword, setKeyword] = useState('');
 
   const [search, setSearch] = useState({
     "category": '',
@@ -24,34 +20,16 @@ const SearchTopics = () => {
     "keyword": ''
   });
 
-  // 페이지 초기화
   useEffect(() => {
-
+    // 페이지 초기화
     const fetchTopics = async () => {
       const response = await fetchGetTopics(search);
       setTopics(response || []);
     };
     fetchTopics();
-    
+
   }, [fetchGetTopics, search]);
 
-
-  const searchTopicHandler = async (e) => {
-    e.preventDefault();
-
-    setKeyword("제목");
-
-    setSearch({
-      "category": category,
-      "condition": condition,
-      "keyword": keyword
-    });
-  }
-  
-  // 로딩 중일 때 표시할 메시지
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   // 에러가 발생했을 때 표시할 메시지
   if (error) {
@@ -73,53 +51,12 @@ const SearchTopics = () => {
 
   ));
 
+
   return (
 
     <Container>
 
-      <Form onSubmit={searchTopicHandler}>
-
-        <Form.Group className="mb-4">
-          <SearchBar/>
-        </Form.Group>
-
-        <div className="d-flex gap-4 justify-content-center">
-          <Form.Group className="mb-2">
-            <Form.Label htmlFor="category">카테고리</Form.Label>
-            <Form.Control 
-              id="category" 
-              as="select" 
-              value={category} 
-              onChange={(e) => setCategory(e.target.value)} 
-              style={{ width: '150px' }} 
-            >
-              <option value="">전체</option>
-              <option value="1">잡담</option>
-              <option value="2">질문</option>
-              <option value="3">후기</option>
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group className="mb-2">
-            <Form.Label htmlFor="condition">검색 기준</Form.Label>
-            <Form.Control 
-              id="condition" 
-              as="select" 
-              value={condition} 
-              onChange={(e) => setCondition(e.target.value)} 
-              style={{ width: '150px' }} 
-            >
-              <option value="" disabled hidden>검색기준</option>
-              <option value="1">제목</option>
-              <option value="2">본문</option>
-              <option value="3">작성자</option>
-              <option value="4">해시태그</option>
-            </Form.Control>
-          </Form.Group>
-        </div>
-
-      </Form>
-
+      <TopicSearchBar setSearch={setSearch}/>
       <br/>
       
       <div>

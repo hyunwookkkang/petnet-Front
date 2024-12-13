@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Container, ButtonGroup, Button } from "react-bootstrap";
 
-import "../../styles/Main.css"; // 기존 스타일 재사용
 import SearchBar from "../../components/common/searchBar/SearchBar";
 import ViewTopics from "../../components/community/topic/ViewTopics";
 import ViewAllTopics from "../../components/community/topic/ViewAllTopics";
 import ViewHotTopics from "../../components/community/topic/ViewHotTopics";
-import { Link } from "react-router-dom";
+
+import "../../styles/Main.css"; // 기존 스타일 재사용
 
 
 const CommunityMain = () => {
@@ -50,7 +51,9 @@ const CommunityMain = () => {
     <Container>
       
       <div>
-        <SearchBar searchTopics={searchTopics} />
+        <Link to={`/searchTopics`} className="link-unstyled">
+          <SearchBar searchTopics={searchTopics} />
+        </Link>
         <Link to={`/editTopic`}>
           <button>게시글 작성</button>
         </Link>

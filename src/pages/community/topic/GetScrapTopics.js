@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Container } from "react-bootstrap";
 
 import { useUser } from "../../../components/contexts/UserContext";
-import SearchBar from "../../../components/common/searchBar/SearchBar";
+import TopicSearchBar from "../../../components/community/topic/TopicSearchBar";
 import TopicScrapButton from "../../../components/community/topic/TopicScrapButton";
 import useFetchGetScrapTopics from "../../../components/community/topic/useFetchGetScrapTopics";
 
@@ -16,9 +16,15 @@ const GetScrapTopics = () => {
 
   const { userId } = useUser(''); // 사용자 ID 가져오기
 
-  const { fetchGetScrapTopics, loading, error } = useFetchGetScrapTopics();
+  const { fetchGetScrapTopics, error } = useFetchGetScrapTopics();
 
   const [topics, setTopics] = useState([]);
+    
+  const [search, setSearch] = useState({
+    "category": '',
+    "condition": '',
+    "keyword": ''
+  });
 
 
   // 페이지 초기화
@@ -30,22 +36,14 @@ const GetScrapTopics = () => {
     }
 
     const fetchTopics = async () => {
-      const response = await fetchGetScrapTopics(userId);
+      const response = await fetchGetScrapTopics(userId, search);
       setTopics(response || []);
     };
     fetchTopics();
     
-  }, [fetchGetScrapTopics, userId, navigate]);
-  
-  // 로딩 중일 때 표시할 메시지
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  }, [fetchGetScrapTopics, userId, search, navigate]);
 
-  // 에러가 발생했을 때 표시할 메시지
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+
 
   const topicsView = topics.map((topic) => (
 
@@ -64,13 +62,19 @@ const GetScrapTopics = () => {
 
   ));
 
+
+  // 에러가 발생했을 때 표시할 메시지
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+
   return (
 
     <Container>
       
-      <div>
-        <SearchBar/>
-      </div>
+      <TopicSearchBar setSearch={setSearch}/>
+      <br/>
 
       <div>
         <h1>View Scrap Topics</h1>

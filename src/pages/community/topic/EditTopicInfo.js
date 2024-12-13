@@ -40,6 +40,7 @@ const EditTopicInfo = () => {
   const [tagSuggestions, setTagSuggestions] = useState([]); // 해시태그 자동완성
   const [required, setRequired] = useState('');
 
+  // 페이지 초기화
   useEffect(() => {
     if (!userId) {
       alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
@@ -58,31 +59,36 @@ const EditTopicInfo = () => {
     }
   }, [topic, userId, navigate]);
 
+  // 해시태그 자동완성
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      // 조건 검사
+      if (!hashtagTemp.trim()) {
+        setTagSuggestions([]);
+        return;
+      }
+      // 해시태그 비동기 검색
+      try {
+        const resHashTags = await fetchGetHashtags(hashtagTemp);
+        setTagSuggestions(resHashTags || []);
+      } 
+      catch (err) {
+        console.error(err);
+        setTagSuggestions([]);
+      }
+    };
+    // 비동기 함수 호출
+    fetchSuggestions();
+  }, [hashtagTemp, fetchGetHashtags]);
+
 
   const appendHashtag = () => {
     setHashtags(prevHahstag => [...prevHahstag, hashtagTemp]);
     setHashtagTemp('');
-    getHahstagSuggestions('');
   }
 
   const removeHashtag = (tag) => {
     setHashtags(prevHahstag => prevHahstag.filter(i => i !== tag));
-  }
-
-  const getHahstagSuggestions = async (keyword) => {
-    if (!keyword.trim()) {
-      setTagSuggestions([]);
-      return;
-    }
-
-    try {
-      const resHashTags = await fetchGetHashtags(keyword);
-      setTagSuggestions(resHashTags);
-    } 
-    catch (err) {
-      console.error(err);
-      setTagSuggestions([]);
-    }
   }
 
   const submitTopicHandler = async (e) => {
@@ -122,6 +128,7 @@ const EditTopicInfo = () => {
     }
   };
 
+
   if ((topicId && error) || addError || updateError) {
     return <div>Error: {error || addError || updateError}</div>;
   }
@@ -134,13 +141,12 @@ const EditTopicInfo = () => {
     return <div>Loading...</div>;
   }
 
+
   return (
     <Container className="d-flex justify-content-center">
       <div>
         
         <h2>{topic ? '게시글 수정' : '새 게시글 작성'}</h2>
-
-        {/* {error && <div className="error-message">{error}</div>} */}
 
         <Form onSubmit={submitTopicHandler}>
 
@@ -208,10 +214,7 @@ const EditTopicInfo = () => {
               type="text" 
               placeholder="해시태그 입력" 
               value={hashtagTemp} 
-              onChange={(e) => {
-                setHashtagTemp(e.target.value);
-                getHahstagSuggestions(e.target.value);
-              }} 
+              onChange={(e) => setHashtagTemp(e.target.value)} 
               style={{ width: '250px' }} 
             />
             

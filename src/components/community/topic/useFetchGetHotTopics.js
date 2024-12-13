@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-import "../../../styles/Main.css"; // 기존 스타일 재사용
-
 
 function useFetchGetHotTopics() {
 

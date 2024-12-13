@@ -1,9 +1,10 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 
-import "../../../styles/Main.css";
 import ViewTopicsCard from "./ViewTopicsCard";
 import ViewHotTopicsCard from "./ViewHotTopicsCard";
+
+import "../../../styles/Main.css";
 
 const ViewAllTopics = () => {
 

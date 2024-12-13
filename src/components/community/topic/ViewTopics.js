@@ -21,16 +21,7 @@ const ViewTopics = ({search}) => {
     };
     fetchTopics();
   },[fetchGetTopics, search]);
-  
-  // 로딩 중일 때 표시할 메시지
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
-  // 에러가 발생했을 때 표시할 메시지
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   const topicsView = topics.map((topic) => (
     
@@ -46,6 +37,18 @@ const ViewTopics = ({search}) => {
     </div>
     
   ));
+
+  
+  // 로딩 중일 때 표시할 메시지
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // 에러가 발생했을 때 표시할 메시지
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  
 
   return (
 

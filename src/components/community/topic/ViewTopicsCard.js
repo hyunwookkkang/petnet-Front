@@ -2,39 +2,39 @@ import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { Container, Card } from "react-bootstrap";
 
+import useFetchGetTopics from "./useFetchGetTopics";
+
 import "../../../styles/Main.css"; // 기존 스타일 재사용
-import useFetchTopics from "./useFetchGetTopics";
 
 
 const ViewTopicsCard = ({category}) => {
 
-  const search = { 
-    category: category
-  }
-
-  const { topics, loading, error } = useFetchTopics(search);
+  const { fetchGetTopics, loading, error } = useFetchGetTopics();
 
   const [topicCategory, setTopicCategory] = useState('');
+  const [topics, setTopics] = useState([]);
 
+  // 페이지 초기화
   useEffect(() => {
-    switch(search.category) {
+    const search = {
+      "category": category
+    }
+
+    switch(category) {
       case '1': setTopicCategory('잡담'); break;
       case '2': setTopicCategory('질문'); break;
       case '3': setTopicCategory('후기'); break;
       default: setTopicCategory('???');
     }
-  }, [search.category]);
 
+    const fetchTopics = async () => {
+      const response = await fetchGetTopics(search);
+      setTopics(response || []);
+    };
+    fetchTopics();
+
+  },[fetchGetTopics, category]);
   
-  // 로딩 중일 때 표시할 메시지
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  // 에러가 발생했을 때 표시할 메시지
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   const topicsCardView = topics.map((topic) => (
 
@@ -55,6 +55,18 @@ const ViewTopicsCard = ({category}) => {
     </ul>
 
   ));
+
+  
+  // 로딩 중일 때 표시할 메시지
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // 에러가 발생했을 때 표시할 메시지
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
 
   return (
 

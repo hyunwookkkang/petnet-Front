@@ -1,7 +1,7 @@
 .dropdown-suggestions {
   position: absolute;  /* 입력창 바로 아래에 위치 */
   top: 100%;           /* Form.Control의 바로 아래 */
-  left: 0;
+  /* left: 0; */
   /* width: 100%; */
   border: 1px solid #ddd;
   max-height: 200px;   /* 최대 높이 제한 */
@@ -13,11 +13,6 @@
   /* border-radius: 0 0 10px 10px; */  /* 둥근 모서리 */
 }
 
-button.submit-btn {
-  background-color:#feb98e;
-  color: white;
-  padding: 10px 15px;
-  margin-right: 10px;
-  border-radius: 10px;
-  cursor: pointer;
+.search {
+  left: 10%;
 }
