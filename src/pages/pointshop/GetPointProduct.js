@@ -5,6 +5,8 @@ import "../../styles/common/Button.css"; // .modal-button 클래스 포함
 import { useUser } from "../../components/contexts/UserContext";
 import CommonModal from "../../components/common/modal/CommonModal";
 import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
+
+
 const GetPointProduct = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
