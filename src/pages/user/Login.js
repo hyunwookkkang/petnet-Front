@@ -32,7 +32,7 @@ function Login() {
         console.log("로그인 성공");
 
         await fetchUserData(); 
-        
+
         navigate("/"); // 홈으로 이동
       }
     } catch (error) {
