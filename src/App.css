@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  padding-top: 60px; /* 상단 네비게이션 높이 추가 */
+  padding-bottom: 60px; /* 하단 네비게이션 높이 추가 */
+  
 }
 
 .App-logo {
@@ -15,7 +18,7 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: calc(100vh - 120px); /* 상단(60px) + 하단(60px) 네비게이션 높이 제외 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,6 +50,9 @@
 body {
   font-family: 'Ownglyph_ParkDaHyun', sans-serif !important;
   background-color: #fff;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* 수평 스크롤 방지 */
 }
 
 .container {
@@ -84,3 +90,4 @@ body {
     max-width: 1200px;
   }
 }
+
