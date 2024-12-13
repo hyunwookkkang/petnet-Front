@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Container, InputGroup, FormControl, Button, ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { showSuccessToast, showErrorToast } from "../../../components/common/alert/CommonToast";
+
 
 const PlaceSearch = () => {
   const [searchKeyword, setSearchKeyword] = useState(""); // 검색어
@@ -46,7 +48,7 @@ const PlaceSearch = () => {
 
     const handleSearch = async () => {
         if (!searchKeyword || !searchKeyword.trim()) {
-        alert("검색어를 입력하세요.");
+            showErrorToast("검색어를 입력하세요.");
         return;
         }
 
@@ -65,12 +67,12 @@ const PlaceSearch = () => {
             updateMapMarkers(data); // 지도에 마커 표시
         } else {
             console.error("응답 데이터가 배열이 아닙니다:", data);
-            alert("검색 결과를 불러올 수 없습니다.");
+            showErrorToast("검색 결과를 불러올 수 없습니다.");
             setPlaces([]); // 빈 배열로 초기화
         }
         } catch (error) {
         console.error("Error fetching places:", error);
-        alert("장소 검색 중 오류가 발생했습니다.");
+        showErrorToast("장소 검색 중 오류가 발생했습니다.");
         setPlaces([]); // 에러 발생 시 빈 배열로 초기화
         }
     };

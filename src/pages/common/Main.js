@@ -1,15 +1,30 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import "../../styles/Main.css";
 import dogCatImage from './파비콘이 될 놈.png';
 
 function Main() {
   const navigate = useNavigate();
+  const [imageIndex, setImageIndex] = useState(0);
 
   const handleNavigation = (path) => {
     console.log(`Navigating to ${path}`);
     navigate(path);
   };
+
+  const images = [
+      '/assets/common/cat1.png', // 첫 번째 이미지
+      '/assets/common/cat2.png'  // 두 번째 이미지
+    ];
+  
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+      }, 500);
+  
+      // 컴포넌트가 unmount 될 때 interval을 클리어
+      return () => clearInterval(interval);
+    }, []);
 
 
   return (
@@ -19,11 +34,16 @@ function Main() {
       <div className="content-wrapper"></div>
 
       <img src={dogCatImage} alt="귀여워" className="section-image"/>
+      <div style={{
+        display: 'flex',            // Flexbox를 사용하여 중앙 정렬
+        justifyContent: 'center',   // 수평 중앙 정렬
+        alignItems: 'center',       // 수직 중앙 정렬
+        textAlign: 'center'         // 텍스트 중앙 정렬
+      }}>
+        <img src={images[imageIndex]} alt="Image" /> 
+      </div>
 
       <div className="sections">
-        <div>
-          <h2>♤ ♧ † £ ¢ ♤ ♧ † £ ¢ ♤ ♧ † £ ¢</h2>
-        </div>
         <div
           className="section"
           onClick={() => handleNavigation("/pointshop-page")} // 장소지도로 네비게이션

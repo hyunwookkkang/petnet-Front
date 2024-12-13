@@ -10,7 +10,7 @@ import { UserProvider } from "./components/contexts/UserContext";
 
 import Navigation from "./components/common/navigationBar/Navigation";
 import TopNavigation from "./components/common/navigationBar/TopNavigation";
-import BasicSpeedDial from "./components/common/dial/BasicSpeedDial";
+//import BasicSpeedDial from "./components/common/dial/BasicSpeedDial";
 import UsingComponent from "./components/common/UsingComponent";
 
 // Shop 관련 페이지
@@ -91,6 +91,8 @@ function App() {
       <Router>
         {/* 상단 nav 고정 */}
         <TopNavigation />
+
+        <div className="main-content">
         
         {/* 페이지 콘텐츠 영역에 여백을 추가해 상단/하단 네비게이션이 겹치지 않도록 처리 */}
           <Routes>
@@ -197,10 +199,11 @@ function App() {
             {/* END : cashbook-page */}
 
           </Routes>
+          </div>
         {/*하단 Nav 고정*/}
         <Navigation />
         {/* SpeedDial */}
-        <BasicSpeedDial />
+        {/* <BasicSpeedDial /> */}
       </Router>
     </UserProvider>
     </div>

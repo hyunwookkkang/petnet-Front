@@ -15,6 +15,8 @@ function TopNavigation() {
   const [isHidden, setIsHidden] = useState(false); // 숨김 상태 관리
   const [lastScrollY, setLastScrollY] = useState(0); // 마지막 스크롤 위치
   const topNavRef = useRef(null); // 네비게이션 높이를 참조하기 위한 Ref
+  const { fetchUserData } = useUser();
+
 
   // 뒤로가기
   const handleGoBack = () => {
@@ -36,7 +38,12 @@ function TopNavigation() {
     try {
       await axios.post("/api/users/logout", {}, { withCredentials: true });
       showSuccessToast("로그아웃되었습니다.");
+
+      await fetchUserData(); 
+
       navigate("/"); // 로그아웃 후 메인페이지로이동
+
+      window.location.reload();
     } catch (error) {
       console.error("로그아웃 중 오류 발생:", error);
       showErrorToast("로그아웃에 실패했습니다. 다시 시도해주세요.");

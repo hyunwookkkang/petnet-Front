@@ -96,10 +96,10 @@ const FavoriteInfo = () => {
                 style={{ cursor: "pointer", flex: 1 }}
                 >
                 <div>
-                    <strong>장소 이름:</strong> {place.placeName || "정보 없음"}
+                    <h2><strong>장소 이름:</strong> {place.placeName || "정보 없음"}</h2>
                 </div>
                 <div>
-                    <strong>운영 시간:</strong> {place.operTime || "정보 없음"}
+                    <h2><strong>운영 시간:</strong> {place.operTime || "정보 없음"}</h2>
                 </div>
                 </div>
                 <Button
@@ -108,6 +108,7 @@ const FavoriteInfo = () => {
                     color: "#fff",
                     border: "none",
                 }}
+                size="lg"
                 onClick={() => handleDeletePlace(place.placeId)} // 삭제 핸들러 호출
                 >
                 삭제
