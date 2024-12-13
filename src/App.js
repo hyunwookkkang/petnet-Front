@@ -90,6 +90,8 @@ function App() {
       <Router>
         {/* 상단 nav 고정 */}
         <TopNavigation />
+
+        <div className="main-content">
         
         {/* 페이지 콘텐츠 영역에 여백을 추가해 상단/하단 네비게이션이 겹치지 않도록 처리 */}
           <Routes>
@@ -195,6 +197,7 @@ function App() {
             {/* END : cashbook-page */}
 
           </Routes>
+          </div>
         {/*하단 Nav 고정*/}
         <Navigation />
         {/* SpeedDial */}

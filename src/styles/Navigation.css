@@ -12,6 +12,7 @@ margin: 0 auto;
 padding: 10px 20px;
 left: 0;
 right: 0;
+height: 60px;
 /* 모바일 추가부분 */
   display: flex;
   justify-content: space-around;
