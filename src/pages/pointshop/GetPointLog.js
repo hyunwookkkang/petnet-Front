@@ -94,79 +94,48 @@ const GetPointLog = () => {
   ];
 
   return (
-    <div style={{ padding: '20px', background: '#FFFFFF', borderRadius: '10px', boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)' }}>
+    <div style={{ padding: '20px', background: '#FFFFFF', borderRadius: '10px', boxShadow: '0 5px 20px rgba(0, 0, 0, 0.15)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 style={{ color: '#FF6347', fontSize: '2rem', fontWeight: 'bold' }}>포인트 내역</h1>
+        <h1 style={{ color: '#FEBE98', fontSize: '2.2rem', fontWeight: 'bold' }}>포인트 내역</h1>
         <div style={{
-          backgroundColor: '#FEBE98',
-          color: '#FFFFFF',
-          padding: '10px 20px',
+          backgroundColor: '#FFFFFF',
+          color: '#FEBE98 ',
+          padding: '12px 20px',
           borderRadius: '5px',
           fontWeight: 'bold',
           boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)',
         }}>
-          현재 포인트: {userPoint !== null ? userPoint : '불러오는 중...'}
+         <h5> 현재 포인트: {userPoint !== null ? userPoint : '불러오는 중...'}</h5>
         </div>
       </div>
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-        <button
-          onClick={() => setCurrentApi('getPointLog')}
-          style={{
-            flex: 1,
-            backgroundColor: currentApi === 'getPointLog' ? '#FF6347' : '#FFFFFF',
-            color: currentApi === 'getPointLog' ? '#FFFFFF' : '#FF6347',
-            padding: '10px',
-            borderRadius: '5px',
-            border: '1px solid #FF6347',
-            fontWeight: 'bold',
-            boxShadow: '0 3px 10px rgba(0, 0, 0, 0.1)',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-          }}
-        >
-          전체 로그
-        </button>
-        <button
-          onClick={() => setCurrentApi('getPointAddLog')}
-          style={{
-            flex: 1,
-            backgroundColor: currentApi === 'getPointAddLog' ? '#ECB392' : '#FFFFFF',
-            color: currentApi === 'getPointAddLog' ? '#FFFFFF' : '#ECB392',
-            padding: '10px',
-            borderRadius: '5px',
-            border: '1px solid #ECB392',
-            fontWeight: 'bold',
-            boxShadow: '0 3px 10px rgba(0, 0, 0, 0.1)',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-          }}
-        >
-          적립 로그
-        </button>
-        <button
-          onClick={() => setCurrentApi('getPointUpdateLog')}
-          style={{
-            flex: 1,
-            backgroundColor: currentApi === 'getPointUpdateLog' ? '#EEA092' : '#FFFFFF',
-            color: currentApi === 'getPointUpdateLog' ? '#FFFFFF' : '#EEA092',
-            padding: '10px',
-            borderRadius: '5px',
-            border: '1px solid #EEA092',
-            fontWeight: 'bold',
-            boxShadow: '0 3px 10px rgba(0, 0, 0, 0.1)',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-          }}
-        >
-          사용 로그
-        </button>
+      <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
+        {['getPointLog', 'getPointAddLog', 'getPointUpdateLog'].map((type, idx) => (
+          <button
+            key={type}
+            onClick={() => setCurrentApi(type)}
+            style={{
+              flex: 1,
+              backgroundColor: currentApi === type ? '#FEBE98' : '#FFFFFF',
+              color: currentApi === type ? '#FFFFFF' : '#FEBE98',
+              padding: '10px',
+              borderRadius: '8px',
+              border: `2px solid ${currentApi === type ? '#FEBE98' : '#EDEDED'}`,
+              fontWeight: 'bold',
+              boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+          >
+            {idx === 0 ? '전체 로그' : idx === 1 ? '적립 로그' : '사용 로그'}
+          </button>
+        ))}
       </div>
       {loading ? (
         <div style={{ textAlign: 'center', padding: '20px', fontSize: '1.2rem', color: '#DCDCDC' }}>
           포인트 내역을 불러오는 중입니다...
         </div>
       ) : (
-        <div style={{ height: 600, width: '100%', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)', background: '#EDEDED' }}>
+        <div style={{ height: 600, width: '100%', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 5px 15px rgba(0, 0, 0, 0.15)', background: '#FFFFFF' }}>
           <DataGrid
             rows={pointLogs}
             columns={columns}
