@@ -9,7 +9,7 @@ import LikeButton from "../../../components/common/button/LikeButton";
 //css
 import "../../../styles/place/Place.css";
 import ProductImage from "./ProductImage";
-
+import axios from "axios";
 
 const ProductInfo = () => {
   const { productId } = useParams(); // URL에서 placeId 추출
@@ -17,51 +17,41 @@ const ProductInfo = () => {
   const [activeTab, setActiveTab] = useState("info"); // 탭 상태
 
   useEffect(() => {
-    
-    fetch(`/api/shop/products/${productId}`)
-      .then((response) => response.json())
-      .then((data) => setProduct(data))
-      .catch((error) => console.error("Error fetching place detail:", error));
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`/api/shop/products/${productId}`);
+        setProduct(response.data);
+      } catch (error) {
+        console.error("Error fetching product detail:", error);
+      }
+    };
+
+    fetchProduct();
   }, [productId]);
 
   if (!product) {
     return <div>Loading...</div>;
   }
 
-  
-
   return (
     <Container>
       <Row>
-        {/* <Col xs={12} md={6}>
-          
-          <PlaceImage />
-          
-        </Col> */}
-      
-
-
-      <Row className="mb-4">
-        <Col>
-          <Card className="place-button-box">
-          <Card.Body style={{ padding: '10px' }}>
-              <ProductImage />
-                  {/* <Image
-                src={`https://maps.googleapis.com/maps/api/place/photo?key=API_KEY&photo_reference=${place.photoRef}`}
-                alt={place.fcltyNm}
-                fluid
-                  /> */}
-                </Card.Body>
+        <Row className="mb-4">
+          <Col>
+            <Card className="place-button-box">
+              <Card.Body style={{ padding: "10px" }}>
+                <ProductImage />
+              </Card.Body>
             </Card>
-        </Col>
-      </Row>
+          </Col>
+        </Row>
 
-      <Row className="mb-4">
-        <Col>
-          <Card className="place-button-box">
-              <Card.Body style={{ padding: '30px' }}>
+        <Row className="mb-4">
+          <Col>
+            <Card className="place-button-box">
+              <Card.Body style={{ padding: "30px" }}>
                 <Card.Title className="text-left text-muted">
-                 <h6>{product.animalCategory}/{product.productCategory}</h6>
+                  <h6>{product.animalCategory}/{product.productCategory}</h6>
                 </Card.Title>
                 <Col className="text-left">
                   <h4><strong>{product.productName}</strong></h4>
@@ -86,14 +76,13 @@ const ProductInfo = () => {
                           style={{
                             color: "red",
                             fontWeight: "bold",
-                            fontSize: "1.25rem", // Approx. h6 in MUI
+                            fontSize: "1.25rem",
                           }}
                         >
                           {(
                             product.price *
                             (1 - product.discount / 100)
-                          ).toLocaleString()}{" "}
-                          원
+                          ).toLocaleString()} 원
                         </p>
                         <p className="text-muted" style={{ fontSize: "0.875rem" }}>
                           {product.discount}% 할인
@@ -104,14 +93,13 @@ const ProductInfo = () => {
                 </Col>
               </Card.Body>
             </Card>
-        </Col>
-      </Row>
-    
-      <Row className="mb-4">
-        <Col>
-          <Card className="place-button-box">
-              <Card.Body style={{ padding: '3px' }}>
-                {/* <Card.Title className="text-center">{place.fcltyNm}</Card.Title> */}
+          </Col>
+        </Row>
+
+        <Row className="mb-4">
+          <Col>
+            <Card className="place-button-box">
+              <Card.Body style={{ padding: "3px" }}>
                 <Row>
                   <Col sm={11}>
                     <Button size="lg" variant="primary" className="w-100">
@@ -123,13 +111,12 @@ const ProductInfo = () => {
                       <LikeButton />
                     </Button>
                   </Col>
-                </Row>                 
+                </Row>
               </Card.Body>
             </Card>
-        </Col>
+          </Col>
+        </Row>
       </Row>
-      
-    </Row>
 
       {/* 탭 구성 */}
       <Tabs
@@ -138,26 +125,18 @@ const ProductInfo = () => {
         onSelect={(tab) => setActiveTab(tab)}
         className="mb-4"
       >
-
-     
-     
         <Tab eventKey="info" title="장소 상세 정보">
           <div className="place-detail-tabs">
             <p>상품 정보: {product.productName}</p>
-            
-            {/* 장소상세보기 */}
             <p>
-            <strong>상품 상세:</strong>{product.productDetail}
-            </p>         
+              <strong>상품 상세:</strong>{product.productDetail}
+            </p>
           </div>
         </Tab>
 
-        {/* 리뷰Tab */}
         <Tab eventKey="posts" title="리뷰">
           <div>
             <h4>리뷰</h4>
-            {/* <PlacePosts placeId = {placeId}/> */}
-            {/* 로그인상태 추가 예정  isLoggedIn = {isLoggedIn}*/}
           </div>
         </Tab>
       </Tabs>

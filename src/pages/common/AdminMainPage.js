@@ -42,7 +42,7 @@ const AdminMainPage = () => {
                 <Card.Title className="section-title">상점</Card.Title>
                 <ul className="list-unstyled">
                   <li className="section-item">
-                    <a href="/product-management">상품관리</a>
+                    <a href="/shop/products/manage">상품관리</a>
                   </li>
                   <li className="section-item">
                     <a href="/coupon-management">쿠폰관리</a>
