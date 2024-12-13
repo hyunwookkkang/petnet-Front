@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { Snackbar } from '@mui/material';
 import { Grow } from '@mui/material';
@@ -8,10 +7,9 @@ import { useUser } from '../../contexts/UserContext';
 import useFetchGetScrap from './useFetchGetScrap';
 import useFetchAddScrap from './useFetchAddScrap';
 import useFetchDeleteScrap from './useFetchDeleteScrap';
+import LoginModal from '../../common/modal/LoginModal';
 
 const TopicScrapButton = ({ topicId }) => {
-
-  const navigate = useNavigate();
 
   const { userId } = useUser();
 
@@ -22,6 +20,7 @@ const TopicScrapButton = ({ topicId }) => {
   const [loading, setLoading] = useState(false);
   const [sracpMessage, setScrapMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const [isScrap, setIsScrap] = useState(false);
 
@@ -35,9 +34,9 @@ const TopicScrapButton = ({ topicId }) => {
 
   // 스크랩 버튼 클릭 시 처리
   const scrapTopic = async () => {
+    // 로그인 검사
     if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
+      setShowLoginModal(true);
       return;
     }
 
@@ -75,6 +74,7 @@ const TopicScrapButton = ({ topicId }) => {
           )} 
         </button>
 
+
         <Snackbar
           open={sracpMessage}
           TransitionComponent={Grow}
@@ -89,6 +89,11 @@ const TopicScrapButton = ({ topicId }) => {
           message={'fetch scrap error'}
           autoHideDuration={1200}
           onClose={() => setErrorMessage(false)}
+        />
+
+        <LoginModal 
+          showModal={showLoginModal} 
+          setShowModal={setShowLoginModal}
         />
 
     </div>

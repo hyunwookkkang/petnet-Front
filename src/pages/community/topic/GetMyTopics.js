@@ -27,11 +27,6 @@ const GetMyTopics = () => {
 
 
   useEffect(() => {
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
-      return;
-    }
 
     const fetchTopics = async () => {
       const response = await fetchGetMyTopics(userId, search);

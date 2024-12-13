@@ -14,6 +14,7 @@ import useFetchGetHashtags from "../../../components/community/topic/useFetchGet
 import "../../../styles/Main.css";
 import "../../../styles/community/EditTopic.css";
 import "../../../styles/community/AutoComplete.css";
+import LoginModal from "../../../components/common/modal/LoginModal";
 
 const EditTopicInfo = () => {
 
@@ -28,6 +29,8 @@ const EditTopicInfo = () => {
   const { fetchUpdateTopic, updateLoading, updateError } = useFetchUpdateTopic();
   const { fetchGetHashtags, /*loading: tagloading, error: tagError*/ } = useFetchGetHashtags();
 
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -42,12 +45,6 @@ const EditTopicInfo = () => {
 
   // 페이지 초기화
   useEffect(() => {
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
-      return;
-    }
-
     if (topic) {
       setTitle(topic.title);
       setCategory(topic.category);
@@ -57,7 +54,7 @@ const EditTopicInfo = () => {
       setIsDownloadable(topic.isDownloadable);
       setIsAutor(topic.author.userId === userId);
     }
-  }, [topic, userId, navigate]);
+  }, [topic, userId]);
 
   // 해시태그 자동완성
   useEffect(() => {
@@ -93,6 +90,12 @@ const EditTopicInfo = () => {
 
   const submitTopicHandler = async (e) => {
     e.preventDefault();
+    
+    // 로그인 검사
+    if (!userId) {
+      setShowLoginModal(true);
+      return;
+    }
 
     // 에디터 내용이 비어있는지 확인
     if (!content.replace(/<[^>]*>/g, '').trim()) 
@@ -247,6 +250,14 @@ const EditTopicInfo = () => {
         </Form>
 
       </div>
+
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+        message="로그인 정보가 만료되었습니다."
+        required={true}
+      />
+
     </Container>
 
   );

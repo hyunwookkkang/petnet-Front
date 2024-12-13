@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { Snackbar } from '@mui/material';
 import { Grow } from '@mui/material';
@@ -7,10 +6,9 @@ import { Grow } from '@mui/material';
 import { useUser } from '../../contexts/UserContext';
 import useFetchGetVote from './useFetchGetVote';
 import useFetchAddVote from './useFetchAddVote';
+import LoginModal from '../../common/modal/LoginModal';
 
 const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
-
-  const navigate = useNavigate();
 
   const { userId } = useUser();
 
@@ -20,6 +18,7 @@ const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
   const [loading, setLoading] = useState(false);
   const [votedMessage, setVotedMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const [votedCount, setVotedCount] = useState(voteCount);
   const [isVoted, setIsVoted] = useState(false);
@@ -45,15 +44,16 @@ const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
     fetchVote();
   }, [fetchGetVote, vote]);
 
-  // 좋아요 버튼 클릭 시 처리
+  // 버튼 클릭 시 처리
   const voteTopic = async () => {
+    //로그인 검사
     if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
+      setShowLoginModal(true);
       return;
     }
 
     setLoading(true);
+    
     if (isVoted) {
       setVotedMessage(true);
       setLoading(false);
@@ -90,6 +90,7 @@ const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
           ({votedCount}) 
         </button>
 
+
         <Snackbar
           open={votedMessage}
           TransitionComponent={Grow}
@@ -104,6 +105,11 @@ const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
           message={'vote fetch error'}
           autoHideDuration={1200}
           onClose={() => setErrorMessage(false)}
+        />
+        
+        <LoginModal 
+          showModal={showLoginModal} 
+          setShowModal={setShowLoginModal}
         />
 
     </div>
