@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Spinner, Alert } from "react-bootstrap";
 import axios from "axios";
+import { showSuccessToast, showErrorToast } from "../../../components/common/alert/CommonToast"; // 토스트 함수 추가
 
 const AddFavoriteItemModal = ({ show, onClose, placeId, onAddItem }) => {
   const [favorites, setFavorites] = useState([]); // 즐겨찾기 목록
@@ -8,7 +9,7 @@ const AddFavoriteItemModal = ({ show, onClose, placeId, onAddItem }) => {
   const [loading, setLoading] = useState(false); // 로딩 상태
   const [error, setError] = useState(null); // 에러 상태
 
-    // 즐겨찾기 목록 불러오기
+  // 즐겨찾기 목록 불러오기
     useEffect(() => {
         if (show) {
         const fetchFavorites = async () => {
@@ -31,21 +32,23 @@ const AddFavoriteItemModal = ({ show, onClose, placeId, onAddItem }) => {
         }
     }, [show]);
 
+    // 즐겨찾기 항목 추가
     const handleAddItem = async () => {
         try {
         await onAddItem(selectedFavoriteId); // 부모 컴포넌트에서 받은 onAddItem 호출
+        //showSuccessToast("추가되었습니다!"); // 성공 메시지 토스트로 표시
         setSelectedFavoriteId(null); // 선택 초기화
         onClose(); // 모달 닫기
         } catch (error) {
         console.error("Error adding item:", error);
-        setError("항목 추가 중 오류가 발생했습니다.");
+        showErrorToast("항목 추가 중 오류가 발생했습니다."); // 오류 메시지 토스트로 표시
         }
     };
 
     return (
         <Modal show={show} onHide={onClose} centered>
         <Modal.Header closeButton>
-            <Modal.Title>즐겨찾기에 항목 추가</Modal.Title>
+            <Modal.Title> 즐겨찾기에 항목 추가</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             {loading && (
@@ -78,11 +81,23 @@ const AddFavoriteItemModal = ({ show, onClose, placeId, onAddItem }) => {
             )}
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="secondary" onClick={onClose} disabled={loading}>
+            <Button
+            style={{
+                backgroundColor: "#DCDCDC",
+                color: "#fff",
+                border: "none",
+            }}
+            onClick={onClose}
+            disabled={loading}
+            >
             취소
             </Button>
             <Button
-            variant="primary"
+            style={{
+                backgroundColor: "#FF6347",
+                color: "#fff",
+                border: "none",
+            }}
             onClick={handleAddItem}
             disabled={loading || !selectedFavoriteId}
             >

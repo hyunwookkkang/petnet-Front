@@ -1,0 +1,24 @@
+/* card.css */
+
+.common-card {
+    display: flex;
+    margin-bottom: 16px; /* mb-3 equivalent */
+    border: 3px solid #ffffff; /* Border with desired color */
+    border-radius: 8px; /* Rounded corners */
+    transition: border-color 0.3s ease; /* Smooth transition for hover effect */
+    }
+    
+    
+    
+    .common-content {
+        font-family: 'Ownglyph_ParkDaHyun', sans-serif !important;
+    }
+    
+    .common-title {
+        font-size: 1.25rem !important; 
+    }
+    
+    .common-subtitle {
+        font-size: 1rem;
+        color: #6c757d !important; 
+    }

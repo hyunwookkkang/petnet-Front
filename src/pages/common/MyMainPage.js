@@ -152,7 +152,7 @@ const MyMainPage = () => {
                     <Link to="/my/placeposts">내가 쓴 장소리뷰 보기</Link>
                   </li>
                   <li className="section-item">
-                    <Link to="/my/favorites">나의 즐겨찾기 보기</Link>
+                    <Link to="/placeFavorite">나의 즐겨찾기 보기</Link>
                   </li>
                 </ul>
               </Card.Body>

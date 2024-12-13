@@ -57,7 +57,7 @@ function Login() {
               </Card.Title>
               <Form onSubmit={handleLogin}>
                 <Form.Group className="mb-3">
-                  <Form.Label>ID</Form.Label>
+                  <Form.Label><h5>ID</h5></Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="아이디를 입력하세요"
@@ -67,7 +67,7 @@ function Login() {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>Password</Form.Label>
+                  <Form.Label><h5>Password</h5></Form.Label>
                   <Form.Control
                     type="password"
                     placeholder="패스워드를 입력하세요"

@@ -62,7 +62,7 @@ const PointShopAdminPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://192.168.0.40:8000/api/pointshop/pointProducts/Admin');
+        const response = await fetch('/api/pointshop/pointProducts/Admin');
         if (!response.ok) {
           throw new Error('데이터를 불러오는 데 실패했습니다.');
         }
@@ -143,7 +143,7 @@ const PointShopAdminPage = () => {
             if (confirmDelete) {
               try {
                 const response = await fetch(
-                  `http://192.168.0.40:8000/api/pointshop/pointProducts/Admin/${productId}`,
+                  `/api/pointshop/pointProducts/Admin/${productId}`,
                   {
                     method: 'DELETE',
                   }

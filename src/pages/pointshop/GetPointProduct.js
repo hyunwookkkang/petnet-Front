@@ -1,82 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import "../../styles/pointshop/point.css";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import "../../styles/common/Button.css"; // .modal-button 클래스 포함
 import { useUser } from "../../components/contexts/UserContext";
+import CommonModal from "../../components/common/modal/CommonModal";
 
 const GetPointProduct = () => {
-  const { productId } = useParams(); // URL에서 productId를 가져옵니다.
-  const [product, setProduct] = useState(null); // 상품 정보를 저장할 상태 변수
-  const [loading, setLoading] = useState(true); // 로딩 상태
-  const { userId } = useUser(); // UserContext에서 userId 가져오기
+  const { productId } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { userId } = useUser();
   const navigate = useNavigate();
-  const [error, setError] = useState(null); // 에러 상태
+  const [error, setError] = useState(null);
+  const [showAlert, setShowAlert] = useState(false); // 로그인 모달 상태
 
-  // 상품 상세 정보 가져오기
   useEffect(() => {
-
-    // 유저 ID 확인
-    if (userId === null) {
-      console.log("UserContext 초기화 중...");
-      return; // userId가 초기화되지 않았다면 대기
-    }
-
-    if (!userId) {
-      console.log("로그인하지 않은 사용자입니다.");
-      // 로그인하지 않은 경우에도 상품 정보를 조회할 수 있도록 허용
-    } else {
-      console.log(`로그인된 사용자 ID: ${userId}`);
-    }
-
     fetchProductDetail();
-  }, [userId, productId]); // userId를 의존성에 추가
+  }, [productId]);
 
-    const fetchProductDetail = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`http://192.168.0.40:8000/api/pointshop/pointProducts/${productId}`);
-        setProduct(response.data);
-      } catch (error) {
-        console.error('Error fetching product details:', error);
-        setError("상품 정보를 가져오는 중 오류가 발생했습니다.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchProductDetail = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`/api/pointshop/pointProducts/${productId}`);
+      setProduct(response.data);
+    } catch (error) {
+      console.error("Error fetching product details:", error);
+      setError("상품 정보를 가져오는 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    
-
-  // 구매 버튼 클릭 시 처리
   const handlePurchase = async () => {
     if (!userId) {
-      alert("구매하려면 로그인이 필요합니다.");
-      navigate("/login"); // 로그인 페이지로 리디렉션
+      setShowAlert(true); // 로그인 모달 표시
       return;
-      
     }
 
     try {
       await axios.post(
-        `http://192.168.0.40:8000/api/pointshop/pointProducts/${productId}`,
+        `/api/pointshop/pointProducts/${productId}`,
         { userId },
         {
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }
       );
       alert("구매가 완료되었습니다!");
-      navigate("/pointProducts"); // 포인트 상품 목록으로 이동
+      navigate("/pointProducts");
     } catch (error) {
-      console.error('Error purchasing product:', error);
+      console.error("Error purchasing product:", error);
       alert("구매에 실패했습니다. 다시 시도해 주세요.");
     }
   };
 
-  // 로딩 중 화면
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>로딩 중입니다...</div>;
   }
 
-  // 에러 화면
   if (error) {
     return (
       <div className="text-center">
@@ -85,52 +65,130 @@ const GetPointProduct = () => {
     );
   }
 
-  // 상품 상세 정보 렌더링
   return (
     <div
-      className="pointProduct"
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        color: '#FF7826',
-        backgroundColor: '#FFF5EF',
-        border: '2px solid #FF7826',
-        alignItems: 'center', // 수직 중앙 정렬
-        gap: '20px', // 각 항목 간격
-        padding: '20px', // 내부 여백 추가
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #f8f8f8, #ececec)",
+        padding: "20px",
       }}
     >
-      <h1 style={{ textAlign: 'center' }}>포인트 상품 상세</h1>
-      {product.imageIds && (
-        <img
-          src={`http://192.168.0.40:8000/api/images/${product.imageIds}`}
-          alt={product.productName}
-          style={{ width: '100%', height: 'auto' }}
-        />
-      )}
-      <div style={{ textAlign: 'center' }}>
-        <p style={{ fontSize: '40px' }}>{product.productName}</p>
-        <p style={{ fontSize: '20px' }}>가격: {product.price} 포인트</p>
-        <p style={{ fontSize: '20px' }}>브랜드: {product.brandCategory}</p>
-        <p style={{ color: '#FF7826', fontSize: '20px' }}>유효 기간: {product.validityDate}일</p>
-        <div className="points-display">
-          <p>[포인트 상품 이용 안내]</p>
-          <p>- 포인트 상품 구매시 교환 환불 및 연장은 불가하니 참고해 주시기 바랍니다.</p>
-          <p>- 상품의 해당 브랜드 편의점에서 상품 교환이 가능합니다.</p>
-          <p>- 해당 상품이 일부 편의점에서 취급하지 않는 상품일 수 있습니다.</p>
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "500px",
+          background: "#fff",
+          borderRadius: "15px",
+          overflow: "hidden",
+          boxShadow: "0 8px 30px rgba(0, 0, 0, 0.1)",
+          textAlign: "center",
+        }}
+      >
+        {product.imageIds && (
+          <img
+            src={`/api/images/${product.imageIds}`}
+            alt={product.productName}
+            style={{
+              width: "100%",
+              height: "300px",
+              objectFit: "cover",
+              borderBottom: "1px solid #ddd",
+            }}
+          />
+        )}
+        <div style={{ padding: "20px" }}>
+          <p style={{ fontSize: "1rem", color: "#999", marginBottom: "5px" }}>
+            {product.brandCategory}
+          </p>
+          <h1
+            style={{
+              fontSize: "1.8rem",
+              fontWeight: "bold",
+              color: "#333",
+              marginBottom: "10px",
+            }}
+          >
+            {product.productName}
+          </h1>
+          <p
+            style={{
+              fontSize: "1.2rem",
+              fontWeight: "bold",
+              color: "#FF6347 ",
+              marginBottom: "20px",
+            }}
+          >
+            {product.price} 포인트
+          </p>
+          <p style={{ fontSize: "0.9rem", color: "#777", marginBottom: "20px" }}>
+            유효 기간: {product.validityDate}일
+          </p>
+          <button
+            style={{
+              width: "100%",
+              backgroundColor: "#ff6347",
+              color: "#fff",
+              border: "none",
+              padding: "15px",
+              fontSize: "1.2rem",
+              fontWeight: "bold",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+            }}
+            onClick={handlePurchase}
+            onMouseLeave={(e) => (e.target.style.backgroundColor = "#ff6347")}
+          >
+            구매하기
+          </button>
+          <div
+            style={{
+              marginTop: "30px",
+              padding: "20px",
+              backgroundColor: "#f9f9f9",
+              borderRadius: "10px",
+              textAlign: "left",
+              fontSize: "0.9rem",
+              color: "#666",
+              lineHeight: "1.5",
+            }}
+          >
+            <p style={{ fontWeight: "bold", marginBottom: "10px" }}>
+              [포인트 상품 이용 안내]
+            </p>
+            <ul style={{ paddingLeft: "20px", margin: "0" }}>
+              <li>포인트 상품 구매 시 교환, 환불 및 연장은 불가합니다.</li>
+              <li>해당 브랜드 편의점에서 상품 교환이 가능합니다.</li>
+              <li>일부 편의점에서는 취급하지 않는 상품일 수 있습니다.</li>
+            </ul>
+          </div>
         </div>
-        <button
-          className="button-click"
-          onClick={handlePurchase} // 구매 버튼 클릭 이벤트
-          style={{
-            backgroundColor: '#FF7826',
-            color: 'white',
-            padding: '10px 50px',
-          }}
-        >
-          구매하기
-        </button>
       </div>
+      <CommonModal
+        show={showAlert}
+        onHide={() => setShowAlert(false)}
+        title="로그인 필요"
+        body={
+          <div>
+            로그인이 필요한 서비스입니다.<br /> 로그인 화면으로 이동합니다.
+          </div>
+        }
+        footer={
+          <button
+            className="modal-button"
+            style={{ backgroundColor: "#feb98e", border: "none" }}
+            onClick={() => {
+              setShowAlert(false);
+              navigate("/login");
+            }}
+          >
+            확인
+          </button>
+        }
+      />
     </div>
   );
 };

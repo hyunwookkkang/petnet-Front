@@ -22,7 +22,7 @@ const AdminUpdatePointProduct = () => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/pointshop/pointProducts/${productId}`
+          `/api/pointshop/pointProducts/${productId}`
         );
         setOriginalData(response.data);
         setFormData({
@@ -88,7 +88,7 @@ const AdminUpdatePointProduct = () => {
 
     try {
       const response = await axios.put(
-        `http://127.0.0.1:8000/api/pointshop/pointProducts/Admin/${productId}`,
+        `/api/pointshop/pointProducts/Admin/${productId}`,
         bodyData
       );
 
