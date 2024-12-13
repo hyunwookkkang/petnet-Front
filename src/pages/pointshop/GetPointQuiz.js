@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Table, Button, Form } from "react-bootstrap";
 import { useUser } from "../../components/contexts/UserContext";
+import CommonModal from "../../components/common/modal/CommonModal";
 
 const GetPointQuiz = () => {
   const [quizzes, setQuizzes] = useState([]); // 퀴즈 데이터
@@ -12,14 +13,14 @@ const GetPointQuiz = () => {
   const [resultMessage, setResultMessage] = useState(""); // 결과 메시지
   const { userId } = useUser(); // UserContext에서 userId 가져오기
   const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState(false); // 모달 상태
 
   // 로그인 확인
   useEffect(() => {
     if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리디렉션
+      setShowAlert(true); // 모달 표시
     }
-  }, [userId, navigate]);
+  }, [userId]);
 
   // API에서 랜덤 퀴즈 가져오기
   const fetchQuizzes = async () => {
@@ -161,6 +162,28 @@ const GetPointQuiz = () => {
           </Button>
         </div>
       )}
+
+      <CommonModal
+        show={showAlert}
+        onHide={() => {
+          setShowAlert(false);
+          navigate("/login");
+        }}
+        title="로그인 필요"
+        body={<div>로그인이 필요한 서비스입니다.<br /> 로그인 화면으로 이동합니다.</div>}
+        footer={
+          <Button
+            className="modal-button"
+            style={{ backgroundColor: "#feb98e", border: "none" }}
+            onClick={() => {
+              setShowAlert(false);
+              navigate("/login");
+            }}
+          >
+            확인
+          </Button>
+        }
+      />
     </div>
   );
 };

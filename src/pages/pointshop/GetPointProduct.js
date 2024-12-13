@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../styles/common/Button.css"; // .modal-button 클래스 포함
 import { useUser } from "../../components/contexts/UserContext";
+import CommonModal from "../../components/common/modal/CommonModal";
 
 const GetPointProduct = () => {
   const { productId } = useParams();
@@ -11,6 +12,7 @@ const GetPointProduct = () => {
   const { userId } = useUser();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const [showAlert, setShowAlert] = useState(false); // 로그인 모달 상태
 
   useEffect(() => {
     fetchProductDetail();
@@ -31,8 +33,7 @@ const GetPointProduct = () => {
 
   const handlePurchase = async () => {
     if (!userId) {
-      alert("구매하려면 로그인이 필요합니다.");
-      navigate("/login");
+      setShowAlert(true); // 로그인 모달 표시
       return;
     }
 
@@ -166,6 +167,28 @@ const GetPointProduct = () => {
           </div>
         </div>
       </div>
+      <CommonModal
+        show={showAlert}
+        onHide={() => setShowAlert(false)}
+        title="로그인 필요"
+        body={
+          <div>
+            로그인이 필요한 서비스입니다.<br /> 로그인 화면으로 이동합니다.
+          </div>
+        }
+        footer={
+          <button
+            className="modal-button"
+            style={{ backgroundColor: "#feb98e", border: "none" }}
+            onClick={() => {
+              setShowAlert(false);
+              navigate("/login");
+            }}
+          >
+            확인
+          </button>
+        }
+      />
     </div>
   );
 };

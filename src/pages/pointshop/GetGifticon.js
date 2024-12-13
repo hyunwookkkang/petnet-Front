@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../../components/contexts/UserContext";
+import CommonModal from "../../components/common/modal/CommonModal";
 
 const GetGifticon = () => {
   const { gifticonId } = useParams();
@@ -10,12 +11,14 @@ const GetGifticon = () => {
   const [loading, setLoading] = useState(true);
   const { userId } = useUser();
   const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState(false); // 모달 상태
+  const [alertMessage, setAlertMessage] = useState(""); // 모달 메시지
 
   useEffect(() => {
     const fetchGifticon = async () => {
       if (!userId) {
-        alert("로그인이 필요합니다.");
-        navigate("/");
+        setAlertMessage("로그인이 필요합니다.");
+        setShowAlert(true);
         return;
       }
 
@@ -24,8 +27,8 @@ const GetGifticon = () => {
         const gifticonData = response.data;
 
         if (gifticonData.userId !== userId) {
-          alert("해당 기프티콘에 접근할 권한이 없습니다.");
-          navigate("/");
+          setAlertMessage("해당 기프티콘에 접근할 권한이 없습니다.");
+          setShowAlert(true);
           return;
         }
 
@@ -37,15 +40,15 @@ const GetGifticon = () => {
         }
       } catch (error) {
         console.error("Error fetching gifticon or product details:", error);
-        alert("기프티콘 정보를 불러오는데 실패했습니다.");
-        navigate("/");
+        setAlertMessage("기프티콘 정보를 불러오는데 실패했습니다.");
+        setShowAlert(true);
       } finally {
         setLoading(false);
       }
     };
 
     fetchGifticon();
-  }, [gifticonId, userId, navigate]);
+  }, [gifticonId, userId]);
 
   const handleUpdateGifticon = async () => {
     try {
@@ -148,6 +151,27 @@ const GetGifticon = () => {
           </button>
         )}
       </div>
+
+      <CommonModal
+        show={showAlert}
+        onHide={() => {
+          setShowAlert(false);
+          navigate("/");
+        }}
+        title="알림"
+        body={<div>{alertMessage}</div>}
+        footer={
+          <button
+            style={{ backgroundColor: "#feb98e", border: "none", padding: "10px 20px", borderRadius: "5px" }}
+            onClick={() => {
+              setShowAlert(false);
+              navigate("/");
+            }}
+          >
+            확인
+          </button>
+        }
+      />
     </div>
   );
 };
