@@ -98,6 +98,13 @@ const GetQuizs = () => {
 
   return (
     <div className="container mt-4">
+      {!isAdding && !editingQuiz && (
+        <div className="mb-3 text-end">
+          <Button variant="primary" onClick={() => setIsAdding(true)}>
+            추가
+          </Button>
+        </div>
+      )}
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -109,6 +116,54 @@ const GetQuizs = () => {
           </tr>
         </thead>
         <tbody>
+          {/* 새 퀴즈 추가 입력 폼 */}
+          {isAdding && (
+            <tr>
+              <td></td>
+              <td>
+                <Form.Control
+                  type="text"
+                  value={newQuiz.quizContent}
+                  onChange={(e) => handleInputChange('quizContent', e.target.value)}
+                  placeholder="퀴즈 문제 입력"
+                />
+              </td>
+              <td>
+                {[1, 2, 3, 4].map((num) => (
+                  <Form.Control
+                    key={num}
+                    type="text"
+                    value={newQuiz[`quizOption${num}`]}
+                    onChange={(e) =>
+                      handleInputChange(`quizOption${num}`, e.target.value)
+                    }
+                    className="mb-2"
+                    placeholder={`보기 ${num} 입력`}
+                  />
+                ))}
+              </td>
+              <td>
+                <Form.Select
+                  value={newQuiz.answer}
+                  onChange={(e) => handleInputChange('answer', e.target.value)}
+                >
+                  <option value="">정답 선택</option>
+                  <option value="1">1번</option>
+                  <option value="2">2번</option>
+                  <option value="3">3번</option>
+                  <option value="4">4번</option>
+                </Form.Select>
+              </td>
+              <td>
+                <Button variant="success" onClick={handleSaveQuiz}>
+                  저장
+                </Button>{' '}
+                <Button variant="danger" onClick={() => setIsAdding(false)}>
+                  취소
+                </Button>
+              </td>
+            </tr>
+          )}
           {/* 기존 데이터 출력 */}
           {quizzes.map((quiz, index) => (
             editingQuiz && editingQuiz.quizId === quiz.quizId ? (
@@ -179,61 +234,8 @@ const GetQuizs = () => {
               </tr>
             )
           ))}
-          {/* 새 퀴즈 추가 입력 폼 */}
-          {isAdding && (
-            <tr>
-              <td></td>
-              <td>
-                <Form.Control
-                  type="text"
-                  value={newQuiz.quizContent}
-                  onChange={(e) => handleInputChange('quizContent', e.target.value)}
-                  placeholder="퀴즈 문제 입력"
-                />
-              </td>
-              <td>
-                {[1, 2, 3, 4].map((num) => (
-                  <Form.Control
-                    key={num}
-                    type="text"
-                    value={newQuiz[`quizOption${num}`]}
-                    onChange={(e) =>
-                      handleInputChange(`quizOption${num}`, e.target.value)
-                    }
-                    className="mb-2"
-                    placeholder={`보기 ${num} 입력`}
-                  />
-                ))}
-              </td>
-              <td>
-                <Form.Select
-                  value={newQuiz.answer}
-                  onChange={(e) => handleInputChange('answer', e.target.value)}
-                >
-                  <option value="">정답 선택</option>
-                  <option value="1">1번</option>
-                  <option value="2">2번</option>
-                  <option value="3">3번</option>
-                  <option value="4">4번</option>
-                </Form.Select>
-              </td>
-              <td>
-                <Button variant="success" onClick={handleSaveQuiz}>
-                  저장
-                </Button>{' '}
-                <Button variant="danger" onClick={() => setIsAdding(false)}>
-                  취소
-                </Button>
-              </td>
-            </tr>
-          )}
         </tbody>
       </Table>
-      {!isAdding && !editingQuiz && (
-        <Button variant="primary" onClick={() => setIsAdding(true)}>
-          추가
-        </Button>
-      )}
     </div>
   );
 };
