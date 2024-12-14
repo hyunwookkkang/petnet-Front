@@ -1,0 +1,40 @@
+.gifticon-management-container {
+  background: #EDEDED;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* 탭 버튼 스타일 */
+.tab-button {
+  background-color: transparent;
+  color: #FF6347;
+  border: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.tab-button.selected {
+  background-color: white;
+  color: black;
+  border: 1px solid #000;
+}
+
+.tab-button.unselected {
+  background-color: transparent;
+  color: #FF6347;
+  border: none;
+}
+
+/* 로딩 상태 컨테이너 */
+.spinner-container {
+  background: #EDEDED;
+  min-height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

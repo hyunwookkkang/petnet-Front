@@ -18,7 +18,7 @@ function PointShopMain() {
     {
       title: '포인트 상품',
       description: '다양한 상품을 포인트로 구매하세요.',
-      icon: <StorefrontIcon className="option-icon" style={{ color: '#4CAF50' }} />,
+      icon: <StorefrontIcon className="option-icon " style={{ color: '#4CAF50' }} />,
       path: 'pointProducts',
     },
     {

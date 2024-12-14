@@ -1,9 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
-import "../../styles/pointshop/point.css";
+import "../../styles/pointshop/GetPointLog.css"; // CSS 파일 import
 import { useUser } from "../../components/contexts/UserContext";
 import CommonModal from "../../components/common/modal/CommonModal";
+import "../../styles/pointshop/GetPointProduct.css"
+// 로컬 시간대에 맞게 날짜를 변환하는 함수
+const formatLocalDate = (dateStr) => {
+  const date = new Date(dateStr); // UTC 시간을 로컬 시간대로 변환
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 월을 2자리로 표시
+  const day = String(date.getDate()).padStart(2, '0'); // 일을 2자리로 표시
+  const hours = String(date.getHours()).padStart(2, '0'); // 시간을 2자리로 표시
+  const minutes = String(date.getMinutes()).padStart(2, '0'); // 분을 2자리로 표시
+  const seconds = String(date.getSeconds()).padStart(2, '0'); // 초를 2자리로 표시
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`; // YYYY-MM-DD HH:MM:SS 형식
+};
 
 const GetPointLog = () => {
   const [pointLogs, setPointLogs] = useState([]);
@@ -13,6 +26,9 @@ const GetPointLog = () => {
   const [showAlert, setShowAlert] = useState(false);
   const { userId } = useUser();
   const navigate = useNavigate();
+
+  // 오늘 날짜 (YYYY-MM-DD)
+  const todayDate = new Date().toISOString().slice(0, 10);
 
   const apiEndpoints = (userId) => ({
     getPointLog: `/api/pointshop/point/${userId}/getPointLog`,
@@ -49,8 +65,8 @@ const GetPointLog = () => {
         const formattedData = data.map((log, index) => ({
           id: index + 1,
           ...log,
-          reason: reasonMapping[log.reason] || `알 수 없음(${log.reason})`,
-          pointLogDate: new Date(log.pointLogDate).toISOString().replace('T', ' ').substring(0, 19),
+          reasonText: reasonMapping[log.reason] || `알 수 없음(${log.reason})`,
+          pointLogDate: formatLocalDate(log.pointLogDate), // 로컬 시간대로 변환
         }));
 
         setPointLogs(formattedData);
@@ -88,54 +104,74 @@ const GetPointLog = () => {
 
   const columns = [
     { field: 'id', headerName: '순번', width: 100 },
-    { field: 'reason', headerName: '이유', width: 200 },
+    { field: 'reasonText', headerName: '이유', width: 200 },
     { field: 'pointLogDate', headerName: '날짜', width: 200 },
     { field: 'pointAmount', headerName: '포인트 변경량', width: 150 },
   ];
 
+  // 오늘 날짜에 reason 별로 적립 기록 있는지 확인
+  const reasonsToCheck = [1, 2, 3, 4]; 
+  const todayCheck = {};
+  reasonsToCheck.forEach(r => {
+    todayCheck[r] = pointLogs.some(log => {
+      const logDate = log.pointLogDate.slice(0, 10); // YYYY-MM-DD
+      return logDate === todayDate && log.reason === String(r); // String(r)로 비교
+    });
+  });
+
+  const checkItems = [
+    { reason: 1, label: '오늘 장소 리뷰' },
+    { reason: 2, label: '오늘 퀴즈 성공' },
+    { reason: 3, label: '오늘 상품 리뷰' },
+    { reason: 4, label: '오늘 게시글 등록' },
+  ];
+
   return (
-    <div style={{ padding: '20px', background: '#FFFFFF', borderRadius: '10px', boxShadow: '0 5px 20px rgba(0, 0, 0, 0.15)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 style={{ color: '#FEBE98', fontSize: '2.2rem', fontWeight: 'bold' }}>포인트 내역</h1>
-        <div style={{
-          backgroundColor: '#FFFFFF',
-          color: '#FEBE98 ',
-          padding: '12px 20px',
-          borderRadius: '5px',
-          fontWeight: 'bold',
-          boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)',
-        }}>
-         <h5> 현재 포인트: {userPoint !== null ? userPoint : '불러오는 중...'}</h5>
+    <div className="point-log-container">
+      <div className="point-log-header">
+        <h1 className="point-log-title">포인트 내역</h1>
+        <div className="point-log-userpoint">
+          <h5> 현재 포인트: {userPoint !== null ? userPoint : '불러오는 중...'}</h5>
         </div>
       </div>
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
-        {['getPointLog', 'getPointAddLog', 'getPointUpdateLog'].map((type, idx) => (
-          <button
-            key={type}
-            onClick={() => setCurrentApi(type)}
-            style={{
-              flex: 1,
-              backgroundColor: currentApi === type ? '#FEBE98' : '#FFFFFF',
-              color: currentApi === type ? '#FFFFFF' : '#FEBE98',
-              padding: '10px',
-              borderRadius: '8px',
-              border: `2px solid ${currentApi === type ? '#FEBE98' : '#EDEDED'}`,
-              fontWeight: 'bold',
-              boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-            }}
-          >
-            {idx === 0 ? '전체 로그' : idx === 1 ? '적립 로그' : '사용 로그'}
-          </button>
-        ))}
+
+      <div className="today-check-container">
+        {checkItems.map(item => {
+          const isO = todayCheck[item.reason]; 
+          const textColorClass = isO ? 'text-o' : 'text-x'; 
+          return (
+            <div key={item.reason} className={`today-log-card ${textColorClass}`}>
+              {item.label}: {isO ? '⭕' : '❌'}
+            </div>
+          );
+        })}
       </div>
+
+      <div className="button-group">
+        <button
+          onClick={() => setCurrentApi('getPointLog')}
+          className={`log-button ${currentApi === 'getPointLog' ? 'active' : ''}`}
+        >
+          전체 로그
+        </button>
+        <button
+          onClick={() => setCurrentApi('getPointAddLog')}
+          className={`log-button ${currentApi === 'getPointAddLog' ? 'active' : ''}`}
+        >
+          적립 로그
+        </button>
+        <button
+          onClick={() => setCurrentApi('getPointUpdateLog')}
+          className={`log-button ${currentApi === 'getPointUpdateLog' ? 'active' : ''}`}
+        >
+          사용 로그
+        </button>
+      </div>
+
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '20px', fontSize: '1.2rem', color: '#DCDCDC' }}>
-          포인트 내역을 불러오는 중입니다...
-        </div>
+        <div className="loading-text">포인트 내역을 불러오는 중입니다...</div>
       ) : (
-        <div style={{ height: 600, width: '100%', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 5px 15px rgba(0, 0, 0, 0.15)', background: '#FFFFFF' }}>
+        <div className="datagrid-container">
           <DataGrid
             rows={pointLogs}
             columns={columns}
@@ -144,6 +180,18 @@ const GetPointLog = () => {
           />
         </div>
       )}
+
+      <div className="product-info-box">
+        <h2>포인트 이용 안내</h2>
+        <ul>
+          <li>장소 리뷰 작성 시 100P 적립 (하루에 한 번)</li>
+          <li>퀴즈 참여 시, 10문제 중 7문제 이상 맞추면 100P 적립 (하루에 한 번)</li>
+          <li>상품 리뷰 작성 시 100P 적립 (하루에 한 번)</li>
+          <li>게시글 등록 시 100P 적립 (하루에 한 번)</li>
+          <li>인기 게시글로 선정된 경우 200P 적립 (일일 제한 없음)</li>
+          <li>매년 1월 1일, 보유 포인트 소멸</li>
+        </ul>
+      </div>
 
       <CommonModal
         show={showAlert}
@@ -154,8 +202,7 @@ const GetPointLog = () => {
         title="로그인 필요"
         body={<div>로그인이 필요한 서비스입니다.<br /> 로그인 화면으로 이동합니다.</div>}
         footer={
-          <button
-            style={{ backgroundColor: "#FF6347", color: "#FFFFFF", border: "none", padding: "10px 20px", borderRadius: "5px", fontWeight: "bold", cursor: "pointer" }}
+          <button className="modal-confirm-button"
             onClick={() => {
               setShowAlert(false);
               navigate("/login");

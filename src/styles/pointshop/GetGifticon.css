@@ -1,0 +1,78 @@
+.get-gifticon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f8f8, #ececec);
+  padding: 20px;
+}
+
+.gifticon-card {
+  width: 100%;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.gifticon-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #FF6347;
+  margin: 20px 0;
+}
+
+.gifticon-images {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.gifticon-image {
+  width: 300px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 0 5px;
+}
+
+.gifticon-info {
+  padding: 20px;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #333;
+}
+
+.use-gifticon-button {
+  width: 90%;
+  background-color: #FF6347;
+  color: #fff;
+  border: none;
+  padding: 15px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 20px 0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+/* 로딩 및 에러 메시지 스타일 */
+.gifticon-loading,
+.gifticon-not-found {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+/* 모달 확인 버튼 */
+.alert-confirm-button {
+  background-color: #feb98e;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}

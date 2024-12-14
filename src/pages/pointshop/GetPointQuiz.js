@@ -4,6 +4,7 @@ import axios from "axios";
 import { Card, Button, ProgressBar, Alert, Table } from "react-bootstrap";
 import { Box, Button as MUIButton } from "@mui/material";
 import { useUser } from "../../components/contexts/UserContext";
+import "../../styles/pointshop/GetPointQuiz.css"; // CSS 파일 import
 
 const GetPointQuiz = () => {
   const [quizzes, setQuizzes] = useState([]); // 전체 퀴즈 데이터
@@ -72,8 +73,8 @@ const GetPointQuiz = () => {
   const currentQuiz = quizzes[currentIndex];
 
   return (
-    <Box className="quiz-container" sx={{ padding: "20px", maxWidth: "800px", margin: "auto", backgroundColor: "#F7F6F2", borderRadius: "12px", boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)" }}>
-      <h2 className="quiz-title text-center mb-4" style={{ color: "#FF6347", fontWeight: "bold" }}>🎉 포인트 퀴즈 🎉</h2>
+    <Box className="quiz-container">
+      <h2 className="quiz-title text-center mb-4">🎉 포인트 퀴즈 🎉</h2>
 
       {showAlert && (
         <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
@@ -82,12 +83,12 @@ const GetPointQuiz = () => {
       )}
 
       {currentQuiz && !resultMessage ? (
-        <Card className="quiz-card mb-4" style={{ borderColor: "#FEBE98", boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)", backgroundColor: "#FFFFFF" }}>
+        <Card className="quiz-card mb-4">
           <Card.Body>
-            <Card.Title className="text-center mb-3" style={{ color: "#FF6347", fontSize: "1.5rem" }}>
+            <Card.Title className="quiz-progress-title text-center mb-3">
               문제 {currentIndex + 1} / {quizzes.length}
             </Card.Title>
-            <Card.Text className="quiz-question text-center mb-4" style={{ fontSize: "1.2rem", color: "#34495E" }}>
+            <Card.Text className="quiz-question text-center mb-4">
               {currentQuiz.quizContent}
             </Card.Text>
             <div className="quiz-options text-center">
@@ -97,7 +98,9 @@ const GetPointQuiz = () => {
                   variant="contained"
                   color="info"
                   onClick={() => handleAnswerSelection(num)}
-                  sx={{ margin: "10px auto", padding: "12px 20px", width: "80%", backgroundColor: userAnswers[currentQuiz.quizId] === num ? "#FF6347" : "#FFFFFF", color: userAnswers[currentQuiz.quizId] === num ? "#FFFFFF" : "#34495E", fontWeight: "bold", borderRadius: "8px", border: "2px solid #FEBE98" }}
+                  className={`quiz-option-btn ${
+                    userAnswers[currentQuiz.quizId] === num ? "selected" : ""
+                  }`}
                 >
                   {num}. {currentQuiz[`quizOption${num}`]}
                 </MUIButton>
@@ -109,8 +112,7 @@ const GetPointQuiz = () => {
                 <Button
                   onClick={() => setCurrentIndex((prevIndex) => prevIndex - 1)}
                   variant="secondary"
-                  className="me-2"
-                  style={{ backgroundColor: "#DCDCDC", borderColor: "#DCDCDC", color: "#34495E" }}
+                  className="back-button me-2"
                 >
                   뒤로 가기
                 </Button>
@@ -120,17 +122,34 @@ const GetPointQuiz = () => {
         </Card>
       ) : resultMessage ? (
         <div className="quiz-results text-center mt-4">
-          <h3 className="quiz-score" style={{ color: "#FF6347", fontWeight: "bold" }}>총 점수: {score}점</h3>
+          <h3 className="quiz-score">총 점수: {score}점</h3>
           <ProgressBar
             now={(score / (quizzes.length * 10)) * 100}
             label={`${score}%`}
             className="quiz-progress my-3"
-            style={{ height: "25px", fontSize: "1rem", backgroundColor: "#EDEDED" }}
-          />
-          <Alert variant={score >= 70 ? "success" : "danger"} style={{ fontWeight: "bold", fontSize: "1.2rem" }}>{resultMessage}</Alert>
+            style={{
+              height: "25px",
+              fontSize: "1rem",
+              backgroundColor: "#EDEDED",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#FEBE98",
+                width: `${(score / (quizzes.length * 10)) * 100}%`,
+                height: "100%",
+              }}
+            ></div>
+          </ProgressBar>
+          <Alert
+            variant={score >= 70 ? "success" : "danger"}
+            className="quiz-result-alert"
+          >
+            {resultMessage}
+          </Alert>
 
-          <Table bordered hover className="mt-4" style={{ backgroundColor: "#FFFFFF" }}>
-            <thead style={{ backgroundColor: "#FF6347", color: "white" }}>
+          <Table bordered hover className="quiz-result-table mt-4">
+            <thead>
               <tr>
                 <th>문제</th>
                 <th>사용자 답안</th>
@@ -139,8 +158,8 @@ const GetPointQuiz = () => {
             </thead>
             <tbody>
               {quizzes.map((quiz) => (
-                <tr key={quiz.quizId} style={{ backgroundColor: "#F7F9F9" }}>
-                  <td style={{ color: "#34495E" }}>{quiz.quizContent}</td>
+                <tr key={quiz.quizId}>
+                  <td>{quiz.quizContent}</td>
                   <td
                     style={{
                       color: userAnswers[quiz.quizId] === quiz.answer ? "#27AE60" : "#E74C3C",
@@ -148,10 +167,12 @@ const GetPointQuiz = () => {
                     }}
                   >
                     {userAnswers[quiz.quizId]
-                      ? `${userAnswers[quiz.quizId]}. ${quiz[`quizOption${userAnswers[quiz.quizId]}`]}`
+                      ? `${userAnswers[quiz.quizId]}. ${
+                          quiz[`quizOption${userAnswers[quiz.quizId]}`]
+                        }`
                       : "미응답"}
                   </td>
-                  <td style={{ color: "#34495E", fontWeight: "bold" }}>{`${quiz.answer}. ${quiz[`quizOption${quiz.answer}`]}`}</td>
+                  <td>{`${quiz.answer}. ${quiz[`quizOption${quiz.answer}`]}`}</td>
                 </tr>
               ))}
             </tbody>
@@ -159,26 +180,21 @@ const GetPointQuiz = () => {
 
           <div className="quiz-actions mt-3">
             {score < 70 && (
-              <Button
-                variant="warning"
-                onClick={handleRetry}
-                className="me-2"
-                style={{ backgroundColor: "#ECB392", borderColor: "#ECB392", color: "#FFFFFF" }}
-              >
+              <Button variant="warning" onClick={handleRetry} className="retry-button me-2">
                 다시 도전
               </Button>
             )}
             <Button
               variant="success"
               onClick={() => navigate("/pointLog")}
-              style={{ backgroundColor: "#EEA092", borderColor: "#EEA092", color: "#FFFFFF" }}
+              className="end-button"
             >
               종료하기
             </Button>
           </div>
         </div>
       ) : (
-        <p className="text-center" style={{ color: "#7F8C8D", fontSize: "1.2rem" }}>퀴즈를 불러오는 중입니다...</p>
+        <p className="loading-text text-center">퀴즈를 불러오는 중입니다...</p>
       )}
     </Box>
   );
