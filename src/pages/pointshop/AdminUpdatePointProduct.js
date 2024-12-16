@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
 
 const AdminUpdatePointProduct = () => {
   const { productId } = useParams(); // URL에서 productId 가져오기
@@ -93,14 +94,14 @@ const AdminUpdatePointProduct = () => {
       );
 
       if (response.status === 200) {
-        alert("상품이 성공적으로 수정되었습니다.");
+        showSuccessToast("상품이 성공적으로 수정되었습니다.");
         navigate("/"); // 수정 후 목록 페이지로 이동
       } else {
-        alert("상품 수정에 실패했습니다.");
+        showErrorToast("상품 수정에 실패했습니다.");
       }
     } catch (error) {
       console.error("Error updating product:", error);
-      alert("서버와 통신 중 문제가 발생했습니다.");
+      showErrorToast("서버와 통신 중 문제가 발생했습니다.");
     }
   };
 
@@ -168,10 +169,12 @@ const AdminUpdatePointProduct = () => {
         </div>
 
         <div>
-          <label>상품 이미지:</label>
+          <label htmlFor="imageInput" className="form-label">상품 이미지:</label>
           <input
             type="file"
             accept="image/*"
+            className="form-control"
+            id="imageInput"
             onChange={handleFileChange}
             style={{ width: "100%", marginTop: "5px" }}
           />

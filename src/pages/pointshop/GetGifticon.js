@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useUser } from "../../components/contexts/UserContext";
 import CommonModal from "../../components/common/modal/CommonModal";
+import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
 import "../../styles/pointshop/GetGifticon.css"; // CSS 파일 import
 
 const GetGifticon = () => {
@@ -54,11 +55,11 @@ const GetGifticon = () => {
   const handleUpdateGifticon = async () => {
     try {
       await axios.patch(`/api/pointshop/gifticons/${gifticonId}`);
-      alert(`${product.productName} 기프티콘을 사용하셨습니다!`);
+      showSuccessToast(`${product.productName} 기프티콘을 사용하셨습니다!`);
       navigate("/gifticons");
     } catch (error) {
       console.error("Error updating gifticon:", error);
-      alert("기프티콘 사용이 취소되었습니다.");
+      showErrorToast("기프티콘 사용이 취소되었습니다.");
     }
   };
 

@@ -73,7 +73,7 @@ const GifticonManagement = () => {
 
   useEffect(() => {
     if (userId) {
-      fetchData('logs'); // 기본적으로 "사용 전" 데이터를 가져옴
+      fetchData('logs'); 
     }
   }, [userId]);
 
