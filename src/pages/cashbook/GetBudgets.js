@@ -68,18 +68,18 @@ const GetBudgets = () => {
   }
 
   return (
-    <div className="budgets-container">
-      <div className="budgets-header">
+    <div className="cashbook-budgets-container">
+      <div className="cashbook-budgets-header">
         <h2>예산</h2>
-        <button className="reset-button" onClick={handleReset}>
+        <button className="cashbook-reset-button" onClick={handleReset}>
           초기화
         </button>
 
-        <button className="settings-button">
+        <button className="cashbook-settings-button">
           <Link to="/GetBudgetSettings">예산설정</Link>
         </button>
       </div>
-      <div className="budgets-summary">
+      <div className="cashbook-budgets-summary">
         <div>전체예산: {totalBudget.toLocaleString()}원</div>
         <div>사용금액: {totalUsed.toLocaleString()}원</div>
         {overBudget > 0 ? (
@@ -90,11 +90,13 @@ const GetBudgets = () => {
           <div>남은금액: {(totalBudget - totalUsed).toLocaleString()}원</div>
         )}
       </div>
-      <div className="budgets-list">
+      <div className="cashbook-budgets-list">
         {budgets.map((budget) => (
-          <div className="budget-item" key={budget.expenseCategory}>
-            <div className="budget-category">{budget.expenseCategory}</div>
-            <div className="budget-details">
+          <div className="cashbook-budget-item" key={budget.expenseCategory}>
+            <div className="cashbook-budget-category">
+              {budget.expenseCategory}
+            </div>
+            <div className="cashbook-budget-details">
               <div>예산: {budget.budgetAmount.toLocaleString()}원</div>
               <div>사용금액: {budget.usedAmount.toLocaleString()}원</div>
               <div

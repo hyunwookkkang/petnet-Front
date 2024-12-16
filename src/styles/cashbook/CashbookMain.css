@@ -1,5 +1,5 @@
 /* 슬라이드 컨테이너 기본 스타일 */
-.slide-container {
+.cashbook-slide-container {
   position: fixed;
   top: 0;
   right: -100%; /* 처음에 화면 밖으로 숨김 */
@@ -13,12 +13,12 @@
 }
 
 /* 슬라이드 화면이 열렸을 때 */
-.slide-container.open {
+.cashbook-slide-container.open {
   right: 0; /* 화면에 표시 */
 }
 
 /* 슬라이드 헤더 */
-.slide-header {
+.cashbook-slide-header {
   display: flex;
   justify-content: space-between; /* 닫기 버튼과 제목을 양쪽 끝으로 */
   align-items: center;
@@ -32,7 +32,7 @@
 }
 
 /* 닫기 버튼 스타일 */
-.close-btn {
+.cashbook-cashbook-close-btn {
   font-size: 300%; /* 크기 */
   background: none; /* 배경 없음 */
   border: none; /* 테두리 없음 */
@@ -45,7 +45,7 @@
 }
 
 /* 슬라이드 내용 */
-.slide-content {
+.cashbook-slide-content {
   padding: 16px;
   font-size: 16px;
   color: #555;

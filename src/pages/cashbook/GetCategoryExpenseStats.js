@@ -114,7 +114,7 @@ const GetCategoryExpenseStats = () => {
       )}
 
       {/* 도표 */}
-      <div className="table-container">
+      <div className="cashbook-table-container">
         <table>
           <thead>
             <tr>

@@ -37,11 +37,11 @@ const GetLoadExpenseLog = ({ onSelectPurchase }) => {
   };
 
   return (
-    <div className="get-load-expense-log">
-      <h3 className="title">펫넷 상점 주문 내역</h3>
-      <ul className="purchase-list">
+    <div className="cashbook-get-load-expense-log">
+      <h3 className="cashbook-title">펫넷 상점 주문 내역</h3>
+      <ul className="cashbook-purchase-list">
         {purchaseLogs.length === 0 ? (
-          <p className="empty-message">주문 내역이 없습니다.</p>
+          <p className="cashbook-empty-message">주문 내역이 없습니다.</p>
         ) : (
           purchaseLogs.map((log, index) => (
             <li
@@ -54,16 +54,16 @@ const GetLoadExpenseLog = ({ onSelectPurchase }) => {
                   console.error("onSelectPurchase가 정의되지 않았습니다.");
                 }
               }}
-              className="purchase-item"
+              className="cashbook-purchase-item"
             >
-              <div className="content">{log.expenseContent}</div>
-              <div className="date">
+              <div className="cashbook-content">{log.expenseContent}</div>
+              <div className="cashbook-date">
                 날짜: {new Date(log.expenseDate).toLocaleString()}
               </div>
-              <div className="amount">
+              <div className="cashbook-amount">
                 금액: <span>{log.amount}원</span>
               </div>
-              <div className="payment-option">
+              <div className="cashbook-payment-option">
                 결제수단: {log.paymentOption}
               </div>
             </li>

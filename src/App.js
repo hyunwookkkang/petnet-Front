@@ -1,6 +1,6 @@
 import React from "react";
-import './App.css'; 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import './App.css';
 import Main from "./pages/common/Main";
 import MyMainPage from "./pages/common/MyMainPage";
 //import AdminMainPage from "./pages/common/AdminMainPage";
@@ -14,12 +14,12 @@ import TopNavigation from "./components/common/navigationBar/TopNavigation";
 import UsingComponent from "./components/common/UsingComponent";
 
 // Shop 관련 페이지
-import Products from "./pages/shop/product/Products";
-import ManageProducts from "./pages/shop/product/ManageProducts";
 import AddOrEditProduct from "./pages/shop/product/AddOrEditProduct";
-import ProductInfo from "./pages/shop/product/ProductInfo";
-import ProductImage from "./pages/shop/product/ProductImage";
 import Carts from "./pages/shop/product/Carts";
+import ManageProducts from "./pages/shop/product/ManageProducts";
+import ProductImage from "./pages/shop/product/ProductImage";
+import ProductInfo from "./pages/shop/product/ProductInfo";
+import Products from "./pages/shop/product/Products";
 import Wishes from "./pages/shop/product/Wishes";
 import AddPurchase from "./pages/shop/purchase/AddPurchase";
 
@@ -29,49 +29,37 @@ import Singup from "./pages/user/Signup";
 import UpdateUser from "./pages/user/UpdateUser";
 
 // Map 관련 페이지
-import MapMain from "./pages/map/MapMain";
-import PlaceMap from "./pages/map/place/PlaceMap";
-import PlaceInfo from "./pages/map/place/PlaceInfo";
-import Favorites from "./pages/map/favorite/Favorites";
-import FavoriteInfo from "./pages/map/favorite/FavoriteInfo";
-import PlaceSearch from "./pages/map/placeSearch/PlaceSearch";
 import AddPlace from "./pages/map/admin/AddPlace";
+import FavoriteInfo from "./pages/map/favorite/FavoriteInfo";
+import Favorites from "./pages/map/favorite/Favorites";
+import MapMain from "./pages/map/MapMain";
+import PlaceInfo from "./pages/map/place/PlaceInfo";
+import PlaceMap from "./pages/map/place/PlaceMap";
+import PlaceSearch from "./pages/map/placeSearch/PlaceSearch";
 import GetMyPlacePosts from "./pages/map/user/GetMyPlacePosts";
 
 // pointshop 관련 페이지
-import PointShopMain from "./pages/pointshop/PointShopMain";
-import PointProducts from "./pages/pointshop/PointProducts";
-import GetPointProduct from "./pages/pointshop/GetPointProduct";
-import AdminPointProducts from "./pages/pointshop/AdminPointProducts";
 import AdminAddPointProduct from "./pages/pointshop/AdminAddPointProduct";
+import AdminPointProducts from "./pages/pointshop/AdminPointProducts";
 import AdminUpdatePointProduct from "./pages/pointshop/AdminUpdatePointProduct";
-import GifticonManigement from "./pages/pointshop/GifticonManigement";
-import GetPointLog from "./pages/pointshop/GetPointLog";
 import GetGifticon from "./pages/pointshop/GetGifticon";
-import GetQuizs from "./pages/pointshop/GetQuizs";
+import GetPointLog from "./pages/pointshop/GetPointLog";
+import GetPointProduct from "./pages/pointshop/GetPointProduct";
 import GetPointQuiz from "./pages/pointshop/GetPointQuiz";
+import GetQuizs from "./pages/pointshop/GetQuizs";
+import GifticonManigement from "./pages/pointshop/GifticonManigement";
+import PointProducts from "./pages/pointshop/PointProducts";
+import PointShopMain from "./pages/pointshop/PointShopMain";
 
 // Community 관련 페이지
 import CommunityMain from "./pages/community/CommunityMain";
-import GetTopicInfo from "./pages/community/topic/GetTopicInfo";
 import EditTopicInfo from "./pages/community/topic/EditTopicInfo";
-import GetScrapTopics from "./pages/community/topic/GetScrapTopics";
 import GetMyTopics from "./pages/community/topic/GetMyTopics";
+import GetScrapTopics from "./pages/community/topic/GetScrapTopics";
+import GetTopicInfo from "./pages/community/topic/GetTopicInfo";
 import SearchTopics from "./pages/community/topic/SearchTopics";
 
 // 가계부 관련 페이지
-import CashbookMain from "./pages/cashbook/CashbookMain";
-import AddExpenseLog from "./pages/cashbook/AddExpenseLog";
-import GetExpensesLog from "./pages/cashbook/GetExpensesLog";
-import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
-import SlideDrawer from "./components/cashbook/SlideDrawer";
-import GetExpenseLog from "./pages/cashbook/GetExpenseLog";
-import GetCalendarDashboard from "./pages/cashbook/GetCalendarDashboard";
-import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
-import SearchExpenses from "./pages/cashbook/SearchExpenses";
-import AddExpenseAuto from "./components/cashbook/AddExpenseAuto";
-import GetBudgets from "./pages/cashbook/GetBudgets";
-import GetBudgetSettings from "./pages/cashbook/GetBudgetSettings";
 
 
 // Admin 관련 페이지 (잘못된 경로 수정)
@@ -162,8 +150,8 @@ function App() {
             <Route path="/pointQuiz" element={<GetPointQuiz/>}/>
             {/* END : pointshop-page */}
 
- {/* START : cashbook-page */}
- <Route path="/cashbook" element={<CashbookMain />} />
+            {/* START : cashbook-page
+            <Route path="/cashbook" element={<CashbookMain />} />
               <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
               <Route
                 path="/GetCalendarsDashboard"

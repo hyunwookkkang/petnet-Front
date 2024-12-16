@@ -59,9 +59,9 @@ const SearchExpenses = () => {
   };
 
   return (
-    <div className="search-expenses">
+    <div className="cashbook-search-expenses">
       {/* 날짜 선택 */}
-      <div className="date-picker-container">
+      <div className="cashbook-date-picker-container">
         <label>
           <CalendarMonthIcon />
         </label>
@@ -87,7 +87,7 @@ const SearchExpenses = () => {
       <SearchBar />
 
       {/* 드롭다운 필터 */}
-      <div className="dropdown-container">
+      <div className="cashbook-dropdown-container">
         <label>동물 카테고리:</label>
         <select
           value={animalCategory}
@@ -129,12 +129,12 @@ const SearchExpenses = () => {
       </div>
 
       {/* 검색 버튼 */}
-      <button className="search-button" onClick={handleSearch}>
+      <button className="cashbook-search-button" onClick={handleSearch}>
         검색
       </button>
 
       {/* 결과 표시 */}
-      <div className="search-results">
+      <div className="cashbook-search-results">
         <h3>총 지출 금액: {totalExpense}</h3>
         <ul>
           {results.length > 0 ? (

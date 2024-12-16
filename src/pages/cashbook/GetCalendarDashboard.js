@@ -55,7 +55,7 @@ function GetCalendarDashboard() {
   return (
     <div>
       {/* 달력 (클릭 이벤트 예제) */}
-      <div className="calendar">
+      <div className="cashbook-calendar">
         <button onClick={() => openDrawer("2024-11-12")}>2024-11-12</button>
         <button onClick={() => openDrawer("2024-11-23")}>2024-11-23</button>
       </div>

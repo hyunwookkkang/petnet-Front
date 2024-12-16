@@ -169,7 +169,7 @@ const GetExpensesLog = ({ year, month }) => {
 
   return (
     <div>
-      <div className="monthly-total">
+      <div className="cashbook-monthly-total">
         <h2>
           월간 지출 총액:{" "}
           <span style={{ color: "#FF6347  " }}>
@@ -190,7 +190,7 @@ const GetExpensesLog = ({ year, month }) => {
             <p style={{ textAlign: "center" }}>모든 데이터를 불러왔습니다.</p>
           } // 데이터가 모두 로드된 경우
         >
-          <div className="expense-list">
+          <div className="cashbook-expense-list">
             {expenses.map((expense, index) => {
               // 현재 항목의 날짜
               const currentDate = new Date(
@@ -210,7 +210,7 @@ const GetExpensesLog = ({ year, month }) => {
                   {currentDate !== previousDate && (
                     <div>
                       <hr />
-                      <h3 className="date-header">
+                      <h3 className="cashbook-date-header">
                         {new Date(expense.expenseDate).toLocaleDateString(
                           "ko-KR",
                           {
@@ -225,12 +225,12 @@ const GetExpensesLog = ({ year, month }) => {
                   )}
 
                   <div
-                    className="expense-card"
+                    className="cashbook-expense-card"
                     onClick={() => handleExpenseClick(expense.expenseId)} // 클릭 시 상세보기
                   >
                     {/* 왼쪽 영역 */}
-                    <div className="expense-left">
-                      <div className="expense-date">
+                    <div className="cashbook-expense-left">
+                      <div className="cashbook-expense-date">
                         <strong>
                           {new Date(expense.expenseDate).toLocaleDateString(
                             "ko-KR",
@@ -248,23 +248,23 @@ const GetExpensesLog = ({ year, month }) => {
                           )}
                         </span>
                       </div>
-                      <div className="expense-category">
+                      <div className="cashbook-expense-category">
                         {categoryIcons[expense.expenseCategory]}{" "}
                         {expense.expenseCategory}
                       </div>
                     </div>
 
                     {/* 가운데 영역 */}
-                    <div className="expense-center">
+                    <div className="cashbook-expense-center">
                       {expense.expenseContent}
                     </div>
 
                     {/* 오른쪽 영역 */}
-                    <div className="expense-right">
-                      <span className="expense-amount">
+                    <div className="cashbook-expense-right">
+                      <span className="cashbook-expense-amount">
                         {formatAmount(expense.amount)}
                       </span>
-                      <div className="expense-payment">
+                      <div className="cashbook-expense-payment">
                         {expense.paymentOption}
                       </div>{" "}
                       {/* 결제수단을 금액 밑으로 이동 */}

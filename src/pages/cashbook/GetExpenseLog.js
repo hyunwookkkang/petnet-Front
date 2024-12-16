@@ -107,7 +107,7 @@ const GetExpenseLog = ({ expenseId }) => {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="empty-message">
+                <td colSpan="5" className="cashbook-empty-message">
                   지출 내역이 없습니다.
                 </td>
               </tr>

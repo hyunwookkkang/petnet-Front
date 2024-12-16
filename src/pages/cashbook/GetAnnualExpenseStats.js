@@ -73,18 +73,18 @@ const GetAnnualExpenseStats = () => {
   };
 
   return (
-    <div className="annual-expense-stats">
+    <div className="cashbook-annual-expense-stats">
       <h2>{year}년 월별 지출 통계</h2>
 
       {/* Chart.js 막대그래프 */}
       {chartData && (
-        <div className="chart-container">
+        <div className="cashbook-chart-container">
           <Bar data={chartData} options={{ responsive: true }} />
         </div>
       )}
 
       {/* HTML 테이블 */}
-      <div className="table-container">
+      <div className="cashbook-table-container">
         <table>
           <thead>
             <tr>

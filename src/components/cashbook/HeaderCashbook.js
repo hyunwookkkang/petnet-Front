@@ -48,54 +48,54 @@ const HeaderCashbook = ({ currentYear, currentMonth, setYear, setMonth }) => {
 
   return (
     <div className="header-cashbook">
-      <div className="header-row">
-        <button className="nav-btn" onClick={handlePrevMonth}>
+      <div className="cashbook-header-row">
+        <button className="cashbook-nav-btn" onClick={handlePrevMonth}>
           <PlayArrow style={{ transform: "scaleX(-1)" }} />
         </button>
-        <div className="title-section">
+        <div className="cashbook-title-section">
           <span>
             {currentYear}년 {currentMonth}월
           </span>
-          <button className="dropdown-btn" onClick={toggleDatePicker}>
+          <button className="cashbook-dropdown-btn" onClick={toggleDatePicker}>
             <KeyboardDoubleArrowDownSharpIcon />
           </button>
         </div>
-        <button className="nav-btn" onClick={handleNextMonth}>
+        <button className="cashbook-nav-btn" onClick={handleNextMonth}>
           <PlayArrow />
         </button>
-        <button className="search-search">
+        <button className="cashbook-search-search">
           <Link to="/SearchExpenses">
             <SearchIcon />
           </Link>
         </button>
       </div>
 
-      <div className="navigation-menu">
-        <button className="nav-btn">
+      <div className="cashbook-navigation-menu">
+        <button className="cashbook-nav-btn">
           <Link to="/cashbook">일일</Link>
         </button>
 
-        <button className="nav-btn">
+        <button className="cashbook-nav-btn">
           <Link to="/GetCalendarsDashboard">달력</Link>
         </button>
 
-        <button className="nav-btn">
+        <button className="cashbook-nav-btn">
           <Link to="/GetstatisticsDashboards">통계</Link>
         </button>
 
-        <button className="nav-btn">
+        <button className="cashbook-nav-btn">
           <Link to="/GetBudgets">예산</Link>
         </button>
       </div>
 
       {showDatePicker && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={toggleDatePicker}>
+        <div className="cashbook-modal">
+          <div className="cashbook-modal-content">
+            <span className="cashbook-header-close" onClick={toggleDatePicker}>
               &times;
             </span>
             {/* 연도 네비게이션 */}
-            <div className="year-nav">
+            <div className="cashbook-year-nav">
               <button onClick={handlePrevYear}>◀</button>
               <span>{currentYear}</span>
               <button onClick={handleNextYear}>▶</button>

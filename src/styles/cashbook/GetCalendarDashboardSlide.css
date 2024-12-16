@@ -1,4 +1,4 @@
-.slide-drawer {
+.cashbook-slide-drawer {
   position: fixed;
   top: 0;
   right: 0;
@@ -11,23 +11,23 @@
   transform: translateX(0); /* 강제로 화면에 표시 */
 }
 
-.slide-header {
+.cashbook-slide-header {
   padding: 20px;
   border-bottom: 1px solid #ddd;
 }
 
-.slide-header h2 {
+.cashbook-slide-header h2 {
   margin: 0;
   font-size: 1.5em;
 }
 
-.slide-header p {
+.cashbook-slide-header p {
   margin: 5px 0;
   font-size: 1em;
   color: #333;
 }
 
-.close-btn {
+.cashbook-close-btn {
   position: absolute;
   top: 10px;
   right: 15px;
@@ -37,11 +37,11 @@
   cursor: pointer;
 }
 
-.slide-content {
+.cashbook-slide-content {
   padding: 20px;
 }
 
-.expense-item {
+.cashbook-expense-item {
   margin-bottom: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -49,22 +49,22 @@
   background-color: #f9f9f9;
 }
 
-.expense-item .category {
+.cashbook-expense-item .category {
   font-weight: bold;
   color: #333;
 }
 
-.expense-item .content {
+.cashbook-expense-item .content {
   font-size: 0.9em;
   color: #666;
 }
 
-.expense-item .amount {
+.cashbook-expense-item .amount {
   font-size: 1.2em;
   color: red;
 }
 
-.expense-item .payment {
+.cashbook-expense-item .payment {
   font-size: 0.8em;
   color: #888;
 }

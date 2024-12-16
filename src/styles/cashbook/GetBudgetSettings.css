@@ -1,21 +1,21 @@
-.budget-settings-container {
+.cashbook-budget-settings-container {
   padding: 20px;
   background-color: #f9f9f9;
 }
 
-h2 {
+.cashbook-budget-h2 {
   text-align: center;
   color: #333;
   margin-bottom: 20px;
 }
 
-.budget-list {
+.cashbook-budget-list {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.budget-item {
+.cashbook-budget-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -26,14 +26,14 @@ h2 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.budget-category {
+.cashbook-budget-category {
   font-size: 16px;
   font-weight: bold;
   color: #555;
   flex: 1;
 }
 
-.budget-amount input {
+.cashbook-budget-amount input {
   width: 100px;
   padding: 5px;
   border: 1px solid #ddd;
@@ -41,27 +41,27 @@ h2 {
   text-align: right;
 }
 
-.budget-edit .edit-icon {
+.cashbook-budget-edit .edit-icon {
   background-color: transparent;
   border: none;
   cursor: pointer;
   font-size: 16px;
 }
 
-.budget-toggle .switch {
+.cashbook-budget-toggle .switch {
   position: relative;
   display: inline-block;
   width: 40px;
   height: 20px;
 }
 
-.budget-toggle .switch input {
+.cashbook-budget-toggle .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.budget-toggle .slider {
+.cashbook-budget-toggle .slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -73,7 +73,7 @@ h2 {
   border-radius: 20px;
 }
 
-.budget-toggle .slider:before {
+.cashbook-budget-toggle .slider:before {
   position: absolute;
   content: "";
   height: 14px;
@@ -85,15 +85,15 @@ h2 {
   border-radius: 50%;
 }
 
-.budget-toggle input:checked + .slider {
+.cashbook-budget-toggle input:checked + .slider {
   background-color: #4caf50;
 }
 
-.budget-toggle input:checked + .slider:before {
+.cashbook-budget-toggle input:checked + .slider:before {
   transform: translateX(20px);
 }
 
-.save-button {
+.cashbook-save-button {
   display: block;
   margin: 20px auto;
   padding: 10px 20px;
@@ -106,6 +106,6 @@ h2 {
   transition: background-color 0.3s;
 }
 
-.save-button:hover {
+.cashbook-save-button:hover {
   background-color: #ff8c00;
 }

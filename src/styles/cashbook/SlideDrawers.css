@@ -1,7 +1,7 @@
 /* SlideDrawers.css */
 
 /* 지출 상세보기 슬라이드 스타일 */
-.slide-drawer-detail {
+.cashbook-slide-drawer-detail {
   position: fixed;
   top: 0;
   right: 0;
@@ -15,11 +15,11 @@
   transition: transform 0.3s ease-in-out;
 }
 
-.slide-drawer-detail.open {
+.cashbook-slide-drawer-detail.open {
   transform: translateX(0); /* 슬라이드 열림 */
 }
 
-.slide-drawer-detail .close-button {
+.cashbook-slide-drawer-detail .close-button {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -30,34 +30,34 @@
   cursor: pointer;
 }
 
-.slide-drawer-detail .slide-content {
+.cashbook-slide-drawer-detail .slide-content {
   padding-top: 40px; /* 닫기 버튼 아래 공간 확보 */
 }
 
 /* 기타 지출 상세보기 슬라이드 관련 스타일 */
-.field {
+.cashbook-field {
   margin-bottom: 20px;
 }
 
-.field label {
+.cashbook-field label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.field input {
+.cashbook-field input {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-.actions {
+.cashbook-actions {
   display: flex;
   justify-content: space-between;
 }
 
-.update-btn {
+.cashbook-update-btn {
   background-color: #4caf50;
   color: white;
   border: none;
@@ -66,7 +66,7 @@
   border-radius: 4px;
 }
 
-.delete-btn {
+.cashbook-delete-btn {
   background-color: red;
   color: white;
   border: none;
@@ -75,7 +75,7 @@
   border-radius: 4px;
 }
 
-.delete-modal {
+.cashbook-delete-modal {
   position: fixed;
   top: 50%;
   left: 50%;

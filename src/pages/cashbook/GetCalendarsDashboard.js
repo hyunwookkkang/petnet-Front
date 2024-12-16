@@ -76,7 +76,7 @@ const Calendar = () => {
   }, [year, month]);
 
   return (
-    <div className="calendar-container">
+    <div className="cashbook-calendar-container">
       <HeaderCashbook
         currentYear={year}
         currentMonth={month}
@@ -85,7 +85,7 @@ const Calendar = () => {
       />
 
       <FullCalendar
-        className="full-calendar"
+        className="cashbook-full-calendar"
         key={`${year}-${month}`} // 상태 변경 시 강제 리렌더링
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"

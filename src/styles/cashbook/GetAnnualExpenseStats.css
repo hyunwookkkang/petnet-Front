@@ -1,15 +1,15 @@
-.annual-expense-stats {
+.cashbook-annual-expense-stats {
   padding: 20px;
   max-width: 800px;
   margin: 0 auto;
   text-align: center;
 }
 
-.chart-container {
+.cashbook-chart-container {
   margin: 20px 0;
 }
 
-.table-container {
+.cashbook-table-container {
   margin-top: 20px;
 }
 

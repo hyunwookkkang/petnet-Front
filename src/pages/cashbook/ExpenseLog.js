@@ -50,8 +50,8 @@ const ExpenseLog = () => {
   return (
     <div>
       {/* 상단 네비게이션 바 */}
-      <div className="header-nav">
-        <div className="header-nav-left">
+      <div className="cashbook-header-nav">
+        <div className="cashbook-header-nav-left">
           <button>◀</button>
           <span>
             {searchParams.startDate.getFullYear()}년{" "}
@@ -59,7 +59,7 @@ const ExpenseLog = () => {
           </span>
           <button>▶</button>
         </div>
-        <div className="search-box">
+        <div className="cashbook-search-box">
           <input
             type="text"
             placeholder="검색어"
@@ -69,13 +69,13 @@ const ExpenseLog = () => {
           />
           <button>검색</button>
         </div>
-        <div className="expense-log-container">
+        <div className="cashbook-expense-log-container">
           {/* 여기에 컴포넌트 내용 작성 */}
         </div>
       </div>
 
       {/* 검색 조건 */}
-      <div className="filter-box">
+      <div className="cashbook-filter-box">
         <DatePicker
           selected={searchParams.startDate}
           onChange={(date) => handleDateChange(date, "startDate")}
@@ -119,7 +119,7 @@ const ExpenseLog = () => {
       </div>
 
       {/* 지출 내역 테이블 */}
-      <div className="expense-table">
+      <div className="cashbook-expense-table">
         <table>
           <thead>
             <tr>
@@ -145,7 +145,7 @@ const ExpenseLog = () => {
       </div>
 
       {/* 페이지네이션 */}
-      <div className="pagination">
+      <div className="cashbook-pagination">
         <button
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 0}

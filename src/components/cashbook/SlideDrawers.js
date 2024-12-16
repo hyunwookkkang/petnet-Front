@@ -85,8 +85,8 @@ const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
   if (!isOpen) return null;
 
   return (
-    <div className={`slide-drawer ${isOpen ? "open" : ""}`}>
-      <button className="close-btn" onClick={onClose}>
+    <div className={`cashbook-slide-drawer ${isOpen ? "open" : ""}`}>
+      <button className="cashbook-close-btn" onClick={onClose}>
         닫기
       </button>
       <h2>지출 상세 정보</h2>
@@ -94,7 +94,7 @@ const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
         <p>로딩 중...</p>
       ) : expense ? (
         <>
-          <div className="field">
+          <div className="cashbook-field">
             <label>날짜</label>
             <input
               type="datetime-local"
@@ -102,7 +102,7 @@ const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
               onChange={(e) => handleInputChange("expenseDate", e.target.value)}
             />
           </div>
-          <div className="field">
+          <div className="cashbook-field">
             <label>금액</label>
             <input
               type="number"
@@ -110,7 +110,7 @@ const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
               onChange={(e) => handleInputChange("amount", e.target.value)}
             />
           </div>
-          <div className="field">
+          <div className="cashbook-field">
             <label>분류</label>
             <input
               type="text"
@@ -120,7 +120,7 @@ const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
               }
             />
           </div>
-          <div className="field">
+          <div className="cashbook-field">
             <label>내용</label>
             <input
               type="text"
@@ -130,7 +130,7 @@ const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
               }
             />
           </div>
-          <div className="field">
+          <div className="cashbook-field">
             <label>결제수단</label>
             <input
               type="text"
@@ -140,7 +140,7 @@ const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
               }
             />
           </div>
-          <div className="field">
+          <div className="cashbook-field">
             <label>메모</label>
             <input
               type="text"
@@ -148,19 +148,19 @@ const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
               onChange={(e) => handleInputChange("memo", e.target.value)}
             />
           </div>
-          <div className="actions">
+          <div className="cashbook-actions">
             <button className="update-btn" onClick={handleUpdate}>
               수정
             </button>
             <button
-              className="delete-btn"
+              className="cashbook-delete-btn"
               onClick={() => setShowDeleteModal(true)}
             >
               삭제
             </button>
           </div>
           {showDeleteModal && (
-            <div className="delete-modal">
+            <div className="cashbook-delete-modal">
               <p>해당 항목을 삭제하시겠습니까?</p>
               <button onClick={handleDelete}>예</button>
               <button onClick={() => setShowDeleteModal(false)}>아니오</button>

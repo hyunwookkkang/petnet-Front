@@ -1,5 +1,5 @@
 /* 월간 총액 스타일 설정 */
-.monthly-total {
+.cashbook-monthly-total {
   text-align: center; /* 텍스트를 가운데 정렬 */
   margin: 20px 0; /* 위아래 여백을 각각 20px 설정 */
   font-size: 1.5rem; /* 글자 크기를 1.5rem로 설정 */
@@ -7,7 +7,7 @@
 }
 
 /* 지출 카드의 전체 스타일 */
-.expense-card {
+.cashbook-expense-card {
   display: flex; /* 플렉스 박스 레이아웃 적용 */
   justify-content: space-between; /* 내부 요소를 양 끝에 배치 */
   align-items: center; /* 수직 방향으로 가운데 정렬 */
@@ -24,46 +24,46 @@
 }
 
 /* 마우스를 카드 위에 올렸을 때 */
-.expense-card:hover {
+.cashbook-expense-card:hover {
   transform: scale(1.02); /* 카드를 1.02배 확대 */
 }
 
 /* 카드 내부 왼쪽, 가운데, 오른쪽 영역 스타일 설정 */
-.expense-left,
-.expense-center,
-.expense-right {
+.cashbook-expense-left,
+.cashbook-expense-center,
+.cashbook-expense-right {
   display: flex; /* 플렉스 박스를 사용해 내부 요소 배치 */
   flex-direction: column; /* 요소를 세로로 나열 */
   justify-content: center; /* 세로 방향으로 가운데 정렬 */
 }
 
 /* 카드 내부 왼쪽 영역 스타일 */
-.expense-left {
+.cashbook-expense-left {
   text-align: left; /* 텍스트를 왼쪽 정렬 */
 }
 
 /* 카드 내부 가운데 영역 스타일 */
-.expense-center {
+.cashbook-expense-center {
   flex: 1; /* 가운데 영역을 확장해 여유 공간 차지 */
   text-align: center; /* 텍스트를 가운데 정렬 */
   font-weight: bold; /* 텍스트를 굵게 표시 */
 }
 
 /* 카드 내부 오른쪽 영역 스타일 */
-.expense-right {
+.cashbook-xpense-right {
   text-align: right; /* 텍스트를 오른쪽 정렬 */
   color: #ff6347; /* 텍스트 색상을 빨간색으로 설정 (주로 금액 표시) */
   font-weight: bold; /* 텍스트를 굵게 표시 */
 }
 
 /* 날짜와 시간 스타일 */
-.expense-date {
+.cashbook-expense-date {
   display: flex; /* 플렉스 박스 레이아웃 사용 */
   gap: 8px; /* 날짜와 시간 사이의 간격을 8px로 설정 */
   align-items: center; /* 날짜와 시간을 수직 방향으로 가운데 정렬 */
 }
 
-.date-header {
+.cashbook-date-header {
   font-size: 1.4rem; /* 글자 크기 줄임 */
   font-weight: normal; /* 굵기를 조절하려면 normal로 변경 */
   margin: 10px 0; /* 상하 여백 조절 */
