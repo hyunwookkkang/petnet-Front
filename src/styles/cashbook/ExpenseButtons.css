@@ -1,0 +1,31 @@
+.expense-buttons {
+  display: flex; /* Flexbox를 활성화하여 버튼들을 가로로 배치 */
+  justify-content: center; /* 버튼들을 가로 중앙 정렬 */
+  gap: 80px; /* 버튼 간의 간격을 80px로 설정 */
+  margin-bottom: 15px; /* 컨테이너 아래쪽에 15px 여백 추가 */
+}
+
+.expense-btn {
+  padding: 10px 20px; /* 버튼 내부 여백을 상하 10px, 좌우 20px로 설정 */
+  border: 1px solid #ccc; /* 버튼 테두리를 연한 회색으로 설정 */
+  border-radius: 5px; /* 버튼 모서리를 5px 둥글게 설정 */
+  background-color: #f9f9f9; /* 버튼 배경색을 연한 회색으로 설정 */
+  color: #333; /* 버튼 텍스트 색상을 진한 회색으로 설정 */
+  cursor: pointer; /* 마우스를 올리면 커서가 포인터로 변경 */
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* 버튼의 배경색, 텍스트 색상, 테두리 색상이 0.3초 동안 부드럽게 변환되도록 설정 */
+  margin-top: 40px; /* 버튼 위쪽에 40px 여백 추가 */
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  display: inline-block; /* 버튼 크기 조정 */
+  line-height: normal; /* 세로 정렬 기본값으로 복원 */
+}
+
+.expense-btn.active {
+  border-color: #ff5b5b; /* 활성화된 버튼의 테두리 색상을 빨간색으로 변경 */
+  background-color: #ffecec; /* 활성화된 버튼의 배경색을 연한 빨간색으로 변경 */
+  color: #ff5b5b; /* 활성화된 버튼의 텍스트 색상을 빨간색으로 변경 */
+}
+
+.expense-btn:hover {
+  background-color: #f0f0f0; /* 마우스를 올렸을 때 버튼 배경색을 약간 어두운 회색으로 변경 */
+}

@@ -6,7 +6,7 @@ import useFetchGetHashtags from "./useFetchGetHashtags";
 import "../../../styles/SearchBar.css"; // 검색 바 스타일 파일 (선택사항)
 
 
-const TopicSearchBar = ({setSearch}) => {
+const TopicSearchBar = ({search, setSearch}) => {
   
   const { fetchGetHashtags, /*loading: tagloading, error: tagError*/ } = useFetchGetHashtags();
 
@@ -15,6 +15,16 @@ const TopicSearchBar = ({setSearch}) => {
   const [keyword, setKeyword] = useState('');
   
   const [tagSuggestions, setTagSuggestions] = useState([]); // 해시태그 자동완성
+
+
+  // 검색 초기화
+  useEffect(() => {
+    if (search) {
+      setCategory(search.category || '');
+      setCondition(search.condition || '');
+      setKeyword(search.keyword || '');
+    }
+  }, [search]);
 
   // 해시태그 자동완성
   useEffect(() => {
