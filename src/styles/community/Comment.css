@@ -1,0 +1,56 @@
+/* Comment.css */
+
+.comment-container {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 0;
+  }
+  
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  
+  .comment-username {
+    font-weight: bold;
+  }
+  
+  .comment-options {
+    font-size: 12px;
+    color: #888;
+  }
+  
+  .comment-option {
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  .comment-content {
+    margin: 5px 0;
+  }
+  
+  .comment-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #888;
+    font-size: 12px;
+  }
+  
+  .comment-likes {
+    cursor: pointer;
+  }
+  
+  .comment-reply-button {
+    border: none;
+    background: none;
+    color: #3b6de8;
+    cursor: pointer;
+  }
+  
+  .comment-date {
+    margin-left: auto;
+  }
+  

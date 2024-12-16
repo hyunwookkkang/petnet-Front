@@ -33,7 +33,7 @@ const TopicScrapButton = ({ topicId }) => {
   }, [fetchGetScrap, userId, topicId]);
 
   // 스크랩 버튼 클릭 시 처리
-  const scrapTopic = async () => {
+  const scrapTopicHandler = async () => {
     // 로그인 검사
     if (!userId) {
       setShowLoginModal(true);
@@ -64,7 +64,7 @@ const TopicScrapButton = ({ topicId }) => {
     <div>
 
         <button 
-          onClick={() => scrapTopic()}
+          onClick={() => scrapTopicHandler()}
           disabled={loading || loadingGet || loadingAdd || loadingDel}
         > 
           { isScrap ? (
