@@ -8,6 +8,7 @@ import PlacePosts from "../placePost/PlacePosts";
 import "../../../styles/Main.css";
 import { showErrorToast, showSuccessToast } from "../../../components/common/alert/CommonToast";
 import PlaceImage from './PlaceImage';
+import PlaceImageFetcher from "./PlaceImageFetcher";
 
 const PlaceInfo = () => {
   const { placeId } = useParams(); // URL에서 placeId 추출
@@ -16,6 +17,7 @@ const PlaceInfo = () => {
   const [showModal, setShowModal] = useState(false); // 모달 상태
   const [isLiked, setIsLiked] = useState(false);
   const [favoriteId, setFavoriteId] = useState(null); // 현재 장소의 favoriteId 상태
+  const [photoReferences, setPhotoReferences] = useState([]);
 
   // 장소 정보와 좋아요 상태 초기화
   useEffect(() => {
@@ -131,7 +133,11 @@ const PlaceInfo = () => {
                 )}
               </div>
               <div>
-                <PlaceImage/>
+                {/* PlaceImageFetcher 호출: photoReferences를 업데이트
+                <PlaceImageFetcher place={place} onPhotoReferencesFetched={setPhotoReferences} /> */}
+
+              {/* PlaceImage 호출: photoReferences를 전달 */}
+              <PlaceImage place={place} />
               </div>
             </Card.Body>
           </Card>
