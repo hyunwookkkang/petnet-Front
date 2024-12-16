@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Form } from 'react-bootstrap';
 import "../../styles/pointshop/GetQuizs.css";
+import "../../styles/pointshop/AdminPointProducts.css";
+
+
+
 const GetQuizs = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [editingQuiz, setEditingQuiz] = useState(null);
@@ -79,6 +83,7 @@ const GetQuizs = () => {
 
   return (
     <div className="container mt-4">
+      <h1 className="admin-title">퀴즈 관리</h1>
       {!isAdding && !editingQuiz && (
         <div className="mb-3 text-end">
           <button className="quiz-button add-button" onClick={() => setIsAdding(true)}>

@@ -29,8 +29,8 @@
 }
 
 .edit-button {
-  border: 2px solid #feb98e;
-  color: #feb98e;
+  border: 2px solid #FEBE98 ;
+  color: #FEBE98 ;
   background-color: transparent;
 }
 
@@ -43,14 +43,12 @@
 .button-container {
   display: flex;
   flex-direction: column;
-  gap: 4px; /* 버튼 간 간격 */
+  gap: 4px;
   align-items: center;
-  justify-content: center; /* 컨테이너 내부 세로 정렬 */
-  height: 100%; /* 컨테이너 높이를 부모(td)에 맞춤 */
 }
 
 .table-cell {
   text-align: center;
-  vertical-align: middle; /* 세로 중앙 정렬 */
-  padding: 0; /* 셀 내부 간격 최소화 */
+  vertical-align: middle;
+  padding: 4px;
 }

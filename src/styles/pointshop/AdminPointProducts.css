@@ -1,0 +1,75 @@
+.admin-container {
+  padding: 20px;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.admin-title {
+  text-align: center;
+  color: #febe98;
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.add-button {
+  background-color: #ffffff;
+  color: #febe98;
+  border: 2px solid #febe98;
+  padding: 12px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.add-button:hover {
+  background-color: #febe98;
+  color: #ffffff;
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 18px;
+  color: #dcdcdc;
+}
+
+.delete-icon {
+  color: #a9a9a9;
+}
+
+.info-icon {
+  color: #febe98;
+}
+
+.product-name-link {
+  color: #febe98;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.confirm-delete-button {
+  background-color: #febe98;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirm-delete-button:hover {
+  background-color: #e8ab85;
+}
