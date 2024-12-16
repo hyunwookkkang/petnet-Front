@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Container } from "react-bootstrap";
 
 import TopicSearchBar from "../../../components/community/topic/TopicSearchBar";
@@ -10,14 +10,18 @@ import "../../../styles/Main.css"; // 기존 스타일 재사용
 
 const SearchTopics = () => {
 
+  const location = useLocation();
+
+  const { category, condition, keyword } = location.state || {};
+
   const { fetchGetTopics, error } = useFetchGetTopics();
 
   const [topics, setTopics] = useState([]);
 
   const [search, setSearch] = useState({
-    "category": '',
-    "condition": '',
-    "keyword": ''
+    "category": category || '',
+    "condition": condition || '',
+    "keyword": keyword || ''
   });
 
   useEffect(() => {
@@ -56,7 +60,7 @@ const SearchTopics = () => {
 
     <Container>
 
-      <TopicSearchBar setSearch={setSearch}/>
+      <TopicSearchBar search={search} setSearch={setSearch}/>
       <br/>
       
       <div>

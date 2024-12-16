@@ -5,7 +5,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import { useUser } from "../../../components/contexts/UserContext";
 import TopicQuillEditor from "../../../components/community/topic/TopicQuillEditor";
-import HashtagChip from "../../../components/community/topic/HashtagChip";
+import HashtagEditChip from "../../../components/community/topic/HashtagEditChip";
 import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
 import useFetchAddTopic from "../../../components/community/topic/useFetchAddTopic";
 import useFetchUpdateTopic from "../../../components/community/topic/useFetchUpdateTopic";
@@ -244,7 +244,7 @@ const EditTopicInfo = () => {
           <br/>
           {/* 해시태그 출력 */}
           <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-            <HashtagChip items={hashtags} removeItem={removeHashtag}/>
+            <HashtagEditChip items={hashtags} removeItem={removeHashtag}/>
           </div>
 
         </Form>
