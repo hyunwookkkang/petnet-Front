@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Container, ButtonGroup, Button } from "react-bootstrap";
 
-import "../../styles/Main.css"; // 기존 스타일 재사용
+import { useUser } from "../../components/contexts/UserContext";
+import LoginModal from "../../components/common/modal/LoginModal";
 import SearchBar from "../../components/common/searchBar/SearchBar";
 import ViewTopics from "../../components/community/topic/ViewTopics";
 import ViewAllTopics from "../../components/community/topic/ViewAllTopics";
 import ViewHotTopics from "../../components/community/topic/ViewHotTopics";
-import { Link } from "react-router-dom";
+
+import "../../styles/Main.css"; // 기존 스타일 재사용
 
 
 const CommunityMain = () => {
 
-  const [topicsComponent, setTopicsComponent] = useState();
+  const navigate = useNavigate();
 
+  const { userId } = useUser();
+
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const [topicsComponent, setTopicsComponent] = useState();
   const [topicTab, setTopicTab] = useState('all');
 
   const [search, setSearch] = useState({
@@ -30,9 +38,17 @@ const CommunityMain = () => {
   }, [search, topicTab]); // search & topicTab 변경될 때마다 실행
 
 
-  const searchTopics = (searching) => { 
-    setSearch(searching);
+  const navigateAddTopic = () => {    
+    // 로그인 검사
+    if (!userId) {
+      setShowLoginModal(true);
+      return;
+    }
+    else {
+      navigate(`/editTopic`);
+    }
   }
+
   
   const categoryChangehandler = (tab) => {
     if (!Number.isNaN(tab)) {
@@ -50,10 +66,10 @@ const CommunityMain = () => {
     <Container>
       
       <div>
-        <SearchBar searchTopics={searchTopics} />
-        <Link to={`/editTopic`}>
-          <button>게시글 작성</button>
+        <Link to={`/searchTopics`} className="link-unstyled">
+          <SearchBar/>
         </Link>
+        <Button onClick={navigateAddTopic}>게시글 작성</Button>
       </div>
 
       <ButtonGroup className="button-group">
@@ -65,6 +81,12 @@ const CommunityMain = () => {
       </ButtonGroup>
 
       { topicsComponent }
+
+      
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+      />
 
     </Container>
 

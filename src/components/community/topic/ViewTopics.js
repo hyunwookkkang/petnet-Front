@@ -1,25 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 
-import useFetchTopics from "./useFetchGetTopics";
+import useFetchGetTopics from "./useFetchGetTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 
 
 const ViewTopics = ({search}) => {
 
-  // 페이지 초기화
-  const { topics, loading, error } = useFetchTopics(search);
+  const { fetchGetTopics, loading, error } = useFetchGetTopics();
   
-  // 로딩 중일 때 표시할 메시지
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const [topics, setTopics] = useState([]);
 
-  // 에러가 발생했을 때 표시할 메시지
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+
+  // 페이지 초기화
+  useEffect(() => {
+    const fetchTopics = async () => {
+      const response = await fetchGetTopics(search);
+      setTopics(response || []);
+    };
+    fetchTopics();
+  },[fetchGetTopics, search]);
+
 
   const topicsView = topics.map((topic) => (
     
@@ -36,18 +38,31 @@ const ViewTopics = ({search}) => {
     
   ));
 
+  
+  // 로딩 중일 때 표시할 메시지
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // 에러가 발생했을 때 표시할 메시지
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  
+
   return (
 
     <div>
 
       <h1>View Topics</h1>
       <br/>
-      <ul>
-        {/* topics 배열을 순회하며 각 topic을 출력 */}
-        { topicsView }
-      </ul>
+      { topics.length === 0 ? (
+        <p>게시글이 없습니다</p> // topics가 빈 배열일 경우
+      ) : (
+        <ul>{ topicsView }</ul> // topics 배열에 데이터가 있을 경우
+      )}
 
-    </div>
+  </div>
 
   );
 

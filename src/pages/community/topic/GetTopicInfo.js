@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from 'react-router-dom';
-import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from "axios";
 
 import { useUser } from "../../../components/contexts/UserContext";
+import TopicVoteButton from "../../../components/community/topic/TopicVoteButton";
+import TopicScrapButton from "../../../components/community/topic/TopicScrapButton";
 import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 import "../../../styles/community/TopicInfo.css";
 import '../../../styles/community/quill.snow.css'; // quill editor font size
-import TopicVoteButton from "../../../components/community/topic/TopicVoteButton";
+import TopicDeleteModal from "../../../components/community/topic/TopicDeleteModal";
+import ViewTopicComments from "../../../components/community/topic/ViewTopicComments";
 
 const GetTopicInfo = () => {
   
+  const navigate = useNavigate();
+
   const { topicId } = useParams(); // URL에서 topicId를 추출 (수정 시에 필요)
 
+  const { userId } = useUser(); // 사용자 ID 가져오기
   const { topic, loading, error } = useFetchTopicInfo(topicId); // 페이지 초기화
 
-  const { userId } = useUser(); // 사용자 ID 가져오기
-
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isAuthor, setIsAutor] = useState(false); // 로그인 = 작성자? 확인
 
   useEffect(() => {
@@ -35,6 +39,17 @@ const GetTopicInfo = () => {
       setIsAutor(topic.author.userId === userId);
     }
   }, [topic, userId]);
+
+
+  const hashtagClickHandler = (tag) => {
+    const search = {
+      category: '',
+      condition: '4',
+      keyword: tag
+    };
+    navigate('/searchTopics', { state: search });
+  }
+
   
   // 로딩 중일 때 표시할 메시지
   if (loading) {
@@ -46,19 +61,6 @@ const GetTopicInfo = () => {
     return <div>Error: {error}</div>;
   }
 
-
-  const onShare = () => {
-    console.log("share topic ", topic.topicId)
-  }
-
-  const onDelete = () => {
-    console.log("delete topic ", topic.topicId)
-  }
-
-  const onReport = () => {
-    console.log("report topic ", topic.topicId)
-  }
-
   // <Link to={`/comments/${topicId}`}>link to the topic's comments</Link>
 
   return (
@@ -67,12 +69,9 @@ const GetTopicInfo = () => {
 
       {/* 제목 */}
       <div className="post-header">
-        <span>
-          <h1 className="post-title">
-            [{topic.categoryStr}] {topic.title}
-          </h1>
-        </span>
-        <button className="post-extras" onClick={onShare}>공유</button>
+        <h1 className="post-title">
+          [{topic.categoryStr}] {topic.title}
+        </h1>
       </div>
 
       {/* 작성자와 버튼 */}
@@ -84,9 +83,7 @@ const GetTopicInfo = () => {
               <button>수정</button>
             </Link>
             &nbsp;
-            <Link to={{ pathname: "/topicDelete", state: topic }}>
-              <button onClick={onDelete}>삭제</button>
-            </Link>
+            <button onClick={() => setShowDeleteModal(true)}>삭제</button>
           </div>
         ) : "" }
       </div>
@@ -107,8 +104,8 @@ const GetTopicInfo = () => {
 
       {/* 좋아요 / 싫어요 버튼 */}
       <div className="post-feedback">
-        <TopicVoteButton topicId={topicId} voteCount={topic.likeCount} isLike={true}/>
-        <TopicVoteButton topicId={topicId} voteCount={topic.dislikeCount} isLike={false}/>
+        <TopicVoteButton topicId={topic.topicId} voteCount={topic.likeCount} isLike={true}/>
+        <TopicVoteButton topicId={topic.topicId} voteCount={topic.dislikeCount} isLike={false}/>
       </div>
 
       {/* 해시태그 */}
@@ -117,18 +114,17 @@ const GetTopicInfo = () => {
           <button
             key={content}
             className="hashtag-button"
-            /*onClick={() => onHashtagClick(tag)}*/
+            onClick={() => hashtagClickHandler(content)}
           >
             # {content}
           </button>
         )) }
       </div>
 
-      {/* 첨부파일 및 기타 버튼 */}
+      {/* 기타 버튼 */}
       <div className="post-extras">
-        <button /*onClick={downloadFiles}*/>첨부파일 다운로드</button>
-        <button /*onClick={onToggleScrap}*/>스크랩</button>
-        <button onClick={onReport}>신고</button>
+        <TopicScrapButton topicId={topic.topicId}/>
+        <button /*onClick={onReport}*/>신고</button>
       </div>
 
       {/* 댓글 */}
@@ -138,6 +134,17 @@ const GetTopicInfo = () => {
           댓글 보기
         </button>
       </div>
+
+      <div>
+        <ViewTopicComments topicId={topicId}/>
+      </div>
+
+
+      <TopicDeleteModal
+        showModal={showDeleteModal} 
+        setShowModal={setShowDeleteModal}
+        topic={topic}
+      />
 
     </div>
 

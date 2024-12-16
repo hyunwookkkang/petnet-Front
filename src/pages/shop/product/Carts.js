@@ -1,50 +1,45 @@
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import IconButton from '@mui/material/IconButton';
-import Typography from "@mui/material/Typography";
-import axios from 'axios';
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import { useUser } from '../../../components/contexts/UserContext';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
+import { useUser } from "../../../components/contexts/UserContext";
+import { Cart3, Heart } from "react-bootstrap-icons";
 
 const Carts = () => {
   const { userId } = useUser();
-  const [items, setItems] = useState([]); // 상품 데이터
-  const [isFetching, setIsFetching] = useState(false); // 로딩 상태 추가
-  const [error, setError] = useState(null);
-  const navigate = useNavigate(); // 리다이렉트를 위한 navigate 함수
+  const [products, setProducts] = useState([]); // 장바구니 상품 데이터
+  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [error, setError] = useState(null); // 에러 상태
+  const navigate = useNavigate();
 
-  // 상품 데이터 가져오기
+  // 장바구니 데이터 가져오기
   useEffect(() => {
-    if (userId === null) return;
-
-    if (!userId) {
+    // userId가 null일 경우 로그인 페이지로 네비게이션
+    if (userId === null) {
       setError("로그인이 필요합니다.");
       alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
       navigate("/login");
       return;
     }
 
-    const fetchData = async () => {
+    const fetchCartProducts = async () => {
       try {
-        setIsFetching(true);
+        setLoading(true);
         setError(null);
         const response = await axios.get(`/api/shop/products/cart/${userId}`);
-        setItems(response.data);
+        setProducts(response.data); // 응답이 정상적으로 받아지면 상태 업데이트
       } catch (err) {
         setError(err.message);
       } finally {
-        setIsFetching(false);
+        setLoading(false);
       }
     };
 
-    fetchData();
-  }, [userId, navigate]);
+    // userId가 존재할 때만 데이터를 가져오도록 실행
+    if (userId) {
+      fetchCartProducts();
+    }
+  }, [userId, navigate]); // userId와 navigate가 변경될 때마다 실행
 
   // 수량 변경 처리 함수
   const handleQuantityChange = async (itemId, newQuantity) => {
@@ -54,13 +49,15 @@ const Carts = () => {
     }
 
     try {
-      // 프론트엔드 상태 업데이트
-      const updatedItems = items.map((item) =>
-        item.itemId === itemId ? { ...item, quantity: newQuantity } : item
+      // 프론트엔드 상태 업데이트 (새로운 수량 반영)
+      const updatedProducts = products.map((productItem) =>
+        productItem.itemId === itemId
+          ? { ...productItem, quantity: newQuantity } // productItem의 quantity만 업데이트
+          : productItem
       );
-      setItems(updatedItems);
+      setProducts(updatedProducts); // 상태 업데이트
 
-      // 서버 업데이트 요청
+      // 서버에 수량 업데이트 요청
       await axios.put("/api/shop/products/cart", {
         itemId,
         quantity: newQuantity,
@@ -71,145 +68,154 @@ const Carts = () => {
     }
   };
 
-  if (isFetching) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) {
+    return (
+      <div className="text-center py-5">
+        <Spinner animation="border" variant="secondary" />
+        <p className="mt-3" style={{ fontSize: "1.5rem", color: "#888" }}>
+          로딩 중입니다...
+        </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-5">
+        <p className="text-danger" style={{ fontSize: "1.5rem" }}>
+          {error}
+        </p>
+      </div>
+    );
+  }
 
   const handlePurchaseClick = () => {
-    // 구매하기 버튼 클릭 시 addpurchase로 리다이렉트
-    navigate("/shop/purchase");
+    navigate("/shop/purchase"); // 구매하기 페이지로 이동
+  };
+
+  const handleRemoveClick = () => {
+    alert("삭제하기 기능은 아직 구현되지 않았습니다."); // 삭제하기 알림
   };
 
   return (
-    <Container>
+    <Container className="py-4" style={{ background: "linear-gradient(135deg, #FFFFFF, #EDEDED)" }}>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className="d-flex flex-grow-1 justify-content-center">
+          <h1 className="text-warning mb-0" style={{ fontSize: "2rem" }}>
+            장바구니
+          </h1>
+        </div>
+        <div className="d-flex align-items-center">
+          <Button
+            variant="link"
+            className="text-dark fs-5 p-0 me-3"
+            onClick={() => navigate(`/shop/products/cart/${userId}`)}
+          >
+            <Cart3 />
+          </Button>
+          <Button
+            variant="link"
+            className="text-dark fs-5 p-0"
+            onClick={() => navigate(`/shop/products/wish/${userId}`)}
+          >
+            <Heart />
+          </Button>
+        </div>
+      </div>
+
       <Row
+        className="g-0"
         style={{
-          paddingBottom: "50px",
-          flexWrap: "wrap",
-          marginLeft: 0,
-          marginRight: 0,
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
         }}
       >
-        {items.map((productItem) => (
-          <Col
-            xs={12}
-            sm={6}
-            md={4}
-            lg={3}
-            key={productItem.itemId}
-            style={{ paddingLeft: 0, paddingRight: 0 }}
-          >
+        {products.map((productItem) => (
+          <Col key={productItem.itemId}>
             <Card
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-              }}
-              onClick={() =>
-                navigate(`/shop/products/${productItem.product.productId}`)
-              } // 카드 클릭 시 링크로 이동
+              className="h-100 shadow-sm"
+              style={{ cursor: "pointer", border: "none" }}
+              onClick={() => navigate(`/shop/products/${productItem.product.productId}`)}
             >
-              <CardMedia
-                component="img"
-                image={
-                  productItem.product.image || "https://via.placeholder.com/150"
-                }
-                alt={productItem.product.productName}
-                style={{
-                  width: "100%",
-                  height: "200px",
-                  objectFit: "cover",
-                }}
-              />
-              <CardContent style={{ flexGrow: 1 }}>
-                <Typography variant="body2" color="text.secondary">
-                  {productItem.product.animalCategory}/
-                  {productItem.product.productCategory}
-                </Typography>
-                <Typography gutterBottom variant="h5" component="div">
+              <div className="overflow-hidden" style={{ height: "200px" }}>
+                <Card.Img
+                  variant="top"
+                  src={productItem.product.image || "https://via.placeholder.com/150"}
+                  alt={productItem.product.productName}
+                  style={{ objectFit: "cover", height: "100%" }}
+                />
+              </div>
+
+              <Card.Body style={{ padding: "20px" }}>
+                <Card.Text className="text-muted mb-1" style={{ fontSize: "0.9rem" }}>
+                  {productItem.product.animalCategory} / {productItem.product.productCategory}
+                </Card.Text>
+                <Card.Title className="h6 mb-3 text-dark" style={{ fontSize: "1.1rem" }}>
                   {productItem.product.productName}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  color="text.secondary"
-                  style={{
-                    textDecoration:
-                      productItem.product.discount > 0 ? "line-through" : "none",
-                  }}
-                >
-                  {productItem.product.price.toLocaleString()} 원
-                </Typography>
-                {productItem.product.discount > 0 && (
+                </Card.Title>
+
+                {productItem.product.discount > 0 ? (
                   <>
-                    <Typography
-                      variant="h6"
-                      style={{ color: "red", fontWeight: "bold" }}
-                    >
-                      {(
-                        productItem.product.price *
-                        (1 - productItem.product.discount / 100)
-                      ).toLocaleString()}{" "}
-                      원
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Card.Text className="text-muted text-decoration-line-through mb-1" style={{ fontSize: "1rem" }}>
+                      {productItem.product.price ? productItem.product.price.toLocaleString() : "가격 정보 없음"} 원
+                    </Card.Text>
+                    <Card.Text className="text-danger fw-bold mb-1" style={{ fontSize: "1.2rem" }}>
+                      {productItem.product.price && productItem.product.discount
+                        ? (productItem.product.price * (1 - productItem.product.discount / 100)).toLocaleString()
+                        : "할인 가격 없음"} 원
+                    </Card.Text>
+                    <Card.Text className="text-danger fw-bold" style={{ fontSize: "0.9rem" }}>
                       {productItem.product.discount}% 할인
-                    </Typography>
+                    </Card.Text>
                   </>
+                ) : (
+                  <Card.Text className="text-danger fw-bold" style={{ fontSize: "1.2rem" }}>
+                    {productItem.product.price ? productItem.product.price.toLocaleString() : "가격 정보 없음"} 원
+                  </Card.Text>
                 )}
-              </CardContent>
-              <CardActions disableSpacing>
-                <IconButton
-                  aria-label="add to favorites"
-                  onClick={(e) => e.stopPropagation()} // 이벤트 전파 차단
-                >
-                  <FavoriteIcon />
-                </IconButton>
-                <IconButton
-                  aria-label="share"
-                  onClick={(e) => e.stopPropagation()} // 이벤트 전파 차단
-                >
-                  <ShareIcon />
-                </IconButton>
+              </Card.Body>
+
+              <Card.Footer className="d-flex justify-content-between bg-light">
+                {/* 숨겨진 input 필드 추가 */}
+                <input type="hidden" value={productItem.itemId} />
+
                 <Button
                   variant="outline-dark"
+                  size="sm"
                   onClick={(e) => {
-                    e.stopPropagation(); // 이벤트 전파 차단
-                    handleQuantityChange(productItem.itemId, productItem.quantity - 1);
+                    e.stopPropagation(); // 이벤트 전파 방지
+                    const newQuantity = productItem.quantity - 1;
+                    handleQuantityChange(productItem.itemId, newQuantity);
                   }}
                 >
                   -
                 </Button>
-                <input
-                  type="number"
-                  value={productItem.quantity}
-                  onClick={(e) => e.stopPropagation()} // 이벤트 전파 차단
-                  onChange={(e) => {
-                    const newQuantity = parseInt(e.target.value, 10) || 1;
-                    handleQuantityChange(productItem.itemId, newQuantity);
-                  }}
-                  style={{ width: "50px", textAlign: "center" }}
-                />
+                <span>{productItem.quantity}</span>
                 <Button
                   variant="outline-dark"
+                  size="sm"
                   onClick={(e) => {
-                    e.stopPropagation(); // 이벤트 전파 차단
-                    handleQuantityChange(productItem.itemId, productItem.quantity + 1);
+                    e.stopPropagation(); // 이벤트 전파 방지
+                    const newQuantity = productItem.quantity + 1;
+                    handleQuantityChange(productItem.itemId, newQuantity);
                   }}
                 >
                   +
                 </Button>
-              </CardActions>
+              </Card.Footer>
             </Card>
           </Col>
         ))}
-        <div className="d-grid gap-2 mt-2">
-          <Button variant="primary" size="lg" onClick={handlePurchaseClick}>
-            구매하기
-          </Button>
-          <Button variant="secondary" size="lg">
-            삭제하기
-          </Button>
-        </div>
       </Row>
+
+      <div className="d-grid gap-2 mt-4">
+        <Button variant="primary" size="lg" onClick={handlePurchaseClick}>
+          구매하기
+        </Button>
+        <Button variant="secondary" size="lg" onClick={handleRemoveClick}>
+          삭제하기
+        </Button>
+      </div>
     </Container>
   );
 };

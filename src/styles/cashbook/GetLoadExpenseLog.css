@@ -1,0 +1,31 @@
+.cashbook-get-load-expense-log {
+  padding: 20px;
+}
+
+.cashbook-title {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.cashbook-purchase-list {
+  list-style: none;
+  padding: 0;
+}
+
+.cashbook-purchase-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cashbook-purchase-item:hover {
+  background-color: #f9f9f9;
+}
+
+.cashbook-empty-message {
+  text-align: center;
+  font-size: 1.2em;
+  color: #888;
+}

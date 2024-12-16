@@ -1,17 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
-import { Alert, Button, Container, Form } from "react-bootstrap";
+import { Alert, Button, Container, Form, ListGroup } from "react-bootstrap";
 import AddIcon from '@mui/icons-material/Add';
 
 import { useUser } from "../../../components/contexts/UserContext";
+import TopicQuillEditor from "../../../components/community/topic/TopicQuillEditor";
+import HashtagEditChip from "../../../components/community/topic/HashtagEditChip";
 import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
 import useFetchAddTopic from "../../../components/community/topic/useFetchAddTopic";
 import useFetchUpdateTopic from "../../../components/community/topic/useFetchUpdateTopic";
-import TopicQuillEditor from "../../../components/community/topic/TopicQuillEditor";
-import HashtagChip from "../../../components/community/topic/HashtagChip";
+import useFetchGetHashtags from "../../../components/community/topic/useFetchGetHashtags";
 
 import "../../../styles/Main.css";
-import "../../../styles/community/EidtTopic.css";
+import "../../../styles/community/EditTopic.css";
+import "../../../styles/community/AutoComplete.css";
+import LoginModal from "../../../components/common/modal/LoginModal";
 
 const EditTopicInfo = () => {
 
@@ -22,9 +25,12 @@ const EditTopicInfo = () => {
   const { userId } = useUser(''); // 사용자 ID 가져오기
 
   const { topic, loading, error } = useFetchTopicInfo(topicId); // 페이지 초기화
-  const { fetchAddTopic, addLoading, addError } = useFetchAddTopic(); // submit-add
-  const { fetchUpdateTopic, updateLoading, updateError } = useFetchUpdateTopic(); // submit-update
+  const { fetchAddTopic, addLoading, addError } = useFetchAddTopic();
+  const { fetchUpdateTopic, updateLoading, updateError } = useFetchUpdateTopic();
+  const { fetchGetHashtags, /*loading: tagloading, error: tagError*/ } = useFetchGetHashtags();
 
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -34,15 +40,11 @@ const EditTopicInfo = () => {
 
   const [isAuthor, setIsAutor] = useState(false); // 로그인 = 작성자? 확인
   const [hashtagTemp, setHashtagTemp] = useState('');
+  const [tagSuggestions, setTagSuggestions] = useState([]); // 해시태그 자동완성
   const [required, setRequired] = useState('');
 
+  // 페이지 초기화
   useEffect(() => {
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
-      return;
-    }
-
     if (topic) {
       setTitle(topic.title);
       setCategory(topic.category);
@@ -52,7 +54,29 @@ const EditTopicInfo = () => {
       setIsDownloadable(topic.isDownloadable);
       setIsAutor(topic.author.userId === userId);
     }
-  }, [topic, userId, navigate]);
+  }, [topic, userId]);
+
+  // 해시태그 자동완성
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      // 조건 검사
+      if (!hashtagTemp.trim()) {
+        setTagSuggestions([]);
+        return;
+      }
+      // 해시태그 비동기 검색
+      try {
+        const resHashTags = await fetchGetHashtags(hashtagTemp);
+        setTagSuggestions(resHashTags || []);
+      } 
+      catch (err) {
+        console.error(err);
+        setTagSuggestions([]);
+      }
+    };
+    // 비동기 함수 호출
+    fetchSuggestions();
+  }, [hashtagTemp, fetchGetHashtags]);
 
 
   const appendHashtag = () => {
@@ -66,6 +90,12 @@ const EditTopicInfo = () => {
 
   const submitTopicHandler = async (e) => {
     e.preventDefault();
+    
+    // 로그인 검사
+    if (!userId) {
+      setShowLoginModal(true);
+      return;
+    }
 
     // 에디터 내용이 비어있는지 확인
     if (!content.replace(/<[^>]*>/g, '').trim()) 
@@ -101,6 +131,7 @@ const EditTopicInfo = () => {
     }
   };
 
+
   if ((topicId && error) || addError || updateError) {
     return <div>Error: {error || addError || updateError}</div>;
   }
@@ -113,13 +144,12 @@ const EditTopicInfo = () => {
     return <div>Loading...</div>;
   }
 
+
   return (
     <Container className="d-flex justify-content-center">
       <div>
         
         <h2>{topic ? '게시글 수정' : '새 게시글 작성'}</h2>
-
-        {/* {error && <div className="error-message">{error}</div>} */}
 
         <Form onSubmit={submitTopicHandler}>
 
@@ -179,7 +209,8 @@ const EditTopicInfo = () => {
 
           <br/>
           {/* 해시태그 입력 */}
-          <Form.Group className="d-flex">
+          <Form.Group className="d-flex position-relative">
+
             <Form.Label></Form.Label>
             <Form.Control 
               id="input-hashtag" 
@@ -189,23 +220,44 @@ const EditTopicInfo = () => {
               onChange={(e) => setHashtagTemp(e.target.value)} 
               style={{ width: '250px' }} 
             />
+            
+            <ListGroup className="dropdown-suggestions">
+              {tagSuggestions.map((tagSuggestion, index) => (
+                <ListGroup.Item
+                  key={index}
+                  onClick={() => setHashtagTemp(tagSuggestion)}
+                >
+                  {tagSuggestion}
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+
             <Button 
               className="ms-2 addTag-btn"
-              onClick={() => appendHashtag()}
-            >
+              onClick={() => {appendHashtag()}}
+            > 
               <AddIcon fontSize="small" />
             </Button>
+            
           </Form.Group>
           
           <br/>
           {/* 해시태그 출력 */}
           <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-            <HashtagChip items={hashtags} removeItem={removeHashtag}/>
+            <HashtagEditChip items={hashtags} removeItem={removeHashtag}/>
           </div>
 
         </Form>
 
       </div>
+
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+        message="로그인 정보가 만료되었습니다."
+        required={true}
+      />
+
     </Container>
 
   );

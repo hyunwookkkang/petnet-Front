@@ -2,16 +2,25 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../../styles/pointshop/PointProducts.css"; 
 
 const PointProducts = () => {
   const [pointProducts, setPointProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedBrands, setSelectedBrands] = useState([]);
   const navigate = useNavigate();
 
-  const fetchPointProducts = async () => {
+  const brandOptions = [
+    { name: "CU", value: "CU" },
+    { name: "GS25", value: "GS25" },
+    { name: "이마트24", value: "이마트24" },
+  ];
+
+  const fetchPointProducts = async (brands = []) => {
     setLoading(true);
     try {
-      const response = await axios.get("/api/pointshop/pointProducts");
+      const brandQuery = brands.length ? `?brand=${brands.join(",")}` : "";
+      const response = await axios.get(`/api/pointshop/pointProducts${brandQuery}`);
       setPointProducts(response.data);
       setLoading(false);
     } catch (error) {
@@ -24,123 +33,74 @@ const PointProducts = () => {
     fetchPointProducts();
   }, []);
 
+  const handleBrandChange = (brand) => {
+    let newSelectedBrands;
+    if (selectedBrands.includes(brand)) {
+      newSelectedBrands = selectedBrands.filter((b) => b !== brand);
+    } else {
+      newSelectedBrands = [...selectedBrands, brand];
+    }
+    setSelectedBrands(newSelectedBrands);
+    fetchPointProducts(newSelectedBrands);
+  };
+
   if (loading) {
     return (
-      <div
-        style={{
-          textAlign: "center",
-          padding: "50px",
-          fontSize: "1.5rem",
-          color: "#888",
-        }}
-      >
+      <div className="loading-container">
         로딩 중입니다...
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        padding: "0px",
-        background: "linear-gradient(135deg, #FFFFFF, #EDEDED)",
-      }}
-    >
-      <h1
-        style={{
-          textAlign: "center",
-          fontSize: "2rem",
-          marginBottom: "20px",
-          color: "#FF7F50",
-        }}
-      >
-        포인트 상점
-      </h1>
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "0px", // 카드 간의 간격
-          justifyContent: "space-between", // 카드 사이의 공간 균등 배치
-        }}
-      >
-        {pointProducts.map((product) => (
-          <div
-            key={product.productId}
-            style={{
-              width: "calc(33% - 0px)", // 한 줄에 3개씩 배치
-              cursor: "pointer",
-              border: "1px solid #ddd",
-              borderRadius: "1px",//모서리
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              overflow: "hidden",
-              backgroundColor: "#fff",
-              transition: "transform 0.2s ease-in-out",
-            }}
-            onClick={() => navigate(`/pointProducts/${product.productId}`)}
-          >
-            {/* 상품 이미지 */}
-            <div
-              style={{
-                height: "200px",
-                overflow: "hidden",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+    <div className="point-products-container">
+      <h1 className="point-shop-title">포인트 상점</h1>
+
+      {/* 브랜드 필터 버튼들 */}
+      <div className="brand-filter-container">
+        {brandOptions.map((brand) => {
+          const isSelected = selectedBrands.includes(brand.value);
+          return (
+            <button
+              key={brand.value}
+              onClick={() => handleBrandChange(brand.value)}
+              className={`brand-button ${isSelected ? "selected" : "unselected"}`}
             >
-              <img
-                src={`/api/images/${product.imageIds}`}
-                alt={product.productName}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
+              {brand.name}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* 상품 리스트: 3열 레이아웃 */}
+      <div className="product-grid">
+        {pointProducts.length === 0 ? (
+          <p className="no-products">상품이 없습니다.</p>
+        ) : (
+          pointProducts.map((product) => (
+            <div
+              key={product.productId}
+              className="product-card"
+              onClick={() => navigate(`/pointProducts/${product.productId}`)}
+            >
+              {/* 상품 이미지 */}
+              <div className="product-image-container">
+                <img
+                  src={`/api/images/${product.imageIds}`}
+                  alt={product.productName}
+                  className="product-image"
+                />
+              </div>
+
+              {/* 상품 정보 */}
+              <div className="product-info">
+                <p className="product-brand">{product.brandCategory}</p>
+                <h3 className="product-name">{product.productName}</h3>
+                <p className="product-price">{product.price} 포인트</p>
+              </div>
             </div>
-
-            {/* 상품 정보 */}
-            <div style={{ padding: "10px" }}>
-              {/* 브랜드명 */}
-              <p
-                style={{
-                  fontSize: "0.9rem",
-                  fontWeight: "bold",
-                  color: "#777",
-                  margin: "0 0 5px 0",
-                }}
-              >
-                {product.brandCategory}
-              </p>
-
-              {/* 상품명 */}
-              <h3
-                style={{
-                  fontSize: "1.1rem",
-                  fontWeight: "bold",
-                  margin: "0 0 10px 0",
-                  color: "#333",
-                  lineHeight: "1.2",
-                }}
-              >
-                {product.productName}
-              </h3>
-
-              {/* 포인트 가격 */}
-              <p
-                style={{
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                  color: "#FF6347",
-                  margin: "0",
-                }}
-              >
-                {product.price} 포인트
-              </p>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

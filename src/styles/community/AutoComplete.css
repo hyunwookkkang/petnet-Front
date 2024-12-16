@@ -1,0 +1,18 @@
+.dropdown-suggestions {
+  position: absolute;  /* 입력창 바로 아래에 위치 */
+  top: 100%;           /* Form.Control의 바로 아래 */
+  /* left: 0; */
+  /* width: 100%; */
+  border: 1px solid #ddd;
+  max-height: 200px;   /* 최대 높이 제한 */
+  overflow-y: auto;    /* 스크롤 가능하게 */
+  /* background-color: white; */ 
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */ /* 부드러운 그림자 */
+  z-index: 10;         /* 다른 요소들보다 위에 표시 */
+  font-size: 14px;
+  /* border-radius: 0 0 10px 10px; */  /* 둥근 모서리 */
+}
+
+.search {
+  left: 10%;
+}

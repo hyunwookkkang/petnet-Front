@@ -2,8 +2,9 @@ import React from "react";
 import { Link } from 'react-router-dom';
 import { Container, Card } from "react-bootstrap";
 
-import "../../../styles/Main.css"; // 기존 스타일 재사용
 import useFetchHotTopics from "./useFetchGetHotTopics";
+
+import "../../../styles/Main.css"; // 기존 스타일 재사용
 
 
 const ViewHotTopicsCard = () => {

@@ -14,18 +14,18 @@ function useFetchUpdateTopic() {
     setUpdateLoading(true);
     setUpdateError(null);
 
-    // axios로 put 요청 보내기
-    await axios.put(`/api/topics`, newTopic)
-      .then(response => {
-        return response.data; // 받아온 데이터를 저장
-      })
-      .catch(err => {
-        console.log('axios fetch update topic error : ', err);
-        setUpdateError(`Error: ${err.response ? err.response.data : err.message}`); // 에러 처리
-      })  
-      .finally(() => {
-        setUpdateLoading(false); // 로딩 종료.
-      });
+    try {
+      // axios로 put 요청 보내기
+      const response = await axios.put('/api/topics', newTopic);
+      return response.data; // 받아온 데이터를 반환
+    } 
+    catch (err) {
+      console.log('axios fetch update topic error:', err);
+      setUpdateError(`Error: ${err.response ? err.response.data : err.message}`);
+    } 
+    finally {
+      setUpdateLoading(false); // 로딩 종료
+    }
   };
 
   return { fetchUpdateTopic, updateLoading, updateError }

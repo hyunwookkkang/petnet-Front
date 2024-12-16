@@ -14,18 +14,18 @@ function useFetchAddTopic() {
     setAddLoading(true);
     setAddError(null);
 
-    // axios로 post 요청 보내기
-    await axios.post(`/api/topics`, newTopic)
-      .then(response => {
-        return response.data; // 받아온 데이터를 저장
-      })
-      .catch(err => {
-        console.log('axios fetch add topic error : ', err);
-        setAddError(`Error: ${err.response ? err.response.data : err.message}`); // 에러 처리
-      })  
-      .finally(() => {
-        setAddLoading(false); // 로딩 종료.
-      });
+    try {
+      // axios로 POST 요청 보내기
+      const response = await axios.post('/api/topics', newTopic);
+      return response.data; // 받아온 데이터를 반환
+    } 
+    catch (err) {
+      console.log('axios fetch add topic error:', err);
+      setAddError(`Error: ${err.response ? err.response.data : err.message}`);
+    } 
+    finally {
+      setAddLoading(false); // 로딩 종료
+    }
   };
 
   return { fetchAddTopic, addLoading, addError }

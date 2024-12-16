@@ -2,7 +2,7 @@ import React from 'react';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
-const HashtagChip = ({ items, removeItem }) => {
+const HashtagEditChip = ({ items, removeItem }) => {
 
   const handleRemoveItem = (item) => {
     removeItem(item);  // 부모에서 전달된 removeItem 함수 호출
@@ -26,4 +26,4 @@ const HashtagChip = ({ items, removeItem }) => {
 
 }
 
-export default HashtagChip;
+export default HashtagEditChip;

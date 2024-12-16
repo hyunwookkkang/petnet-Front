@@ -18,7 +18,7 @@ function PointShopMain() {
     {
       title: '포인트 상품',
       description: '다양한 상품을 포인트로 구매하세요.',
-      icon: <StorefrontIcon className="option-icon" style={{ color: '#4CAF50' }} />,
+      icon: <StorefrontIcon className="option-icon " style={{ color: '#4CAF50' }} />,
       path: 'pointProducts',
     },
     {
@@ -46,7 +46,7 @@ function PointShopMain() {
     if (visibleButtons < options.length) {
       const timer = setTimeout(() => {
         setVisibleButtons(visibleButtons + 1);
-      }, 500); // 0.5초 간격으로 버튼을 보여줍니다.
+      }, 300); // 0.3초 간격으로 버튼을 보여줍니다.
       return () => clearTimeout(timer); // 타이머 정리
     }
   }, [visibleButtons, options.length]);
@@ -58,22 +58,49 @@ function PointShopMain() {
         {options.map((option, index) => (
           <div
             key={index}
-            className={`option-card ${index < visibleButtons ? 'visible' : ''}`} // visible 클래스 추가
+            className={`option-card ${index < visibleButtons ? 'visible' : ''}`}
+            style={{
+              transition: 'transform 0.4s ease, opacity 0.4s ease',
+              transform: index < visibleButtons ? 'scale(1)' : 'scale(0.9)',
+              opacity: index < visibleButtons ? 1 : 0,
+              boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
+              borderRadius: '15px',
+              overflow: 'hidden',
+              background: 'linear-gradient(135deg, #fff, #f9f9f9)',
+              cursor: 'pointer',
+            }}
             onMouseEnter={(e) => {
               e.currentTarget.querySelector('.highlight').classList.add('highlight-hover');
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.3)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.querySelector('.highlight').classList.remove('highlight-hover');
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)';
             }}
             onClick={() => handleNavigation(option.path)}
           >
-            <div className="highlight"></div>
-            <div className="card-content">
-              <div className="option-text-container">
+            <div
+              className="highlight"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background: 'rgba(255, 255, 255, 0.5)',
+                zIndex: -1,
+                transition: 'opacity 0.4s ease',
+                opacity: 0,
+              }}
+            ></div>
+            <div className="card-content" style={{ padding: '20px' }}>
+              <div className="option-text-container" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                 {option.icon}
                 <div>
-                  <h2 className="option-title">{option.title}</h2>
-                  <p className="option-description">{option.description}</p>
+                  <h2 className="option-title" style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>{option.title}</h2>
+                  <p className="option-description" style={{ fontSize: '1rem', color: '#666' }}>{option.description}</p>
                 </div>
               </div>
             </div>

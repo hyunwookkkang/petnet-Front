@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Container } from "react-bootstrap";
 
 import { useUser } from "../../../components/contexts/UserContext";
-import SearchBar from "../../../components/common/searchBar/SearchBar";
+import TopicSearchBar from "../../../components/community/topic/TopicSearchBar";
 import useFetchGetMyTopics from "../../../components/community/topic/useFetchGetMyTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
@@ -15,37 +15,27 @@ const GetMyTopics = () => {
 
   const { userId } = useUser(''); // 사용자 ID 가져오기
 
-  const { fetchGetMyTopics, loading, error } = useFetchGetMyTopics();
+  const { fetchGetMyTopics, error } = useFetchGetMyTopics();
 
   const [topics, setTopics] = useState([]);
+  
+  const [search, setSearch] = useState({
+    "category": '',
+    "condition": '',
+    "keyword": ''
+  });
 
 
-  // 페이지 초기화
   useEffect(() => {
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
-      return;
-    }
 
     const fetchTopics = async () => {
-      const response = await fetchGetMyTopics(userId);
+      const response = await fetchGetMyTopics(userId, search);
       setTopics(response || []);
     };
-    
     fetchTopics();
-    
-  }, [fetchGetMyTopics, userId, navigate]);
-  
-  // 로딩 중일 때 표시할 메시지
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
-  // 에러가 발생했을 때 표시할 메시지
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  }, [fetchGetMyTopics, userId, search, navigate]);
+
 
   const topicsView = topics.map((topic) => (
 
@@ -62,14 +52,20 @@ const GetMyTopics = () => {
 
   ));
 
+
+  // 에러가 발생했을 때 표시할 메시지
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  
   return (
 
     <Container>
       
-      <div>
-        <SearchBar/>
-      </div>
-
+      <TopicSearchBar setSearch={setSearch}/>
+      <br/>
+      
       <div>
         <h1>View My Topics</h1>
         <br/>
