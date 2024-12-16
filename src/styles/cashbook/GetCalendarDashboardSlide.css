@@ -1,0 +1,70 @@
+.slide-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 350px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+  z-index: 1500;
+  transform: translateX(0); /* 강제로 화면에 표시 */
+}
+
+.slide-header {
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.slide-header h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.slide-header p {
+  margin: 5px 0;
+  font-size: 1em;
+  color: #333;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.slide-content {
+  padding: 20px;
+}
+
+.expense-item {
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.expense-item .category {
+  font-weight: bold;
+  color: #333;
+}
+
+.expense-item .content {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.expense-item .amount {
+  font-size: 1.2em;
+  color: red;
+}
+
+.expense-item .payment {
+  font-size: 0.8em;
+  color: #888;
+}

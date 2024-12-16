@@ -1,0 +1,89 @@
+/* SlideDrawers.css */
+
+/* 지출 상세보기 슬라이드 스타일 */
+.slide-drawer-detail {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px; /* 지출 상세보기 슬라이드 너비 */
+  height: 100%;
+  background-color: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  z-index: 1400; /* 지출 등록 슬라이드보다 높은 z-index */
+  transform: translateX(100%); /* 기본적으로 화면 밖에 숨김 */
+  transition: transform 0.3s ease-in-out;
+}
+
+.slide-drawer-detail.open {
+  transform: translateX(0); /* 슬라이드 열림 */
+}
+
+.slide-drawer-detail .close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.slide-drawer-detail .slide-content {
+  padding-top: 40px; /* 닫기 버튼 아래 공간 확보 */
+}
+
+/* 기타 지출 상세보기 슬라이드 관련 스타일 */
+.field {
+  margin-bottom: 20px;
+}
+
+.field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.field input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.update-btn {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  z-index: 3000; /* 모달은 슬라이드보다 높은 z-index */
+}
