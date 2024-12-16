@@ -203,6 +203,7 @@ const GetPointLog = () => {
         body={<div>로그인이 필요한 서비스입니다.<br /> 로그인 화면으로 이동합니다.</div>}
         footer={
           <button className="modal-confirm-button"
+          style={{ backgroundColor: "#feb98e", border: "none" }}
             onClick={() => {
               setShowAlert(false);
               navigate("/login");

@@ -5,8 +5,16 @@ import "../../styles/pointshop/point.css";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import InfoIcon from '@mui/icons-material/Info';
+import axios from 'axios'; // Axios 추가
 import CommonModal from '../../components/common/modal/CommonModal';
 import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
+
+// 날짜 포맷 함수 (년-월-일 시:분:초)
+const formatLocalDate = (dateStr) => {
+  const date = new Date(dateStr);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} 
+    ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
+};
 
 const betweenOperator = {
   label: 'Between',
@@ -62,14 +70,14 @@ const PointShopAdminPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/pointshop/pointProducts/Admin');
-        if (!response.ok) {
-          throw new Error('데이터를 불러오는 데 실패했습니다.');
-        }
-        const data = await response.json();
-        setProducts(data);
+        const response = await axios.get('/api/pointshop/pointProducts/Admin');
+        const formattedData = response.data.map((product) => ({
+          ...product,
+          productAddDate: formatLocalDate(product.productAddDate),
+        }));
+        setProducts(formattedData);
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching products:', error);
       } finally {
         setLoading(false);
       }
@@ -82,22 +90,13 @@ const PointShopAdminPage = () => {
     if (!selectedProduct) return;
 
     try {
-      const response = await fetch(
-        `/api/pointshop/pointProducts/Admin/${selectedProduct.productId}`,
-        {
-          method: 'DELETE',
-        }
+      await axios.delete(`/api/pointshop/pointProducts/Admin/${selectedProduct.productId}`);
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product.productId !== selectedProduct.productId)
       );
-      if (response.ok) {
-        setProducts((prevProducts) =>
-          prevProducts.filter((product) => product.productId !== selectedProduct.productId)
-        );
-        showSuccessToast('상품이 성공적으로 삭제되었습니다.');
-      } else {
-        showErrorToast('상품 삭제 실패.');
-      }
+      showSuccessToast('상품이 성공적으로 삭제되었습니다.');
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error deleting product:', error);
       showErrorToast('서버 오류가 발생했습니다. 다시 시도해 주세요.');
     } finally {
       setShowDeleteModal(false);
@@ -136,10 +135,10 @@ const PointShopAdminPage = () => {
         </IconButton>
       ),
     },
-    { field: 'productId', headerName: '포인트 상품 ID', width: 150 },
+    { field: 'productId', headerName: '상품ID', width: 100 },
     {
       field: 'productName',
-      headerName: '포인트 상품명',
+      headerName: '포인트 상품명(수정)',
       width: 200,
       renderCell: (params) => (
         <span
@@ -155,8 +154,8 @@ const PointShopAdminPage = () => {
         </span>
       ),
     },
-    { field: 'productAddDate', headerName: '등록 일자', width: 200 },
-    { field: 'validityDate', headerName: '유효 기간', width: 100 },
+    { field: 'productAddDate', headerName: '등록 일자', width: 250 },
+    { field: 'validityDate', headerName: '유효 기간', width: 150 },
     { 
       field: 'price',
       headerName: '포인트 가격',
@@ -171,7 +170,7 @@ const PointShopAdminPage = () => {
       <h1 style={styles.title}>포인트 상품 관리</h1>
       <div style={styles.headerActions}>
         <div style={{ flex: 8 }}></div>
-        <div style={{ flex: 2 }}>
+        <div style={{ flex: 2, textAlign: 'right', whiteSpace: 'nowrap' }}>
           <button
             onClick={() => navigate('AdminAddPointProduct')}
             style={styles.addButton}
@@ -188,7 +187,7 @@ const PointShopAdminPage = () => {
             rows={products}
             columns={columns}
             pageSize={10}
-            getRowId={(row) => row.productId} 
+            getRowId={(row) => row.productId}
           />
         </div>
       )}
@@ -250,15 +249,6 @@ const styles = {
     textAlign: 'center',
     boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
     transition: 'all 0.3s ease',
-  },
-  actionButton: {
-    backgroundColor: '#FEBE98',
-    color: '#FFFFFF',
-    border: 'none',
-    padding: '5px 10px',
-    cursor: 'pointer',
-    borderRadius: '5px',
-    fontSize: '14px',
   },
   loadingText: {
     textAlign: 'center',

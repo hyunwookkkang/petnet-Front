@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
 
 const AdminAddPointProduct = () => {
   const navigate = useNavigate();
@@ -47,14 +48,14 @@ const AdminAddPointProduct = () => {
       });
 
       if (response.ok) {
-        alert('포인트 상품이 성공적으로 추가되었습니다.');
+        showSuccessToast('포인트 상품이 성공적으로 추가되었습니다.');
         navigate('/point-product-management'); // Admin 상품 목록 페이지로 이동
       } else {
-        alert('포인트 상품 추가에 실패했습니다.');
+        showErrorToast('포인트 상품 추가에 실패했습니다.');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('서버와 통신 중 문제가 발생했습니다.');
+      showErrorToast('서버와 통신 중 문제가 발생했습니다.');
     }
   };
 
@@ -115,15 +116,17 @@ const AdminAddPointProduct = () => {
         </div>
 
         <div>
-          <label>상품 이미지:</label>
+          <label htmlFor="imageInput" className="form-label">상품 이미지:</label>
           <input
             type="file"
             accept="image/*"
+            className="form-control"
+            id="imageInput"
             onChange={handleFileChange}
             required
-            style={{ width: '100%', marginTop: '5px' }}
           />
         </div>
+
 
         <button
           type="submit"

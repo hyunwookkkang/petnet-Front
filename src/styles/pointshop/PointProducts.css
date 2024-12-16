@@ -1,7 +1,7 @@
 /* 전체 컨테이너 */
 .point-products-container {
   padding: 0px;
-  background: #EDEDED;
+  background: linear-gradient(135deg, #f8f8f8, #ececec);
 }
 
 /* 상점 타이틀 */
@@ -44,7 +44,7 @@
 
 /* 비선택 상태 */
 .brand-button.unselected {
-  background-color: #EDEDED;
+  background: #F3F3F3;
   color: #666;
   border: 1px solid #ccc;
 }
@@ -74,8 +74,7 @@
 .product-card {
   cursor: pointer;
   border: 1px solid #ddd;
-  border-radius: 1px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0 !important;
   overflow: hidden;
   background-color: #fff;
   transition: transform 0.2s ease-in-out;
