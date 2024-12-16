@@ -13,7 +13,7 @@ function ProductImage() {
         '/assets/common/tori4.jpg',
     ];
   return (
-    <Carousel className='carousel' interval={3000} fade={false} indicators controls style={{ height: "100%", overflow: "hidden" }}>
+    <Carousel className='carousel' interval={3000} fade={false} indicators controls style= {{ height: "100%", overflow: "hidden" }}>
       {/* 각 이미지를 Carousel.Item에 추가 */}
       {images.map((image, index) => (
         <Carousel.Item key={index}>

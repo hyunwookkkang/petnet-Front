@@ -1,3 +1,5 @@
+// Favorites.js
+
 import React, { useState, useEffect } from "react";
 import { Card, Button, Spinner, ButtonGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -21,8 +23,8 @@ const Favorites = () => {
 
   // 즐겨찾기 목록 가져오기
   useEffect(() => {
-    if(userId === null){
-      //userId불러오기
+    if (userId === null) {
+      // userId 불러오기
       return;
     }
     
@@ -105,22 +107,29 @@ const Favorites = () => {
   return (
     <div className="container mt-4">
       <h3 className="text-center mb-4">🐾 {nickname || "회원"}님의 즐겨찾기 목록 🐾</h3>
-      <Button
-        className="button-click"
-        onClick={() => {
-          setSelectedFavorite(null);
-          setIsFavoriteModalOpen(true); // 추가 모달 열기
-        }}
-      >
-        즐겨찾기 추가하기
-      </Button>
+      <div className="text-center mb-4">
+        <Button
+          className="button-click"
+          onClick={() => {
+            setSelectedFavorite(null);
+            setIsFavoriteModalOpen(true); // 추가 모달 열기
+          }}
+        >
+          즐겨찾기 추가하기
+        </Button>
+      </div>
+      
 
       <div className="sections">
-        {favorites.map((favorite) => (
-          <Card key={favorite.favoriteId} className="section">
+        {favorites.map((favorite, index) => (
+          <Card key={favorite.favoriteId || index} className="section">
             <Card.Body>
-              <Card.Title>
-                즐겨찾기 이름: {favorite.favoriteName}{" "} <br/>
+              <Card.Title
+                style={{ cursor: "pointer" }}
+                onClick={() => navigate(`/place/${favorite.placeId}`)} // 장소 상세 페이지로 이동
+              >
+                즐겨찾기 이름: {favorite.favoriteName}{" "}
+                <br />
                 {favorite.isPublic ? "🌟 공개" : "🔒 비공개"}
               </Card.Title>
               <Card.Text>저장된 장소 {favorite.itemCount || 0}개</Card.Text>

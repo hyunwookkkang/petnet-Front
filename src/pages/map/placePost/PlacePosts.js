@@ -197,7 +197,7 @@ const PlacePosts = ({ placeId }) => {
           required
         />
 
-        <div className="review-images">
+        {/* <div className="review-images">
           <label htmlFor="imageUpload" className="image-upload-label">
             이미지 추가:
           </label>
@@ -216,7 +216,7 @@ const PlacePosts = ({ placeId }) => {
             ))}
           </div>
         </div>
-        <p className="image-limit-text">이미지 최대 3장까지 등록 가능</p>
+        <p className="image-limit-text">이미지 최대 3장까지 등록 가능</p> */}
       </PostModal>
 
       {/* 리뷰 목록 */}

@@ -17,7 +17,7 @@ import LocalParkingRoundedIcon from '@mui/icons-material/LocalParkingRounded';
 
 const MyMainPage = () => {
   
-  const { userId, nickname, mypoint } = useUser();
+  const { userId, nickname, myPoint } = useUser();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [imageIndex, setImageIndex] = useState(0);
@@ -59,34 +59,44 @@ const MyMainPage = () => {
       {/* 콘텐츠를 네비게이션 아래로 배치 */}
       <Container fluid className="mt-4 content-wrapper">
         {/* User Info and Points */}
-        <Row className="mb-4">
+        <Row className="mb-4 justify-content-center">
           <Col>
             <Card className="my-user-info-box">
               <Card.Body className = "text-center">
-                <Card.Title><p style={{ fontSize: '30px' }}>안녕하세요 <span className="my-nickname-text">{nickname}</span> 님!</p>
+                <Card.Title><p style={{ fontSize: '30px' }}>안녕하세요 <span className="my-nickname-text">{nickname}</span> 님!</p> <br/>
                 
                 </Card.Title>
-                <Row className="d-flex justify-content-start">
-                  <Col>
+                <Row className="d-flex flex-wrap justify-content-center align-items-center">
+                  <Col xs="auto" className="my-icon-container">
                     <p className="my-icon-text">
-                      <span style={{ fontWeight: 'bold', fontSize: '24px', color: "#FEBE98" }}>{mypoint || 0}P</span>내 보유포인트
+                      <span style={{ fontWeight: 'bold', fontSize: '24px', color: "#FEBE98" }}>{myPoint || 0}P</span>
+                      내 보유포인트
                     </p>
+                  </Col>
 
-                    <p className="my-icon-text" onClick={() => navigate("/my/orders")}>
+                  <Col xs="auto" className="my-icon-container" onClick={() => navigate("/my/orders")}>
+                    <p className="my-icon-text">
                       <span style={{ fontSize: '24px', color: "#FEBE98" }}><ShoppingBasketOutlinedIcon /></span>
                       주문내역
                     </p>
+                  </Col>
 
-                    <p className="my-icon-text" onClick={() => navigate("/gifticons")}>
-                      <span style={{ fontSize: '24px', color: "#FEBE98" }}><RedeemIcon /></span>기프티콘
-                    </p>
-
-                    <p className="my-icon-text" onClick={() => navigate("/cashbook")}>
-                      <span style={{ fontSize: '24px', color: "#FEBE98" }}><SavingsIcon /></span>가계부
+                  <Col xs="auto" className="my-icon-container" onClick={() => navigate("/gifticons")}>
+                    <p className="my-icon-text">
+                      <span style={{ fontSize: '24px', color: "#FEBE98" }}><RedeemIcon /></span>
+                      기프티콘
                     </p>
                   </Col>
-                  <hr style={{ border: "0.5px solid #FEBE98" }} />
+
+                  <Col xs="auto" className="my-icon-container" onClick={() => navigate("/cashbook")}>
+                    <p className="my-icon-text">
+                      <span style={{ fontSize: '24px', color: "#FEBE98" }}><SavingsIcon /></span>
+                      가계부
+                    </p>
+                  </Col>
+                  <hr style={{ border: "0.5px solid #FEBE98", width: "100%" }} />
                 </Row>
+
 
               </Card.Body>
                 <Button className = "my-get-point-button" onClick={() => navigate("/pointQuiz")}>
