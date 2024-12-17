@@ -1,30 +1,32 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button, Spinner } from 'react-bootstrap';
 
 import { showErrorToast, showSuccessToast } from '../../common/alert/CommonToast';
-
 import CommonModal from '../../common/modal/CommonModal';
-import useFetchDeleteTopic from './useFetchDeleteTopic';
+
+import useFetchDeleteComment from './useFetchDeleteComment';
 
 import "../../../styles/common/Button.css";
 
 
-const TopicDeleteModal = ({showModal, setShowModal, topic}) => {
+const CommentDeleteModal = ({showModal, setShowModal, prevComment, setComments}) => {
 
-  const navigate = useNavigate();
-
-  const { fetchDeleteTopic, loading, error } = useFetchDeleteTopic();
+  const { fetchDeleteComment, loading, error } = useFetchDeleteComment();
 
 
-  const deleteTopicHandler = async () => {
+  const deleteCommentHandler = async () => {
     try {
-      await fetchDeleteTopic(topic.topicId);
-      navigate(-1);
-      showSuccessToast(`게시글이 삭제되었습니다`);
+      await fetchDeleteComment(prevComment.commentId);
+      // 댓글 목록에서 선택된 댓글 삭제
+      setComments((prevComments) => 
+        prevComments.filter((comment) => 
+          comment.commentId !== prevComment.commentId
+      ));
+      setShowModal(false);
+      showSuccessToast(`댓글이 삭제되었습니다`);
     }
     catch(err) {
-      console.log("catch err: ", err)
+      console.log(err)
       showErrorToast(`삭제 중 오류가 발생했습니다`);
     }
   };
@@ -49,8 +51,9 @@ const TopicDeleteModal = ({showModal, setShowModal, topic}) => {
 
   const DeleteMessage = () => (
     <div>
-      <strong>{topic.title}</strong><br/>
-      삭제된 게시글은 복구할 수 없습니다.<br/>
+      <strong>{prevComment.content}</strong>
+      <br/>
+      삭제된 댓글은 복구할 수 없습니다.<br/>
       정말 삭제하시겠습니까?
     </div>
   );
@@ -70,7 +73,7 @@ const TopicDeleteModal = ({showModal, setShowModal, topic}) => {
     <div style={{ display: 'flex', gap: '10px' }}>
       <Button
         className="modal-button"
-        onClick={() => deleteTopicHandler()}
+        onClick={() => deleteCommentHandler()}
         disabled={loading}
       >
         삭제
@@ -92,7 +95,7 @@ const TopicDeleteModal = ({showModal, setShowModal, topic}) => {
       <CommonModal
         show = {showModal} 
         onHide = {() => setShowModal(false)}
-        title = "게시글 삭제"
+        title = "댓글 삭제"
         body = {<ModalBody />}
         footer = {<ModalFooter />}
       />
@@ -103,4 +106,4 @@ const TopicDeleteModal = ({showModal, setShowModal, topic}) => {
 
 }
 
-export default TopicDeleteModal;
+export default CommentDeleteModal;

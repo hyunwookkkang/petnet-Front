@@ -1,70 +1,99 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Form } from "react-bootstrap";
+import { FaImage } from "react-icons/fa";
 
 import { useUser } from "../../contexts/UserContext";
 import { showErrorToast, showSuccessToast } from '../../common/alert/CommonToast';
 import CommonModal from "../../common/modal/CommonModal";
+
 import useFetchAddComment from "./useFetchAddComment";
+import useFetchUpdateComment from "./useFetchUpdateComment";
 
 import "../../../styles/place/Modal.css";
 import "../../../styles/community/Comment.css";
-import { FaImage } from "react-icons/fa";
-import { Form } from "react-bootstrap";
 
 
-const CommentEditModal = ({showModal, setShowModal, topic, comment, oldComment}) => {
+const CommentEditModal = ({showModal, setShowModal, targetTopic, targetComment, prevComment, setComments}) => {
   
   const formRef = useRef(null); // form을 참조할 ref
 
   const { userId, nickname } = useUser();
   const { fetchAddComment, loading: addLoading } = useFetchAddComment();
-  // const { fetchUpdateComment, loading: updateLoading } = useFetchUpdateComment();
+  const { fetchUpdateComment, loading: updateLoading } = useFetchUpdateComment();
 
+  const [commentId, setCommentId] = useState('');
+  const [targetTopicInfo, setTargetTopicInfo] = useState(null);
+  const [targetCommentInfo, setTargetCommentInfo] = useState(null);
   const [content, setContent] = useState('');
 
 
   // 폼 초기화
   useEffect(() => {
-    if (oldComment) {
-      setContent(oldComment.content);
+    if (prevComment) {
+      // 기존 댓글 수정 시 초기화
+      setCommentId(prevComment.commentId);
+      setTargetTopicInfo(prevComment.targetTopic);
+      setTargetCommentInfo(prevComment.targetComment);
+      setContent(prevComment.content);
     }
+    else {
+      // 신규 댓글 작성 시 초기화
+      setCommentId('');
+      setTargetCommentInfo(targetComment);
+      setTargetTopicInfo(targetTopic);
+      setContent('');
+    }
+  }, [prevComment, targetTopic, targetComment]);
 
-  }, [oldComment]);
 
-
-  const addCommentHandler = async (e) => {
+  const submitCommentHandler = async (e) => {
     e.preventDefault();
     
     const newComment = {
-      'commentId': oldComment ? oldComment.commentId : '',
+      'commentId': commentId,
       'author': { 'userId': userId },
-      'targetTopic' : { 'topicId' : topic.topicId },
-      'targetComment' : { 'commentId' : comment ? comment.commentId : '' },
+      'targetTopic' : targetTopicInfo,
+      'targetComment' : targetCommentInfo,
       'content': content
     };
 
-    //setLoading(true);
-
-    const submitComment = /*oldComment ? fetchUpdateComment :*/ fetchAddComment;
+    const submitComment = prevComment ? fetchUpdateComment : fetchAddComment;
+    const modifyComments = prevComment ? modifyUpdateComment : modifyAddComment;
     try {
-      await submitComment(newComment);
+      const resComment = await submitComment(newComment);
+      modifyComments(resComment);
       setShowModal(false);
       showSuccessToast(`댓글이 저장되었습니다`);
     } 
     catch(err) {
-      console.log("catch err: ", err)
+      console.error(err);
       showErrorToast(`댓글 저장 중 오류가 발생했습니다`);
     }
   };
 
+  const modifyAddComment = (newComment) => {
+    setComments((prevComments) => [...prevComments, newComment]);
+  }
+
+  const modifyUpdateComment = (newComment) => {
+    setComments((prevComments) => 
+      prevComments.map((comment) => 
+        comment.commentId === newComment.commentId 
+          ? newComment
+          : comment
+      )
+    );
+  }
+
 
   const ModalBody = () => (
-    <Form ref={formRef} onSubmit={addCommentHandler}>
+    <Form ref={formRef} onSubmit={submitCommentHandler}>
       <p>
-        <strong>[{topic.categoryStr}] {topic.title}</strong>
+        <strong>[{targetTopicInfo.categoryStr}] {targetTopicInfo.title}</strong>
       </p>
 
-      { comment ? (
-        <p>{comment.title} {comment.targetComment.author.nickname}</p>
+      { targetCommentInfo ? (
+        <p>{targetCommentInfo.title} {targetCommentInfo.author.nickname}</p>
       ) : '' }
 
       <div className="comment-post-header">
@@ -100,7 +129,7 @@ const CommentEditModal = ({showModal, setShowModal, topic, comment, oldComment})
         className="modal-submit" 
         type="button"
         onClick={() => formRef.current?.requestSubmit()}
-        disabled={addLoading /* updateLoading */}
+        disabled={ addLoading || updateLoading }
       >
         저장
       </button>
@@ -113,7 +142,7 @@ const CommentEditModal = ({showModal, setShowModal, topic, comment, oldComment})
     <CommonModal
       show = {showModal} 
       onHide = {() => setShowModal(false)}
-      title = { "댓글 " + (oldComment ? "수정하기" : "작성하기") }
+      title = { "댓글 " + (prevComment ? "수정하기" : "작성하기") }
       body = {<ModalBody />}
       footer = {<ModalFooter />}
     />

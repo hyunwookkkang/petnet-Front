@@ -102,6 +102,12 @@ const GetTopicInfo = () => {
       {/* 게시글 본문 */}
       <div dangerouslySetInnerHTML={{ __html: topic.content }}/>
 
+
+      {/* 이미지 가져오기 테스트 */}
+      <div dangerouslySetInnerHTML={{ __html: `<img src="/api/images/local/23" />` }}/>
+      <br/>
+
+
       {/* 좋아요 / 싫어요 버튼 */}
       <div className="post-feedback">
         <TopicVoteButton topicId={topic.topicId} voteCount={topic.likeCount} isLike={true}/>
@@ -129,7 +135,7 @@ const GetTopicInfo = () => {
 
       {/* 댓글 */}
       <div>
-        <ViewTopicComments topic={topic} commentCount={topic.commentCount}/>
+        <ViewTopicComments targetTopic={topic} commentCount={topic.commentCount}/>
       </div>
 
 
