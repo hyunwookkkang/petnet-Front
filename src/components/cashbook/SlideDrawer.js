@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import ExpenseButtons from "./ExpenseButtons";
+import "../../styles/cashbook/SlideDrawer.css";
 import { useUser } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import GetLoadExpenseLog from "../../pages/cashbook/GetLoadExpenseLog";
 import AnimalCategoryDropdown from "./AnimalCategoryDropdown";
 import ExpenseCategoryDropdown from "./ExpenseCategoryDropdown";
 import PaymentCategoryDropdown from "./PaymentCategoryDropdown";
+import {
+  showSuccessToast,
+  showErrorToast,
+} from "../../components/common/alert/CommonToast";
 
 // SlideDrawer 컴포넌트
 const SlideDrawer = ({
@@ -93,7 +98,7 @@ const SlideDrawer = ({
       expenseCategory,
       expenseContent,
       paymentOption,
-      expenseDate: `${date}T${time}`,
+      expenseDate: `${date}T${time}:00`,
       memo,
     };
 
@@ -131,14 +136,14 @@ const SlideDrawer = ({
         console.log("onAddExpense  호출 전:", newExpense);
         onAddExpense(newExpense); // 새로 등록된 하나의 expense 객체만 onAddExpense  넘긴다.
         console.log("onAddExpense  호출됨:", newExpense);
-        alert("지출이 성공적으로 등록되었습니다!!!");
+        showSuccessToast("지출등록되었습니다!");
       } else {
         console.error("지출 등록 실패, 응답 상태:", response.status);
-        alert("지출 등록에 실패했습니다.");
+        showErrorToast("지출등록에 실패했습니다.!");
       }
     } catch (error) {
       console.error("API 요청 중 오류 발생:", error);
-      alert("API 요청 중 오류가 발생했습니다.");
+      showErrorToast("지출등록에 실패했습니다.");
     } finally {
       onClose();
     }
@@ -149,7 +154,7 @@ const SlideDrawer = ({
         position: "fixed",
         top: 0,
         right: isOpen ? 0 : "-100%", // 슬라이드 열리고 닫히는 효과
-        width: "300px",
+        width: "400px",
         height: "100%",
         backgroundColor: "#fff",
         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
@@ -157,17 +162,22 @@ const SlideDrawer = ({
         zIndex: 1300,
         transition: "right 0.3s ease-in-out", // 슬라이드 애니메이션
         overflowY: "auto", // 스크롤 추가
+        borderTopLeftRadius: "20px", // 왼쪽 상단 둥글게
+        borderBottomLeftRadius: "20px", // 왼쪽 하단 둥글게
+        borderTopRightRadius: "0", // 오른쪽 상단 둥글지 않게
+        borderBottomRightRadius: "0", // 오른쪽 하단 둥글지 않게
       }}
     >
       {/* 닫기 버튼 */}
       <button
+        className=".cashbook-slide-drawer-add .close-button"
         onClick={onClose}
         style={{
           position: "absolute",
-          top: "10px",
-          left: "-40px",
-          backgroundColor: "#FF6347",
-          color: "#fff",
+          top: "15px",
+          right: "40px",
+          fontSize: "1.4rem",
+          color: "black",
           border: "none",
           borderRadius: "50%",
           width: "30px",
@@ -199,6 +209,8 @@ const SlideDrawer = ({
               top: "40px",
               marginBottom: "10px",
               margin: "30px 0",
+              width: "150px",
+              gap: "60px",
             }}
           >
             <div>
@@ -207,7 +219,15 @@ const SlideDrawer = ({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                style={inputStyle}
+                style={{
+                  display: "block",
+                  width: "130px" /* 날짜 입력폼 너비 설정 */,
+                  padding: "8px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  marginTop: "5px",
+                  boxSizing: "border-box",
+                }}
               />
             </div>
             <div>
@@ -216,7 +236,15 @@ const SlideDrawer = ({
                 type="time"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
-                style={inputStyle}
+                style={{
+                  display: "block",
+                  width: "150px" /* 시간 입력폼 너비 설정 */,
+                  padding: "8px",
+                  border: "1px solid #ccc",
+                  borderRadius: "4px",
+                  marginTop: "5px",
+                  boxSizing: "border-box",
+                }}
               />
             </div>
           </div>
@@ -297,21 +325,24 @@ const SlideDrawer = ({
 const inputStyle = {
   display: "block",
   width: "100%",
+  maxWidth: "400px", // 최대 너비를 400px로 제한 (원하는 값으로 설정 가능)
   padding: "8px",
   border: "1px solid #ccc",
   borderRadius: "4px",
   marginTop: "5px",
+  boxSizing: "border-box", // 패딩과 테두리를 너비에 포함
 };
 
 // 플로팅 버튼 컴포넌트
 // - 페이지에서 항상 고정된 위치에 표시되는 둥근 버튼
 const FloatingActionButton = ({ onClick }) => (
   <button
+    className="cashbook-floating-action-button"
     onClick={onClick} // 버튼 클릭 시 onClick 함수가 실행되도록 설정
     style={{
-      position: "fixed", // 화면에서 고정 위치에 배치 (스크롤을 따라 움직이지 않음)
-      bottom: "70px", // 화면 하단에서 200px 위쪽에 배치
-      left: "450px", // 화면 우측에서 20px 떨어지게 배치
+      position: "flex", // 화면에서 고정 위치에 배치 (스크롤을 따라 움직이지 않음)
+      bottom: "100px", // 화면 하단에서 200px 위쪽에 배치
+      left: "20px", // 화면 우측에서 20px 떨어지게 배치
       width: "60px", // 버튼 너비를 60px로 설정
       height: "60px", // 버튼 높이를 60px로 설정
       borderRadius: "50%", // 버튼을 원형으로 만들기 위해 50%로 설정
@@ -321,6 +352,7 @@ const FloatingActionButton = ({ onClick }) => (
       border: "none", // 버튼의 기본 테두리를 제거
       cursor: "pointer", // 버튼에 마우스를 올리면 포인터로 변경 (클릭 가능함을 표시)
       boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // 버튼에 그림자 효과 추가 (살짝 떠 있는 느낌)
+      zIndex: 9999, // 다른 요소 위에 위치하도록 설정
     }}
   >
     + {/* 버튼 안에 "+" 아이콘을 표시 */}

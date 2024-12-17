@@ -70,6 +70,7 @@ const GetExpensesLog = ({ year, month }) => {
 
   // 지출 목록 및 월간 총액을 가져오는 함수
   const fetchExpenses = async (page) => {
+    console.log("Fetching expenses...");
     if (!userId || loading || !hasMore) return; // 이미 로딩 중이거나 더 이상 데이터가 없으면 중단
     setLoading(true); // 로딩 시작
 
@@ -86,9 +87,17 @@ const GetExpensesLog = ({ year, month }) => {
       const data = await response.json();
       console.log("지출 목록 데이터:", data);
 
-      if (data.expenses && data.expenses.length > 0) {
+      if (Array.isArray(data.expenses) && data.expenses.length > 0) {
         // 새 데이터를 기존 데이터와 병합
-        setExpenses((prev) => [...prev, ...data.expenses]);
+        setExpenses((prev) => {
+          const newExpenses = data.expenses.filter(
+            (expense) =>
+              !prev.some(
+                (prevExpense) => prevExpense.expenseId === expense.expenseId
+              )
+          );
+          return [...prev, ...newExpenses];
+        });
         // 추가 데이터가 있는지 확인
         if (data.expenses.length < 10) {
           // 한 페이지당 10개의 데이터를 가져오므로
@@ -185,7 +194,7 @@ const GetExpensesLog = ({ year, month }) => {
           dataLength={expenses.length} // 현재까지 로드된 데이터 개수
           next={() => fetchExpenses(currentPage)} // 다음 페이지 데이터를 로드
           hasMore={hasMore} // 추가 데이터가 더 있는지 여부 (true로 초기 설정)
-          loader={<h4>Loading...</h4>} // 로딩 중 표시
+          loader={<h4>Loading....</h4>} // 로딩 중 표시
           endMessage={
             <p style={{ textAlign: "center" }}>모든 데이터를 불러왔습니다.</p>
           } // 데이터가 모두 로드된 경우
@@ -241,10 +250,15 @@ const GetExpensesLog = ({ year, month }) => {
                             }
                           )}
                         </strong>
+                        {/* 시간 표시 부분 */}
                         <span>
                           {new Date(expense.expenseDate).toLocaleTimeString(
                             "ko-KR",
-                            { hour: "2-digit", minute: "2-digit" }
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: false, // 24시간 형식
+                            }
                           )}
                         </span>
                       </div>

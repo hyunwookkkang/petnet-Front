@@ -10,6 +10,7 @@ const Carts = () => {
   const [products, setProducts] = useState([]); // 장바구니 상품 데이터
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState(null); // 에러 상태
+  const [selectedItems, setSelectedItems] = useState(new Set()); // 선택된 항목 관리
   const navigate = useNavigate();
 
   // 장바구니 데이터 가져오기
@@ -68,6 +69,34 @@ const Carts = () => {
     }
   };
 
+  // 체크박스 클릭 시 선택된 항목 업데이트
+  const handleSelectItem = (itemId) => {
+    const updatedSelection = new Set(selectedItems);
+    if (updatedSelection.has(itemId)) {
+      updatedSelection.delete(itemId); // 이미 선택된 항목이라면 선택 해제
+    } else {
+      updatedSelection.add(itemId); // 새로 선택된 항목이라면 선택
+    }
+    setSelectedItems(updatedSelection);
+  };
+
+  // 선택된 항목 삭제
+  const handleRemoveClick = async () => {
+    try {
+      for (let itemId of selectedItems) {
+        await axios.delete(`/api/shop/products/cart/${itemId}`);
+      }
+      alert("선택된 상품이 장바구니에서 삭제되었습니다.");
+      // 삭제 후 다시 장바구니 항목을 업데이트
+      const response = await axios.get(`/api/shop/products/cart/${userId}`);
+      setProducts(response.data);
+      setSelectedItems(new Set()); // 선택된 항목 초기화
+    } catch (error) {
+      console.error("장바구니에서 삭제하는 데 실패했습니다.", error);
+      alert("장바구니에서 삭제하는 데 실패했습니다.");
+    }
+  };
+
   if (loading) {
     return (
       <div className="text-center py-5">
@@ -91,10 +120,6 @@ const Carts = () => {
 
   const handlePurchaseClick = () => {
     navigate("/shop/purchase"); // 구매하기 페이지로 이동
-  };
-
-  const handleRemoveClick = () => {
-    alert("삭제하기 기능은 아직 구현되지 않았습니다."); // 삭제하기 알림
   };
 
   return (
@@ -135,7 +160,6 @@ const Carts = () => {
             <Card
               className="h-100 shadow-sm"
               style={{ cursor: "pointer", border: "none" }}
-              onClick={() => navigate(`/shop/products/${productItem.product.productId}`)}
             >
               <div className="overflow-hidden" style={{ height: "200px" }}>
                 <Card.Img
@@ -175,7 +199,7 @@ const Carts = () => {
                 )}
               </Card.Body>
 
-              <Card.Footer className="d-flex justify-content-between bg-light">
+              <Card.Footer className="d-flex justify-content-between bg-light" onClick={(e) => e.stopPropagation()}>
                 {/* 숨겨진 input 필드 추가 */}
                 <input type="hidden" value={productItem.itemId} />
 
@@ -202,18 +226,48 @@ const Carts = () => {
                 >
                   +
                 </Button>
+
+                {/* 체크박스 영역 클릭 시 상품 상세로 이동하지 않도록 수정 */}
+                <div
+                  className="form-check"
+                  style={{ paddingLeft: "15px", paddingTop: "5px", cursor: "pointer" }}
+                >
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={selectedItems.has(productItem.itemId)}
+                    onChange={() => handleSelectItem(productItem.itemId)}
+                  />
+                </div>
               </Card.Footer>
             </Card>
           </Col>
         ))}
       </Row>
 
-      <div className="d-grid gap-2 mt-4">
-        <Button variant="primary" size="lg" onClick={handlePurchaseClick}>
-          구매하기
-        </Button>
-        <Button variant="secondary" size="lg" onClick={handleRemoveClick}>
+      {/* 버튼을 한 줄에 두 개씩 배치 */}
+      <div className="d-flex justify-content-between mt-4">
+        <Button
+          variant="warning"
+          onClick={handleRemoveClick}
+          style={{
+            backgroundColor: "#FF6347",
+            borderColor: "#FF6347",
+            width: "48%", // 버튼 너비 48%로 설정
+          }}
+        >
           삭제하기
+        </Button>
+        <Button
+          variant="warning"
+          onClick={handlePurchaseClick}
+          style={{
+            backgroundColor: "#FEBE98",
+            borderColor: "#FEBE98",
+            width: "48%", // 버튼 너비 48%로 설정
+          }}
+        >
+          구매하기
         </Button>
       </div>
     </Container>

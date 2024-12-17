@@ -2,13 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDog, faCat } from "@fortawesome/free-solid-svg-icons";
 
-const AnimalCategoryDropdown = ({ onSelect }) => {
+const AnimalCategoryDropdown = ({ onSelect, initialValue }) => {
   const [isAnimalDropDownOpen, setIsAnimalDropDownOpen] = useState(false);
-  const [selected, setSelected] = useState({ label: "선택", icon: null });
+  const [selected, setSelected] = useState(
+    initialValue
+      ? { label: initialValue, icon: null } // 초기값 설정
+      : { label: "카테고리를 선택하세요", icon: null }
+  );
   const dropdownRef = useRef(null); // 드롭다운 영역 참조
 
+  useEffect(() => {
+    if (initialValue) {
+      setSelected({ label: initialValue, icon: null }); // 초기값 업데이트
+    }
+  }, [initialValue]);
+
   const options = [
-    { value: "개", label: "개", icon: faDog },
+    { value: "강아지", label: "강아지", icon: faDog },
     { value: "고양이", label: "고양이", icon: faCat },
   ];
 

@@ -6,13 +6,20 @@ import {
   faMoneyBill1, // 현금 아이콘
 } from "@fortawesome/free-solid-svg-icons";
 
-const PaymentCategoryDropdown = ({ onSelect }) => {
+const PaymentCategoryDropdown = ({ onSelect, initialValue }) => {
   const [isPaymentDropDownOpen, setIsPaymentDropDownOpen] = useState(false); // 드롭다운 열림/닫힘 상태
-  const [selected, setSelected] = useState({
-    label: "카테고리를 선택하세요",
-    icon: null,
-  }); // 선택된 값
+  const [selected, setSelected] = useState(
+    initialValue
+      ? { label: initialValue, icon: faCreditCard }
+      : { label: "카테고리를 선택하세요", icon: null }
+  );
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    if (initialValue) {
+      setSelected({ label: initialValue, icon: faCreditCard }); // 초기값 업데이트
+    }
+  }, [initialValue]);
 
   const options = [
     {

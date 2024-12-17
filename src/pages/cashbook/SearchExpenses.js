@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "../../styles/cashbook/SearchExpenses.css";
-import SearchBar from "../../components/common/searchBar/SearchBar";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useUser } from "../../components/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import "../../styles/cashbook/SearchExpenses.css";
 
 const SearchExpenses = () => {
   const [startDate, setStartDate] = useState(null);
@@ -13,115 +9,111 @@ const SearchExpenses = () => {
   const [animalCategory, setAnimalCategory] = useState("");
   const [expenseCategory, setExpenseCategory] = useState("");
   const [paymentOption, setPaymentOption] = useState("");
-  const [results, setResults] = useState([]); // 검색 결과 상태
-  const [totalExpense, setTotalExpense] = useState(0); // 총 지출 금액 상태
+  const [results, setResults] = useState([]); // 검색 결과
+  const [totalExpense, setTotalExpense] = useState(0); // 총 지출 금액
+  const [searching, setSearching] = useState(false); // 검색 진행 상태
 
-  const { userId } = useUser(""); // 사용자 ID 가져오기
-
+  const { userId } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(userId);
     if (!userId) {
       alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
-      return;
+      navigate("/login");
     }
   }, [userId, navigate]);
 
+  const formatDateToStartOfDay = (date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d.toISOString();
+  };
+
+  const formatDateToEndOfDay = (date) => {
+    const d = new Date(date);
+    d.setHours(23, 59, 59, 999);
+    return d.toISOString();
+  };
+
   const handleSearch = async () => {
+    setSearching(true); // 검색 시작
     try {
-      const response = await fetch(`/api/cashbook/expense/searchExpensesLog`, {
+      const response = await fetch("/api/cashbook/expense/searchExpensesLog", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId, // 추가된 부분
-          startDate: startDate ? startDate.toISOString() : null,
-          endDate: endDate ? endDate.toISOString() : null,
+          userId,
+          startDate: startDate ? formatDateToStartOfDay(startDate) : null,
+          endDate: endDate ? formatDateToEndOfDay(endDate) : null,
           animalCategory,
           expenseCategory,
           paymentOption,
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("서버 응답이 올바르지 않습니다.");
-      }
+      if (!response.ok) throw new Error("서버 응답이 올바르지 않습니다.");
 
       const data = await response.json();
-      setResults(data.expenses); // 검색 결과 업데이트
-      setTotalExpense(data.totalCount); // 총 지출 금액 업데이트
+      setResults(data.expenses || []);
+      setTotalExpense(data.totalExpense || 0);
     } catch (error) {
-      console.error("검색 중 오류가 발생했습니다:", error);
+      console.error("검색 중 오류 발생:", error);
+    } finally {
+      setSearching(false); // 검색 종료
     }
   };
 
   return (
-    <div className="cashbook-search-expenses">
+    <div className="cashbook-search-expenses-container">
       {/* 날짜 선택 */}
-      <div className="cashbook-date-picker-container">
-        <label>
-          <CalendarMonthIcon />
-        </label>
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-          dateFormat="yyyy-MM-dd"
-          placeholderText="시작 날짜 선택"
-        ></DatePicker>
+      <div className="cashbook-date-picker-sections">
+        <div className="cashbook-date-picker">
+          <label>시작 날짜</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+        </div>
+        <div className="cashbook-date-picker">
+          <label>종료 날짜</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </div>
       </div>
-      <div>
-        <label>
-          <CalendarMonthIcon />
-        </label>
-        <DatePicker
-          selected={endDate}
-          onChange={(date) => setEndDate(date)}
-          dateFormat="yyyy-MM-dd"
-          placeholderText="종료 날짜 선택"
-        />
-      </div>
-
-      <SearchBar />
 
       {/* 드롭다운 필터 */}
-      <div className="cashbook-dropdown-container">
-        <label>동물 카테고리:</label>
+      <div className="cashbook-filter-section">
         <select
           value={animalCategory}
           onChange={(e) => setAnimalCategory(e.target.value)}
         >
-          <option value="">선택하세요</option>
-          <option value="개">개</option>
+          <option value="">동물 카테고리</option>
+          <option value="강아지">강아지</option>
           <option value="고양이">고양이</option>
         </select>
 
-        <label>지출 카테고리:</label>
         <select
           value={expenseCategory}
           onChange={(e) => setExpenseCategory(e.target.value)}
         >
-          <option value="">선택하세요</option>
+          <option value="">지출 카테고리</option>
           <option value="사료">사료</option>
           <option value="간식">간식</option>
-          <option value="장난감">장난감</option>
-          <option value="산책용품">산책용품</option>
-          <option value="의류">의류</option>
-          <option value="미용용품">미용용품</option>
-          <option value="위생용품">위생용품</option>
           <option value="병원비">병원비</option>
-          <option value="미용비">미용비</option>
           <option value="기타">기타</option>
         </select>
 
-        <label>결제 수단:</label>
         <select
           value={paymentOption}
           onChange={(e) => setPaymentOption(e.target.value)}
         >
-          <option value="">선택하세요</option>
+          <option value="">결제 수단</option>
           <option value="카드결제">카드결제</option>
           <option value="간편결제">간편결제</option>
           <option value="현금">현금</option>
@@ -129,26 +121,93 @@ const SearchExpenses = () => {
       </div>
 
       {/* 검색 버튼 */}
-      <button className="cashbook-search-button" onClick={handleSearch}>
+      <button
+        className="cashbook-searches-button"
+        onClick={handleSearch}
+        style={{
+          padding: "15px 30px",
+          backgroundColor: "#ff6b6b",
+          color: "white",
+          border: "none",
+          borderRadius: "20px",
+          fontSize: "17px",
+          cursor: "pointer",
+          boxSizing: "border-box",
+          marginTop: "20px",
+          marginLeft: "auto", // 버튼을 왼쪽에서부터 자동으로 배치
+          marginRight: "auto", // 버튼을 오른쪽에서부터 자동으로 배치
+          display: "block", // 버튼을 블록 레벨로 설정
+          width: "300px !important", // 버튼의 너비를 300px로 고정
+          height: "60px", // 버튼의 높이를 60px로 고정
+        }}
+      >
         검색
       </button>
 
-      {/* 결과 표시 */}
-      <div className="cashbook-search-results">
-        <h3>총 지출 금액: {totalExpense}</h3>
-        <ul>
-          {results.length > 0 ? (
-            results.map((expense) => (
-              <li key={expense.expenseId}>
-                {expense.expenseDate} - {expense.expenseContent} - ₩
-                {expense.amount}
-              </li>
-            ))
-          ) : (
-            <li>검색된 결과가 없습니다.</li>
+      {/* 검색 진행 상태 */}
+      {searching ? (
+        <div className="cashbook-search-status">검색 중...</div>
+      ) : (
+        <>
+          {/* 결과 표시 */}
+          {results.length > 0 && (
+            <div className="cashbook-search-total-expense">
+              총 지출 금액: {totalExpense.toLocaleString()} 원
+            </div>
           )}
-        </ul>
-      </div>
+
+          <div className="cashbook-results-section">
+            {results.length > 0 ? (
+              results.map((expense) => (
+                <div key={expense.expenseId} className="cashbook-expense-card">
+                  <div className="cashbook-expense-left">
+                    <div className="cashbook-expense-date">
+                      <strong>
+                        {new Date(expense.expenseDate).toLocaleDateString(
+                          "ko-KR",
+                          {
+                            month: "2-digit",
+                            day: "2-digit",
+                            weekday: "short", // 요일 추가
+                          }
+                        )}
+                      </strong>
+                      <span>
+                        {new Date(expense.expenseDate).toLocaleTimeString(
+                          "ko-KR",
+                          {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false, // 24시간 형식
+                          }
+                        )}
+                      </span>
+                    </div>
+                    <div className="cashbook-expense-category">
+                      {expense.expenseCategory}
+                    </div>
+                  </div>
+
+                  <div className="cashbook-expense-center">
+                    {expense.expenseContent}
+                  </div>
+
+                  <div className="cashbook-expense-right">
+                    <span className="cashbook-expense-amount">
+                      ₩ {expense.amount.toLocaleString()}
+                    </span>
+                    <div className="cashbook-expense-payment">
+                      {expense.paymentOption}
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div>검색된 결과가 없습니다.</div>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };
