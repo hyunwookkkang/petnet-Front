@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Container, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom"; // useNavigate import 추가
+import AddPlaceAddress from "./AddPlaceAddress";
+import { showErrorToast, showSuccessToast } from './../../../components/common/alert/CommonToast';
 
 
 const AddPlace = () => {
         const [formData, setFormData] = useState({
         placeId: "",
         fcltyNm: "",
-        ctgryThreeNm: "식당", // 기본값
+        ctgryThreeNm: "식당",
         ctyprvnSignguNm: "",
         lcLa: "",
         lcLo: "",
@@ -17,62 +19,53 @@ const AddPlace = () => {
         telNo: "",
         rstdeGuidCn: "",
         operTime: "",
-        parkngPosblAt: "Y", // 기본값
+        parkngPosblAt: "Y",
         entrnPosblPetSizeValue: "소형",
         petLmttMtrCn: "",
         petAcptAditChrgeValue: "",
         inPlaceAcptPosblAt: "N",
         outPlaceAcptPosblAt: "Y",
-        fcltyInfoDc: ""
-    });
-
-    const navigate = useNavigate(); // useNavigate 훅 사용
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // 숫자 필드 변환
-        const payload = { 
-        ...formData, 
-        lcLa: parseFloat(formData.lcLa), 
-        lcLo: parseFloat(formData.lcLo),
-        placeId: formData.placeId ? parseInt(formData.placeId,10) : null
-        };
-
-        axios.post("/api/places", payload)
-        .then(res => {
-            alert("장소가 추가되었습니다!");
-            // 필요하다면 상태 초기화나 화면전환 로직 추가
-            setFormData({
-            placeId: "",
-            fcltyNm: "",
-            ctgryThreeNm: "식당",
-            ctyprvnSignguNm: "",
-            lcLa: "",
-            lcLo: "",
-            rdnmadrNm: "",
-            hmpgUrl: "",
-            telNo: "",
-            rstdeGuidCn: "",
-            operTime: "",
-            parkngPosblAt: "Y",
-            entrnPosblPetSizeValue: "소형",
-            petLmttMtrCn: "",
-            petAcptAditChrgeValue: "",
-            inPlaceAcptPosblAt: "N",
-            outPlaceAcptPosblAt: "Y",
-            fcltyInfoDc: ""
-            });
-        })
-        .catch(err => {
-            console.error(err);
-            alert("장소 추가 중 오류가 발생했습니다.");
+        fcltyInfoDc: "",
         });
-    };
+    
+        const navigate = useNavigate();
+    
+        const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+        };
+    
+        const handleAddressSelected = (addressData) => {
+            setFormData((prev) => ({
+                ...prev,
+                rdnmadrNm: addressData.address,  // 도로명 주소
+                lcLa: addressData.latitude,      // 위도
+                lcLo: addressData.longitude      // 경도
+            }));
+        };
+    
+        const handleSubmit = (e) => {
+        e.preventDefault();
+    
+        const payload = {
+            ...formData,
+            lcLa: parseFloat(formData.lcLa),
+            lcLo: parseFloat(formData.lcLo),
+            placeId: formData.placeId ? parseInt(formData.placeId, 10) : null,
+        };
+    
+        axios
+            .post("/api/map/places", payload)
+            .then(() => {
+            showSuccessToast("장소가 추가되었습니다!");
+            navigate("/admin");
+            })
+            .catch((err) => {
+            console.error(err);
+            showErrorToast("장소 추가 중 오류가 발생했습니다.");
+            });
+        };
+    
 
     const handleCancel = () => {
         navigate("/admin"); // /admin 경로로 이동
@@ -102,25 +95,56 @@ const AddPlace = () => {
             </Form.Select>
             </Form.Group>
 
-            <Form.Group className="mb-3">
+            {/* <Form.Group className="mb-3">
             <Form.Label>주소(시/도/구)</Form.Label>
+            <AddPlaceAddress onAddressSelected={handleAddressSelected} />
             <Form.Control type="text" name="ctyprvnSignguNm" value={formData.ctyprvnSignguNm} onChange={handleChange} placeholder="서울특별시 강남구" />
+            </Form.Group> */}
+            <Form.Group className="mb-3">
+                <Form.Label>주소 (구글 geo코딩 위도와 경도 자동 입력)</Form.Label>
+                    <AddPlaceAddress onAddressSelected={handleAddressSelected} />
+                    <Form.Control
+                        type="text"
+                        name="rdnmadrNm"
+                        value={formData.rdnmadrNm}
+                        placeholder="도로명 주소"
+                        readOnly
+                    />
             </Form.Group>
 
-            <Form.Group className="mb-3">
+            {/* <Form.Group className="mb-3">
             <Form.Label>위도 (예: 37.5665)</Form.Label>
             <Form.Control type="text" name="lcLa" value={formData.lcLa} onChange={handleChange} placeholder="위도 입력" />
-            </Form.Group>
+            </Form.Group> */}
 
-            <Form.Group className="mb-3">
+            {/* <Form.Group className="mb-3">
             <Form.Label>경도 (예: 126.9780)</Form.Label>
             <Form.Control type="text" name="lcLo" value={formData.lcLo} onChange={handleChange} placeholder="경도 입력" />
+            </Form.Group> */}
+            <Form.Group className="mb-3">
+            <Form.Label>위도</Form.Label>
+            <Form.Control
+                type="text"
+                name="lcLa"
+                value={formData.lcLa}
+                readOnly
+            />
             </Form.Group>
 
             <Form.Group className="mb-3">
+            <Form.Label>경도</Form.Label>
+            <Form.Control
+                type="text"
+                name="lcLo"
+                value={formData.lcLo}
+                readOnly
+            />
+            </Form.Group>
+
+            {/* <Form.Group className="mb-3">
             <Form.Label>도로명 주소</Form.Label>
             <Form.Control type="text" name="rdnmadrNm" value={formData.rdnmadrNm} onChange={handleChange} placeholder="도로명 주소" />
-            </Form.Group>
+            </Form.Group> */}
 
             <Form.Group className="mb-3">
             <Form.Label>홈페이지 URL</Form.Label>
@@ -186,7 +210,9 @@ const AddPlace = () => {
             <Form.Control as="textarea" rows={3} name="fcltyInfoDc" value={formData.fcltyInfoDc} onChange={handleChange} placeholder="상세정보 입력" />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button 
+                style={{ backgroundColor: "#FF6347", borderColor: "#FF6347" }}
+                variant="primary" type="submit">
                 추가하기
             </Button>
             <Button variant="secondary" style={{ marginLeft: "10px" }} onClick={() => {window.location.href="/admin"}}>

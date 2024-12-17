@@ -10,6 +10,7 @@ const AddFavoriteItemModal = ({ show, onClose, placeId, onItemAdded }) => {
   const [error, setError] = useState(null); // 에러 상태
   const [creatingFavorite, setCreatingFavorite] = useState(false); // 새 즐겨찾기 추가 모드
   const [newFavoriteName, setNewFavoriteName] = useState(""); // 새 즐겨찾기 이름
+  const [isPublic, setIsPublic] = useState(0);  //default = 0
 
     // 즐겨찾기 목록 불러오기
     const fetchFavorites = async () => {
@@ -41,11 +42,12 @@ const AddFavoriteItemModal = ({ show, onClose, placeId, onItemAdded }) => {
         setLoading(true);
         await axios.post(
             "/api/map/favorites",
-            { favoriteName: newFavoriteName, isPublic: 0, maxListCount: null },
+            { favoriteName: newFavoriteName, isPublic: isPublic, maxListCount: null },
             { withCredentials: true }
         );
         showSuccessToast("새로운 즐겨찾기가 추가되었습니다.");
         setNewFavoriteName(""); // 입력 초기화
+        setIsPublic(0); // 공개 여부 초기화화
         setCreatingFavorite(false);
 
         // 새 데이터 가져오기
@@ -107,6 +109,31 @@ const AddFavoriteItemModal = ({ show, onClose, placeId, onItemAdded }) => {
                     placeholder="즐겨찾기 이름을 입력하세요"
                 />
                 </Form.Group>
+                <Form.Group>
+                    <Form.Label>공개 여부</Form.Label>
+                    <div>
+                        <Form.Check
+                        inline
+                        type="radio"
+                        label="공개"
+                        name="isPublic"
+                        value={1}
+                        checked={isPublic === 1}
+                        onChange={() => setIsPublic(1)}
+                        style={{ accentColor: "#FF6347" }}
+                        />
+                        <Form.Check
+                        inline
+                        type="radio"
+                        label="비공개"
+                        name="isPublic"
+                        value={0}
+                        checked={isPublic === 0}
+                        onChange={() => setIsPublic(0)}
+                        style={{ accentColor: "#FF6347" }}
+                        />
+                    </div>
+                    </Form.Group>
             </Form>
             ) : (
             <Form>
@@ -133,8 +160,10 @@ const AddFavoriteItemModal = ({ show, onClose, placeId, onItemAdded }) => {
         <Modal.Footer>
             
             {creatingFavorite ? (
-            <Button variant="success" onClick={handleCreateFavorite} disabled={loading}>
-                추가하기
+            <Button 
+                style={{ backgroundColor: "#EEA092 ", color: "#fff", border: "none" }} 
+                onClick={handleCreateFavorite} disabled={loading}>
+                새로 추가하기
             </Button>
             ) : (
             <>

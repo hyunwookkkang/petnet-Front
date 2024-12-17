@@ -7,6 +7,7 @@ import "../../../styles/place/PlacePosts.css";
 import { useNavigate } from "react-router-dom";
 import LoginModal from "../../../components/common/modal/LoginModal";
 import DatePicker from "react-datepicker";
+import PlacePostInfoModal from "./PlacePostInfoModal";
 
 const PlacePosts = ({ placeId }) => {
   const { userId } = useUser();
@@ -20,6 +21,25 @@ const PlacePosts = ({ placeId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // 상세보기 모달 상태
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+
+
+    // 상세 모달 열기
+  const openInfoModal = (post) => {
+    setSelectedPost(post);
+    setIsInfoModalOpen(true);
+  };
+
+  // 상세 모달 닫기
+  const closeInfoModal = () => {
+    setSelectedPost(null);
+    setIsInfoModalOpen(false);
+  };
+
+
 
   // 장소 데이터 Fetch
   useEffect(() => {
@@ -196,6 +216,7 @@ const PlacePosts = ({ placeId }) => {
           <PostItem
             key={post.id}
             post={post}
+            onClick={() => openInfoModal(post)}
             isUserPost={post.author_id === userId}
             onEdit={() => {
               setUpdatePost(post);
@@ -204,9 +225,15 @@ const PlacePosts = ({ placeId }) => {
             onDelete={() => {
               setPosts((prev) => prev.filter((p) => p.id !== post.id));
             }}
+
           />
         ))}
       </div>
+      <PlacePostInfoModal
+        isOpen={isInfoModalOpen}
+        post={selectedPost}
+        onClose={closeInfoModal}
+      />
     </div>
   );
 };

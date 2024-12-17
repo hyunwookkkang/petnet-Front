@@ -16,16 +16,6 @@ const GetMyPlacePosts = () => {
     const [selectedPostId, setSelectedPostId] = useState(null); // 선택된 postId
 
 
-    const fetchPlaceName = async (placeId) => {
-        try {
-            const response = await axios.get(`/api/map/places/${placeId}`);
-            return response.data.fcltyNm;
-        } catch (error) {
-            console.error(`Error fetching place name for placeId ${placeId}:`, error);
-            return "정보 없음";
-        }
-    };
-
     useEffect(() => {
         if (userId) {
             fetchMyPlacePosts();
@@ -36,24 +26,20 @@ const GetMyPlacePosts = () => {
 
     const fetchMyPlacePosts = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(`/api/map/placePosts/user`, {
                 params: { userId },
                 withCredentials: true,
             });
-            const postsWithPlaceName = await Promise.all(
-                response.data.map(async (post) => {
-                    const placeName = await fetchPlaceName(post.placeId);
-                    return { ...post, fcltyNm: placeName };
-                })
-            );
-            console.log("Fetched posts:", postsWithPlaceName);
-            setPosts(postsWithPlaceName);
+            setPosts(response.data); // fcltyNm이 이미 포함되어 있음
             setLoading(false);
         } catch (error) {
             console.error("Error fetching place posts:", error);
             setLoading(false);
         }
     };
+    
+    
 
     const handleEdit = (post) => {
         // 모달창 띄울 때 post 데이터가 제대로 있는지 확인하고, 비어있다면 기본값 설정

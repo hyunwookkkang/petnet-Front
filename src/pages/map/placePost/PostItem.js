@@ -1,8 +1,8 @@
 import React from "react";
 import "../../../styles/place/PostItem.css";
 
-const PostItem = ({ post, isUserPost, onEdit, onDelete }) => (
-  <div className="post-item">
+const PostItem = ({ post, isUserPost, onEdit, onDelete, onClick }) => (
+  <div className="post-item" onClick={() => onClick(post)}>
     {/* Header */}
     <div className="post-header">
       <strong>작성자Id: {post.authorId || "닉네임 로딩 중..."}</strong>
