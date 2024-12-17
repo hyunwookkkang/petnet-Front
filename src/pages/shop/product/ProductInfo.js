@@ -9,6 +9,7 @@ import LikeButton from "../../../components/common/button/LikeButton";
 //css
 import "../../../styles/place/Place.css";
 import ProductImage from "./ProductImage";
+import ProductPost from "../productPost/ProductPosts";
 
 
 const ProductInfo = () => {
@@ -156,7 +157,7 @@ const ProductInfo = () => {
         <Tab eventKey="posts" title="리뷰">
           <div>
             <h4>리뷰</h4>
-            {/* <PlacePosts placeId = {placeId}/> */}
+            <ProductPost productId = {productId}/>
             {/* 로그인상태 추가 예정  isLoggedIn = {isLoggedIn}*/}
           </div>
         </Tab>
