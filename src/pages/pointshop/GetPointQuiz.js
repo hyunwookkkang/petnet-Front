@@ -17,7 +17,6 @@ const GetPointQuiz = () => {
   const navigate = useNavigate();
   const [showAlert, setShowAlert] = useState(false);
 
-  // 로그인 확인
   useEffect(() => {
     if (!userId) {
       setShowAlert(true);
@@ -123,7 +122,7 @@ const GetPointQuiz = () => {
         }
       />
 
-      <h2 className="quiz-title text-center mb-4" style={{ color: "#FF6347", fontWeight: "bold" }}>🎉 포인트 퀴즈 🎉</h2>
+      <h2 className="quiz-title text-center mb-4" style={{ color: "#FF6347", fontWeight: "bold" }}>💯 포인트 퀴즈 💯</h2>
 
       {currentQuiz && !resultMessage ? (
         <Card className="quiz-card mb-4" style={{ borderColor: "#FEBE98", boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)", backgroundColor: "#FFFFFF" }}>
@@ -141,7 +140,9 @@ const GetPointQuiz = () => {
                   variant="contained"
                   color="info"
                   onClick={() => handleAnswerSelection(num)}
-                  sx={{ margin: "10px auto", padding: "12px 20px", width: "80%", backgroundColor: userAnswers[currentQuiz.quizId] === num ? "#FF6347" : "#FFFFFF", color: userAnswers[currentQuiz.quizId] === num ? "#FFFFFF" : "#34495E", fontWeight: "bold", borderRadius: "8px", border: "2px solid #FEBE98" }}
+                  sx={{ margin: "10px auto", padding: "12px 20px", width: "80%", backgroundColor: userAnswers[currentQuiz.quizId] === num ? "#FF6347" : "#FFFFFF",
+                    color: userAnswers[currentQuiz.quizId] === num ? "#FFFFFF" : "#34495E", fontWeight: "bold", 
+                    borderRadius: "8px", border: "2px solid #FEBE98",  fontFamily: "'Ownglyph_ParkDaHyun', sans-serif" }}
                 >
                   {num}. {currentQuiz[`quizOption${num}`]}
                 </MUIButton>
@@ -199,7 +200,7 @@ const GetPointQuiz = () => {
                 다시 도전
               </Button>
             )}
-            <Button variant="success" onClick={() => navigate("/pointLog")} style={{ backgroundColor: "#EEA092", borderColor: "#EEA092", color: "#FFFFFF" }}>
+            <Button variant="success" onClick={() => navigate("/pointshop-page")} style={{ backgroundColor: "#EEA092", borderColor: "#EEA092", color: "#FFFFFF" }}>
               종료하기
             </Button>
           </div>

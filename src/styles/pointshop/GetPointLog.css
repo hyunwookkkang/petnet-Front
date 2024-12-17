@@ -111,3 +111,17 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+.point-log-header .my-user-info-box {
+  padding: 10px;
+  background-color: #fff; /* 배경 색상 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+}
+
+.point-log-header .my-icon-text {
+  font-size: 18px;
+  color: #666;
+  margin: 0; /* 기본 여백 제거 */
+}

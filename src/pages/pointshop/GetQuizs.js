@@ -83,7 +83,8 @@ const GetQuizs = () => {
 
   return (
     <div className="container mt-4">
-      <h1 className="admin-title">퀴즈 관리</h1>
+      <h1 className="admin-title" style={{textAlign: 'center',color: '#febe98',fontSize: '2.2rem',fontWeight: 'bold',marginBottom: '20px',
+        }}>퀴즈 관리</h1>
       {!isAdding && !editingQuiz && (
         <div className="mb-3 text-end">
           <button className="quiz-button add-button" onClick={() => setIsAdding(true)}>
