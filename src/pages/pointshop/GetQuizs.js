@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Form } from 'react-bootstrap';
 import "../../styles/pointshop/GetQuizs.css";
-import "../../styles/pointshop/AdminPointProducts.css";
+
 
 
 
@@ -135,13 +135,15 @@ const GetQuizs = () => {
                   <option value="4">4번</option>
                 </Form.Select>
               </td>
-              <td className="button-container">
+              <td className="table-cell">
+              <div className="button-container">
                 <button className="quiz-button save-button" onClick={handleSaveQuiz}>
                   저장
                 </button>
                 <button className="quiz-button cancel-button" onClick={() => setIsAdding(false)}>
                   취소
                 </button>
+              </div>
               </td>
             </tr>
           )}
@@ -178,13 +180,15 @@ const GetQuizs = () => {
                     <option value="4">4번</option>
                   </Form.Select>
                 </td>
-                <td className="button-container">
+                <td className="table-cell">
+                <div className="button-container">
                   <button className="quiz-button save-button" onClick={handleUpdateQuiz}>
                     저장
                   </button>
                   <button className="quiz-button cancel-button" onClick={handleCancelEdit}>
                     취소
                   </button>
+                </div>
                 </td>
               </tr>
             ) : (
