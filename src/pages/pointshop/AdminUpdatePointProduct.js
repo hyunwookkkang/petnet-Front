@@ -16,7 +16,7 @@ const AdminUpdatePointProduct = () => {
   });
 
   const [originalData, setOriginalData] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null); // 이미지 미리보기
+  const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // 기존 상품 데이터 가져오기
@@ -32,7 +32,7 @@ const AdminUpdatePointProduct = () => {
           brandCategory: response.data.brandCategory || "",
           imageFiles: null,
         });
-        // 기존 이미지 미리보기 설정
+        // 기존 이미지
         if (response.data.imageIds) {
           setImagePreview(`/api/images/${response.data.imageIds}`);
         }
@@ -46,7 +46,7 @@ const AdminUpdatePointProduct = () => {
     fetchProduct();
   }, [productId]);
 
-  // 입력값 변경 핸들러
+  // 입력값 변경
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -55,7 +55,7 @@ const AdminUpdatePointProduct = () => {
     }));
   };
 
-  // 이미지 파일 변경 핸들러
+  // 이미지 파일 변경
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setFormData((prevData) => ({
@@ -67,7 +67,7 @@ const AdminUpdatePointProduct = () => {
     }
   };
 
-  // 폼 제출 핸들러
+  //제출
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -86,7 +86,7 @@ const AdminUpdatePointProduct = () => {
 
       if (response.status === 200) {
         showSuccessToast("상품이 성공적으로 수정되었습니다.");
-        navigate("/");
+        navigate("/point-product-management");
       } else {
         showErrorToast("상품 수정에 실패했습니다.");
       }

@@ -9,7 +9,7 @@ const AdminAddPointProduct = () => {
     price: '',
     validityDate: '',
     brandCategory: '',
-    imageFiles: null, // 단일 이미지 파일
+    imageFiles: null,//난 이미지 1개개
   });
 
   // 폼 데이터 변경 핸들러
@@ -25,7 +25,7 @@ const AdminAddPointProduct = () => {
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
-      imageFiles: e.target.files[0], // 단일 파일 선택
+      imageFiles: e.target.files[0], // 파일 1개만 선택택
     }));
   };
 
@@ -49,7 +49,7 @@ const AdminAddPointProduct = () => {
 
       if (response.ok) {
         showSuccessToast('포인트 상품이 성공적으로 추가되었습니다.');
-        navigate('/point-product-management'); // Admin 상품 목록 페이지로 이동
+        navigate('/point-product-management');
       } else {
         showErrorToast('포인트 상품 추가에 실패했습니다.');
       }

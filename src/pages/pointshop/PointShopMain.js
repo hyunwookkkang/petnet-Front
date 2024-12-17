@@ -8,7 +8,7 @@ import '../../styles/pointshop/pointshopmain.css';
 
 function PointShopMain() {
   const navigate = useNavigate();
-  const [visibleButtons, setVisibleButtons] = useState(0); // 보여질 버튼 개수
+  const [visibleButtons, setVisibleButtons] = useState(0); 
 
   const handleNavigation = (path) => {
     navigate(`/${path}`);
@@ -42,11 +42,11 @@ function PointShopMain() {
   ];
 
   useEffect(() => {
-    // 버튼을 하나씩 표시하는 타이머 설정
+    // 버튼 타이머 설정
     if (visibleButtons < options.length) {
       const timer = setTimeout(() => {
         setVisibleButtons(visibleButtons + 1);
-      }, 300); // 0.3초 간격으로 버튼을 보여줍니다.
+      }, 300); // 0.3초 
       return () => clearTimeout(timer); // 타이머 정리
     }
   }, [visibleButtons, options.length]);
