@@ -69,7 +69,10 @@ const CommentEditModal = ({showModal, setShowModal, topic, comment, oldComment})
 
       <div className="comment-post-header">
         <div className="comment-post-username">{nickname}</div>
-        <button className="comment-post-image-button" /*onClick={() => alert('이미지 핸들')}*/>
+        <button 
+          type="button" 
+          className="comment-post-image-button" 
+          /*onClick={() => alert('이미지 핸들')}*/>
           <FaImage size={20} />
         </button>
       </div>
