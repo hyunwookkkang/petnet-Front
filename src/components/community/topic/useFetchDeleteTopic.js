@@ -23,7 +23,7 @@ function useFetchDeleteTopic() {
     } 
     catch (err) {
       setError(`Error: ${err.response ? err.response.data.message : err.message}`);
-      throw new Error('axios fetch delete topic error:', err);
+      throw new Error('axios fetch delete topic error ', err);
     } 
     finally {
       setLoading(false);

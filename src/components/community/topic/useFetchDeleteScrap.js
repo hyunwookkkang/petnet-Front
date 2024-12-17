@@ -22,7 +22,7 @@ function useFetchDeleteScrap() {
       return response.data;
     } 
     catch (err) {
-      console.log('axios fetch delete scrap error:', err);
+      console.error('axios fetch delete scrap error:', err);
       setError(`Error: ${err.response ? err.response.data : err.message}`);
     } 
     finally {
