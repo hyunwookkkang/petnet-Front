@@ -21,6 +21,7 @@ import ProductInfo from "./pages/shop/product/ProductInfo";
 import ProductImage from "./pages/shop/product/ProductImage";
 import Carts from "./pages/shop/product/Carts";
 import Wishes from "./pages/shop/product/Wishes";
+import ProductPost from "./pages/shop/productPost/ProductPosts";
 import AddPurchase from "./pages/shop/purchase/AddPurchase";
 
 // 사용자 페이지
@@ -88,6 +89,7 @@ import AdminMainPage from "./pages/common/AdminMainPage";
 
 
 
+
 function App() {
   //const userRole = 1; // 관리자: 0 또는 1, 일반 사용자: 2
 
@@ -143,6 +145,7 @@ function App() {
             <Route path="/shop/products/:productId/image" element={<ProductImage />} />
             <Route path="/shop/products/cart/:userId" element={<Carts/>} />
             <Route path="/shop/products/wish/:userId" element={<Wishes />} />
+            <Route path=".shop/productPost/:productId" element={<ProductPost />} />
             <Route path="/shop/purchase" element={<AddPurchase />} />
             {/* END : shop-page */}
 
