@@ -4,35 +4,38 @@ import axios from "axios";
 import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
 
 const AdminUpdatePointProduct = () => {
-  const { productId } = useParams(); // URL에서 productId 가져오기
-  const navigate = useNavigate(); // 페이지 이동
+  const { productId } = useParams();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     productName: "",
     price: "",
     validityDate: "",
     brandCategory: "",
-    imageFiles: null, // 이미지 파일
+    imageFiles: null,
   });
 
-  const [originalData, setOriginalData] = useState(null); // 기존 데이터 저장
-  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [originalData, setOriginalData] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null); // 이미지 미리보기
+  const [loading, setLoading] = useState(true);
 
   // 기존 상품 데이터 가져오기
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(
-          `/api/pointshop/pointProducts/${productId}`
-        );
+        const response = await axios.get(`/api/pointshop/pointProducts/${productId}`);
         setOriginalData(response.data);
         setFormData({
           productName: response.data.productName || "",
           price: response.data.price || "",
           validityDate: response.data.validityDate || "",
           brandCategory: response.data.brandCategory || "",
-          imageFiles: null, // 이미지 파일은 초기값 없음
+          imageFiles: null,
         });
+        // 기존 이미지 미리보기 설정
+        if (response.data.imageIds) {
+          setImagePreview(`/api/images/${response.data.imageIds}`);
+        }
       } catch (error) {
         console.error("Error fetching product data:", error);
       } finally {
@@ -54,48 +57,36 @@ const AdminUpdatePointProduct = () => {
 
   // 이미지 파일 변경 핸들러
   const handleFileChange = (e) => {
+    const file = e.target.files[0];
     setFormData((prevData) => ({
       ...prevData,
-      imageFiles: e.target.files[0], // 파일 업데이트
+      imageFiles: file,
     }));
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
   // 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // FormData 객체 생성
     const bodyData = new FormData();
-
-    // 빈 값은 기존 값 유지
-    bodyData.append(
-      "productName",
-      formData.productName || originalData.productName
-    );
+    bodyData.append("productName", formData.productName || originalData.productName);
     bodyData.append("price", formData.price || originalData.price);
-    bodyData.append(
-      "validityDate",
-      formData.validityDate || originalData.validityDate
-    );
-    bodyData.append(
-      "brandCategory",
-      formData.brandCategory || originalData.brandCategory
-    );
+    bodyData.append("validityDate", formData.validityDate || originalData.validityDate);
+    bodyData.append("brandCategory", formData.brandCategory || originalData.brandCategory);
 
-    // 이미지 파일 추가 (선택 사항)
     if (formData.imageFiles) {
       bodyData.append("imageFiles", formData.imageFiles);
     }
 
     try {
-      const response = await axios.put(
-        `/api/pointshop/pointProducts/Admin/${productId}`,
-        bodyData
-      );
+      const response = await axios.put(`/api/pointshop/pointProducts/Admin/${productId}`, bodyData);
 
       if (response.status === 200) {
         showSuccessToast("상품이 성공적으로 수정되었습니다.");
-        navigate("/"); // 수정 후 목록 페이지로 이동
+        navigate("/");
       } else {
         showErrorToast("상품 수정에 실패했습니다.");
       }
@@ -116,10 +107,7 @@ const AdminUpdatePointProduct = () => {
   return (
     <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
       <h1 style={{ textAlign: "center" }}>포인트 상품 수정</h1>
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-      >
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         <div>
           <label>포인트 상품명:</label>
           <input
@@ -169,14 +157,21 @@ const AdminUpdatePointProduct = () => {
         </div>
 
         <div>
-          <label htmlFor="imageInput" className="form-label">상품 이미지:</label>
+          <label>상품 이미지:</label>
+          {imagePreview && (
+            <img
+              src={imagePreview}
+              alt="이미지 미리보기"
+              style={{ width: "100%", height: "auto", marginBottom: "10px" }}
+            />
+          )}
+          <label>변경할 이미지 선택:</label>
           <input
             type="file"
             accept="image/*"
             className="form-control"
             id="imageInput"
             onChange={handleFileChange}
-            style={{ width: "100%", marginTop: "5px" }}
           />
         </div>
 
@@ -189,7 +184,6 @@ const AdminUpdatePointProduct = () => {
             border: "none",
             borderRadius: "5px",
             cursor: "pointer",
-            textAlign: "center",
           }}
         >
           수정하기

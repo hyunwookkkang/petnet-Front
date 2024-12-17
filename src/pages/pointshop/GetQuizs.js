@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Form } from 'react-bootstrap';
 import "../../styles/pointshop/GetQuizs.css";
+
+
+
+
 const GetQuizs = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [editingQuiz, setEditingQuiz] = useState(null);
@@ -79,6 +83,7 @@ const GetQuizs = () => {
 
   return (
     <div className="container mt-4">
+      <h1 className="admin-title">퀴즈 관리</h1>
       {!isAdding && !editingQuiz && (
         <div className="mb-3 text-end">
           <button className="quiz-button add-button" onClick={() => setIsAdding(true)}>
@@ -130,13 +135,15 @@ const GetQuizs = () => {
                   <option value="4">4번</option>
                 </Form.Select>
               </td>
-              <td className="button-container">
+              <td className="table-cell">
+              <div className="button-container">
                 <button className="quiz-button save-button" onClick={handleSaveQuiz}>
                   저장
                 </button>
                 <button className="quiz-button cancel-button" onClick={() => setIsAdding(false)}>
                   취소
                 </button>
+              </div>
               </td>
             </tr>
           )}
@@ -173,13 +180,15 @@ const GetQuizs = () => {
                     <option value="4">4번</option>
                   </Form.Select>
                 </td>
-                <td className="button-container">
+                <td className="table-cell">
+                <div className="button-container">
                   <button className="quiz-button save-button" onClick={handleUpdateQuiz}>
                     저장
                   </button>
                   <button className="quiz-button cancel-button" onClick={handleCancelEdit}>
                     취소
                   </button>
+                </div>
                 </td>
               </tr>
             ) : (

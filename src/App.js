@@ -21,6 +21,7 @@ import ProductImage from "./pages/shop/product/ProductImage";
 import ProductInfo from "./pages/shop/product/ProductInfo";
 import Products from "./pages/shop/product/Products";
 import Wishes from "./pages/shop/product/Wishes";
+import ProductPost from "./pages/shop/productPost/ProductPosts";
 import AddPurchase from "./pages/shop/purchase/AddPurchase";
 
 // 사용자 페이지
@@ -64,6 +65,7 @@ import SearchTopics from "./pages/community/topic/SearchTopics";
 
 // Admin 관련 페이지 (잘못된 경로 수정)
 import AdminMainPage from "./pages/common/AdminMainPage";
+
 
 
 
@@ -124,6 +126,7 @@ function App() {
             <Route path="/shop/products/:productId/image" element={<ProductImage />} />
             <Route path="/shop/products/cart/:userId" element={<Carts/>} />
             <Route path="/shop/products/wish/:userId" element={<Wishes />} />
+            <Route path=".shop/productPost/:productId" element={<ProductPost />} />
             <Route path="/shop/purchase" element={<AddPurchase />} />
             {/* END : shop-page */}
 

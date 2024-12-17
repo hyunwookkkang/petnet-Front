@@ -148,9 +148,30 @@ const Products = () => {
     }
   };
 
+  const handleScroll = () => {
+    const bottom = window.innerHeight + document.documentElement.scrollTop === document.documentElement.scrollHeight;
+    if (bottom && hasMore) {
+      setCurrentPage((prevPage) => {
+        const nextPage = prevPage + 1;
+        fetchProducts(nextPage);
+        return nextPage;
+      });
+
+      // 스크롤을 50px 위로 올리기
+      window.scrollBy(0, -50);
+    }
+  };
+
   useEffect(() => {
     fetchInitialData();
   }, [userId]); // userId 변경 시 데이터 재로드
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [hasMore, currentPage]);
 
   if (loading && currentPage === 0) {
     return (
@@ -206,7 +227,7 @@ const Products = () => {
               <div className="overflow-hidden" style={{ height: "200px" }}>
                 <Card.Img
                   variant="top"
-                  src={product.image || "https://via.placeholder.com/150"}
+                  src={product.images && product.images.length > 0 ? `/api/images/${product.images[0]}` : "https://via.placeholder.com/150"}
                   alt={product.productName}
                   style={{ objectFit: "cover", height: "100%" }}
                 />
