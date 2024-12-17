@@ -1,0 +1,49 @@
+/* PlaceSearch.css */
+
+/* 기본 버튼 스타일 */
+.custom-button {
+    background-color: #DCDCDC;
+    border-color: #DCDCDC;
+    color: #000;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+  }
+  
+  /* 버튼 호버 효과 */
+  .custom-button:hover {
+    background-color: #C0C0C0; /* 약간 어두운 회색으로 호버 효과 추가 */
+    border-color: #C0C0C0;
+  }
+  
+  /* 활성화된 버튼 스타일 */
+  .custom-button.active {
+    background-color: #FF6347;
+    border-color: #FF6347;
+    color: #fff;
+  }
+  
+  /* 활성화된 버튼 호버 효과 */
+  .custom-button.active:hover {
+    background-color: #FF4500; /* 약간 더 진한 색으로 호버 효과 */
+    border-color: #FF4500;
+  }
+  
+  /* 버튼 간 간격 조정 (Bootstrap의 me-2 클래스 사용) */
+  .me-2 {
+    margin-right: 0.5rem;
+  }
+  
+  /* 카드 스타일 조정 */
+  .common-card {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* 카드 내용 스타일 */
+  .common-content {
+    /* 추가적인 스타일을 여기에 정의할 수 있습니다 */
+  }
+  
+  .common-title {
+    /* 추가적인 스타일을 여기에 정의할 수 있습니다 */
+  }
+  

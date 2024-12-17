@@ -1,73 +1,63 @@
-/*******************************************************************************/
-/* Carousel Image */
-/*******************************************************************************/
 .carousel {
-  width: flex;
-  height: 400px; /* Carousel의 고정 높이 */
-  overflow: hidden; /* 내부 내용이 넘치지 않도록 설정 */
+  width: 100%;
+  height: 400px; /* Carousel의 높이 */
+  overflow: hidden; /* 넘침 숨기기 */
   position: relative;
 }
 
 .carousel-item {
-  height: 100%; /* 모든 슬라이드의 높이를 동일하게 설정 */
-  display: flex; /* Flexbox로 이미지 정렬 */
-  justify-content: center; /* 가로 중앙 정렬 */
-  align-items: center; /* 세로 중앙 정렬 */
-  position: relative; /* Carousel 안에서 위치를 명확히 설정 */
-  z-index: 1; /* 기본 z-index */
-  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-.carousel-item.active {
-  z-index: 2; /* 활성화된 슬라이드 우선 순위 */
+  height: 100%; /* 모든 슬라이드 높이를 동일하게 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .carousel-item img {
-  max-height: 100%; /* 이미지의 최대 높이를 슬라이드에 맞춤 */
+  max-height: 100%; /* 슬라이드 높이에 맞춤 */
   width: auto; /* 가로 비율 유지 */
-  object-fit: contain; /* 비율 유지하며 크기 조정 */
-  display: block;
+  object-fit: contain; /* 비율 유지 */
   margin: auto;
 }
 
-/* 화살표 컨트롤 스타일 */
+/* 화살표 항상 보이게 설정 */
 .carousel-control-prev,
 .carousel-control-next {
-  z-index: 3; /* 화살표가 항상 슬라이드 위에 표시되도록 설정 */
-  width: 5%; /* 화살표 크기 조정 */
-  opacity: 0.7; /* 화살표 투명도 */
+  display: flex !important; /* 항상 표시 */
+  align-items: center;
+  justify-content: center;
+  visibility: visible !important; /* 보이지 않더라도 강제로 표시 */
+  opacity: 1 !important; /* 항상 불투명 */
+  z-index: 10; /* 다른 요소보다 위에 표시 */
 }
 
 .carousel-control-prev:hover,
 .carousel-control-next:hover {
-  opacity: 1; /* 화살표 hover 효과 */
+  opacity: 1; /* 호버 시 투명도 변화 없음 */
 }
 
-/* 도트(슬라이드 인디케이터) 스타일 */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.5); /* 버튼 배경색 추가 */
+  border-radius: 50%; /* 원형 버튼 */
+  padding: 10px;
+}
+
+/* 도트 인디케이터 스타일 */
 .carousel-indicators {
   position: absolute;
-  bottom: 15px; /* 도트 위치: 슬라이드 아래쪽 */
-  left: 50%; /* 중앙 정렬 */
+  bottom: 15px;
+  left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  z-index: 4; /* 도트가 항상 화살표와 슬라이드 위에 표시되도록 설정 */
 }
 
 .carousel-indicators li {
   width: 12px;
   height: 12px;
-  margin: 0 5px; /* 도트 간격 */
-  background-color: rgba(0, 0, 0, 0.5); /* 기본 도트 색상 */
-  border-radius: 50%; /* 도트를 원형으로 설정 */
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  margin: 0 5px;
 }
 
 .carousel-indicators .active {
-  background-color: white; /* 활성화된 도트 색상 */
+  background-color: white;
 }
-
-  

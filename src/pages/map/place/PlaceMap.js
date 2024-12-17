@@ -2,10 +2,9 @@ import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Container, ButtonGroup, Button } from "react-bootstrap";
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography, CardMedia } from "@mui/material";
 import "../../../styles/common/Font.css";
 import "../../../styles/common/Card.css";
-
 
 const PlaceMap = ({ dbFcltyNm }) => {
   const [places, setPlaces] = useState([]);
@@ -14,20 +13,26 @@ const PlaceMap = ({ dbFcltyNm }) => {
   const [map, setMap] = useState(null);
   const [category, setCategory] = useState("전체");
   const [userLocation, setUserLocation] = useState({ lat: null, lng: null });
-  const [googleApiKey, setGoogleApiKey] = useState("");
   const [photoReferences, setPhotoReferences] = useState({});
+  const [googleApiKey, setGoogleApiKey] = useState("");
 
+  // Fetch Google Maps API Key
   useEffect(() => {
-    fetch("/api/google/maps/key")
-      .then((response) => response.text())
-      .then((key) => {
-        setGoogleApiKey(key);
-        console.log("Google API Key fetched:", key);
-      })
-      .catch((error) => console.error("Error fetching Google Maps API Key:", error));
+    const fetchApiKey = async () => {
+      try {
+        const response = await fetch("/api/google/maps/key");
+        const apiKey = await response.text();
+        setGoogleApiKey(apiKey);
+        console.log("Google API Key fetched:", apiKey);
+      } catch (error) {
+        console.error("Error fetching Google API Key:", error);
+      }
+    };
+
+    fetchApiKey();
   }, []);
 
-  // 사용자 위치 정보 가져오기
+  // Fetch user location
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -41,32 +46,47 @@ const PlaceMap = ({ dbFcltyNm }) => {
     }
   }, []);
 
-  // Google Maps 초기화
   useEffect(() => {
     if (!googleApiKey || !userLocation.lat || !userLocation.lng) return;
-    const initMap = () => {
-      const googleMap = new window.google.maps.Map(
-        document.getElementById("google-map"),
-        { center: { lat: userLocation.lat, lng: userLocation.lng }, zoom: 12 }
-      );
-      console.log("Google Map initialized at:", userLocation);
-      setMap(googleMap);
-    };
-
-    if (!window.google || !window.google.maps) {
+  
+    const scriptId = "google-maps-script";
+    
+    // Google Maps 스크립트 로드 함수
+    const loadGoogleMapsScript = () => {
+      if (document.getElementById(scriptId)) {
+        // 스크립트가 이미 로드된 경우
+        window.initMap && window.initMap();
+        return;
+      }
+  
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${googleApiKey}`;
+      script.id = scriptId;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${googleApiKey}&callback=initMap`;
       script.async = true;
       script.defer = true;
-      script.onload = initMap;
+  
+      // 전역 함수 등록
+      window.initMap = () => {
+        const googleMap = new window.google.maps.Map(
+          document.getElementById("google-map"),
+          {
+            center: { lat: userLocation.lat, lng: userLocation.lng },
+            zoom: 12,
+          }
+        );
+        setMap(googleMap);
+        console.log("Google Map initialized.");
+      };
+  
       document.body.appendChild(script);
-    } else {
-      initMap();
-    }
+    };
+  
+    loadGoogleMapsScript();
   }, [googleApiKey, userLocation]);
+  
 
+  // Fetch places from the server
   const fetchPlaces = (offset = 0) => {
-    if (!googleApiKey) return;
     if (!userLocation.lat || !userLocation.lng) return;
 
     const categoryParam = category === "전체" ? "" : category;
@@ -78,80 +98,123 @@ const PlaceMap = ({ dbFcltyNm }) => {
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        console.log("Places fetched:", data);
         if (data.length === 0) {
           setHasMore(false);
         } else {
-          // DB에서 받은 places
-          setPlaces((prevPlaces) => {
-            const merged = [...prevPlaces, ...data];
-            console.log("All places after adding new batch:", merged);
-            return merged;
-          });
-          setFilteredPlaces((prevPlaces) => {
-            const merged = [...prevPlaces, ...data];
-            console.log("Filtered places after adding new batch:", merged);
-            return merged;
-          });
+          setPlaces((prevPlaces) => [...prevPlaces, ...data]);
+          setFilteredPlaces((prevPlaces) => [...prevPlaces, ...data]);
 
-          // 각 장소 별 photo_reference 조회
+          // Fetch photo references for each place
           data.forEach((place) => {
-            const fcltyNmEncoded = encodeURIComponent(place.fcltyNm);
-            const photoRefUrl = `/api/google/place/photo-reference?fcltyNm=${fcltyNmEncoded}`;
-            fetch(photoRefUrl)
-              .then(res => res.text())
-              .then(ref => {
-                const photoRef = (ref && ref !== "null") ? ref : null;
-                setPhotoReferences(prev => ({ ...prev, [place.placeId]: photoRef }));
-              })
-              .catch(err => console.error("Error fetching photo reference:", err));
+            fetchPhotoReference(place);
           });
         }
       })
       .catch((error) => console.error("Error fetching places:", error));
   };
 
-  // userLocation, category, googleApiKey 변경 시 places 재조회
+  const fetchPhotoReference = async (place) => {
+    const { lcLa, lcLo, fcltyNm } = place;
+
+    if (!lcLa || !lcLo || !fcltyNm) {
+      console.error("Missing data to fetch photo reference:", place);
+      return;
+    }
+
+    try {
+      const nearbySearchUrl = `/api/proxy/place/nearbysearch?latitude=${lcLa}&longitude=${lcLo}&radius=500&keyword=${encodeURIComponent(fcltyNm)}`;
+      console.log("Request URL:", nearbySearchUrl);
+
+      const response = await fetch(nearbySearchUrl);
+      const data = await response.json();
+
+      if (data.status === "OK" && data.results.length > 0) {
+        const firstPlaceId = data.results[0].place_id;
+
+        // Fetch place details to get photo reference
+        const detailsUrl = `/api/proxy/place/details?placeId=${firstPlaceId}`;
+        console.log("Details URL:", detailsUrl);
+
+        const detailsResponse = await fetch(detailsUrl);
+        const detailsData = await detailsResponse.json();
+
+        if (detailsData.result && detailsData.result.photos && detailsData.result.photos.length > 0) {
+          const firstPhotoReference = detailsData.result.photos[0].photo_reference;
+          setPhotoReferences((prev) => ({
+            ...prev,
+            [place.placeId]: firstPhotoReference,
+          }));
+          console.log("Photo Reference fetched:", firstPhotoReference);
+        } else {
+          console.error("No photos found for the given Place ID.");
+        }
+      } else {
+        console.error("No place found for:", fcltyNm);
+      }
+    } catch (error) {
+      console.error("Error fetching photo reference:", error);
+    }
+  };
+
+  // Reload places when user location or category changes
   useEffect(() => {
-    console.log("Attempting to fetch places due to changes:", userLocation, category, googleApiKey);
-    if (userLocation.lat && userLocation.lng && googleApiKey) {
+    if (userLocation.lat && userLocation.lng) {
       setPlaces([]);
       setFilteredPlaces([]);
       setHasMore(true);
       setPhotoReferences({});
       fetchPlaces(0);
     }
-  }, [userLocation, category, googleApiKey]);
+  }, [userLocation, category]);
 
-  const handleFilter = (category) => {
-    console.log("Filtering by category:", category);
-    setCategory(category);
+  // Handle category filter
+  const handleFilter = (selectedCategory) => {
+    setCategory(selectedCategory);
     setPlaces([]);
     setFilteredPlaces([]);
     setHasMore(true);
-    setPhotoReferences({});
   };
 
-  // filteredPlaces 변경 시 지도에 마커 표시
+  // Update markers on the map
   useEffect(() => {
     if (!map || !filteredPlaces.length) return;
-    console.log("Updating markers on the map with filteredPlaces:", filteredPlaces);
-
+  
     filteredPlaces.forEach((place) => {
       if (place.lcLa && place.lcLo) {
+        // 카테고리에 따라 마커 아이콘 설정
+        let markerIcon = "";
+        if (place.ctgryThreeNm  === "카페") {
+          markerIcon = "/assets/map/caffe.png";
+        } else if (place.ctgryThreeNm  === "식당") {
+          markerIcon = "/assets/map/food.png";
+        } else if (place.ctgryThreeNm  === "여행지") {
+          markerIcon ="/assets/map/travel.png";
+        } else {
+          markerIcon = ""; // 기본 마커를 사용
+        }
+
+        console.log("Custom Marker Icon:", markerIcon);
+        console.log("Place Object:", place);
+        console.log("Place Category:", place.ctgryThreeNm )
+  
+        // 마커 생성
         const marker = new window.google.maps.Marker({
           position: { lat: place.lcLa, lng: place.lcLo },
           map,
+          icon: markerIcon, // 커스텀 아이콘 설정
         });
-
+  
+        // 인포 윈도우 설정
         const infoWindow = new window.google.maps.InfoWindow({
           content: `<div><strong>${place.fcltyNm}</strong><p>${place.operTime || ""}</p></div>`,
         });
-
+  
+        // 마커 클릭 이벤트
         marker.addListener("click", () => infoWindow.open(map, marker));
       }
     });
   }, [filteredPlaces, map]);
+  
 
   return (
     <Container>
@@ -170,10 +233,7 @@ const PlaceMap = ({ dbFcltyNm }) => {
         </Button>
       </ButtonGroup>
 
-      <div
-        id="google-map"
-        style={{ width: "100%", height: "400px", marginBottom: "20px" }}
-      />
+      <div id="google-map" style={{ width: "100%", height: "400px", marginBottom: "20px" }} />
 
       <InfiniteScroll
         dataLength={filteredPlaces.length}
@@ -184,18 +244,21 @@ const PlaceMap = ({ dbFcltyNm }) => {
       >
         <Container>
           {filteredPlaces.map((place, index) => {
-            const photoRef = photoReferences[place.placeId];
-            const imageSrc = photoRef
-              ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoRef}&key=${googleApiKey}&nocache=${new Date().getTime()}`
+            const photoReference = photoReferences[place.placeId];
+            const imageSrc = photoReference
+              ? `/api/proxy/place/photo?photoReference=${photoReference}`
               : "https://via.placeholder.com/151";
 
             return (
               <Link
-                to={`/place/${place.placeId}`}
+                to={{
+                  pathname: `/place/${place.placeId}`,
+                  state: { photoReferences: photoReferences[place.placeId] || [] },
+                }}
                 key={index}
                 style={{ textDecoration: "none" }}
               >
-                <Card key={index} sx={{ display: "flex", mb: 3 }} className="common-card">
+                <Card sx={{ display: "flex", mb: 3 }} className="common-card">
                   <CardMedia
                     component="img"
                     sx={{ width: 151 }}
@@ -204,13 +267,13 @@ const PlaceMap = ({ dbFcltyNm }) => {
                   />
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <CardContent>
-                      <Typography component="div" variant="h5"  className="common-content common-title">
+                      <Typography component="div" variant="h5" className="common-content common-title">
                         <h3>{place.fcltyNm}</h3>
                       </Typography>
                       <Typography variant="subtitle1" color="text.secondary" className="common-content common-title">
                         운영시간: {place.operTime}
                       </Typography>
-                      <Typography variant="subtitle1" color="text.secondary"  className="common-content common-title">
+                      <Typography variant="subtitle1" color="text.secondary" className="common-content common-title">
                         거리: ~{(place.distance || 0).toFixed(1)}km
                       </Typography>
                     </CardContent>

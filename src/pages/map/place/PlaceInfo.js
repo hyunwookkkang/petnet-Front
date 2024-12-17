@@ -7,6 +7,8 @@ import axios from "axios";
 import PlacePosts from "../placePost/PlacePosts";
 import "../../../styles/Main.css";
 import { showErrorToast, showSuccessToast } from "../../../components/common/alert/CommonToast";
+import PlaceImage from './PlaceImage';
+import PlaceImageFetcher from "./PlaceImageFetcher";
 
 const PlaceInfo = () => {
   const { placeId } = useParams(); // URL에서 placeId 추출
@@ -15,6 +17,7 @@ const PlaceInfo = () => {
   const [showModal, setShowModal] = useState(false); // 모달 상태
   const [isLiked, setIsLiked] = useState(false);
   const [favoriteId, setFavoriteId] = useState(null); // 현재 장소의 favoriteId 상태
+  const [photoReferences, setPhotoReferences] = useState([]);
 
   // 장소 정보와 좋아요 상태 초기화
   useEffect(() => {
@@ -129,11 +132,19 @@ const PlaceInfo = () => {
                   />
                 )}
               </div>
+              <div>
+                {/* PlaceImageFetcher 호출: photoReferences를 업데이트
+                <PlaceImageFetcher place={place} onPhotoReferencesFetched={setPhotoReferences} /> */}
+
+              {/* PlaceImage 호출: photoReferences를 전달 */}
+              <PlaceImage place={place} />
+              </div>
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
+      <div className="button-group"> 
       <Button className="button-click">
         <div>
           내부입장 <br />
@@ -158,6 +169,7 @@ const PlaceInfo = () => {
           {place.parkngPosblAt}
         </div>
       </Button>
+      </div>
 
       {/* 탭 구성 */}
       <Tabs
@@ -175,43 +187,40 @@ const PlaceInfo = () => {
           }
         >
           <div className="place-detail-tabs">
-            <p>장소 정보: {place.ctgryThreeNm}</p>
+            <h4>시설명: {place.fcltyNm}</h4>
             <p>
-              <strong>운영시간:</strong>
+              <strong>🏪 장소 정보: </strong>
+              {place.ctgryThreeNm}
+            </p>
+            <p>
+              <strong>🕒 운영시간:</strong>
               {place.operTime}
             </p>
             <p>
-              <strong>전화번호:</strong> {place.telNo}
+              <strong>📞 전화번호:</strong> {place.telNo}
             </p>
+            
             <p>
-              <strong>반려동물 제한:</strong> {place.petLmttMtrCn || "없음"}
-            </p>
-            <p>
-              <strong>주차 가능:</strong>{" "}
+              <strong>🅿️ 주차 가능:</strong>{" "}
               {place.parkngPosblAt === "Y" ? "가능" : "불가능"}
             </p>
             <p>
-              <strong>시설명: </strong>
-              {place.fcltyNm}
-            </p>
-            <p>
-              <strong>도로명주소: </strong>
+              <strong>🗺️ 도로명주소: </strong>
               {place.rdnmadrNm}
             </p>
             <p>
-              <strong>운영시간: </strong>
-              {place.operTime}
-            </p>
-            <p>
-              <strong>휴무일안내: </strong>
+              <strong>📆 휴무일안내: </strong>
               {place.rstdeGuidCn}
             </p>
             <p>
-              <strong>반려동물 제한 사항: </strong>
+              <strong>🐶 반려동물 제한:</strong> {place.petLmttMtrCn || "없음"}
+            </p>
+            <p>
+              <strong>🐈 반려동물 제한 몸무게: </strong>
               {place.entrnPosblPetSizeValue}
             </p>
             <p>
-              <strong>홈페이지: </strong>
+              <strong>🖥️ 홈페이지: </strong>
               {place.hmpgUrl}
             </p>
           </div>
@@ -241,9 +250,9 @@ const PlaceInfo = () => {
         >
           <div>
             <h4>추가정보</h4>
-            <p>분류: {place.fcltyInfoDc}</p>
-            <p>기타사항: {place.petLmttMtrCn}</p>
-            <p>이용가격: {place.petAcptAditChrgeValue}</p>
+            <p>🏪 분류: {place.fcltyInfoDc}</p>
+            <p>⁉️ 기타사항: {place.petLmttMtrCn}</p>
+            <p>💸 이용가격: {place.petAcptAditChrgeValue}</p>
           </div>
         </Tab>
       </Tabs>

@@ -43,7 +43,8 @@ const EditTopicInfo = () => {
   const [tagSuggestions, setTagSuggestions] = useState([]); // 해시태그 자동완성
   const [required, setRequired] = useState('');
 
-  // 페이지 초기화
+  
+  // 폼 초기화
   useEffect(() => {
     if (topic) {
       setTitle(topic.title);

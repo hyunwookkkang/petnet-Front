@@ -11,7 +11,7 @@ import "../../../styles/Main.css"; // 기존 스타일 재사용
 import "../../../styles/community/TopicInfo.css";
 import '../../../styles/community/quill.snow.css'; // quill editor font size
 import TopicDeleteModal from "../../../components/community/topic/TopicDeleteModal";
-import ViewTopicComments from "../../../components/community/topic/ViewTopicComments";
+import ViewTopicComments from "../../../components/community/comment/ViewTopicComments";
 
 const GetTopicInfo = () => {
   
@@ -128,15 +128,8 @@ const GetTopicInfo = () => {
       </div>
 
       {/* 댓글 */}
-      <div className="post-comments-bar">
-        <span className="comment-count">댓글 ({topic.commentCount})</span>
-        <button className="view-comments-button" /*onClick={onToggleComments}*/>
-          댓글 보기
-        </button>
-      </div>
-
       <div>
-        <ViewTopicComments topicId={topicId}/>
+        <ViewTopicComments topic={topic} commentCount={topic.commentCount}/>
       </div>
 
 

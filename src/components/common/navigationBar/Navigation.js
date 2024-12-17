@@ -11,6 +11,7 @@ import HomeIcon from '@mui/icons-material/Home';  // home
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';  //commu
 import MapIcon from '@mui/icons-material/Map';  //map
 import StorefrontIcon from '@mui/icons-material/Storefront';  //store
+import LocalMallIcon from '@mui/icons-material/LocalMall';
 import PersonIcon from '@mui/icons-material/Person'; //MY
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';  //admin
 
@@ -71,7 +72,7 @@ function Navigation() {
           className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
         >
           <div style={{ textAlign: "center" }}>
-              <StorefrontIcon style={{ fontSize: "24px" }} /> 
+              <LocalMallIcon style={{ fontSize: "24px" }} /> 
               <div style={{ fontSize: "12px", marginTop: "4px" }}>
                 상점
               </div>

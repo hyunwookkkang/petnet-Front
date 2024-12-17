@@ -132,3 +132,16 @@
     width: 100%; /* 부모 컨테이너에 맞게 버튼 너비가 100% */
     box-sizing: border-box; /* padding과 border를 포함한 전체 크기 계산 */
 }
+
+.my-icon-container {
+    margin: 10px; /* 각 아이콘 간격 조정 */
+    text-align: center; /* 텍스트 가운데 정렬 */
+  }
+  
+  .my-icon-text {
+    font-size: 18px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0; /* 기본 마진 제거 */
+  }
