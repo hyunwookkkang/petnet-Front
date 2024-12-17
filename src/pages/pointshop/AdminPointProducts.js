@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
+import "../../styles/pointshop/point.css";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import InfoIcon from '@mui/icons-material/Info';
+import ChangeCircleSharpIcon from '@mui/icons-material/ChangeCircleSharp';
 import axios from 'axios';
 import CommonModal from '../../components/common/modal/CommonModal';
-import { showSuccessToast, showErrorToast } from '../../components/common/alert/CommonToast';
-import '../../styles/pointshop/AdminPointProducts.css'; // CSS 파일 import
+import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
 
 const formatLocalDate = (dateStr) => {
   const date = new Date(dateStr);
@@ -23,23 +24,23 @@ const PointShopAdminPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('/api/pointshop/pointProducts/Admin');
-        const formattedData = response.data.map((product) => ({
-          ...product,
-          productAddDate: formatLocalDate(product.productAddDate),
-        }));
-        setProducts(formattedData);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('/api/pointshop/pointProducts/Admin');
+      const formattedData = response.data.map((product) => ({
+        ...product,
+        productAddDate: formatLocalDate(product.productAddDate),
+      }));
+      setProducts(formattedData);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleDelete = async () => {
     if (!selectedProduct) return;
@@ -55,6 +56,17 @@ const PointShopAdminPage = () => {
       showErrorToast('서버 오류가 발생했습니다. 다시 시도해 주세요.');
     } finally {
       setShowDeleteModal(false);
+    }
+  };
+
+  const handleToggleStock = async (productId) => {
+    try {
+      await axios.patch(`/api/pointshop/pointProducts/Admin/${productId}`);
+      showSuccessToast('상품 상태가 성공적으로 변경되었습니다.');
+      fetchProducts(); // 상태 업데이트를 위해 데이터 다시 불러오기
+    } catch (error) {
+      console.error('Error toggling product stock:', error);
+      showErrorToast('상품 상태 변경에 실패했습니다.');
     }
   };
 
@@ -90,6 +102,22 @@ const PointShopAdminPage = () => {
         </IconButton>
       ),
     },
+    {
+      field: 'Toggle',
+      headerName: '상태 변경',
+      width: 120,
+      renderCell: (params) => (
+        <IconButton
+          onClick={() => handleToggleStock(params.row.productId)}
+          aria-label="toggle"
+          style={{
+            color: params.row.productStock === 1 ? '#4caf50' : '#f44336', // 초록색(1) / 빨간색(0)
+          }}
+        >
+          <ChangeCircleSharpIcon />
+        </IconButton>
+      ),
+    },
     { field: 'productId', headerName: '상품ID', width: 100 },
     {
       field: 'productName',
@@ -114,10 +142,7 @@ const PointShopAdminPage = () => {
     <div className="admin-container">
       <h1 className="admin-title">포인트 상품 관리</h1>
       <div className="header-actions">
-        <button
-          onClick={() => navigate('AdminAddPointProduct')}
-          className="add-button"
-        >
+        <button onClick={() => navigate('AdminAddPointProduct')} className="add-button">
           포인트 상품 추가
         </button>
       </div>
