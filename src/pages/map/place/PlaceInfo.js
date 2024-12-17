@@ -8,138 +8,144 @@ import PlacePosts from "../placePost/PlacePosts";
 import "../../../styles/Main.css";
 import { showErrorToast, showSuccessToast } from "../../../components/common/alert/CommonToast";
 import PlaceImage from './PlaceImage';
-import PlaceImageFetcher from "./PlaceImageFetcher";
+import { Heart, HeartFill } from "react-bootstrap-icons";
 
 const PlaceInfo = () => {
-  const { placeId } = useParams(); // URL에서 placeId 추출
-  const [place, setPlace] = useState(null); // 장소 정보 상태
-  const [activeTab, setActiveTab] = useState("info"); // 탭 상태
-  const [showModal, setShowModal] = useState(false); // 모달 상태
+  const { placeId } = useParams();
+  const [place, setPlace] = useState(null);
+  const [activeTab, setActiveTab] = useState("info");
+  const [showModal, setShowModal] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [favoriteId, setFavoriteId] = useState(null); // 현재 장소의 favoriteId 상태
-  const [photoReferences, setPhotoReferences] = useState([]);
+  const [favoriteId, setFavoriteId] = useState(null);
 
-  // 장소 정보와 좋아요 상태 초기화
+  // **1. 장소 정보 및 좋아요 상태 초기화**
+ // **1. 좋아요 상태 및 장소 정보 초기화**
   useEffect(() => {
-    // 장소 정보 가져오기
-    const fetchPlaceInfo = async () => {
-      try {
-        const response = await axios.get(`/api/map/places/${placeId}`);
-        setPlace(response.data);
-      } catch (error) {
-        console.error("Error fetching place detail:", error);
-      }
-    };
-
-    // 좋아요 상태 가져오기
-    const fetchFavoriteId = async () => {
-      try {
-        const response = await axios.get(`/api/map/favorites/getFavoriteId`, {
-          params: { placeId },
-        });
-        const fetchedFavoriteId = response.data;
-        if (fetchedFavoriteId) {
-          setFavoriteId(fetchedFavoriteId);
-          setIsLiked(true);
-        } else {
-          setFavoriteId(null);
-          setIsLiked(false);
-        }
-      } catch (error) {
-        console.error("Error checking like status:", error);
-      }
-    };
-
-    fetchPlaceInfo();
-    fetchFavoriteId();
-  }, [placeId]);
-
-  // 선택한 즐겨찾기에 항목(placeId) 추가
-  const handleAddToFavorite = async (favoriteId) => {
-    if (isLiked) {
-      showErrorToast("이미 즐겨찾기에 추가된 항목입니다.");
-      return; // 중복 요청 방지
-    }
+  const fetchData = async () => {
     try {
-      await axios.post(
-        `/api/map/favorites/item/${placeId}`,
-        null,
-        {
-          params: { favoriteId },
-          withCredentials: true,
-        }
-      );
-      showSuccessToast("항목이 즐겨찾기에 추가되었습니다!");
-      setIsLiked(true); // 좋아요 상태 업데이트
-      setFavoriteId(favoriteId); // favoriteId 저장
-      setShowModal(false); // 모달 닫기
-    } catch (error) {
-      console.error("Error adding item to favorite:", error);
-      showErrorToast("항목 추가 중 오류가 발생했습니다.");
-    }
-  };
+      // 장소 정보 가져오기
+      const placeResponse = await axios.get(`/api/map/places/${placeId}`);
+      setPlace(placeResponse.data);
 
-  // 즐겨찾기 삭제
-  const handleRemoveFromFavorite = async () => {
-    if (!isLiked) {
-      showErrorToast("즐겨찾기에 없는 항목입니다.");
-      return; // 중복 요청 방지
-    }
-    try {
-      await axios.delete(`/api/map/favorites/item/${placeId}`, {
-        params: { favoriteId },
+      // 좋아요 상태 가져오기
+      const favoriteResponse = await axios.get(`/api/map/favorites/getFavoriteId`, {
+        params: { placeId },
         withCredentials: true,
+        headers: { "Cache-Control": "no-cache" }, // 캐시 무효화
       });
-      showSuccessToast("항목이 즐겨찾기에서 제거되었습니다!");
-      setIsLiked(false); // 좋아요 상태 업데이트
-      setFavoriteId(null); // favoriteId 초기화
+
+      const fetchedFavoriteId = favoriteResponse.data;
+
+      if (fetchedFavoriteId) {
+        setFavoriteId(fetchedFavoriteId); // favoriteId 상태 설정
+        setIsLiked(true); // 좋아요 상태 유지
+      } else {
+        setFavoriteId(null); // 초기화
+        setIsLiked(false); // 좋아요 상태 false
+      }
     } catch (error) {
-      console.error("Error removing item from favorite:", error);
-      showErrorToast("항목 제거 중 오류가 발생했습니다.");
+      console.error("Error fetching data:", error);
+      showErrorToast("데이터를 불러오는 중 오류가 발생했습니다.");
     }
   };
 
-  if (!place) {
-    return <div>Loading...</div>;
+  fetchData();
+}, [placeId]);
+
+// **2. 즐겨찾기 추가 함수**
+const handleAddToFavorite = async (selectedFavoriteId) => {
+  try {
+    await axios.post(`/api/map/favorites/item/${placeId}`, null, {
+      params: { favoriteId: selectedFavoriteId },
+      withCredentials: true,
+    });
+
+    showSuccessToast("항목이 즐겨찾기에 추가되었습니다!");
+
+    // 최신 상태를 유지하기 위해 서버에서 다시 조회
+    const favoriteResponse = await axios.get(`/api/map/favorites/getFavoriteId`, {
+      params: { placeId },
+      withCredentials: true,
+    });
+
+    const updatedFavoriteId = favoriteResponse.data;
+    setFavoriteId(updatedFavoriteId); // 최신 favoriteId 설정
+    setIsLiked(true); // 좋아요 상태 true
+    setShowModal(false); // 모달 닫기
+  } catch (error) {
+    console.error("Error adding favorite:", error);
+    showErrorToast("항목 추가 중 오류가 발생했습니다.");
   }
+};
+
+// **3. 즐겨찾기 삭제 함수**
+const handleRemoveFromFavorite = async () => {
+  if (!favoriteId) {
+    showErrorToast("즐겨찾기에 추가된 항목이 없습니다.");
+    return;
+  }
+
+  try {
+    await axios.delete(`/api/map/favorites/item/${placeId}`, {
+      params: { favoriteId }, // 명확한 파라미터 전달
+      withCredentials: true,
+    });
+
+    showSuccessToast("항목이 즐겨찾기에서 제거되었습니다!");
+    setFavoriteId(null); // favoriteId 초기화
+    setIsLiked(false); // 좋아요 상태 false
+  } catch (error) {
+    console.error("Error removing favorite:", error);
+    showErrorToast("항목 제거 중 오류가 발생했습니다.");
+  }
+};
+
+if (!place) return <div>Loading...</div>;
 
   return (
     <Container>
       <Row className="mb-4">
         <Col>
-          <Card className="place-button-box">
-            <Card.Body style={{ padding: "3px" }}>
-              <div className="like-button-container">
-                {/* 좋아요 버튼 */}
-                <LikeButton
-                  onClick={() => {
-                    if (isLiked) {
-                      handleRemoveFromFavorite(); // 좋아요 상태일 때 제거
-                    } else {
-                      setShowModal(true); // 좋아요 상태가 아닐 때 모달 열기
-                    }
-                  }}
-                  liked={isLiked} // LikeButton 컴포넌트에 좋아요 상태 전달
-                />
-
-                {/* 즐겨찾기 모달 */}
-                {isLiked ? null : (
-                  <AddFavoriteItemModal
-                    show={showModal}
-                    onClose={() => setShowModal(false)}
-                    placeId={placeId} // placeId 전달
-                    onAddItem={handleAddToFavorite} // 항목 추가 함수 전달
-                  />
-                )}
-              </div>
-              <div>
-                {/* PlaceImageFetcher 호출: photoReferences를 업데이트
-                <PlaceImageFetcher place={place} onPhotoReferencesFetched={setPhotoReferences} /> */}
-
-              {/* PlaceImage 호출: photoReferences를 전달 */}
+          <Card>
+            <Card.Body>
+            <Button
+                variant="link"
+                className="text-danger fs-3 p-0 float-end me-3"
+                onClick={() => {
+                  if (isLiked) {
+                    handleRemoveFromFavorite();
+                  } else {
+                    setShowModal(true);
+                  }
+                }}
+              >
+                {isLiked ? <HeartFill /> : <Heart />}
+              </Button>
+              <AddFavoriteItemModal
+                show={showModal}
+                onClose={() => setShowModal(false)}
+                placeId={placeId}
+                onAddItem={handleAddToFavorite}
+                onItemAdded={(newFavoriteId) => {
+                  console.log("Item added with favoriteId:", newFavoriteId);
+                  setFavoriteId(newFavoriteId); // 상태 업데이트
+                  setIsLiked(true); // 좋아요 상태 true
+                }}
+              />
               <PlaceImage place={place} />
-              </div>
+              
             </Card.Body>
+            <div
+              style={{
+                fontSize: '50px',
+                marginLeft: '20px'
+              }}
+            >
+              {place.fcltyNm}
+            </div>
+            <div>
+              
+            </div>
           </Card>
         </Col>
       </Row>

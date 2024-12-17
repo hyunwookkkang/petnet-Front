@@ -11,6 +11,16 @@
   z-index: 1000;
 }
 
+/*모달창 가운데정렬렬*/
+.modal-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto; /* 좌우 가운데 정렬 */
+  min-height: 100vh; /* 화면 높이 전체 사용 */
+  padding: 1rem; /* 여백 추가 */
+}
+
 .modal-content {
   width: 90%;
   max-width: 600px;
@@ -19,7 +29,11 @@
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   animation: fadeIn 0.3s ease-in-out;
+
+  display: flex;
+  justify-content: center;
 }
+
 
 .modal-header {
   display: flex;

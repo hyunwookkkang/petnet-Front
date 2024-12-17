@@ -27,8 +27,8 @@ function Main() {
   };
 
   const images = [
-    '/assets/common/santa-cat1.png', // 첫 번째 이미지
-    '/assets/common/santa-cat2.png'  // 두 번째 이미지
+    '/assets/common/cat1.png', // 첫 번째 이미지
+    '/assets/common/cat2.png'  // 두 번째 이미지
   ];
 
   useEffect(() => {

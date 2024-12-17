@@ -4,19 +4,16 @@ import { useUser } from "../../contexts/UserContext";
 import { Button } from "react-bootstrap";
 import "../../../styles/Navigation.css";
 import "../../../styles/common/Button.css";
-import CommonModal from "../modal/CommonModal";
+import LoginModal from "../modal/LoginModal";
 
-//NavBarIcons
-import HomeIcon from '@mui/icons-material/Home';  // home
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';  //commu
-import MapIcon from '@mui/icons-material/Map';  //map
-import StorefrontIcon from '@mui/icons-material/Storefront';  //store
-import LocalMallIcon from '@mui/icons-material/LocalMall';
-import PersonIcon from '@mui/icons-material/Person'; //MY
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';  //admin
-
-
-
+// NavBarIcons
+import HomeIcon from "@mui/icons-material/Home"; // home
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary"; // commu
+import MapIcon from "@mui/icons-material/Map"; // map
+import StorefrontIcon from "@mui/icons-material/Storefront"; // store
+import LocalMallIcon from "@mui/icons-material/LocalMall";
+import PersonIcon from "@mui/icons-material/Person"; // MY
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings"; // admin
 
 function Navigation() {
   const { userId, userRole } = useUser(); // userId와 userRole 가져오기
@@ -39,10 +36,8 @@ function Navigation() {
           className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
         >
           <div style={{ textAlign: "center" }}>
-              <HomeIcon style={{ fontSize: "24px" }} /> 
-              <div style={{ fontSize: "12px", marginTop: "4px" }}>
-                홈
-              </div> 
+            <HomeIcon style={{ fontSize: "24px" }} />
+            <div style={{ fontSize: "12px", marginTop: "4px" }}>홈</div>
           </div>
         </NavLink>
         <NavLink
@@ -50,32 +45,26 @@ function Navigation() {
           className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
         >
           <div style={{ textAlign: "center" }}>
-              <LocalLibraryIcon style={{ fontSize: "24px" }} /> 
-              <div style={{ fontSize: "12px", marginTop: "4px" }}>
-                커뮤니티
-              </div> 
-            </div>
+            <LocalLibraryIcon style={{ fontSize: "24px" }} />
+            <div style={{ fontSize: "12px", marginTop: "4px" }}>커뮤니티</div>
+          </div>
         </NavLink>
         <NavLink
           to="/map-main"
           className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
         >
           <div style={{ textAlign: "center" }}>
-              <MapIcon style={{ fontSize: "24px" }} /> 
-              <div style={{ fontSize: "12px", marginTop: "4px" }}>
-                지도
-              </div>
-            </div>
+            <MapIcon style={{ fontSize: "24px" }} />
+            <div style={{ fontSize: "12px", marginTop: "4px" }}>지도</div>
+          </div>
         </NavLink>
         <NavLink
           to="/shop/products"
           className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
         >
           <div style={{ textAlign: "center" }}>
-              <LocalMallIcon style={{ fontSize: "24px" }} /> 
-              <div style={{ fontSize: "12px", marginTop: "4px" }}>
-                상점
-              </div>
+            <LocalMallIcon style={{ fontSize: "24px" }} />
+            <div style={{ fontSize: "12px", marginTop: "4px" }}>상점</div>
           </div>
         </NavLink>
 
@@ -86,10 +75,8 @@ function Navigation() {
             style={{ cursor: "pointer" }}
           >
             <div style={{ textAlign: "center" }}>
-              <PersonIcon style={{ fontSize: "24px" }} /> 
-              <div style={{ fontSize: "12px", marginTop: "4px" }}>
-                MY
-              </div> 
+              <PersonIcon style={{ fontSize: "24px" }} />
+              <div style={{ fontSize: "12px", marginTop: "4px" }}>MY</div>
             </div>
           </span>
         ) : userRole === "0" || userRole === "1" ? (
@@ -98,34 +85,16 @@ function Navigation() {
             className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
           >
             <div style={{ textAlign: "center" }}>
-              <AdminPanelSettingsIcon style={{ fontSize: "24px" }} /> 
-              <div style={{ fontSize: "12px", marginTop: "4px" }}>
-                관리자
-              </div> 
+              <AdminPanelSettingsIcon style={{ fontSize: "24px" }} />
+              <div style={{ fontSize: "12px", marginTop: "4px" }}>관리자</div>
             </div>
           </NavLink>
         ) : null}
       </nav>
 
-      <CommonModal
-        show = {showAlert} 
-        onHide = {() => setShowAlert(false)}
-        title = "로그인 필요"
-        body = {<div>
-                로그인이 필요한 서비스입니다.<br/> 로그인 화면으로 이동합니다.
-              </div>}
-        footer = {
-          <Button
-            className="modal-button"
-            style={{backgroundColor: "#feb98e", border: "none"}}
-            onClick={() => {
-              setShowAlert(false);
-              navigate("/login");
-            }}
-          >
-            확인
-          </Button>
-        }
+      <LoginModal
+        showModal={showAlert}
+        setShowModal={setShowAlert}
       />
     </>
   );

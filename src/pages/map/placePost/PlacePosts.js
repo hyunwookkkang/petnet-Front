@@ -5,6 +5,8 @@ import PostModal from "./PostModal";
 import PostItem from "./PostItem";
 import "../../../styles/place/PlacePosts.css";
 import { useNavigate } from "react-router-dom";
+import LoginModal from "../../../components/common/modal/LoginModal";
+import DatePicker from "react-datepicker";
 
 const PlacePosts = ({ placeId }) => {
   const { userId, nickname } = useUser(); // 사용자 ID 및 닉네임 가져오기
@@ -19,7 +21,8 @@ const PlacePosts = ({ placeId }) => {
     images: [], // 이미지 URL 목록
   }); // 새 리뷰
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
-  const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지
+  const [showLoginModal, setShowLoginModal] = useState(false); // 로그인 모달 상태
+
   const [error, setError] = useState(null);
 
   // 장소 데이터 Fetch
@@ -133,6 +136,8 @@ const PlacePosts = ({ placeId }) => {
         setPosts((prev) => [response.data, ...prev]);
       }
 
+      console.log("Review Response:", response.data);
+
       setUpdatePost(null);
       setNewPost({ content: "", visitDate: "", images: [] });
       setIsModalOpen(false);
@@ -141,18 +146,32 @@ const PlacePosts = ({ placeId }) => {
     }
   };
 
+  // 리뷰 작성 버튼 클릭 시
   const handleAddReview = () => {
-    setIsModalOpen(true);
-    setErrorMessage(""); // 에러 메시지 초기화
+    if (!userId) {
+      setShowLoginModal(true); // 로그인 모달 표시
+    } else {
+      setIsModalOpen(true); // 리뷰 작성 모달 열기
+    }
   };
 
   return (
     <div className="place-posts">
       {/* 리뷰 작성 버튼 */}
       <div className="post-actions">
-        <button style={{backgroundColor: "#FF6347", border: "none"}} onClick={handleAddReview}>리뷰 작성</button>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
+        <button 
+          style={{backgroundColor: "#FF6347", border: "none"}} 
+          onClick={handleAddReview}>
+            리뷰 작성
+          </button>
       </div>
+      {/* 로그인 필요 모달 */}
+      <LoginModal
+        showModal={showLoginModal}
+        setShowModal={setShowLoginModal}
+        message="리뷰를 작성하려면 로그인이 필요합니다.
+                로그인 화면으로 이동하시겠습니까?"
+      />
 
       {/* 리뷰 작성/수정 모달 */}
       <PostModal
@@ -171,17 +190,27 @@ const PlacePosts = ({ placeId }) => {
 
         <div>
           <label htmlFor="visitDate">방문 날짜:</label>
-          <input
-            type="date"
-            id="visitDate"
-            value={updatePost ? updatePost.visitDate : newPost.visitDate}
-            onChange={(e) =>
-              updatePost
-                ? setUpdatePost({ ...updatePost, visitDate: e.target.value })
-                : setNewPost({ ...newPost, visitDate: e.target.value })
+          <DatePicker
+            selected={
+              updatePost && updatePost.visitDate
+                ? new Date(updatePost.visitDate)
+                : newPost.visitDate
+                ? new Date(newPost.visitDate)
+                : new Date() // 기본값: 오늘 날짜
             }
-            required
+            onChange={(date) => {
+              if (date) {
+                const formattedDate = date.toISOString().split("T")[0];
+                updatePost
+                  ? setUpdatePost({ ...updatePost, visitDate: formattedDate })
+                  : setNewPost({ ...newPost, visitDate: formattedDate });
+              }
+            }}
+            maxDate={new Date()} // 오늘 날짜 이후 선택 불가
+            dateFormat="yyyy-MM-dd"
+            isClearable
           />
+
         </div>
 
         <textarea
@@ -192,8 +221,8 @@ const PlacePosts = ({ placeId }) => {
               ? setUpdatePost({ ...updatePost, content: e.target.value })
               : setNewPost({ ...newPost, content: e.target.value })
           }
-          placeholder="리뷰 내용을 작성하세요. (500자 이내)"
-          maxLength={500}
+          placeholder="리뷰 내용을 작성하세요. (100자 이내)"
+          maxLength={100}
           required
         />
 

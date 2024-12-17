@@ -200,10 +200,24 @@ const GetMyPlacePosts = () => {
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        <Button 
+                            style={{
+                                backgroundColor: "#DCDCDC",
+                                border: "none",
+                                marginRight: "5px",
+                            }}
+                            onClick={() => setShowModal(false)}
+                        >
                             취소
                         </Button>
-                        <Button variant="primary" onClick={handleSave}>
+                        <Button 
+                            style={{
+                                backgroundColor: "#FF6347",
+                                border: "none",
+                                marginRight: "5px",
+                            }}
+                            onClick={handleSave}
+                        >
                             저장
                         </Button>
                     </Modal.Footer>

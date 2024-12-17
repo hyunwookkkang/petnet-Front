@@ -10,9 +10,15 @@ import Places from './place/Places';
 
 import MapIcon from '@mui/icons-material/Map';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useUser } from "../../components/contexts/UserContext";
+import { showSuccessToast } from './../../components/common/alert/CommonToast';
+import LoginModal from "../../components/common/modal/LoginModal";
 
 function MapMain() {
   const navigate = useNavigate();
+  const {userId} = useUser();
+    const [showAlert, setShowAlert] = React.useState(false);
+  
 
   // 동반지도 페이지 이동
   const handleNavigationToMap = () => {
@@ -23,7 +29,13 @@ function MapMain() {
   // 내 즐겨찾기 페이지 이동
   const handleNavigationToFavorite = () => {
     console.log("Navigating to Favorites");
-    navigate("/placeFavorite");
+    
+
+    if(!userId){
+      setShowAlert(true);
+    }else{
+      navigate("/placeFavorite");
+    }
   };
 
   // 장소 상세보기 테스트 페이지 이동
@@ -44,6 +56,7 @@ function MapMain() {
     navigate("/placeSearch");
   }
 
+
   return (
     <div className="places-map-page">
       {/* 콘텐츠를 네비게이션 아래로 배치 */}
@@ -54,8 +67,6 @@ function MapMain() {
           onSearch={handleSearch}
           onInputClick={handleInputClick}
         />
-        <br />
-        <br />
 
         {/* 지도 옵션 */}
         <div className="map-options">
@@ -75,11 +86,15 @@ function MapMain() {
             <strong><FavoriteBorderIcon/></strong>
             <h3>내 즐겨찾기</h3>
           </div>
+          <LoginModal
+            showModal={showAlert}
+            setShowModal={setShowAlert}
+
+          />
           
         </div>
-{/* 인기 Top10 장소 */}
-<PopularPlaces />
-
+        {/* 인기 Top10 장소 */}
+        <PopularPlaces />
       </div>
     </div>
   );
