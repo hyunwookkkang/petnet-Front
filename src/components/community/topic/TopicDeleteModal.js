@@ -9,6 +9,7 @@ import useFetchDeleteTopic from './useFetchDeleteTopic';
 
 import "../../../styles/common/Button.css";
 
+
 const TopicDeleteModal = ({showModal, setShowModal, topic}) => {
 
   const navigate = useNavigate();
@@ -55,6 +56,35 @@ const TopicDeleteModal = ({showModal, setShowModal, topic}) => {
   );
 
 
+  const ModalBody = () => (
+    error 
+    ? <ErrorMessage />
+    : (
+        loading 
+        ? <LoadingMessage />
+        : <DeleteMessage />
+      )
+  );
+
+  const ModalFooter = () => (
+    <div style={{ display: 'flex', gap: '10px' }}>
+      <Button
+        className="modal-button"
+        onClick={() => deleteTopicHandler()}
+        disabled={loading}
+      >
+        삭제
+      </Button>
+      <Button
+        className="modal-button-negative"
+        onClick={() => setShowModal(false)}
+      >
+        닫기
+      </Button>
+    </div>
+  );
+
+
   return (
 
     <div>
@@ -63,37 +93,8 @@ const TopicDeleteModal = ({showModal, setShowModal, topic}) => {
         show = {showModal} 
         onHide = {() => setShowModal(false)}
         title = "게시글 삭제"
-        body = { 
-          error 
-          ? <ErrorMessage />
-          : (
-              loading 
-              ? <LoadingMessage />
-              : <DeleteMessage />
-            )
-        }
-        footer = {
-
-          <div style={{ display: 'flex', gap: '10px' }}>
-
-            <Button
-              className="modal-button"
-              onClick={() => deleteTopicHandler()}
-              disabled={loading}
-            >
-              삭제
-            </Button>
-            
-            <Button
-              className="modal-button-negative"
-              onClick={() => setShowModal(false)}
-            >
-              닫기
-            </Button>
-
-          </div>
-
-        }
+        body = {<ModalBody />}
+        footer = {<ModalFooter />}
       />
 
     </div>

@@ -4,30 +4,48 @@ import { Link } from 'react-router-dom';
 import { useUser } from "../../contexts/UserContext";
 import useFetchGetTopicComments from "./useFetchGetTopicComments";
 
-import "../../../styles/Main.css"; // 기존 스타일 재사용
+import "../../../styles/Main.css";
+import "../../../styles/community/Comment.css";
+import CommentEditModal from "./CommentEditModal";
+import LoginModal from "../../common/modal/LoginModal";
 
 
-const ViewTopicComments = ({topicId}) => {
+const ViewTopicComments = ({topic, commentCount}) => {
 
   const { userId } = useUser(''); // 사용자 ID 가져오기
 
   const { fetchGetTopicComments, loading, error } = useFetchGetTopicComments();
 
   const [comments, setComments] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
 
   // 페이지 초기화
   useEffect(() => {
     const fetchComments = async () => {
-      const response = await fetchGetTopicComments(topicId);
+      const response = await fetchGetTopicComments(topic.topicId);
       setComments(response || []);
     };
     fetchComments();
-  }, []);
+  }, [fetchGetTopicComments, topic]);
+
+
+  // 댓글 쓰기 버튼 클릭 시 처리
+  const addCommentClickHandler = () => {
+    // 로그인 검사
+    if (!userId) {
+      setShowLoginModal(true);
+      return;
+    }
+    setShowAddModal(true)
+  }
 
 
   const commentsView = comments.map((comment) => (
 
-    <div className="comment-container">
+    <div key={comment.commentId} className="comment-container">
+
       {/* Header */}
       <div className="comment-header">
         <span className="comment-username">{comment.author.nickname}</span>
@@ -49,6 +67,7 @@ const ViewTopicComments = ({topicId}) => {
           {comment.addDateStr}
         </span>
       </div>
+
     </div>
     
   ));
@@ -68,11 +87,32 @@ const ViewTopicComments = ({topicId}) => {
   return (
 
     <div>
+      
+      <div className="post-comments-bar">
+        <span className="comment-count">댓글 ({commentCount})</span>
+        <button className="view-comments-button" onClick={() => addCommentClickHandler()}>
+          댓글 쓰기
+        </button>
+      </div>
 
       <br/>
       <ul>
         { commentsView }
       </ul>
+
+
+      <CommentEditModal
+        showModal={showAddModal}
+        setShowModal={setShowAddModal}
+        topic={topic}
+        comment={null}
+        oldComment={null}
+      />
+
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+      />
 
     </div>
 
