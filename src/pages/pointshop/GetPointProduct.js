@@ -76,6 +76,7 @@ const GetPointProduct = () => {
   return (
     <div className="get-point-product-container">
       <div className="product-card">
+      <h1 className="point-shop-title">포인트 상품 정보</h1>
         {product.imageIds && (
           <img
             src={`/api/images/${product.imageIds}`}

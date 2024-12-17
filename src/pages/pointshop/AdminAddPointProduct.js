@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // axios 추가
 import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
 
 const AdminAddPointProduct = () => {
@@ -9,7 +10,7 @@ const AdminAddPointProduct = () => {
     price: '',
     validityDate: '',
     brandCategory: '',
-    imageFiles: null,//난 이미지 1개개
+    imageFiles: null,
   });
 
   // 폼 데이터 변경 핸들러
@@ -25,7 +26,7 @@ const AdminAddPointProduct = () => {
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
-      imageFiles: e.target.files[0], // 파일 1개만 선택택
+      imageFiles: e.target.files[0], // 파일 1개만 선택
     }));
   };
 
@@ -39,23 +40,19 @@ const AdminAddPointProduct = () => {
     bodyData.append('price', formData.price);
     bodyData.append('validityDate', formData.validityDate);
     bodyData.append('brandCategory', formData.brandCategory);
-    bodyData.append('imageFiles', formData.imageFiles); // 이미지 파일 추가
+    bodyData.append('imageFiles', formData.imageFiles);
 
     try {
-      const response = await fetch('/api/pointshop/pointProducts/Admin', {
-        method: 'POST',
-        body: bodyData,
-      });
+      // axios를 사용해 POST 요청
+      const response = await axios.post('/api/pointshop/pointProducts/Admin', bodyData);
 
-      if (response.ok) {
-        showSuccessToast('포인트 상품이 성공적으로 추가되었습니다.');
-        navigate('/point-product-management');
-      } else {
-        showErrorToast('포인트 상품 추가에 실패했습니다.');
-      }
+      // 성공 처리
+      showSuccessToast('포인트 상품이 성공적으로 추가되었습니다.');
+      navigate('/point-product-management');
     } catch (error) {
+      // 실패 처리
       console.error('Error:', error);
-      showErrorToast('서버와 통신 중 문제가 발생했습니다.');
+      showErrorToast('포인트 상품 추가에 실패했습니다.');
     }
   };
 
@@ -126,7 +123,6 @@ const AdminAddPointProduct = () => {
             required
           />
         </div>
-
 
         <button
           type="submit"
