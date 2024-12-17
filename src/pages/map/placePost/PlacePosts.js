@@ -9,100 +9,67 @@ import LoginModal from "../../../components/common/modal/LoginModal";
 import DatePicker from "react-datepicker";
 
 const PlacePosts = ({ placeId }) => {
-  const { userId, nickname } = useUser(); // 사용자 ID 및 닉네임 가져오기
+  const { userId } = useUser();
   const navigate = useNavigate();
-  const [posts, setPosts] = useState([]); // 리뷰 목록
-  const [place, setPlace] = useState(null); // 장소 정보
-  const [nicknameMap, setNicknameMap] = useState({}); // userId와 nickname 매핑
-  const [updatePost, setUpdatePost] = useState(null); // 수정할 리뷰
-  const [newPost, setNewPost] = useState({
-    content: "",
-    visitDate: "",
-    images: [], // 이미지 URL 목록
-  }); // 새 리뷰
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
-  const [showLoginModal, setShowLoginModal] = useState(false); // 로그인 모달 상태
 
-  const [error, setError] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [place, setPlace] = useState(null);
+  const [updatePost, setUpdatePost] = useState(null);
+  const [newPost, setNewPost] = useState({ content: "", visitDate: "" });
+  const [imageFiles, setImageFiles] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 장소 데이터 Fetch
   useEffect(() => {
     const fetchPlace = async () => {
       try {
         const response = await axios.get(`/api/map/places/${placeId}`);
-        setPlace(response.data); // 장소 데이터 저장
+        setPlace(response.data);
       } catch (error) {
         console.error("Error fetching place:", error);
       }
     };
-
     fetchPlace();
   }, [placeId]);
 
-  // 닉네임 가져오기 함수
-  const fetchNickname = async (authorId) => {
-    if (nicknameMap[authorId]) return; // 이미 닉네임이 있는 경우 호출하지 않음
+  // 리뷰 목록 Fetch
+  const fetchPosts = async () => {
     try {
-      const response = await axios.get(`/api/user/nickname`, {
-        params: { userId: authorId },
-      });
-      setNicknameMap((prev) => ({
-        ...prev,
-        [authorId]: response.data.nickname, // 닉네임 매핑
-      }));
+      const response = await axios.get(`/api/map/placePosts/${placeId}`);
+  
+      // 중복된 postId 제거
+      const uniquePosts = response.data.reduce((acc, current) => {
+        const x = acc.find((item) => item.postId === current.postId);
+        if (!x) {
+          acc.push(current);
+        }
+        return acc;
+      }, []);
+  
+      setPosts(uniquePosts);
     } catch (error) {
-      console.error(`Error fetching nickname for userId ${authorId}:`, error);
+      console.error("Error fetching posts:", error);
     }
   };
+  
 
-  // 리뷰 데이터 Fetch
   useEffect(() => {
-    if (userId === null) {
-      return;
-    }
-
-    if (!userId) {
-      setError("로그인이 필요합니다."); // 에러 상태
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
-      return;
-    }
-
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(`/api/map/placePosts/${placeId}`);
-        const fetchedPosts = response.data;
-
-        // 닉네임 가져오기 (작성자 ID 기반)
-        fetchedPosts.forEach((post) => fetchNickname(post.author_id));
-
-        setPosts(fetchedPosts); // 리뷰 목록 저장
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
-
-    fetchPosts();
+    if (userId) fetchPosts();
+    else navigate("/login");
   }, [placeId, userId, navigate]);
 
-  // 이미지 업로드 핸들러
-  const handleImageUpload = async (e) => {
+  // 이미지 파일 추가 핸들러
+  const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const formData = new FormData();
 
-    files.forEach((file) => formData.append("imageFiles", file));
-
-    try {
-      const response = await axios.post("/api/images", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      const imageIds = Array.isArray(response.data) ? response.data : [];
-      const imageUrls = imageIds.map((id) => `/api/images/${id}`);
-      setNewPost((prev) => ({ ...prev, images: [...prev.images, ...imageUrls] }));
-    } catch (error) {
-      console.error("Image upload failed:", error);
-      alert("이미지 업로드 실패. 다시 시도해주세요.");
+    // 이미지 파일 중복 추가 방지 및 최대 3개 제한
+    const validFiles = files.slice(0, 3 - imageFiles.length);
+    if (validFiles.length > 0) {
+      setImageFiles([...imageFiles, ...validFiles]);
+    } else {
+      alert("이미지는 최대 3개까지 등록할 수 있습니다.");
     }
   };
 
@@ -112,140 +79,115 @@ const PlacePosts = ({ placeId }) => {
       alert("모든 필드를 작성해주세요.");
       return;
     }
-
-    const url = updatePost
-      ? `/api/map/placePosts/${updatePost.id}`
-      : `/api/map/placePosts`;
-    const method = updatePost ? "PUT" : "POST";
-
+  
+    if (isSubmitting) return; // 중복 제출 방지
+    setIsSubmitting(true);
+  
     try {
-      const response = await axios({
+      const formData = new FormData();
+      formData.append("content", newPost.content);
+      formData.append("visitDate", newPost.visitDate);
+      formData.append("placeId", placeId);
+  
+      // 이미지 파일 한 번만 추가
+      imageFiles.forEach((file) => formData.append("imageFiles", file));
+  
+      const url = updatePost
+        ? `/api/map/placePosts/${updatePost.id}`
+        : `/api/map/placePosts/${placeId}`;
+      const method = updatePost ? "put" : "post";
+  
+      await axios({
         method,
         url,
-        data: updatePost ? updatePost : { ...newPost, placeId },
-        headers: {
-          "Content-Type": "application/json",
-        },
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
       });
-
-      if (updatePost) {
-        setPosts((prev) =>
-          prev.map((p) => (p.id === updatePost.id ? response.data : p))
-        );
-      } else {
-        setPosts((prev) => [response.data, ...prev]);
-      }
-
-      console.log("Review Response:", response.data);
-
-      setUpdatePost(null);
-      setNewPost({ content: "", visitDate: "", images: [] });
-      setIsModalOpen(false);
+  
+      // 전체 리뷰 다시 불러오기
+      await fetchPosts();
+  
+      resetForm();
     } catch (error) {
       console.error("Error submitting post:", error);
+      alert("리뷰 등록 중 오류가 발생했습니다.");
+    } finally {
+      setIsSubmitting(false);
     }
-  };
+  };  
 
-  // 리뷰 작성 버튼 클릭 시
-  const handleAddReview = () => {
-    if (!userId) {
-      setShowLoginModal(true); // 로그인 모달 표시
-    } else {
-      setIsModalOpen(true); // 리뷰 작성 모달 열기
-    }
+  // 폼 초기화
+  const resetForm = () => {
+    setUpdatePost(null);
+    setNewPost({ content: "", visitDate: "" });
+    setImageFiles([]);
+    setIsModalOpen(false);
   };
 
   return (
     <div className="place-posts">
       {/* 리뷰 작성 버튼 */}
       <div className="post-actions">
-        <button 
-          style={{backgroundColor: "#FF6347", border: "none"}} 
-          onClick={handleAddReview}>
-            리뷰 작성
-          </button>
+        <button
+          style={{ backgroundColor: "#FF6347", border: "none" }}
+          onClick={() =>
+            userId ? setIsModalOpen(true) : setShowLoginModal(true)
+          }
+        >
+          리뷰 작성
+        </button>
       </div>
+
       {/* 로그인 필요 모달 */}
       <LoginModal
         showModal={showLoginModal}
         setShowModal={setShowLoginModal}
-        message="리뷰를 작성하려면 로그인이 필요합니다.
-                로그인 화면으로 이동하시겠습니까?"
+        message="리뷰를 작성하려면 로그인이 필요합니다."
       />
 
       {/* 리뷰 작성/수정 모달 */}
       <PostModal
         title={updatePost ? "리뷰 수정하기" : "리뷰 작성하기"}
         isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setUpdatePost(null); // 수정 상태 초기화
-          setNewPost({ content: "", visitDate: "", images: [] });
-        }}
+        onClose={resetForm}
         onSubmit={handlePostSubmit}
       >
-        <p>
-          <strong>장소 이름:</strong> {place ? place.fcltyNm : "정보 없음"}
-        </p>
+        <label>방문 날짜</label>
+        <DatePicker
+          selected={
+            updatePost?.visitDate
+              ? new Date(updatePost.visitDate)
+              : new Date(newPost.visitDate || new Date())
+          }
+          onChange={(date) => {
+            const formattedDate = date.toISOString().split("T")[0];
+            updatePost
+              ? setUpdatePost({ ...updatePost, visitDate: formattedDate })
+              : setNewPost({ ...newPost, visitDate: formattedDate });
+          }}
+          maxDate={new Date()}
+          dateFormat="yyyy-MM-dd"
+        />
 
-        <div>
-          <label htmlFor="visitDate">방문 날짜:</label>
-          <DatePicker
-            selected={
-              updatePost && updatePost.visitDate
-                ? new Date(updatePost.visitDate)
-                : newPost.visitDate
-                ? new Date(newPost.visitDate)
-                : new Date() // 기본값: 오늘 날짜
-            }
-            onChange={(date) => {
-              if (date) {
-                const formattedDate = date.toISOString().split("T")[0];
-                updatePost
-                  ? setUpdatePost({ ...updatePost, visitDate: formattedDate })
-                  : setNewPost({ ...newPost, visitDate: formattedDate });
-              }
-            }}
-            maxDate={new Date()} // 오늘 날짜 이후 선택 불가
-            dateFormat="yyyy-MM-dd"
-            isClearable
-          />
-
-        </div>
-
+        <label>리뷰 내용</label>
         <textarea
-          className="review-textarea"
           value={updatePost ? updatePost.content : newPost.content}
           onChange={(e) =>
             updatePost
               ? setUpdatePost({ ...updatePost, content: e.target.value })
               : setNewPost({ ...newPost, content: e.target.value })
           }
-          placeholder="리뷰 내용을 작성하세요. (100자 이내)"
+          placeholder="리뷰 내용을 작성하세요."
           maxLength={100}
-          required
         />
 
-        {/* <div className="review-images">
-          <label htmlFor="imageUpload" className="image-upload-label">
-            이미지 추가:
-          </label>
-          <input
-            type="file"
-            id="imageUpload"
-            multiple
-            accept="image/*"
-            onChange={handleImageUpload}
-          />
-          <div className="image-preview">
-            {newPost.images.map((image, index) => (
-              <div key={index} className="image-item">
-                <img src={image} alt={`리뷰 이미지 ${index + 1}`} />
-              </div>
-            ))}
-          </div>
+        <label>이미지 추가</label>
+        <input type="file" multiple accept="image/*" onChange={handleFileChange} />
+        <div>
+          {imageFiles.map((file, idx) => (
+            <div key={idx}>{file.name}</div>
+          ))}
         </div>
-        <p className="image-limit-text">이미지 최대 3장까지 등록 가능</p> */}
       </PostModal>
 
       {/* 리뷰 목록 */}
@@ -253,17 +195,14 @@ const PlacePosts = ({ placeId }) => {
         {posts.map((post) => (
           <PostItem
             key={post.id}
-            post={{
-              ...post,
-              nickname: nicknameMap[post.author_id] || "닉네임 로딩 중...",
-            }}
+            post={post}
             isUserPost={post.author_id === userId}
-            onEdit={(id) => {
-              setUpdatePost(posts.find((p) => p.id === id));
+            onEdit={() => {
+              setUpdatePost(post);
               setIsModalOpen(true);
             }}
-            onDelete={(id) => {
-              setPosts((prev) => prev.filter((p) => p.id !== id));
+            onDelete={() => {
+              setPosts((prev) => prev.filter((p) => p.id !== post.id));
             }}
           />
         ))}

@@ -100,7 +100,7 @@ const handleRemoveFromFavorite = async () => {
   }
 };
 
-if (!place) return <div>Loading...</div>;
+if (!place) return <div>...🐾🐾🐾🐾조금만 기다려주세용</div>;
 
   return (
     <Container>
@@ -141,7 +141,7 @@ if (!place) return <div>Loading...</div>;
                 marginLeft: '20px'
               }}
             >
-              {place.fcltyNm}
+              🐾 {place.fcltyNm} 🐾
             </div>
             <div>
               
