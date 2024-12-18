@@ -220,14 +220,14 @@ const MyMainPage = () => {
                   내가 쓴 댓글 보기
                   <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
                 </ListGroup.Item>
-                <ListGroup.Item
+                {/* <ListGroup.Item
                   key="myReports"
                   className="my-flex-between"
                   onClick={() => navigate("/getMyReports")}
                 >
                   내가 보낸 신고 보기
                   <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
-                </ListGroup.Item>
+                </ListGroup.Item> */}
               </ListGroup>
             </Card.Body>
           </Card>
