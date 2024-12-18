@@ -7,7 +7,7 @@ import { useUser } from "../../components/contexts/UserContext";
 import CommonModal from "../../components/common/modal/CommonModal";
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'; // 포인트 아이콘 추가
 
-// 날짜 포맷팅
+// 날짜 포맷팅 함수
 const formatLocalDate = (dateStr) => {
   const date = new Date(dateStr);
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} 
@@ -18,10 +18,9 @@ const GetPointLog = () => {
   const [pointLogs, setPointLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentApi, setCurrentApi] = useState('getPointLog');
-  const [userPoint, setUserPoint] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
 
-  const { userId } = useUser();
+  const { userId, myPoint } = useUser(); // useUser에서 myPoint 가져오기
   const navigate = useNavigate();
   const todayDate = new Date().toISOString().slice(0, 10);
 
@@ -70,24 +69,6 @@ const GetPointLog = () => {
     fetchLogs();
   }, [currentApi, userId]);
 
-  useEffect(() => {
-    if (!userId) {
-      setShowAlert(true);
-      return;
-    }
-
-    const fetchUserPoint = async () => {
-      try {
-        const response = await axios.get(`/api/pointshop/point/${userId}/getUserPoint`);
-        setUserPoint(response.data);
-      } catch (error) {
-        console.error("Error fetching user points:", error);
-      }
-    };
-
-    fetchUserPoint();
-  }, [userId]);
-
   const columns = [
     { field: 'id', headerName: '순번', width: 100 },
     { field: 'reasonText', headerName: '이유', width: 200 },
@@ -104,30 +85,33 @@ const GetPointLog = () => {
 
   return (
     <div className="point-log-container" style={{ fontFamily: "Ownglyph_ParkDaHyun, sans-serif" }}>
+      {/* 포인트 내역 헤더 */}
       <div className="point-log-header">
         <h1 className="point-log-title">포인트 내역</h1>
         <div className="my-user-info-box text-center">
           <p className="my-icon-text" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <PaidOutlinedIcon sx={{ color: "#FEBE98", marginRight: "6px", fontSize: "28px" }} />
             <span style={{ fontWeight: "bold", fontSize: "24px", color: "#FEBE98" }}>
-              {userPoint !== null ? userPoint : '0'}P
+              {myPoint !== null ? myPoint : '0'}P
             </span>
           </p>
         </div>
       </div>
 
+      {/* 오늘 기록 체크 */}
       <div className="today-check-container">
         {checkItems.map(item => (
           <div
             key={item.reason}
-            style={{fontSize: '12px'}}
             className={`today-log-card ${pointLogs.some(log => log.pointLogDate.slice(0, 10) === todayDate && log.reason === String(item.reason)) ? 'text-o' : 'text-x'}`}
+            style={{fontSize: '13px'}}
           >
             {item.label}: {pointLogs.some(log => log.pointLogDate.slice(0, 10) === todayDate && log.reason === String(item.reason)) ? '⭕' : '❌'}
           </div>
         ))}
       </div>
 
+      {/* 버튼 그룹 */}
       <div className="button-group">
         {["getPointLog", "getPointAddLog", "getPointUpdateLog"].map((apiKey) => (
           <button
@@ -159,15 +143,15 @@ const GetPointLog = () => {
         <h2>포인트 이용 안내</h2>
         <ul>
           <li>장소 리뷰 작성 시 100P 적립 (하루에 한 번)</li>
-          <li>퀴즈 참여 점수 70점 이상일 시시 100P 적립 (하루에 한 번)</li>
+          <li>퀴즈 70점 이상 시 100P 적립 (하루에 한 번)</li>
           <li>상품 리뷰 작성 시 100P 적립 (하루에 한 번)</li>
           <li>게시글 등록 시 100P 적립 (하루에 한 번)</li>
           <li>인기 게시글 선정 시 200P 적립 (제한 없음)</li>
-          <li>매년 1월 1일, 보유 포인트 소멸</li>
+          <li>매년 1월 1일에 모든 보유 포인트 소멸</li>
         </ul>
       </div>
 
-      {/* 로그인 모달 */}
+      {/* 로그인 필요 모달 */}
       <CommonModal
         show={showAlert}
         onHide={() => {
