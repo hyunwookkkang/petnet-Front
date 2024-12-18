@@ -31,13 +31,23 @@ const GetMyPlacePosts = () => {
                 params: { userId },
                 withCredentials: true,
             });
-            setPosts(response.data); // fcltyNm이 이미 포함되어 있음
+        
+            // 중복된 postId 제거
+            const uniquePosts = response.data.reduce((acc, current) => {
+                const exists = acc.find((item) => item.postId === current.postId);
+                if (!exists) {
+                acc.push(current);
+                }
+                return acc;
+            }, []);
+        
+            setPosts(uniquePosts); // 중복 제거된 데이터 상태 업데이트
             setLoading(false);
-        } catch (error) {
+            } catch (error) {
             console.error("Error fetching place posts:", error);
             setLoading(false);
-        }
-    };
+            }
+        };
     
     
 

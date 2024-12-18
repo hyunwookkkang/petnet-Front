@@ -167,47 +167,66 @@ const PlacePosts = ({ placeId }) => {
 
       {/* 리뷰 작성/수정 모달 */}
       <PostModal
-        title={updatePost ? "리뷰 수정하기" : "리뷰 작성하기"}
-        isOpen={isModalOpen}
-        onClose={resetForm}
-        onSubmit={handlePostSubmit}
-      >
-        <label>방문 날짜</label>
-        <DatePicker
-          selected={
-            updatePost?.visitDate
-              ? new Date(updatePost.visitDate)
-              : new Date(newPost.visitDate || new Date())
-          }
-          onChange={(date) => {
-            const formattedDate = date.toISOString().split("T")[0];
-            updatePost
-              ? setUpdatePost({ ...updatePost, visitDate: formattedDate })
-              : setNewPost({ ...newPost, visitDate: formattedDate });
-          }}
-          maxDate={new Date()}
-          dateFormat="yyyy-MM-dd"
-        />
+          title={updatePost ? "리뷰 수정하기" : "리뷰 작성하기"}
+          isOpen={isModalOpen}
+          onClose={resetForm}
+          onSubmit={handlePostSubmit}
+        >
+          <div className="review-modal">
+            {/* 방문 날짜 */}
+            <div className="form-group">
+              <label>방문 날짜</label>
+              <DatePicker
+                selected={
+                  updatePost?.visitDate
+                    ? new Date(updatePost.visitDate)
+                    : new Date(newPost.visitDate || new Date())
+                }
+                onChange={(date) => {
+                  const formattedDate = date.toISOString().split("T")[0];
+                  updatePost
+                    ? setUpdatePost({ ...updatePost, visitDate: formattedDate })
+                    : setNewPost({ ...newPost, visitDate: formattedDate });
+                }}
+                maxDate={new Date()}
+                dateFormat="yyyy-MM-dd"
+                className="input-field"
+              />
+            </div>
 
-        <label>리뷰 내용</label>
-        <textarea
-          value={updatePost ? updatePost.content : newPost.content}
-          onChange={(e) =>
-            updatePost
-              ? setUpdatePost({ ...updatePost, content: e.target.value })
-              : setNewPost({ ...newPost, content: e.target.value })
-          }
-          placeholder="리뷰 내용을 작성하세요."
-          maxLength={100}
-        />
+            {/* 리뷰 내용 */}
+            <div className="form-group">
+              <label>리뷰 내용</label>
+              <textarea
+                value={updatePost ? updatePost.content : newPost.content}
+                onChange={(e) =>
+                  updatePost
+                    ? setUpdatePost({ ...updatePost, content: e.target.value })
+                    : setNewPost({ ...newPost, content: e.target.value })
+                }
+                placeholder="리뷰 내용을 작성하세요."
+                maxLength={100}
+                className="textarea-field"
+              />
+            </div>
 
-        <label>이미지 추가</label>
-        <input type="file" multiple accept="image/*" onChange={handleFileChange} />
-        <div>
-          {imageFiles.map((file, idx) => (
-            <div key={idx}>{file.name}</div>
-          ))}
-        </div>
+            {/* 이미지 추가 */}
+            <div className="form-group">
+              <label>이미지 추가</label>
+              <input 
+                type="file" 
+                multiple 
+                accept="image/*" 
+                onChange={handleFileChange} 
+                className="input-field"
+              />
+              <div className="image-list">
+                {imageFiles.map((file, idx) => (
+                  <div key={idx} className="image-name">{file.name}</div>
+                ))}
+              </div>
+            </div>
+          </div>
       </PostModal>
 
       {/* 리뷰 목록 */}
@@ -225,7 +244,7 @@ const PlacePosts = ({ placeId }) => {
             onDelete={() => {
               setPosts((prev) => prev.filter((p) => p.id !== post.id));
             }}
-
+            
           />
         ))}
       </div>
