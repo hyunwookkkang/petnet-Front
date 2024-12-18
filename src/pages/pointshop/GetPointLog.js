@@ -120,6 +120,7 @@ const GetPointLog = () => {
         {checkItems.map(item => (
           <div
             key={item.reason}
+            style={{fontSize: '12px'}}
             className={`today-log-card ${pointLogs.some(log => log.pointLogDate.slice(0, 10) === todayDate && log.reason === String(item.reason)) ? 'text-o' : 'text-x'}`}
           >
             {item.label}: {pointLogs.some(log => log.pointLogDate.slice(0, 10) === todayDate && log.reason === String(item.reason)) ? '⭕' : '❌'}
@@ -133,6 +134,7 @@ const GetPointLog = () => {
             key={apiKey}
             onClick={() => setCurrentApi(apiKey)}
             className={`log-button ${currentApi === apiKey ? 'active' : ''}`}
+            style={{fontSize: '16px'}}
           >
             {apiKey === "getPointLog" ? "전체 로그" : apiKey === "getPointAddLog" ? "적립 로그" : "사용 로그"}
           </button>
@@ -157,7 +159,7 @@ const GetPointLog = () => {
         <h2>포인트 이용 안내</h2>
         <ul>
           <li>장소 리뷰 작성 시 100P 적립 (하루에 한 번)</li>
-          <li>퀴즈 참여 시 100P 적립 (하루에 한 번)</li>
+          <li>퀴즈 참여 점수 70점 이상일 시시 100P 적립 (하루에 한 번)</li>
           <li>상품 리뷰 작성 시 100P 적립 (하루에 한 번)</li>
           <li>게시글 등록 시 100P 적립 (하루에 한 번)</li>
           <li>인기 게시글 선정 시 200P 적립 (제한 없음)</li>

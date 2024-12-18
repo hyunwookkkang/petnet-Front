@@ -91,7 +91,7 @@ const AdminMainPage = () => {
                   </ListGroup.Item>
                   <ListGroup.Item
                     className="my-flex-between"
-                    onClick={() => navigate("/order-history")}
+                    onClick={() => navigate("/shop/purhcase/all")}
                   >
                     주문내역관리
                     <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
@@ -119,7 +119,7 @@ const AdminMainPage = () => {
             </Card>
           </Col>
 
-          {/* 커뮤니티 */}
+          {/* 커뮤니티 
           <Col>
             <Card className="my-section">
               <Card.Body>
@@ -135,7 +135,7 @@ const AdminMainPage = () => {
                 </ListGroup>
               </Card.Body>
             </Card>
-          </Col>
+          </Col>*/}
         </Row>
       </Container>
     </div>

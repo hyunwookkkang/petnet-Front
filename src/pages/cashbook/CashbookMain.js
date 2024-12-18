@@ -17,7 +17,6 @@ const CashbookMain = () => {
       />
       <GetExpensesLog year={year} month={month} />
       {/* 공통 플로팅 버튼과 슬라이드 */}
-      <SlideDrawer />
     </div>
   );
 };

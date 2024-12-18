@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Modal } from "react-bootstrap"; // React-Bootstrap Modal 추가
-import "../../styles/common/Button.css"; // .modal-button 클래스 포함
+import { Modal } from "react-bootstrap";
+import "../../styles/common/Button.css";
 import { useUser } from "../../components/contexts/UserContext";
 import CommonModal from "../../components/common/modal/CommonModal";
 import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
-import "../../styles/pointshop/GetPointProduct.css"; // 새로운 CSS 파일 import
+import "../../styles/pointshop/GetPointProduct.css";
 
 const GetPointProduct = () => {
   const { productId } = useParams();
@@ -19,11 +19,8 @@ const GetPointProduct = () => {
   const [showModal, setShowModal] = useState(false); // 이미지 확대 모달 상태
   const [modalImage, setModalImage] = useState(""); // 모달에 표시할 이미지 URL
 
-  useEffect(() => {
-    fetchProductDetail();
-  }, [productId]);
-
-  const fetchProductDetail = async () => {
+  // fetchProductDetail을 useCallback으로 감싸기
+  const fetchProductDetail = useCallback(async () => {
     try {
       setLoading(true);
       const response = await axios.get(`/api/pointshop/pointProducts/${productId}`);
@@ -34,7 +31,12 @@ const GetPointProduct = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [productId]); // productId가 변경될 때만 새로 생성됨
+
+  // 의존성 배열에 fetchProductDetail 추가
+  useEffect(() => {
+    fetchProductDetail();
+  }, [fetchProductDetail]);
 
   const handleImageClick = (imageUrl) => {
     setModalImage(imageUrl);
@@ -76,13 +78,13 @@ const GetPointProduct = () => {
   return (
     <div className="get-point-product-container">
       <div className="product-card">
-      <h1 className="point-shop-title">포인트 상품 정보</h1>
+        <h1 className="point-shop-title">포인트 상품 정보</h1>
         {product.imageIds && (
           <img
             src={`/api/images/${product.imageIds}`}
             alt={product.productName}
             className="product-image"
-            style={{ cursor: "pointer" }} // 클릭 가능한 스타일
+            style={{ cursor: "pointer" }}
             onClick={() => handleImageClick(`/api/images/${product.imageIds}`)}
           />
         )}
