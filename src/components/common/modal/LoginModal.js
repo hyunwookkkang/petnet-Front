@@ -10,11 +10,20 @@ const LoginModal = ({showModal, setShowModal, message, required}) => {
 
   const navigate = useNavigate();
 
+
+  const requiredHideHandler = () => {
+    setShowModal(false);
+    if (required) {
+      navigate("/login");
+    }
+  }
+  
+
   return (
       
     <CommonModal
       show = {showModal} 
-      onHide = {() => setShowModal(false)}
+      onHide = {() => requiredHideHandler()}
       title = "로그인 필요"
       body = {message ? (
         <div>{message}</div>
@@ -39,7 +48,7 @@ const LoginModal = ({showModal, setShowModal, message, required}) => {
           { !required && (
             <Button
               className="modal-button-negative"
-              onClick={() => setShowModal(false)}
+              onClick={() => requiredHideHandler()}
             >
               닫기
             </Button>

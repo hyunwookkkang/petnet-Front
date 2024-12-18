@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { Container } from "react-bootstrap";
 
-import { useUser } from "../../components/contexts/UserContext";
+import LoginModal from "../../components/common/modal/LoginModal";
 import TopicSearchBar from "../../components/community/topic/TopicSearchBar";
+
+import { useUser } from "../../components/contexts/UserContext";
 import useFetchGetMyTopics from "../../components/community/topic/useFetchGetMyTopics";
 
 import "../../styles/Main.css"; // 기존 스타일 재사용
@@ -14,8 +16,9 @@ const GetMyTopics = () => {
   const navigate = useNavigate();
 
   const { userId } = useUser(''); // 사용자 ID 가져오기
-
   const { fetchGetMyTopics, error } = useFetchGetMyTopics();
+
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const [topics, setTopics] = useState([]);
   
@@ -27,6 +30,11 @@ const GetMyTopics = () => {
 
 
   useEffect(() => {
+    // 로그인 검사
+    if (!userId) {
+      setShowLoginModal(true);
+      return;
+    }
 
     const fetchTopics = async () => {
       const response = await fetchGetMyTopics(userId, search);
@@ -75,6 +83,12 @@ const GetMyTopics = () => {
           <ul>{topicsView}</ul> // topics 배열에 데이터가 있을 경우
         )}
       </div>
+
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+        required={true}
+      />
 
     </Container>
 

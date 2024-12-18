@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { Container } from "react-bootstrap";
 
-import { useUser } from "../../components/contexts/UserContext";
+import LoginModal from "../../components/common/modal/LoginModal";
 import TopicSearchBar from "../../components/community/topic/TopicSearchBar";
 import TopicScrapButton from "../../components/community/topic/TopicScrapButton";
+
+import { useUser } from "../../components/contexts/UserContext";
 import useFetchGetScrapTopics from "../../components/community/topic/useFetchGetScrapTopics";
 
 import "../../styles/Main.css"; // 기존 스타일 재사용
@@ -15,8 +17,9 @@ const GetScrapTopics = () => {
   const navigate = useNavigate();
 
   const { userId } = useUser(''); // 사용자 ID 가져오기
-
   const { fetchGetScrapTopics, error } = useFetchGetScrapTopics();
+
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const [topics, setTopics] = useState([]);
     
@@ -29,9 +32,9 @@ const GetScrapTopics = () => {
 
   // 페이지 초기화
   useEffect(() => {
+    // 로그인 검사
     if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
+      setShowLoginModal(true);
       return;
     }
 
@@ -85,6 +88,13 @@ const GetScrapTopics = () => {
           <ul>{topicsView}</ul> // topics 배열에 데이터가 있을 경우
         )}
       </div>
+
+
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+        required={true}
+      />
 
     </Container>
 
