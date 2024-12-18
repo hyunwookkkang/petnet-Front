@@ -3,9 +3,11 @@ import "../../styles/cashbook/GetExpensesLog.css";
 import SlideDrawers from "../../components/cashbook/SlideDrawers";
 import SlideDrawer from "../../components/cashbook/SlideDrawer";
 import { useNavigate } from "react-router-dom";
+import LoginModal from "../../components/common/modal/LoginModal";
 import GetLoadExpenseLog from "../../pages/cashbook/GetLoadExpenseLog";
 import { useUser } from "../../components/contexts/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { showErrorToast } from "../../components/common/alert/CommonToast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // 아이콘 추가
 import {
   faBowlFood,
@@ -19,6 +21,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons"; // 아이콘 임포트
 
 const GetExpensesLog = ({ year, month }) => {
+  const navigate = useNavigate();
+  const { userId } = useUser();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
   const [expenses, setExpenses] = useState([]); // 지출 목록
   const [loading, setLoading] = useState(false); // 로딩 상태
   const [monthlyTotal, setMonthlyTotal] = useState(0); // 월간 총액
@@ -34,13 +40,17 @@ const GetExpensesLog = ({ year, month }) => {
   const [hasMore, setHasMore] = useState(true);
   const [newExpense, setNewExpense] = useState(null); // 새로 추가된 지출 데이터
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 번호
-
-  const { userId } = useUser();
-  const navigate = useNavigate();
+  const [error, setError] = useState(null); // 에러 상태
 
   useEffect(() => {
     if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      setShowLoginModal(true);
+      return;
+    }
+
+    if (!userId) {
+      setError("로그인이 필요합니다."); // 로그인이 필요한 경우 처리
+      showErrorToast("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
       navigate("/login");
       return;
     }

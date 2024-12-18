@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from "axios";
 
-import { useUser } from "../../../components/contexts/UserContext";
-import TopicVoteButton from "../../../components/community/topic/TopicVoteButton";
-import TopicScrapButton from "../../../components/community/topic/TopicScrapButton";
-import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
+import TopicVoteButton from "../../components/community/topic/TopicVoteButton";
+import TopicScrapButton from "../../components/community/topic/TopicScrapButton";
+import TopicDeleteModal from "../../components/community/topic/TopicDeleteModal";
+import ViewTopicCommentBox from "../../components/community/comment/ViewTopicCommentBox";
 
-import "../../../styles/Main.css"; // 기존 스타일 재사용
-import "../../../styles/community/TopicInfo.css";
-import '../../../styles/community/quill.snow.css'; // quill editor font size
-import TopicDeleteModal from "../../../components/community/topic/TopicDeleteModal";
-import ViewTopicComments from "../../../components/community/comment/ViewTopicComments";
+import { useUser } from "../../components/contexts/UserContext";
+import useFetchTopicInfo from "../../components/community/topic/useFetchGetTopic";
+
+import "../../styles/Main.css"; // 기존 스타일 재사용
+import "../../styles/community/TopicInfo.css";
+import '../../styles/community/quill.snow.css'; // quill editor font size
+
 
 const GetTopicInfo = () => {
   
@@ -25,6 +27,7 @@ const GetTopicInfo = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isAuthor, setIsAutor] = useState(false); // 로그인 = 작성자? 확인
 
+  
   useEffect(() => {
     if (topic) {
       // 조회수 증가 axios patch 요청 보내기
@@ -61,7 +64,6 @@ const GetTopicInfo = () => {
     return <div>Error: {error}</div>;
   }
 
-  // <Link to={`/comments/${topicId}`}>link to the topic's comments</Link>
 
   return (
 
@@ -104,7 +106,7 @@ const GetTopicInfo = () => {
 
 
       {/* 이미지 가져오기 테스트 */}
-      <div dangerouslySetInnerHTML={{ __html: `<img src="/api/images/local/23" />` }}/>
+      <div dangerouslySetInnerHTML={{ __html: `<img src="/api/images/local/23" alt="" />` }}/>
       <br/>
 
 
@@ -130,12 +132,12 @@ const GetTopicInfo = () => {
       {/* 기타 버튼 */}
       <div className="post-extras">
         <TopicScrapButton topicId={topic.topicId}/>
-        <button /*onClick={onReport}*/>신고</button>
+        {/* <button onClick={onReport}>신고</button> */}
       </div>
 
-      {/* 댓글 */}
+      {/* 댓글 목록 */}
       <div>
-        <ViewTopicComments targetTopic={topic} commentCount={topic.commentCount}/>
+        <ViewTopicCommentBox targetTopic={topic}/>
       </div>
 
 

@@ -45,7 +45,7 @@ const AnimalCategoryDropdown = ({ onSelect, initialValue }) => {
   return (
     <div
       ref={dropdownRef} // 드롭다운 영역 참조 설정
-      style={{ position: "relative", width: "200px" }}
+      style={{ position: "relative", width: "100%" }}
     >
       <label>동물 카테고리</label>
       <div
@@ -58,6 +58,7 @@ const AnimalCategoryDropdown = ({ onSelect, initialValue }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          width: "100%",
         }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>

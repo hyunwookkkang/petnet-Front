@@ -3,18 +3,20 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Alert, Button, Container, Form, ListGroup } from "react-bootstrap";
 import AddIcon from '@mui/icons-material/Add';
 
-import { useUser } from "../../../components/contexts/UserContext";
-import TopicQuillEditor from "../../../components/community/topic/TopicQuillEditor";
-import HashtagEditChip from "../../../components/community/topic/HashtagEditChip";
-import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
-import useFetchAddTopic from "../../../components/community/topic/useFetchAddTopic";
-import useFetchUpdateTopic from "../../../components/community/topic/useFetchUpdateTopic";
-import useFetchGetHashtags from "../../../components/community/topic/useFetchGetHashtags";
+import LoginModal from "../../components/common/modal/LoginModal";
+import TopicQuillEditor from "../../components/community/topic/TopicQuillEditor";
+import HashtagEditChip from "../../components/community/topic/HashtagEditChip";
 
-import "../../../styles/Main.css";
-import "../../../styles/community/EditTopic.css";
-import "../../../styles/community/AutoComplete.css";
-import LoginModal from "../../../components/common/modal/LoginModal";
+import { useUser } from "../../components/contexts/UserContext";
+import useFetchTopicInfo from "../../components/community/topic/useFetchGetTopic";
+import useFetchAddTopic from "../../components/community/topic/useFetchAddTopic";
+import useFetchUpdateTopic from "../../components/community/topic/useFetchUpdateTopic";
+import useFetchGetHashtags from "../../components/community/topic/useFetchGetHashtags";
+
+import "../../styles/Main.css";
+import "../../styles/community/EditTopic.css";
+import "../../styles/community/AutoComplete.css";
+
 
 const EditTopicInfo = () => {
 

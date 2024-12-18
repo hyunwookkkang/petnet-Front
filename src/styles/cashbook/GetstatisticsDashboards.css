@@ -1,17 +1,19 @@
-.scashbook-tatistics-dashboard {
+.cashbook-statistics-dashboard {
   padding: 20px;
   max-width: 1000px;
   margin: 0 auto;
 }
 
-h1 {
-  text-align: center;
+.cashbook-dashboard-bit {
   margin-bottom: 20px;
-  color: #333;
-}
-
-.dashboard-section {
-  margin-bottom: 40px;
+  margin-top: 20px; /* 원하는 만큼 여백을 추가 */
+  left: 10px;
+  color: white;
+  background-color: #ff6347; /* 배경색을 흰색으로 설정 */
+  width: 50%; /* 너비 48%로 설정 */
+  font-size: 1.2rem; /* 글자 크기 */
+  border-radius: 4px; /* 둥근 모서리 */
+  text-align: center; /* 텍스트 가운데 정렬 */
 }
 
 hr {

@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/cashbook/GetBudgetSettings.css";
+import { useUser } from "../../components/contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const GetBudgetSettings = () => {
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const { userId } = useUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userId) {
+      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      navigate("/login");
+    }
+  }, [userId, navigate]);
+
   // 예산 데이터 가져오기
   useEffect(() => {
     const fetchBudgets = async () => {
       try {
-        const userId = "user01"; // 로그인 사용자 ID
         const response = await axios.get(
           `/api/cashbook/budget/getAllBudgets/${userId}`
         );
@@ -53,7 +64,10 @@ const GetBudgetSettings = () => {
       <h2 className="cashbook-budget-h2">예산 설정</h2>
       <div className="cashbook-budget-list">
         {budgets.map((budget, index) => (
-          <div className="cashbook-budget-item" key={budget.expenseCategory}>
+          <div
+            className="cashbook-budgetsetting-item"
+            key={budget.expenseCategory}
+          >
             <div className="cashbook-budget-icon">{/* 카테고리 아이콘 */}</div>
             <div className="cashbook-budget-category">
               {budget.expenseCategory}
