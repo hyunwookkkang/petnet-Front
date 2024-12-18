@@ -124,10 +124,7 @@ const Favorites = () => {
         {favorites.map((favorite, index) => (
           <Card key={favorite.favoriteId || index} className="section">
             <Card.Body>
-              <Card.Title
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate(`/place/${favorite.placeId}`)} // 장소 상세 페이지로 이동
-              >
+              <Card.Title>
                 즐겨찾기 이름: {favorite.favoriteName}{" "}
                 <br />
                 {favorite.isPublic ? "🌟 공개" : "🔒 비공개"}

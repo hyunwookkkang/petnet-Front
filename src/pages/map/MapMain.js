@@ -17,7 +17,7 @@ import LoginModal from "../../components/common/modal/LoginModal";
 function MapMain() {
   const navigate = useNavigate();
   const {userId} = useUser();
-    const [showAlert, setShowAlert] = React.useState(false);
+  const [showAlert, setShowAlert] = React.useState(false);
   
 
   // 동반지도 페이지 이동
@@ -29,8 +29,7 @@ function MapMain() {
   // 내 즐겨찾기 페이지 이동
   const handleNavigationToFavorite = () => {
     console.log("Navigating to Favorites");
-    
-
+  
     if(!userId){
       setShowAlert(true);
     }else{
@@ -89,7 +88,6 @@ function MapMain() {
           <LoginModal
             showModal={showAlert}
             setShowModal={setShowAlert}
-
           />
           
         </div>
