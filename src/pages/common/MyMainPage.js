@@ -74,7 +74,7 @@ const MyMainPage = () => {
                     </p>
                   </Col>
 
-                  <Col xs="auto" className="my-icon-container" onClick={() => navigate("/my/orders")}>
+                  <Col xs="auto" className="my-icon-container" onClick={() => navigate("/shop/purchase/my")}>
                     <p className="my-icon-text">
                       <span style={{ fontSize: '24px', color: "#FEBE98" }}><ShoppingBasketOutlinedIcon /></span>
                       주문내역
@@ -172,7 +172,7 @@ const MyMainPage = () => {
                 <ListGroup.Item
                   key="myAddresses"
                   className="my-flex-between"
-                  onClick={() => navigate("/my/addresses")}
+                  onClick={() => navigate("/deliveryInfo")}
                 >
                   내 배송지 관리
                   <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
