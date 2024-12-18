@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MonthCalendar } from "@mui/x-date-pickers/MonthCalendar";
@@ -12,7 +12,13 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const HeaderCashbook = ({ currentYear, currentMonth, setYear, setMonth }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(dayjs());
+  const [selectedDate, setSelectedDate] = useState(
+    dayjs(`${currentYear}-${currentMonth}-01`)
+  ); // 초기 날짜 설정
+
+  useEffect(() => {
+    setSelectedDate(dayjs(`${currentYear}-${currentMonth}-01`)); // year, month 변경 시 업데이트
+  }, [currentYear, currentMonth]);
 
   const toggleDatePicker = () => {
     setShowDatePicker(!showDatePicker);
@@ -102,6 +108,7 @@ const HeaderCashbook = ({ currentYear, currentMonth, setYear, setMonth }) => {
             </div>
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
               <MonthCalendar
+                value={selectedDate}
                 onChange={(newDate) => {
                   setSelectedDate(newDate);
                   setYear(newDate.year());

@@ -340,7 +340,7 @@ const FloatingActionButton = ({ onClick }) => (
     className="cashbook-floating-action-button"
     onClick={onClick} // 버튼 클릭 시 onClick 함수가 실행되도록 설정
     style={{
-      position: "flex", // 화면에서 고정 위치에 배치 (스크롤을 따라 움직이지 않음)
+      position: "fixed", // 화면에서 고정 위치에 배치 (스크롤을 따라 움직이지 않음)
       bottom: "100px", // 화면 하단에서 200px 위쪽에 배치
       left: "20px", // 화면 우측에서 20px 떨어지게 배치
       width: "60px", // 버튼 너비를 60px로 설정

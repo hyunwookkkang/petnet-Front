@@ -4,16 +4,18 @@ import "chart.js/auto";
 import "../../styles/cashbook/GetAnnualExpenseStats.css";
 import { useUser } from "../../components/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import GetAnnualExpenseStatsModal from "./GetAnnualExpenseStatsModal";
 
 const GetAnnualExpenseStats = () => {
   const [stats, setStats] = useState([]); // 월별 지출 데이터 상태
   const [chartData, setChartData] = useState(null); // Chart.js 데이터 상태
-  const [year] = useState(new Date().getFullYear()); // 현재 연도
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // 선택된 연도
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // 선택된 월 (1부터 시작)
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
   const { userId } = useUser(""); // 사용자 ID 가져오기
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(userId);
     if (!userId) {
       alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
       navigate("/login"); // 로그인 페이지로 리다이렉트
@@ -25,14 +27,12 @@ const GetAnnualExpenseStats = () => {
   const fetchAnnualExpenseStats = async () => {
     try {
       const response = await fetch(
-        `/api/cashbook/expense/${userId}/${year}/getAnnualExpenseStats`
+        `/api/cashbook/expense/${userId}/${selectedYear}/getAnnualExpenseStats`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-
-      // 상태 업데이트
       setStats(data);
       processChartData(data); // Chart.js 데이터 가공
     } catch (error) {
@@ -42,7 +42,7 @@ const GetAnnualExpenseStats = () => {
 
   // Chart.js 데이터 가공
   const processChartData = (data) => {
-    const months = Array.from({ length: 12 }, (_, i) => `${i + 1}월`); // 1월~12월
+    const months = Array.from({ length: 12 }, (_, i) => `${i + 1}`);
     const expenses = Array(12).fill(0); // 각 월별 기본값 0
 
     // 월별 데이터 매핑
@@ -65,16 +65,32 @@ const GetAnnualExpenseStats = () => {
   // 컴포넌트 마운트 시 데이터 가져오기
   useEffect(() => {
     fetchAnnualExpenseStats();
-  }, []);
+  }, [selectedYear, selectedMonth]); // year와 month가 변경되면 데이터를 새로 가져옵니다.
 
   // 합계 계산
   const calculateTotalExpense = () => {
     return stats.reduce((sum, item) => sum + item.totalExpense, 0);
   };
 
+  // 월별 지출 비율 계산
+  const calculatePercentage = (amount) => {
+    const total = calculateTotalExpense();
+    return total > 0 ? (amount / total) * 100 : 0;
+  };
+
+  // 총합 색상
+  const totalExpenseColor = "#0500FF";
+
+  // 모달 열기/닫기
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   return (
     <div className="cashbook-annual-expense-stats">
-      <h2>{year}년 월별 지출 통계</h2>
+      <h3 className="cashbook-annual-expense-statsh2">
+        {selectedYear}년 월별 지출 통계
+      </h3>
 
       {/* Chart.js 막대그래프 */}
       {chartData && (
@@ -83,34 +99,47 @@ const GetAnnualExpenseStats = () => {
         </div>
       )}
 
-      {/* HTML 테이블 */}
-      <div className="cashbook-table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>월</th>
-              {[...Array(12)].map((_, i) => (
-                <th key={i}>{i + 1}월</th>
-              ))}
-              <th>합계</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>지출</td>
-              {[...Array(12)].map((_, i) => {
-                const monthData = stats.find((item) => item.month === i + 1);
-                return (
-                  <td key={i}>
-                    {monthData ? monthData.totalExpense.toLocaleString() : "0"}{" "}
-                    원
-                  </td>
-                );
-              })}
-              <td>{calculateTotalExpense().toLocaleString()} 원</td>
-            </tr>
-          </tbody>
-        </table>
+      {/* HTML 테이블 및 월별 지출 비율 표시 */}
+      <div className="cashbook-monthly-expense-list">
+        {stats.length > 0 ? (
+          stats.map((item) => {
+            const percentage = calculatePercentage(item.totalExpense);
+            const color =
+              percentage >= 80 ? "red" : percentage >= 50 ? "yellow" : "green"; // 색상 설정
+            return (
+              <div key={item.month} className="cashbook-monthly-expense-item">
+                <div
+                  className={`cashbook-monthly-expense-bar ${color}`}
+                  style={{ width: `${percentage}%` }}
+                ></div>
+                <div className="cashbook-monthly-expense-text">
+                  <span>{item.month}월</span>
+                  <span>{item.totalExpense.toLocaleString()} 원</span>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <p>데이터가 없습니다.</p>
+        )}
+
+        {/* 총합 표시 */}
+        <div
+          className="cashbook-monthly-expense-item"
+          style={{ color: totalExpenseColor }}
+        >
+          <div
+            className="cashbook-monthly-expense-bar"
+            style={{
+              width: `${calculatePercentage(calculateTotalExpense())}%`,
+              backgroundColor: totalExpenseColor,
+            }}
+          ></div>
+          <div className="cashbook-monthly-expense-text">
+            <span>총합</span>
+            <span>{calculateTotalExpense().toLocaleString()} 원</span>
+          </div>
+        </div>
       </div>
     </div>
   );
