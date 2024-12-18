@@ -100,7 +100,7 @@ const handleRemoveFromFavorite = async () => {
   }
 };
 
-if (!place) return <div>Loading...</div>;
+if (!place) return <div>...🐾🐾🐾🐾조금만 기다려주세용</div>;
 
   return (
     <Container>
@@ -141,7 +141,7 @@ if (!place) return <div>Loading...</div>;
                 marginLeft: '20px'
               }}
             >
-              {place.fcltyNm}
+              🐾 {place.fcltyNm} 🐾
             </div>
             <div>
               
@@ -193,7 +193,20 @@ if (!place) return <div>Loading...</div>;
           }
         >
           <div className="place-detail-tabs">
-            <h4>시설명: {place.fcltyNm}</h4>
+          <p
+            style={{
+              fontSize: '30px',
+              marginLeft: '20px'
+            }}>
+            <strong>시설명: {place.fcltyNm}</strong>
+          </p>
+            <div
+              style={{
+                fontSize: '20px',
+                marginLeft: '20px'
+              }}
+            >
+              
             <p>
               <strong>🏪 장소 정보: </strong>
               {place.ctgryThreeNm}
@@ -229,6 +242,7 @@ if (!place) return <div>Loading...</div>;
               <strong>🖥️ 홈페이지: </strong>
               {place.hmpgUrl}
             </p>
+            </div>           
           </div>
         </Tab>
 
@@ -240,8 +254,11 @@ if (!place) return <div>Loading...</div>;
             </span>
           }
         >
-          <div>
-            <h4>리뷰</h4>
+          <div
+            style={{
+              fontSize: '30px',
+              marginLeft: '5px'
+            }}>
             <PlacePosts placeId={placeId} />
           </div>
         </Tab>
@@ -254,8 +271,12 @@ if (!place) return <div>Loading...</div>;
             </span>
           }
         >
-          <div>
-            <h4>추가정보</h4>
+          <div
+              style={{
+                fontSize: '20px',
+                marginLeft: '20px'
+              }}
+            >
             <p>🏪 분류: {place.fcltyInfoDc}</p>
             <p>⁉️ 기타사항: {place.petLmttMtrCn}</p>
             <p>💸 이용가격: {place.petAcptAditChrgeValue}</p>

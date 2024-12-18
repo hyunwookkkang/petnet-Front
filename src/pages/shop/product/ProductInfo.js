@@ -1,164 +1,237 @@
-//react
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-//react bootstrap
+import axios from "axios";
 import { Button, Card, Col, Container, Row, Tab, Tabs } from "react-bootstrap";
-//pages
-//components
-import LikeButton from "../../../components/common/button/LikeButton";
-//css
+import { Heart, HeartFill, Cart } from "react-bootstrap-icons";
 import "../../../styles/place/Place.css";
 import ProductImage from "./ProductImage";
 import ProductPost from "../productPost/ProductPosts";
-
+import { useUser } from "../../../components/contexts/UserContext";
 
 const ProductInfo = () => {
-  const { productId } = useParams(); // URL에서 placeId 추출
+  const { productId } = useParams();
+  const { userId } = useUser(); // 로그인한 사용자 정보 가져오기
   const [product, setProduct] = useState(null);
-  const [activeTab, setActiveTab] = useState("info"); // 탭 상태
+  const [activeTab, setActiveTab] = useState("info");
+  const [isWished, setIsWished] = useState(false); // 위시리스트 여부 상태
 
   useEffect(() => {
-    
-    fetch(`/api/shop/products/${productId}`)
-      .then((response) => response.json())
-      .then((data) => setProduct(data))
-      .catch((error) => console.error("Error fetching place detail:", error));
-  }, [productId]);
+    const fetchProductDetails = async () => {
+      try {
+        const response = await axios.get(`/api/shop/products/${productId}`);
+        setProduct(response.data);
+
+        if (userId) {
+          const wishResponse = await axios.get(
+            `/api/shop/products/wish/${userId}`
+          );
+          const wishList = wishResponse.data.map(
+            (wishItem) => wishItem.product.productId
+          );
+          setIsWished(wishList.includes(productId));
+        }
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      }
+    };
+
+    fetchProductDetails();
+  }, [productId, userId]);
 
   if (!product) {
     return <div>Loading...</div>;
   }
 
-  
+  // 위시리스트 등록/해제 핸들러
+  const handleToggleWishlist = async () => {
+    if (!userId) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
+      return;
+    }
+
+    try {
+      if (isWished) {
+        await axios.delete(`/api/shop/products/wish/${productId}`);
+        alert("상품이 위시리스트에서 제거되었습니다.");
+      } else {
+        await axios.post(`/api/shop/products/wish/${productId}`);
+        alert("상품이 위시리스트에 등록되었습니다.");
+      }
+      setIsWished(!isWished);
+    } catch (error) {
+      console.error("Error toggling wishlist:", error);
+      alert("위시리스트 업데이트에 실패했습니다.");
+    }
+  };
+
+  // 장바구니 등록 핸들러
+  const handleAddToCart = async () => {
+    if (!userId) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
+      return;
+    }
+
+    try {
+      await axios.post("/api/shop/cart", { userId, productId });
+      alert("상품이 장바구니에 등록되었습니다.");
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      alert("장바구니 등록에 실패했습니다.");
+    }
+  };
+
+  // 구매하기 핸들러
+  const handlePurchase = async () => {
+    if (!userId) {
+      alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
+      return;
+    }
+
+    try {
+      await axios.post("/api/shop/purchase", { userId, productId });
+      alert("구매가 완료되었습니다!");
+    } catch (error) {
+      console.error("Error processing purchase:", error);
+      alert("구매 처리에 실패했습니다.");
+    }
+  };
 
   return (
     <Container>
       <Row>
-        {/* <Col xs={12} md={6}>
-          
-          <PlaceImage />
-          
-        </Col> */}
-      
-
-
-      <Row className="mb-4">
         <Col>
           <Card className="place-button-box">
-          <Card.Body style={{ padding: '10px' }}>
+            {/* 사진 영역 */}
+            <Card.Body style={{ padding: "10px" }}>
               <ProductImage />
-                  {/* <Image
-                src={`https://maps.googleapis.com/maps/api/place/photo?key=API_KEY&photo_reference=${place.photoRef}`}
-                alt={place.fcltyNm}
-                fluid
-                  /> */}
-                </Card.Body>
-            </Card>
+            </Card.Body>
+
+            {/* 버튼 영역 */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                padding: "15px",
+              }}
+            >
+              <Button
+                variant="outline-danger"
+                onClick={handleToggleWishlist}
+                style={{ flex: "1", margin: "0 10px" }}
+              >
+                {isWished ? <HeartFill /> : <Heart />} 
+              </Button>
+              <Button
+                variant="outline-primary"
+                onClick={handleAddToCart}
+                style={{ flex: "1", margin: "0 10px" }}
+              >
+                <Cart /> 장바구니
+              </Button>
+            </div>
+          </Card>
         </Col>
       </Row>
 
+      {/* 상품 정보 */}
       <Row className="mb-4">
         <Col>
           <Card className="place-button-box">
-              <Card.Body style={{ padding: '30px' }}>
-                <Card.Title className="text-left text-muted">
-                 <h6>{product.animalCategory}/{product.productCategory}</h6>
-                </Card.Title>
-                <Col className="text-left">
-                  <h4><strong>{product.productName}</strong></h4>
-                </Col>
-                <Col className="text-left">
-                  <div>
-                    {/* Original Price */}
-                    <p
-                      className="text-muted"
-                      style={{
-                        textDecoration: product.discount > 0 ? "line-through" : "none",
-                        fontSize: product.discount === 0 ? "1.25rem" : "",
-                      }}
-                    >
-                      {product.price.toLocaleString()} 원
-                    </p>
-
-                    {/* Discounted Price */}
-                    {product.discount > 0 && (
-                      <>
-                        <p
-                          style={{
-                            color: "red",
-                            fontWeight: "bold",
-                            fontSize: "1.25rem", // Approx. h6 in MUI
-                          }}
-                        >
-                          {(
-                            product.price *
-                            (1 - product.discount / 100)
-                          ).toLocaleString()}{" "}
-                          원
-                        </p>
-                        <p className="text-muted" style={{ fontSize: "0.875rem" }}>
-                          {product.discount}% 할인
-                        </p>
-                      </>
-                    )}
-                  </div>
-                </Col>
-              </Card.Body>
-            </Card>
+            <Card.Body style={{ padding: "30px" }}>
+              <Card.Title className="text-left text-muted">
+                <h6>
+                  {product.animalCategory}/{product.productCategory}
+                </h6>
+              </Card.Title>
+              <Col className="text-left">
+                <h4>
+                  <strong>{product.productName}</strong>
+                </h4>
+              </Col>
+              <Col className="text-left">
+                <div>
+                  <p
+                    className="text-muted"
+                    style={{
+                      textDecoration:
+                        product.discount > 0 ? "line-through" : "none",
+                      fontSize: product.discount === 0 ? "1.25rem" : "",
+                    }}
+                  >
+                    {product.price.toLocaleString()} 원
+                  </p>
+                  {product.discount > 0 && (
+                    <>
+                      <p
+                        style={{
+                          color: "red",
+                          fontWeight: "bold",
+                          fontSize: "1.25rem",
+                        }}
+                      >
+                        {(
+                          product.price *
+                          (1 - product.discount / 100)
+                        ).toLocaleString()}{" "}
+                        원
+                      </p>
+                      <p
+                        className="text-muted"
+                        style={{ fontSize: "0.875rem" }}
+                      >
+                        {product.discount}% 할인
+                      </p>
+                    </>
+                  )}
+                </div>
+              </Col>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
-    
-      <Row className="mb-4">
+
+      {/* 구매하기 버튼 (상품 정보 하단) */}
+      <Row>
         <Col>
-          <Card className="place-button-box">
-              <Card.Body style={{ padding: '3px' }}>
-                {/* <Card.Title className="text-center">{place.fcltyNm}</Card.Title> */}
-                <Row>
-                  <Col sm={11}>
-                    <Button size="lg" variant="primary" className="w-100">
-                      구매하기
-                    </Button>
-                  </Col>
-                  <Col sm={1}>
-                    <Button size="sm" variant="secondary" className="w-100">
-                      <LikeButton />
-                    </Button>
-                  </Col>
-                </Row>                 
-              </Card.Body>
-            </Card>
+          <div style={{ padding: "15px" }}>
+            <Button
+              variant="warning"
+              onClick={handlePurchase}
+              style={{
+                width: "100%",
+                padding: "10px",
+                fontSize: "1.25rem",
+                fontWeight: "bold",
+                backgroundColor: "#FF6347",
+                borderColor: "#FF6347",
+              }}
+            >
+              구매하기
+            </Button>
+          </div>
         </Col>
       </Row>
-      
-    </Row>
 
-      {/* 탭 구성 */}
+      {/* 탭 영역 */}
       <Tabs
         id="place-detail-tabs"
         activeKey={activeTab}
         onSelect={(tab) => setActiveTab(tab)}
         className="mb-4"
       >
-
-     
-     
-        <Tab eventKey="info" title="장소 상세 정보">
+        <Tab eventKey="info" title="상품 상세 정보">
           <div className="place-detail-tabs">
             <p>상품 정보: {product.productName}</p>
-            
-            {/* 장소상세보기 */}
             <p>
-            <strong>상품 상세:</strong>{product.productDetail}
-            </p>         
+              <strong>상품 상세:</strong>
+              {product.productDetail}
+            </p>
           </div>
         </Tab>
-
-        {/* 리뷰Tab */}
         <Tab eventKey="posts" title="리뷰">
           <div>
             <h4>리뷰</h4>
-            <ProductPost productId = {productId}/>
-            {/* 로그인상태 추가 예정  isLoggedIn = {isLoggedIn}*/}
+            <ProductPost productId={productId} />
           </div>
         </Tab>
       </Tabs>

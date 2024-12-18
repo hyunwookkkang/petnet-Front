@@ -3,6 +3,8 @@ import axios from "axios";
 import { Container, Card, Button, Modal, Form } from "react-bootstrap";
 import { useUser } from "../../../components/contexts/UserContext";
 import { Link } from "react-router-dom"; // Link 컴포넌트 추가
+import { showErrorToast } from "../../../components/common/alert/CommonToast";
+import CommonModal from "../../../components/common/modal/CommonModal";
 
 const GetMyPlacePosts = () => {
     const { userId } = useUser();
@@ -10,16 +12,9 @@ const GetMyPlacePosts = () => {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false); // 수정 모달 상태
     const [currentPost, setCurrentPost] = useState(null); // 현재 수정 중인 포스트
+    const [showConfirmModal, setShowConfirmModal] = useState(false); // 삭제 확인 모달 상태
+    const [selectedPostId, setSelectedPostId] = useState(null); // 선택된 postId
 
-    const fetchPlaceName = async (placeId) => {
-        try {
-            const response = await axios.get(`/api/map/places/${placeId}`);
-            return response.data.fcltyNm;
-        } catch (error) {
-            console.error(`Error fetching place name for placeId ${placeId}:`, error);
-            return "정보 없음";
-        }
-    };
 
     useEffect(() => {
         if (userId) {
@@ -31,24 +26,20 @@ const GetMyPlacePosts = () => {
 
     const fetchMyPlacePosts = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(`/api/map/placePosts/user`, {
                 params: { userId },
                 withCredentials: true,
             });
-            const postsWithPlaceName = await Promise.all(
-                response.data.map(async (post) => {
-                    const placeName = await fetchPlaceName(post.placeId);
-                    return { ...post, fcltyNm: placeName };
-                })
-            );
-            console.log("Fetched posts:", postsWithPlaceName);
-            setPosts(postsWithPlaceName);
+            setPosts(response.data); // fcltyNm이 이미 포함되어 있음
             setLoading(false);
         } catch (error) {
             console.error("Error fetching place posts:", error);
             setLoading(false);
         }
     };
+    
+    
 
     const handleEdit = (post) => {
         // 모달창 띄울 때 post 데이터가 제대로 있는지 확인하고, 비어있다면 기본값 설정
@@ -60,23 +51,30 @@ const GetMyPlacePosts = () => {
         setShowModal(true); // 모달 열기
     };
 
-    const handleDelete = async (postId) => {
-        if (window.confirm("정말 삭제하시겠습니까?")) {
-            try {
-                await axios.delete(`/api/map/placePosts/${postId}`, {
+    const openConfirmModal = (postId) => {
+        setSelectedPostId(postId);
+        setShowConfirmModal(true);
+        };
+
+        const handleDeleteConfirmed = async () => {
+                if (selectedPostId) {
+                try {
+                    await axios.delete(`/api/map/placePosts/${selectedPostId}`, {
                     params: { userId },
-                });
-                setPosts((prev) => prev.filter((post) => post.postId !== postId)); // 삭제된 포스트 제거
-            } catch (error) {
-                console.error("Error deleting post:", error);
-                alert("삭제 중 문제가 발생했습니다.");
-            }
-        }
-    };
+                    });
+                    setPosts((prev) => prev.filter((post) => post.postId !== selectedPostId));
+                    setShowConfirmModal(false);
+                    setSelectedPostId(null);
+                } catch (error) {
+                    console.error("Error deleting post:", error);
+                    showErrorToast("삭제 중 문제가 발생했습니다.");
+                }
+                }
+            };
 
     const handleSave = async () => {
         if (!currentPost.content?.trim() || !currentPost.visitDate) {
-            alert("모든 필드를 입력해주세요.");
+            showErrorToast("모든 필드를 입력해주세요.");
             return;
         }
 
@@ -102,7 +100,7 @@ const GetMyPlacePosts = () => {
             setCurrentPost(null);
         } catch (error) {
             console.error("Error updating post:", error);
-            alert("수정 중 문제가 발생했습니다.");
+            showErrorToast("수정 중 문제가 발생했습니다.");
         }
     };
 
@@ -155,10 +153,38 @@ const GetMyPlacePosts = () => {
                                         border: "none",
                                         fontWeight: "bold",
                                     }}
-                                    onClick={() => handleDelete(post.postId)}
-                                >
+                                    onClick={() => openConfirmModal(post.postId)} // 모달 열기
+                                    >
                                     삭제
                                 </Button>
+
+                                <CommonModal
+                                    show={showConfirmModal}
+                                    onHide={() => setShowConfirmModal(false)} // 모달 닫기
+                                    title="삭제 확인"
+                                    body="정말 삭제하시겠습니까?"
+                                    footer={
+                                        <>
+                                        <Button 
+                                            variant="secondary"
+                                            onClick={() => setShowConfirmModal(false)}
+                                        >
+                                            취소
+                                        </Button>
+                                        <Button 
+                                            style={{ backgroundColor: "#FF6347", border: "none" }}
+                                            onClick={handleDeleteConfirmed} // 삭제 실행
+                                        >
+                                            삭제
+                                        </Button>
+                                        </>
+                                    }
+                                    backdropStyle={{
+                                        backgroundColor: "rgba(234, 234, 234, 0.74)", // 불투명 회색 배경
+                                        zIndex: 1040, // 모달 뒤로 설정
+                                    }}
+                                />
+
                             </div>
                         </div>
                         <Card.Text className="mt-2" style={{ fontSize: "1rem", color: "#333" }}>

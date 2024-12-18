@@ -23,6 +23,7 @@ import Products from "./pages/shop/product/Products";
 import Wishes from "./pages/shop/product/Wishes";
 import ProductPost from "./pages/shop/productPost/ProductPosts";
 import AddPurchase from "./pages/shop/purchase/AddPurchase";
+import Purchases from "./pages/shop/purchase/Purchases";
 
 // 사용자 페이지
 import Login from "./pages/user/Login";
@@ -61,10 +62,24 @@ import GetTopicInfo from "./pages/community/topic/GetTopicInfo";
 import SearchTopics from "./pages/community/topic/SearchTopics";
 
 // 가계부 관련 페이지
+import CashbookMain from "./pages/cashbook/CashbookMain";
+import GetExpensesLog from "./pages/cashbook/GetExpensesLog";
+import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
+import SlideDrawer from "./components/cashbook/SlideDrawer";
+
+import GetCalendarDashboard from "./pages/cashbook/GetCalendarDashboard";
+import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
+import SearchExpenses from "./pages/cashbook/SearchExpenses";
+import AddExpenseAuto from "./components/cashbook/AddExpenseAuto";
+import GetBudgets from "./pages/cashbook/GetBudgets";
+import GetBudgetSettings from "./pages/cashbook/GetBudgetSettings";
 
 
 // Admin 관련 페이지 (잘못된 경로 수정)
 import AdminMainPage from "./pages/common/AdminMainPage";
+import DeliveryInfos from "./pages/shop/purchase/DeliveryInfos";
+import AddOrEditDeliveryInfo from "./pages/shop/purchase/AddOrEditDeliveryInfo";
+
 
 
 
@@ -128,6 +143,9 @@ function App() {
             <Route path="/shop/products/wish/:userId" element={<Wishes />} />
             <Route path=".shop/productPost/:productId" element={<ProductPost />} />
             <Route path="/shop/purchase" element={<AddPurchase />} />
+            <Route path="/shop/purchase/my" element={<Purchases />} />
+            <Route path="/deliveryInfo" element={<DeliveryInfos />} />
+            <Route path="/deliveryInfo/form" element={<AddOrEditDeliveryInfo />} />
             {/* END : shop-page */}
 
             {/* START : community-page */}
@@ -153,8 +171,8 @@ function App() {
             <Route path="/pointQuiz" element={<GetPointQuiz/>}/>
             {/* END : pointshop-page */}
 
-            {/* START : cashbook-page
-            <Route path="/cashbook" element={<CashbookMain />} />
+              {/* START : cashbook-page */}
+              <Route path="/cashbook" element={<CashbookMain />} />
               <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
               <Route
                 path="/GetCalendarsDashboard"
@@ -162,11 +180,7 @@ function App() {
               />
               <Route path="/SlideDrawer" element={<SlideDrawer />} />
               <Route path="/AddExpenseAuto" element={<AddExpenseAuto />} />
-              <Route path="/AddExpenseLog" element={<AddExpenseLog />} />
-              <Route
-                path="/GetExpenseLog/:expenseId"
-                element={<GetExpenseLog />}
-              />
+
               <Route
                 path="/GetstatisticsDashboards"
                 element={<GetstatisticsDashboards />}

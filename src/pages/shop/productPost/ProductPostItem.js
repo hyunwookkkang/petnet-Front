@@ -1,12 +1,15 @@
 import React from "react";
 import "../../../styles/place/PostItem.css";
 
-const PostItem = ({ post, isUserPost, onEdit, onDelete, onClick }) => (
-  <div className="post-item" onClick={() => onClick(post)}>
+const ProductPostItem = ({ post, isUserPost, onEdit, onDelete }) => (
+  <div className="post-item">
     {/* Header */}
     <div className="post-header">
-      <strong>작성자Id: {post.userId || "닉네임 로딩 중..."}</strong>
-      <span>방문일: {post.visitDate}</span>
+      <strong>작성자: {post.userId || "닉네임 로딩 중..."}</strong>
+      <div className="post-dates">
+        <span>작성일: {post.addDate}</span>
+        <span>최종 수정일: {post.updateDate}</span>
+      </div>
     </div>
 
     {/* Images */}
@@ -22,10 +25,10 @@ const PostItem = ({ post, isUserPost, onEdit, onDelete, onClick }) => (
     {/* Actions */}
     {isUserPost && (
       <div className="post-actions">
-        <button className="post-edit" onClick={() => onEdit(post.id)}>
+        <button className="post-edit" onClick={() => onEdit(post.productPostId)}>
           수정
         </button>
-        <button className="post-delete" onClick={() => onDelete(post.id)}>
+        <button className="post-delete" onClick={() => onDelete(post.productPostId)}>
           삭제
         </button>
       </div>
@@ -33,4 +36,4 @@ const PostItem = ({ post, isUserPost, onEdit, onDelete, onClick }) => (
   </div>
 );
 
-export default PostItem; 
+export default ProductPostItem;

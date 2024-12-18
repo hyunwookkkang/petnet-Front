@@ -3,21 +3,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBowlFood,
   faBone,
-  faPaw,
+  faBath,
   faPumpMedical,
   faScissors,
-  faBath,
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { faHospital } from "@fortawesome/free-regular-svg-icons";
+import { faWalking } from "@fortawesome/free-solid-svg-icons"; // 산책용품 아이콘 추가
+import { faFutbol } from "@fortawesome/free-regular-svg-icons"; // 장난감 아이콘 추가
 
-const ExpenseCategoryDropdown = ({ onSelect }) => {
+const ExpenseCategoryDropdown = ({ onSelect, initialValue }) => {
   const [isExpenseDropDownOpen, setIsExpenseDropDownOpen] = useState(false);
-  const [selected, setSelected] = useState({
-    label: "카테고리를 선택하세요",
-    icon: null,
-  });
+  const [selected, setSelected] = useState(
+    initialValue
+      ? { label: initialValue, icon: null } // 초기값 설정
+      : { label: "카테고리를 선택하세요", icon: null }
+  );
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    if (initialValue) {
+      setSelected({ label: initialValue, icon: null }); // 초기값 업데이트
+    }
+  }, [initialValue]);
 
   const options = [
     {
@@ -29,14 +37,14 @@ const ExpenseCategoryDropdown = ({ onSelect }) => {
     {
       value: "장난감",
       label: "장난감",
-      icon: <FontAwesomeIcon icon={faPaw} />, // 대체 아이콘 사용
+      icon: <FontAwesomeIcon icon={faFutbol} />, // 장난감 아이콘
     },
     {
       value: "산책용품",
       label: "산책용품",
-      icon: <FontAwesomeIcon icon={faBone} />, // 대체 아이콘 사용
+      icon: <FontAwesomeIcon icon={faWalking} />, // 산책용품 아이콘
     },
-    { value: "의류", label: "의류", icon: <FontAwesomeIcon icon={faPaw} /> },
+    { value: "의류", label: "의류", icon: <FontAwesomeIcon icon={faHeart} /> },
     {
       value: "미용용품",
       label: "미용용품",
@@ -83,7 +91,7 @@ const ExpenseCategoryDropdown = ({ onSelect }) => {
   }, []);
 
   return (
-    <div ref={dropdownRef} style={{ position: "relative", width: "200px" }}>
+    <div ref={dropdownRef} style={{ position: "relative", width: "100%" }}>
       <label>지출 카테고리</label>
       <div
         onClick={() => setIsExpenseDropDownOpen((prev) => !prev)}
@@ -118,9 +126,9 @@ const ExpenseCategoryDropdown = ({ onSelect }) => {
             zIndex: 10,
           }}
         >
-          {options.map((option, index) => (
+          {options.map((option) => (
             <div
-              key={index}
+              key={option.value}
               onClick={() => handleSelect(option)}
               style={{
                 padding: "8px",

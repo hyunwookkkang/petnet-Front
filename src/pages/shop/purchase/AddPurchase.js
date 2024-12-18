@@ -7,28 +7,21 @@ const AddPurchase = () => {
   const { userId } = useUser();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [deliveryInfo, setDeliveryInfo] = useState(null); // 배송지 정보 상태
-  const [deliveryList, setDeliveryList] = useState([]); // 배송지 목록 상태
-  const [showDeliveryModal, setShowDeliveryModal] = useState(false); // 배송지 모달 상태
-  const [isFetchingDelivery, setIsFetchingDelivery] = useState(false); // 배송지 정보 로딩 상태
-  const [discount, setDiscount] = useState(0); // 할인 금액 상태
-  const [paymentMethod, setPaymentMethod] = useState("card"); // 결제 수단 상태
-  const [selectedCard, setSelectedCard] = useState("366"); // 카드 선택 상태
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false); // 결제 처리 상태
+  const [deliveryInfo, setDeliveryInfo] = useState(null);
+  const [deliveryList, setDeliveryList] = useState([]);
+  const [showDeliveryModal, setShowDeliveryModal] = useState(false);
+  const [isFetchingDelivery, setIsFetchingDelivery] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [selectedCard, setSelectedCard] = useState("366");
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
-  // 데이터 가져오기
   useEffect(() => {
-    let script = document.querySelector(
-      `script[src="https://cdn.iamport.kr/v1/iamport.js"]`
-    );
-
-    // 만약 스크립트가 존재하지 않으면
+    let script = document.querySelector('script[src="https://cdn.iamport.kr/v1/iamport.js"]');
     if (!script) {
-      // 새로운 스크립트 요소를 생성
       script = document.createElement("script");
       script.src = "https://cdn.iamport.kr/v1/iamport.js";
       script.async = true;
-      document.body.appendChild(script); // 스크립트를 문서의 body에 추가
+      document.body.appendChild(script);
     }
 
     const fetchCartItems = async () => {
@@ -41,24 +34,16 @@ const AddPurchase = () => {
       } finally {
         setLoading(false);
       }
-
-      return () => {
-        // 스크립트 요소가 존재하는지 확인 후 제거
-        if (script && script.parentNode === document.body) {
-          document.body.removeChild(script);
-        }
-      };
     };
 
     fetchCartItems();
   }, [userId]);
 
-  // 배송지 목록을 가져오는 함수
   const fetchDeliveryList = async () => {
     setIsFetchingDelivery(true);
     try {
-      const response = await axios.get(`/api/deliveryInfo`);
-      setDeliveryList(response.data); // 배송지 목록 업데이트
+      const response = await axios.get("/api/deliveryInfo");
+      setDeliveryList(response.data);
     } catch (error) {
       console.error("Error fetching delivery info:", error);
     } finally {
@@ -66,78 +51,81 @@ const AddPurchase = () => {
     }
   };
 
-  // 배송지 선택 모달 열기
   const handleSelectDelivery = async () => {
-    await fetchDeliveryList(); // 배송지 목록 가져오기
-    setShowDeliveryModal(true); // 모달 열기
+    await fetchDeliveryList();
+    setShowDeliveryModal(true);
   };
 
-  // 배송지 모달 닫기
   const handleCloseDeliveryModal = () => {
     setShowDeliveryModal(false);
   };
 
-  // 배송지 선택 처리
   const handleDeliverySelect = (delivery) => {
-    setDeliveryInfo(delivery); // 선택된 배송지 정보를 상태에 저장
-    setShowDeliveryModal(false); // 모달 닫기
+    setDeliveryInfo(delivery);
+    setShowDeliveryModal(false);
   };
 
-  // 상품 금액 계산
   const totalProductPrice = items.reduce(
     (total, item) => total + item.product.price * item.quantity,
     0
   );
-  const totalPayment = totalProductPrice - discount; // 총 결제 금액 = 상품 금액 - 할인 금액
+
+  // 각 상품의 할인 금액을 계산하여 총 할인 금액을 구함
+  const totalDiscount = items.reduce(
+    (total, item) => total + (item.product.price * item.quantity * (item.product.discount / 100)),
+    0
+  );
+
+  // 총 결제 금액은 원래의 금액에서 할인 금액을 뺀 금액
+  const totalPayment = totalProductPrice - totalDiscount;
 
   const handlePaymentMethodChange = (e) => {
-    setPaymentMethod(e.target.value); // 결제 수단 변경
+    setPaymentMethod(e.target.value);
     if (e.target.value === "simple") {
-      setSelectedCard(null); // 간편 결제 선택 시 카드 드롭다운 비활성화
+      setSelectedCard(null);
     }
   };
 
   const handleCardChange = (e) => {
-    setSelectedCard(e.target.value); // 카드 종류 선택
+    setSelectedCard(e.target.value);
   };
-  
+
   const handlePayment = async () => {
     if (!deliveryInfo) {
       alert("배송지 정보를 선택해 주세요.");
       return;
     }
-  
+
     if (!paymentMethod) {
       alert("결제 수단을 선택해 주세요.");
       return;
     }
-  
+
     if (paymentMethod === "card" && !selectedCard) {
       alert("카드를 선택해 주세요.");
       return;
     }
-  
-    setIsProcessingPayment(true); // 결제 처리 시작
-  
+
+    setIsProcessingPayment(true);
+
     try {
       const { IMP } = window;
       IMP.init("imp52051063");
-  
-      // 장바구니에서 결제 데이터를 동적으로 생성
+
       const productNames = items.map((item) => item.product.productName).join(", ");
       const totalQuantity = items.reduce(
         (total, item) => total + item.quantity,
         0
       );
-  
+
       const paymentData = {
-        pg: 'html5_inicis', 
+        pg: 'html5_inicis',
         channelKey: "channel-key-2ccba774-c929-46a9-9f15-26d25e8f8d29",
-        pay_method: paymentMethod, // 결제 수단
-        merchant_uid: `ORD-${Date.now()}`, // 주문 번호
-        name: productNames, // 상품명
-        amount: totalPayment, // 결제 금액
-        company: "pet-net", // 회사명
+        pay_method: paymentMethod,
+        merchant_uid: `ORD-${Date.now()}`,
+        name: productNames,
+        amount: totalPayment,
+        company: "pet-net",
         buyer_name: deliveryInfo?.buyerName,
         buyer_tel: deliveryInfo?.deliveryPhoneNumber,
         buyer_addr: deliveryInfo?.deliveryAddress,
@@ -149,20 +137,18 @@ const AddPurchase = () => {
           }
         } : null
       };
-  
-      // 결제 요청
+
       IMP.request_pay(paymentData, async (rsp) => {
         if (rsp.success) {
           try {
-            // 결제 성공 후 imp_uid를 서버로 전송하여 결제 검증
             const response = await axios.post("/api/shop/purchases/verify", {
               imp_uid: rsp.imp_uid,
               merchant_uid: rsp.merchant_uid,
             });
-  
+
             if (response.status === 200) {
               alert("결제가 성공적으로 처리되었습니다.");
-              window.location.href = response.data.redirectUrl; // 결제 페이지로 리다이렉션
+              window.location.href = response.data.redirectUrl;
             } else {
               alert("결제 검증 실패: " + response.data);
             }
@@ -171,7 +157,6 @@ const AddPurchase = () => {
             alert("결제 검증 중 오류가 발생했습니다.");
           }
         } else {
-          // 결제 실패 시
           console.error("결제 실패:", rsp.error_msg);
           alert(`결제 실패: ${rsp.error_msg}`);
         }
@@ -180,7 +165,7 @@ const AddPurchase = () => {
       console.error("결제 처리 중 오류:", error);
       alert("결제 처리 중 오류가 발생했습니다.");
     } finally {
-      setIsProcessingPayment(false); // 처리 끝
+      setIsProcessingPayment(false);
     }
   };
 
@@ -192,7 +177,7 @@ const AddPurchase = () => {
     <div>
       <Row>
         <Col>
-          <Table striped bordered hover>
+          <Table striped bordered hover >
             <thead>
               <tr>
                 <th>구매 상품</th>
@@ -228,10 +213,9 @@ const AddPurchase = () => {
         </Col>
       </Row>
 
-      {/* 배송지 입력 영역 */}
       <Row>
         <Col>
-          <Card className="mt-4">
+          <Card className="mt-4" style={{ marginLeft: "10px", marginRight: "10px", padding: "20px" }}>
             <Card.Body>
               <h5>배송지 정보</h5>
               <Form>
@@ -241,6 +225,7 @@ const AddPurchase = () => {
                     type="text"
                     value={deliveryInfo?.buyerName || ''}
                     disabled
+                    style={{ marginLeft: "10px", marginRight: "10px" }}
                   />
                 </Form.Group>
                 <Form.Group controlId="formDeliveryAddress">
@@ -249,6 +234,7 @@ const AddPurchase = () => {
                     type="text"
                     value={deliveryInfo?.deliveryAddress || ''}
                     disabled
+                    style={{ marginLeft: "10px", marginRight: "10px" }}
                   />
                 </Form.Group>
                 <Form.Group controlId="formDeliveryPhone">
@@ -257,13 +243,14 @@ const AddPurchase = () => {
                     type="text"
                     value={deliveryInfo?.deliveryPhoneNumber || ''}
                     disabled
+                    style={{ marginLeft: "10px", marginRight: "10px" }}
                   />
                 </Form.Group>
                 <Button
-                  variant="outline-primary"
+                  style={{ backgroundColor: "#FEBE98", borderColor: "#FEBE98", marginTop: "10px", marginLeft: "10px", marginRight: "10px" }}
                   className="mt-2"
                   onClick={handleSelectDelivery}
-                  disabled={isFetchingDelivery} // 배송지 로딩 중 버튼 비활성화
+                  disabled={isFetchingDelivery}
                 >
                   {isFetchingDelivery ? "Loading..." : "배송지 선택"}
                 </Button>
@@ -273,10 +260,9 @@ const AddPurchase = () => {
         </Col>
       </Row>
 
-      {/* 결제 금액 계산 영역 */}
-      <Row className="mt-4">
+      <Row>
         <Col>
-          <Card>
+          <Card className="mt-4" style={{ marginLeft: "10px", marginRight: "10px", padding: "20px" }}>
             <Card.Body>
               <h5>결제 금액</h5>
               <Row>
@@ -285,7 +271,7 @@ const AddPurchase = () => {
               </Row>
               <Row>
                 <Col xs={6}>할인 금액</Col>
-                <Col xs={6} className="text-end">{discount.toLocaleString()} 원</Col>
+                <Col xs={6} className="text-end">{totalDiscount.toLocaleString()} 원</Col>
               </Row>
               <Row>
                 <Col xs={6}><strong>총 결제 금액</strong></Col>
@@ -296,10 +282,9 @@ const AddPurchase = () => {
         </Col>
       </Row>
 
-      {/* 결제 수단 선택 */}
       <Row className="mt-4">
         <Col>
-          <Card>
+          <Card style={{ marginLeft: "10px", marginRight: "10px", padding: "20px" }}>
             <Card.Body>
               <h5>결제 수단</h5>
               <Form>
@@ -319,15 +304,14 @@ const AddPurchase = () => {
                   checked={paymentMethod === "kakaopay"}
                   onChange={handlePaymentMethodChange}
                 />
-
-                {/* 카드 결제를 선택한 경우에만 카드 선택 드롭다운 활성화 */}
                 {paymentMethod === "card" && (
-                  <Form.Group controlId="formCard">
+                  <Form.Group controlId="formCard" style={{ marginLeft: "10px", marginRight: "10px" }}>
                     <Form.Label>카드 종류</Form.Label>
                     <Form.Control
                       as="select"
                       value={selectedCard}
                       onChange={handleCardChange}
+                      style={{ marginLeft: "10px", marginRight: "10px" }}
                     >
                       <option value="366">신한카드</option>
                       <option value="361">BC카드</option>
@@ -340,16 +324,20 @@ const AddPurchase = () => {
         </Col>
       </Row>
 
-      {/* 결제하기 버튼 */}
       <Row className="mt-4">
         <Col>
-          <Button variant="success" size="lg" onClick={handlePayment} disabled={isProcessingPayment}>
+          <Button
+            style={{ backgroundColor: "#FF6347", borderColor: "#FF6347", marginTop: "10px", marginLeft: "10px", marginRight: "10px" }}
+            size="lg"
+            className="d-block w-100"
+            onClick={handlePayment}
+            disabled={isProcessingPayment}
+          >
             {isProcessingPayment ? '결제 처리 중...' : '결제하기'}
           </Button>
         </Col>
       </Row>
 
-      {/* 배송지 정보 모달 */}
       <Modal show={showDeliveryModal} onHide={handleCloseDeliveryModal}>
         <Modal.Header closeButton>
           <Modal.Title>배송지 선택</Modal.Title>
@@ -365,11 +353,9 @@ const AddPurchase = () => {
                     <Button
                       variant="outline-primary"
                       onClick={() => handleDeliverySelect(delivery)}
-                      style={{ textAlign: "left", display: "block" }}
+                      style={{ marginBottom: "10px" }}
                     >
-                      {delivery.buyerName} <br />
-                      {delivery.deliveryAddress} <br />
-                      {delivery.deliveryPhoneNumber}
+                      {delivery.buyerName} ({delivery.deliveryAddress})
                     </Button>
                   </li>
                 ))}
@@ -377,6 +363,11 @@ const AddPurchase = () => {
             </div>
           )}
         </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeliveryModal}>
+            Close
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );
