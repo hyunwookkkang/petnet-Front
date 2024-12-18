@@ -1,38 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import "../../styles/pointshop/GetPointLog.css";
+import React, { useEffect, useState } from "react";
+import { Table, Button, Card, Statistic, Modal, Space, Tag } from "antd";
+import { DollarCircleOutlined } from "@ant-design/icons"; // Ant Design 아이콘
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../../components/contexts/UserContext";
-import CommonModal from "../../components/common/modal/CommonModal";
-import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'; // 포인트 아이콘 추가
-
-// 날짜 포맷팅 함수
-const formatLocalDate = (dateStr) => {
-  const date = new Date(dateStr);
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} 
-          ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
-};
 
 const GetPointLog = () => {
   const [pointLogs, setPointLogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentApi, setCurrentApi] = useState('getPointLog');
+  const [currentApi, setCurrentApi] = useState("getPointLog");
   const [showAlert, setShowAlert] = useState(false);
 
-  const { userId, myPoint } = useUser(); // useUser에서 myPoint 가져오기
+  const { userId, myPoint } = useUser();
   const navigate = useNavigate();
   const todayDate = new Date().toISOString().slice(0, 10);
 
   const reasonMapping = {
-    0: '이벤트 발생',
-    1: '장소 리뷰',
-    2: '퀴즈 성공',
-    3: '상품 리뷰',
-    4: '게시글 등록',
-    5: '인기 게시글 선정',
-    7: '포인트 소멸',
-    8: '상품 구매',
+    0: "이벤트 발생",
+    1: "장소 리뷰",
+    2: "퀴즈 성공",
+    3: "상품 리뷰",
+    4: "게시글 등록",
+    5: "인기 게시글 선정",
+    7: "포인트 소멸",
+    8: "상품 구매",
   };
 
   const apiEndpoints = (userId) => ({
@@ -52,12 +43,11 @@ const GetPointLog = () => {
       try {
         const response = await axios.get(apiEndpoints(userId)[currentApi]);
         const formattedData = response.data.map((log, index) => ({
-          id: index + 1,
+          key: index + 1, // Table의 고유 키
           ...log,
           reasonText: reasonMapping[log.reason] || `알 수 없음(${log.reason})`,
-          pointLogDate: formatLocalDate(log.pointLogDate),
+          pointLogDate: new Date(log.pointLogDate).toLocaleString(), // 포맷팅
         }));
-
         setPointLogs(formattedData);
       } catch (error) {
         console.error("Error fetching point logs:", error);
@@ -70,76 +60,122 @@ const GetPointLog = () => {
   }, [currentApi, userId]);
 
   const columns = [
-    { field: 'id', headerName: '순번', width: 100 },
-    { field: 'reasonText', headerName: '이유', width: 200 },
-    { field: 'pointLogDate', headerName: '날짜', width: 200 },
-    { field: 'pointAmount', headerName: '포인트 변경량', width: 150 },
+    {
+      title: "순번",
+      dataIndex: "key",
+      key: "key",
+      width: 80,
+    },
+    {
+      title: "이유",
+      dataIndex: "reasonText",
+      key: "reasonText",
+    },
+    {
+      title: "날짜",
+      dataIndex: "pointLogDate",
+      key: "pointLogDate",
+    },
+    {
+      title: "포인트 변경량",
+      dataIndex: "pointAmount",
+      key: "pointAmount",
+    },
   ];
 
   const checkItems = [
-    { reason: 1, label: '오늘 장소 리뷰' },
-    { reason: 2, label: '오늘 퀴즈 성공' },
-    { reason: 3, label: '오늘 상품 리뷰' },
-    { reason: 4, label: '오늘 게시글 등록' },
+    { reason: 1, label: "오늘 장소 리뷰" },
+    { reason: 2, label: "오늘 퀴즈 성공" },
+    { reason: 3, label: "오늘 상품 리뷰" },
+    { reason: 4, label: "오늘 게시글 등록" },
   ];
 
+  const handleApiChange = (apiKey) => {
+    setCurrentApi(apiKey);
+  };
+
   return (
-    <div className="point-log-container" style={{ fontFamily: "Ownglyph_ParkDaHyun, sans-serif" }}>
-      {/* 포인트 내역 헤더 */}
-      <div className="point-log-header">
-        <h1 className="point-log-title">포인트 내역</h1>
-        <div className="my-user-info-box text-center">
-          <p className="my-icon-text" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <PaidOutlinedIcon sx={{ color: "#FEBE98", marginRight: "6px", fontSize: "28px" }} />
-            <span style={{ fontWeight: "bold", fontSize: "24px", color: "#FEBE98" }}>
-              {myPoint !== null ? myPoint : '0'}P
-            </span>
-          </p>
-        </div>
-      </div>
+    <div style={{ padding: "20px", backgroundColor: "#F0F0F0", minHeight: "100vh" }}>
+      {/* 헤더 */}
+      <Card style={{ marginBottom: "20px" }}>
+        <Statistic
+          title="보유 포인트"
+          value={myPoint || 0}
+          suffix="P"
+          prefix={<DollarCircleOutlined style={{ color: "#FEBE98" }} />} // Ant Design 아이콘 사용
+          valueStyle={{ color: "#FEBE98" }}
+        />
+      </Card>
 
       {/* 오늘 기록 체크 */}
-      <div className="today-check-container">
-        {checkItems.map(item => (
-          <div
+      <div style={{ marginBottom: "20px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
+        {checkItems.map((item) => (
+          <Tag
             key={item.reason}
-            className={`today-log-card ${pointLogs.some(log => log.pointLogDate.slice(0, 10) === todayDate && log.reason === String(item.reason)) ? 'text-o' : 'text-x'}`}
-            style={{fontSize: '13px'}}
+            color={pointLogs.some(
+              (log) =>
+                log.pointLogDate.slice(0, 10) === todayDate &&
+                log.reason === String(item.reason)
+            )
+              ? "green"
+              : "volcano"}
           >
-            {item.label}: {pointLogs.some(log => log.pointLogDate.slice(0, 10) === todayDate && log.reason === String(item.reason)) ? '⭕' : '❌'}
-          </div>
+            {item.label}: {pointLogs.some(
+              (log) =>
+                log.pointLogDate.slice(0, 10) === todayDate &&
+                log.reason === String(item.reason)
+            )
+              ? "⭕"
+              : "❌"}
+          </Tag>
         ))}
       </div>
 
       {/* 버튼 그룹 */}
-      <div className="button-group">
-        {["getPointLog", "getPointAddLog", "getPointUpdateLog"].map((apiKey) => (
-          <button
-            key={apiKey}
-            onClick={() => setCurrentApi(apiKey)}
-            className={`log-button ${currentApi === apiKey ? 'active' : ''}`}
-            style={{fontSize: '16px'}}
-          >
-            {apiKey === "getPointLog" ? "전체 로그" : apiKey === "getPointAddLog" ? "적립 로그" : "사용 로그"}
-          </button>
-        ))}
-      </div>
+      <Space style={{ marginBottom: "20px" }}>
+        <Button
+          type="default"
+          style={{
+            backgroundColor: currentApi === "getPointLog" ? "#FEBE98" : "#DCDCDC",
+            color: "#FFFFFF",
+          }}
+          onClick={() => handleApiChange("getPointLog")}
+        >
+        전체 로그
+        </Button>
+        <Button
+          type="default"
+          style={{
+            backgroundColor: currentApi === "getPointAddLog" ? "#FEBE98" : "#DCDCDC",
+            color: "#FFFFFF",
+          }}
+         onClick={() => handleApiChange("getPointAddLog")}
+        >
+          적립 로그
+        </Button>
+        <Button
+          type="default"
+          style={{
+            backgroundColor: currentApi === "getPointUpdateLog" ? "#FEBE98" : "#DCDCDC",
+            color: "#FFFFFF",
+          }}
+          onClick={() => handleApiChange("getPointUpdateLog")}
+        >
+          사용 로그
+        </Button>
+        </Space>
 
-      {loading ? (
-        <div className="loading-text">포인트 내역을 불러오는 중입니다...</div>
-      ) : (
-        <div className="datagrid-container">
-          <DataGrid
-            rows={pointLogs}
-            columns={columns}
-            pageSize={10}
-            style={{ backgroundColor: '#FFFFFF', border: 'none', fontFamily: 'Ownglyph_ParkDaHyun, sans-serif' }}
-          />
-        </div>
-      )}
+      {/* 테이블 */}
+      <Table
+  dataSource={pointLogs}
+  columns={columns}
+  loading={loading}
+  pagination={{ pageSize: 10 }}
+  style={{ border: "none", backgroundColor: "#FFFFFF" }} // 테두리 제거 및 배경색 유지
+/>
 
       {/* 포인트 이용 안내 */}
-      <div className="product-info-box">
+      <Card style={{ marginTop: "20px" }}>
         <h2>포인트 이용 안내</h2>
         <ul>
           <li>장소 리뷰 작성 시 100P 적립 (하루에 한 번)</li>
@@ -149,27 +185,19 @@ const GetPointLog = () => {
           <li>인기 게시글 선정 시 200P 적립 (제한 없음)</li>
           <li>매년 1월 1일에 모든 보유 포인트 소멸</li>
         </ul>
-      </div>
+      </Card>
 
-      {/* 로그인 필요 모달 */}
-      <CommonModal
-        show={showAlert}
-        onHide={() => {
-          setShowAlert(false);
-          navigate("/login");
-        }}
+      {/* 모달 */}
+      <Modal
+        visible={showAlert}
+        onOk={() => navigate("/login")}
+        onCancel={() => setShowAlert(false)}
         title="로그인 필요"
-        body="로그인이 필요한 서비스입니다. 로그인 화면으로 이동합니다."
-        footer={
-          <button
-            className="modal-confirm-button"
-            style={{ backgroundColor: "#feb98e", border: 'none' }}
-            onClick={() => navigate("/login")}
-          >
-            확인
-          </button>
-        }
-      />
+        okText="확인"
+        cancelText="취소"
+      >
+        로그인이 필요한 서비스입니다. 로그인 화면으로 이동합니다.
+      </Modal>
     </div>
   );
 };
