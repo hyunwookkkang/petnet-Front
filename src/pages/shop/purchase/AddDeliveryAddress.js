@@ -28,9 +28,10 @@ const AddDeliveryAddress = ({ onAddressSelected }) => {
           fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
         }
 
+        // 상위 컴포넌트로 데이터 전달
         onAddressSelected({
-          postcode: data.zonecode,
-          address: fullAddr,
+          zipCode: data.zonecode,
+          deliveryAddress: fullAddr,
         });
       },
     }).open();
@@ -38,15 +39,9 @@ const AddDeliveryAddress = ({ onAddressSelected }) => {
 
   return (
     <div>
-      <input type="text" placeholder="우편번호" readOnly />
-      <input
-        type="button"
-        onClick={execDaumPostcode}
-        value="우편번호 찾기"
-        style={{ marginLeft: "10px" }}
-      />
-      <input type="text" placeholder="주소" readOnly style={{ marginTop: "10px", width: "100%" }} />
-      <input type="text" placeholder="상세주소" style={{ marginTop: "10px", width: "100%" }} />
+      <button type="button" onClick={execDaumPostcode}>
+        우편번호 찾기
+      </button>
     </div>
   );
 };

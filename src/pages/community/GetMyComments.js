@@ -1,54 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from 'react-router-dom';
 import { Container } from "react-bootstrap";
 
+import LoginModal from "../../components/common/modal/LoginModal";
+import ViewMyCommentInfo from "../../components/community/comment/ViewMyCommentInfo";
+
 import { useUser } from "../../components/contexts/UserContext";
-import useFetchGetMyTopics from "../../components/community/topic/useFetchGetMyTopics";
+import useFetchGetMyComments from "../../components/community/comment/useFetchGetMyComments";
 
 import "../../styles/Main.css"; // 기존 스타일 재사용
 
 
 const GetMyComments = () => {
 
-  const navigate = useNavigate();
+  const { userId } = useUser(); // 사용자 ID 가져오기
+  const { fetchGetMyComments, error } = useFetchGetMyComments();
 
-  const { userId } = useUser(''); // 사용자 ID 가져오기
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
-  const { fetchGetMyTopics, error } = useFetchGetMyTopics();
-
-  const [topics, setTopics] = useState([]);
-  
-  const [search, setSearch] = useState({
-    "category": '',
-    "condition": '',
-    "keyword": ''
-  });
+  const [comments, setComments] = useState([]);
 
 
   useEffect(() => {
+    // 로그인 검사
+    if (!userId) {
+      setShowLoginModal(true);
+      return;
+    }
 
-    const fetchTopics = async () => {
-      const response = await fetchGetMyTopics(userId, search);
-      setTopics(response || []);
+    const fetchComments = async () => {
+      const response = await fetchGetMyComments(userId);
+      setComments(response || []);
     };
-    fetchTopics();
+    fetchComments();
+    
+  }, [fetchGetMyComments, userId]);
 
-  }, [fetchGetMyTopics, userId, search, navigate]);
 
-
-  const topicsView = topics.map((topic) => (
-
-    <div key={topic.topicId}>
-
-      <Link className="link-unstyled" to={`/getTopic/${topic.topicId}`}>
-        <h2>제목: {topic.title}</h2>
-        <p>작성일: {topic.addDateStr}</p>
-        <p>작성자: {topic.author.userId}</p>
-        <p>댓글수: {topic.commentCount}</p>
-      </Link>
-
-    </div>
-
+  const commentsView = comments.map((comment) => (
+    <ViewMyCommentInfo 
+      key={comment.commentId}
+      comment={comment}
+      setComments={setComments}
+    />
   ));
 
 
@@ -65,12 +58,19 @@ const GetMyComments = () => {
       <div>
         <h1>View My Comments</h1>
         <br/>
-        { topics.length === 0 ? (
+        { comments.length === 0 ? (
           <p>내가 작성한 댓글이 없습니다</p>
         ) : (
-          <ul>{topicsView}</ul>
+          <ul>{ commentsView }</ul>
         )}
       </div>
+
+
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+        required={true}
+      />
 
     </Container>
 

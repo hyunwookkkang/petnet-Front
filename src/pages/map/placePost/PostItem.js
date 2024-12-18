@@ -20,10 +20,10 @@ const PostItem = ({ post, isUserPost, onEdit, onDelete, onClick }) => {
 
       {/* Images */}
       <div className="post-images">
-        {(post.images || []).map((image, index) => (
+        {(post.images || []).map((images, index) => (
           <img
             key={index}
-            src={image}
+            src={post.images && post.images.length > 0 ? `/api/images/${post.images[index]}` : "https://via.placeholder.com/150"}
             alt={`리뷰 이미지 ${index + 1}`}
             className="post-image"
           />

@@ -60,6 +60,7 @@ import GetMyTopics from "./pages/community/GetMyTopics";
 import GetScrapTopics from "./pages/community/GetScrapTopics";
 import GetTopicInfo from "./pages/community/GetTopicInfo";
 import SearchTopics from "./pages/community/SearchTopics";
+import GetMyComments from "./pages/community/GetMyComments";
 
 // 가계부 관련 페이지
 import CashbookMain from "./pages/cashbook/CashbookMain";
@@ -145,7 +146,7 @@ function App() {
             <Route path="/shop/purchase" element={<AddPurchase />} />
             <Route path="/shop/purchase/my" element={<Purchases />} />
             <Route path="/deliveryInfo" element={<DeliveryInfos />} />
-            <Route path="/deliveryInfo/form" element={<AddOrEditDeliveryInfo />} />
+            <Route path="/deliveryInfo/form/:deliveryInfoId?" element={<AddOrEditDeliveryInfo />} />
             {/* END : shop-page */}
 
             {/* START : community-page */}
@@ -155,6 +156,7 @@ function App() {
             <Route path="/getMyTopics" element={<GetMyTopics />} />
             <Route path="/getScraps" element={<GetScrapTopics />} />
             <Route path="/searchTopics" element={<SearchTopics />} />
+            <Route path="/getMyComments" element={<GetMyComments />} />
             {/* END : community-page */}
 
             {/* START : pointshop-page */}

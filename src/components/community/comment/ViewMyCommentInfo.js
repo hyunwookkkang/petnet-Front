@@ -1,30 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { FaImage, FaHeart } from "react-icons/fa";
 
 import LoginModal from "../../common/modal/LoginModal";
-import CommentAddModal from "./CommentAddModal";
 import CommentUpdateModal from "./CommentUpdateModal";
 import CommentDeleteModal from "./CommentDeleteModal";
-import CommentVoteButton from "./CommentVoteButton";
-import ViewTopicComments from "./ViewTopicComments";
 
 import { useUser } from "../../contexts/UserContext";
 
 import "../../../styles/Main.css";
 import "../../../styles/community/Comment.css";
+import { Link } from "react-router-dom";
 
 
-const ViewTopicCommentInfo = ({comment, setComments, isReComment}) => {
+const ViewMyCommentInfo = ({comment, setComments}) => {
 
   const { userId } = useUser(); // 사용자 ID 가져오기
 
-  const [likeCount, setLikeCount] = useState(comment.likeCount);
-  const [reCommentCount/*, setReCommentCount*/] = useState(comment.reCommentCount);
-  const [reComments, setReComments] = useState([]);
-
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+
+  useEffect(() => {
+    // 로그인 검사
+    if (!userId) {
+      setShowLoginModal(true);
+      return;
+    }
+  }, [userId]);
 
 
   // setComment 임의 지정
@@ -36,23 +39,6 @@ const ViewTopicCommentInfo = ({comment, setComments, isReComment}) => {
           : prevComment
       )
     );
-  }
-
-  // 답글 목록 갱신 -> 답글 수 갱신
-  // const setReCommentsHandler = (newRecomments) => {
-  //   setReComments(newRecomments);
-  //   setReCommentCount(reComments.length);
-  // }
-  // 무한 랜더링 발생
-
-  // 답글 쓰기 버튼 클릭 시 처리
-  const addReCommentHandler = () => {
-    // 로그인 검사
-    if (!userId) {
-      setShowLoginModal(true);
-      return;
-    }
-    setShowAddModal(true);
   }
 
   // 댓글 수정 버튼 클릭 시 처리
@@ -79,9 +65,13 @@ const ViewTopicCommentInfo = ({comment, setComments, isReComment}) => {
   const CommentHeader = () => (
     <div className="comment-header">
 
-      <span className="comment-username">
-        {comment.author.nickname}
-      </span>
+      <Link className="comment-options" to={`/getTopic/${comment.targetTopic.topicId}`}>
+        { comment.targetComment ? (
+          `(댓글) ${comment.targetComment.content}`
+        ) : (
+          `[${comment.targetTopic.categoryStr}] ${comment.targetTopic.title}`
+        )}
+      </Link>
 
       { userId === comment.author.userId ? (
         <div className="comment-options">
@@ -110,10 +100,9 @@ const ViewTopicCommentInfo = ({comment, setComments, isReComment}) => {
     <div>
 
       { comment.imageId ? (
-        <img src={`/api/images/${comment.imageId}`} alt=""/>
-      ) : (
-        <p className="comment-content">{comment.content}</p>
-      )}
+        <FaImage style={{ marginRight: '8px' }} />
+      ) : ''}
+      <p className="comment-content">{comment.content}</p>
 
     </div>
   );
@@ -122,21 +111,13 @@ const ViewTopicCommentInfo = ({comment, setComments, isReComment}) => {
     <div className="comment-footer">
 
       <span className="comment-likes" style={{display: 'flex'}}>
-        <CommentVoteButton 
-          commentId={comment.commentId} 
-          setLikeCount={setLikeCount} 
-        />
-        {likeCount}
+        <FaHeart style={{ color: '#FF6347' }} />
+        {comment.likeCount}
       </span>
 
-      { isReComment ? '' : (
-        <button 
-          className="comment-reply-button"
-          onClick={() => addReCommentHandler()}
-        >
-          답글달기 ({reCommentCount})
-        </button>
-      )}
+      <span>
+        답글 ({comment.reCommentCount})
+      </span>
 
       <span className="comment-date">
         {comment.updateDate ? '(수정됨) ' : ''} 
@@ -154,23 +135,7 @@ const ViewTopicCommentInfo = ({comment, setComments, isReComment}) => {
       <CommentHeader />
       <CommentContent />
       <CommentFooter />
-      { (comment.reCommentCount > 0) ? (
-        <ViewTopicComments 
-          targetTopic={null}
-          targetComment={comment}
-          comments={reComments}
-          setComments={setReComments}
-        />
-      ) : '' }
 
-
-      <CommentAddModal
-        showModal={showAddModal}
-        setShowModal={setShowAddModal}
-        targetTopic={comment.targetTopic}
-        targetComment={comment}
-        setComments={setReComments}
-      />
 
       <CommentUpdateModal
         showModal={showUpdateModal}
@@ -197,4 +162,4 @@ const ViewTopicCommentInfo = ({comment, setComments, isReComment}) => {
 
 }
 
-export default ViewTopicCommentInfo;
+export default ViewMyCommentInfo;
