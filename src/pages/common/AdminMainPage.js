@@ -119,7 +119,7 @@ const AdminMainPage = () => {
             </Card>
           </Col>
 
-          {/* 커뮤니티 */}
+          {/* 커뮤니티 
           <Col>
             <Card className="my-section">
               <Card.Body>
@@ -135,7 +135,7 @@ const AdminMainPage = () => {
                 </ListGroup>
               </Card.Body>
             </Card>
-          </Col>
+          </Col>*/}
         </Row>
       </Container>
     </div>

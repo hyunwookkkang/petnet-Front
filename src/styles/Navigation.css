@@ -109,8 +109,8 @@ height: 60px;
 
 /* 로고(펫 넷) 스타일 */
 .app-title {
-  font-size: 24px !important; /* 글씨 크기를 강제로 키움 */
-  font-weight: bold !important; /* 굵게 표시 */
+  font-size: 35px !important; /* 글씨 크기를 강제로 키움 */
+  /*font-weight: bold !important;  굵게 표시 */
   color: rgb(255, 255, 255) !important; /* 눈에 띄는 색상 */
   text-align: center !important; /* 중앙 정렬 */
   margin: 0 auto !important; /* 여백 중앙 정렬 */

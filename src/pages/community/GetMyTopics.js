@@ -2,24 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import { Container } from "react-bootstrap";
 
-import { useUser } from "../../../components/contexts/UserContext";
-import TopicSearchBar from "../../../components/community/topic/TopicSearchBar";
-import TopicScrapButton from "../../../components/community/topic/TopicScrapButton";
-import useFetchGetScrapTopics from "../../../components/community/topic/useFetchGetScrapTopics";
+import { useUser } from "../../components/contexts/UserContext";
+import TopicSearchBar from "../../components/community/topic/TopicSearchBar";
+import useFetchGetMyTopics from "../../components/community/topic/useFetchGetMyTopics";
 
-import "../../../styles/Main.css"; // 기존 스타일 재사용
+import "../../styles/Main.css"; // 기존 스타일 재사용
 
 
-const GetScrapTopics = () => {
+const GetMyTopics = () => {
 
   const navigate = useNavigate();
 
   const { userId } = useUser(''); // 사용자 ID 가져오기
 
-  const { fetchGetScrapTopics, error } = useFetchGetScrapTopics();
+  const { fetchGetMyTopics, error } = useFetchGetMyTopics();
 
   const [topics, setTopics] = useState([]);
-    
+  
   const [search, setSearch] = useState({
     "category": '',
     "condition": '',
@@ -27,22 +26,15 @@ const GetScrapTopics = () => {
   });
 
 
-  // 페이지 초기화
   useEffect(() => {
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
-      return;
-    }
 
     const fetchTopics = async () => {
-      const response = await fetchGetScrapTopics(userId, search);
+      const response = await fetchGetMyTopics(userId, search);
       setTopics(response || []);
     };
     fetchTopics();
-    
-  }, [fetchGetScrapTopics, userId, search, navigate]);
 
+  }, [fetchGetMyTopics, userId, search, navigate]);
 
 
   const topicsView = topics.map((topic) => (
@@ -56,8 +48,6 @@ const GetScrapTopics = () => {
         <p>댓글수: {topic.commentCount}</p>
       </Link>
 
-      <TopicScrapButton topicId={topic.topicId}/>
-
     </div>
 
   ));
@@ -68,19 +58,19 @@ const GetScrapTopics = () => {
     return <div>Error: {error}</div>;
   }
 
-
+  
   return (
 
     <Container>
       
       <TopicSearchBar setSearch={setSearch}/>
       <br/>
-
+      
       <div>
-        <h1>View Scrap Topics</h1>
+        <h1>View My Topics</h1>
         <br/>
         { topics.length === 0 ? (
-          <p>내 스크랩 게시글이 없습니다</p> // topics가 빈 배열일 경우
+          <p>내가 작성한 게시글이 없습니다</p> // topics가 빈 배열일 경우
         ) : (
           <ul>{topicsView}</ul> // topics 배열에 데이터가 있을 경우
         )}
@@ -92,4 +82,4 @@ const GetScrapTopics = () => {
 
 }
 
-export default GetScrapTopics;
+export default GetMyTopics;

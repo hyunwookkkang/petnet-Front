@@ -70,7 +70,7 @@ const ViewTopicsCard = ({category}) => {
 
   return (
 
-    <Container fluid className="mt-4 content-wrapper">
+    <Container fluid className="mt-4">
 
       <Card className="topic-section">
         <Card.Body>

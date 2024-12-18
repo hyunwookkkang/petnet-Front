@@ -55,11 +55,11 @@ import PointShopMain from "./pages/pointshop/PointShopMain";
 
 // Community 관련 페이지
 import CommunityMain from "./pages/community/CommunityMain";
-import EditTopicInfo from "./pages/community/topic/EditTopicInfo";
-import GetMyTopics from "./pages/community/topic/GetMyTopics";
-import GetScrapTopics from "./pages/community/topic/GetScrapTopics";
-import GetTopicInfo from "./pages/community/topic/GetTopicInfo";
-import SearchTopics from "./pages/community/topic/SearchTopics";
+import EditTopicInfo from "./pages/community/EditTopicInfo";
+import GetMyTopics from "./pages/community/GetMyTopics";
+import GetScrapTopics from "./pages/community/GetScrapTopics";
+import GetTopicInfo from "./pages/community/GetTopicInfo";
+import SearchTopics from "./pages/community/SearchTopics";
 
 // 가계부 관련 페이지
 import CashbookMain from "./pages/cashbook/CashbookMain";
