@@ -15,6 +15,7 @@
   border-top-left-radius: 20px; /* 왼쪽 상단 모서리만 둥글게 */
   border-bottom-left-radius: 20px; /* 왼쪽 하단 모서리만 둥글게 */
   overflow-y: auto; /* 세로 방향 스크롤 추가 (내용이 많을 경우) */
+  z-index: 1500;
 }
 
 /* 슬라이드가 열린 상태에서 애니메이션을 통해 화면에 보이게 */
@@ -39,6 +40,7 @@
 /* 폼 필드 스타일 */
 .cashbook-field {
   margin-bottom: 20px; /* 각 필드의 아래 여백 */
+  margin-top: 30px; /* 상단 여백 */
 }
 
 .cashbook-field label {
@@ -106,7 +108,7 @@
   font-size: 1.2rem; /* 글자 크기 */
   font-weight: bold; /* 글자 굵게 */
   text-align: center; /* 텍스트 가운데 정렬 */
-  margin-top: 30px; /* 상단 여백 */
+  margin-top: 45px; /* 상단 여백 */
   margin-bottom: 16px; /* 하단 여백 */
   width: 100%; /* 100% 너비 */
   max-width: 600px; /* 최대 너비 제한 */

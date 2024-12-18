@@ -4,141 +4,135 @@ import "chart.js/auto";
 import "../../styles/cashbook/GetCategoryExpenseStats.css";
 import { useUser } from "../../components/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { ProgressBar, Container, Row, Col } from "react-bootstrap";
 
 const GetCategoryExpenseStats = () => {
-  const [stats, setStats] = useState([]); // API에서 가져온 원본 데이터
+  const [stats, setStats] = useState([]); // 원본 데이터
   const [pieData, setPieData] = useState(null); // 원형 차트 데이터
-  const [tableData, setTableData] = useState([]); // 테이블 데이터
-  const [totalExpense, setTotalExpense] = useState(0); // 전체 지출 합계
+  const [totalExpense, setTotalExpense] = useState(0); // 총합
   const [year] = useState(new Date().getFullYear()); // 현재 연도
-  const { userId } = useUser(""); // 사용자 ID 가져오기
+  const { userId } = useUser(""); // 사용자 ID
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(userId);
     if (!userId) {
       alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
+      navigate("/login");
       return;
     }
+    fetchCategoryExpenseStats();
   }, [userId, navigate]);
 
-  // 데이터 가져오기
+  // API 데이터 가져오기
   const fetchCategoryExpenseStats = async () => {
     try {
       const response = await fetch(
         `/api/cashbook/expense/${userId}/${year}/getCategoryExpenseStats`
       );
-      if (!response.ok) {
+      if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
-      }
+
       const data = await response.json();
-      setStats(data);
-      processData(data); // 데이터 가공
+      processStats(data);
     } catch (error) {
       console.error("Error fetching category expense stats:", error);
     }
   };
 
-  // 데이터 가공
-  const processData = (data) => {
-    // 1. 원형 차트 데이터 준비
-    const categoryTotals = {};
-    let total = 0;
+  // 데이터 가공 및 카테고리 색상 설정
+  const processStats = (data) => {
+    const categoryTotals = data.reduce(
+      (acc, { expenseCategory, totalExpense }) => {
+        acc[expenseCategory] = (acc[expenseCategory] || 0) + totalExpense;
+        return acc;
+      },
+      {}
+    );
 
-    data.forEach(({ expenseCategory, totalExpense }) => {
-      categoryTotals[expenseCategory] =
-        (categoryTotals[expenseCategory] || 0) + totalExpense;
-      total += totalExpense;
-    });
+    const processedStats = Object.entries(categoryTotals).map(
+      ([category, total]) => ({
+        category,
+        totalExpense: total,
+      })
+    );
 
-    const pieLabels = Object.keys(categoryTotals);
-    const pieValues = Object.values(categoryTotals);
+    setStats(processedStats);
+
+    // 원형 차트에 적용할 데이터
+    const pieLabels = processedStats.map((item) => item.category);
+    const pieValues = processedStats.map((item) => item.totalExpense);
+    const backgroundColors = [
+      "#F4E9E9", // 사료
+      "#ff6384", // 간식
+      "#4BC0C0", // 장난감
+      "#3BB408", //산책용품
+      "#9966FF", // 의류
+      "#4D08B4", //미용용품
+      "#9208B4", //위생용품
+      "#36A2EB", // 병원비
+      "#ffce56", // 미용비
+      "#FF9F40", // 기타
+    ];
 
     setPieData({
       labels: pieLabels,
       datasets: [
         {
           data: pieValues,
-          backgroundColor: [
-            "#FF6384",
-            "#36A2EB",
-            "#FFCE56",
-            "#4BC0C0",
-            "#9966FF",
-            "#FF9F40",
-          ],
+          backgroundColor: backgroundColors.slice(0, pieLabels.length),
         },
       ],
     });
 
-    setTotalExpense(total); // 전체 지출 합계 저장
-
-    // 2. 테이블 데이터 준비
-    const categories = Array.from(
-      new Set(data.map((item) => item.expenseCategory))
-    );
-    const months = Array.from({ length: 12 }, (_, i) => i + 1);
-
-    const table = categories.map((category) => {
-      const row = months.map((month) => {
-        const match = data.find(
-          (item) => item.expenseCategory === category && item.month === month
-        );
-        return match ? match.totalExpense : 0;
-      });
-      const annualTotal = row.reduce((sum, value) => sum + value, 0);
-      return { category, row, annualTotal };
-    });
-
-    setTableData(table);
+    setTotalExpense(pieValues.reduce((sum, value) => sum + value, 0));
   };
 
-  // 컴포넌트 마운트 시 데이터 가져오기
-  useEffect(() => {
-    fetchCategoryExpenseStats();
-  }, []);
+  // 비율 계산
+  const calculatePercentage = (amount) => {
+    return totalExpense > 0 ? ((amount / totalExpense) * 100).toFixed(2) : 0;
+  };
 
   return (
-    <div className="category-expense-stats">
-      <h2>{year}년 지출 카테고리별 통계</h2>
+    <Container className="mt-5 category-expense-stats">
+      {/* 원형 그래프 */}
+      <Row>
+        <Col md={6} className="mx-auto text-center">
+          <h3>{year}년 지출 카테고리별 통계</h3>
+          {pieData && <Pie data={pieData} />}
+          <h4 className="mt-3">
+            총 지출 금액: {totalExpense.toLocaleString()} 원
+          </h4>
+        </Col>
+      </Row>
 
-      {/* 원형 차트 */}
-      {pieData && (
-        <div className="pie-chart-container">
-          <Pie data={pieData} />
-          <h3>
-            연간 지출 총액: <span>{totalExpense.toLocaleString()} 원</span>
-          </h3>
-        </div>
-      )}
-
-      {/* 도표 */}
-      <div className="cashbook-table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>카테고리</th>
-              {[...Array(12)].map((_, i) => (
-                <th key={i}>{i + 1}월</th>
-              ))}
-              <th>합계</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tableData.map(({ category, row, annualTotal }, index) => (
-              <tr key={index}>
-                <td>{category}</td>
-                {row.map((value, i) => (
-                  <td key={i}>{value.toLocaleString()} 원</td>
-                ))}
-                <td>{annualTotal.toLocaleString()} 원</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+      {/* 카테고리별 프로그래스바 */}
+      <Row className="mt-4">
+        <Col>
+          {stats.map((item, index) => {
+            const percentage = calculatePercentage(item.totalExpense);
+            return (
+              <div key={index} className="mb-3 progress-row">
+                <Row className="align-items-center">
+                  <Col xs={2} className="text-start fw-bold">
+                    {item.category}
+                  </Col>
+                  <Col xs={8}>
+                    <ProgressBar
+                      now={percentage}
+                      label={`${percentage}%`}
+                      className={`progress-bar-${index % 6}`}
+                    />
+                  </Col>
+                  <Col xs={2} className="text-end">
+                    {item.totalExpense.toLocaleString()}
+                  </Col>
+                </Row>
+              </div>
+            );
+          })}
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

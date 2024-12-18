@@ -146,7 +146,7 @@ function App() {
             <Route path="/shop/purchase" element={<AddPurchase />} />
             <Route path="/shop/purchase/my" element={<Purchases />} />
             <Route path="/deliveryInfo" element={<DeliveryInfos />} />
-            <Route path="/deliveryInfo/form" element={<AddOrEditDeliveryInfo />} />
+            <Route path="/deliveryInfo/form/:deliveryInfoId?" element={<AddOrEditDeliveryInfo />} />
             {/* END : shop-page */}
 
             {/* START : community-page */}

@@ -60,7 +60,7 @@ const PaymentCategoryDropdown = ({ onSelect, initialValue }) => {
   }, []);
 
   return (
-    <div ref={dropdownRef} style={{ position: "relative", width: "200px" }}>
+    <div ref={dropdownRef} style={{ position: "relative", width: "100%" }}>
       <label>결제 수단</label>
       <div
         onClick={() => setIsPaymentDropDownOpen((prev) => !prev)}
@@ -72,6 +72,7 @@ const PaymentCategoryDropdown = ({ onSelect, initialValue }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          width: "100%",
         }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
