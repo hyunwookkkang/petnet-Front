@@ -60,8 +60,8 @@ const AddPurchase = () => {
     setShowDeliveryModal(false);
   };
 
-  const handleDeliverySelect = (delivery) => {
-    setDeliveryInfo(delivery);
+  const handleDeliverySelect = (deliveryInfo) => {
+    setDeliveryInfo(deliveryInfo);
     setShowDeliveryModal(false);
   };
 
@@ -215,7 +215,7 @@ const AddPurchase = () => {
 
       <Row>
         <Col>
-          <Card className="mt-4" style={{ marginLeft: "10px", marginRight: "10px", padding: "20px" }}>
+          <Card className="mt-4" style={{ padding: "20px" }}>
             <Card.Body>
               <h5>배송지 정보</h5>
               <Form>
@@ -225,7 +225,6 @@ const AddPurchase = () => {
                     type="text"
                     value={deliveryInfo?.buyerName || ''}
                     disabled
-                    style={{ marginLeft: "10px", marginRight: "10px" }}
                   />
                 </Form.Group>
                 <Form.Group controlId="formDeliveryAddress">
@@ -234,7 +233,6 @@ const AddPurchase = () => {
                     type="text"
                     value={deliveryInfo?.deliveryAddress || ''}
                     disabled
-                    style={{ marginLeft: "10px", marginRight: "10px" }}
                   />
                 </Form.Group>
                 <Form.Group controlId="formDeliveryPhone">
@@ -243,7 +241,6 @@ const AddPurchase = () => {
                     type="text"
                     value={deliveryInfo?.deliveryPhoneNumber || ''}
                     disabled
-                    style={{ marginLeft: "10px", marginRight: "10px" }}
                   />
                 </Form.Group>
                 <Button
@@ -262,7 +259,7 @@ const AddPurchase = () => {
 
       <Row>
         <Col>
-          <Card className="mt-4" style={{ marginLeft: "10px", marginRight: "10px", padding: "20px" }}>
+          <Card className="mt-4" style={{ padding: "20px" }}>
             <Card.Body>
               <h5>결제 금액</h5>
               <Row>
@@ -284,7 +281,7 @@ const AddPurchase = () => {
 
       <Row className="mt-4">
         <Col>
-          <Card style={{ marginLeft: "10px", marginRight: "10px", padding: "20px" }}>
+          <Card style={{ padding: "20px" }}>
             <Card.Body>
               <h5>결제 수단</h5>
               <Form>
@@ -327,7 +324,7 @@ const AddPurchase = () => {
       <Row className="mt-4">
         <Col>
           <Button
-            style={{ backgroundColor: "#FF6347", borderColor: "#FF6347", marginTop: "10px", marginLeft: "10px", marginRight: "10px" }}
+            style={{ backgroundColor: "#FF6347", borderColor: "#FF6347"}}
             size="lg"
             className="d-block w-100"
             onClick={handlePayment}
@@ -342,7 +339,7 @@ const AddPurchase = () => {
         <Modal.Header closeButton>
           <Modal.Title>배송지 선택</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ maxHeight: '400px', overflowY: 'auto' }}>
           {isFetchingDelivery ? (
             <Spinner animation="border" role="status" />
           ) : (
@@ -353,7 +350,7 @@ const AddPurchase = () => {
                     <Button
                       variant="outline-primary"
                       onClick={() => handleDeliverySelect(delivery)}
-                      style={{ marginBottom: "10px" }}
+                      style={{ marginBottom: "10px", width: "100%" }}
                     >
                       {delivery.buyerName} ({delivery.deliveryAddress})
                     </Button>

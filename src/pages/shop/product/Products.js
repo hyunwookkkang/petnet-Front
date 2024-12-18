@@ -4,6 +4,7 @@ import axios from "axios";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
 import { Heart, HeartFill, Cart3 } from "react-bootstrap-icons";
 import { useUser } from "../../../components/contexts/UserContext";
+import { toast } from "react-toastify"; // react-toastify 추가
 
 const Products = () => {
   const [products, setProducts] = useState([]); // 상품 데이터
@@ -91,10 +92,12 @@ const Products = () => {
         // 위시리스트에서 제거
         await axios.delete(`/api/shop/products/wish/${productId}`);
         updatedWishList = wishList.filter((id) => id !== productId);
+        toast.success("찜 목록에서 제거되었습니다.");
       } else {
         // 위시리스트에 추가
         await axios.post(`/api/shop/products/wish/${productId}`);
         updatedWishList = [...wishList, productId];
+        toast.success("찜 목록에 물건이 추가되었습니다.");
       }
 
       setWishList(updatedWishList);
@@ -142,6 +145,8 @@ const Products = () => {
         )
       );
 
+      // 장바구니 추가 후 Toast 메시지
+      toast.success("장바구니에 물건이 추가되었습니다.");
       console.log("장바구니에 상품 추가 완료");
     } catch (error) {
       console.error("장바구니 추가 오류:", error);
@@ -265,7 +270,7 @@ const Products = () => {
                   variant="link"
                   className="text-danger fs-5 p-0"
                   onClick={(e) => {
-                    e.stopPropagation();
+                    e.stopPropagation(); // 상세페이지로 이동하지 않게 막음
                     toggleWish(product.productId);
                   }}
                 >
@@ -273,9 +278,9 @@ const Products = () => {
                 </Button>
                 <Button
                   variant="link"
-                  className="text-primary fs-5 p-0"
+                  className="fs-5 p-0"
                   onClick={(e) => {
-                    e.stopPropagation();
+                    e.stopPropagation(); // 상세페이지로 이동하지 않게 막음
                     addToCart(product.productId);
                   }}
                 >
@@ -286,6 +291,12 @@ const Products = () => {
           </Col>
         ))}
       </Row>
+
+      {!hasMore && (
+        <div className="text-center my-4">
+          <p className="text-muted">모든 데이터를 불러왔습니다.</p>
+        </div>
+      )}
     </Container>
   );
 };

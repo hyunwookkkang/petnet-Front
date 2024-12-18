@@ -1,41 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { Container, Form, Button } from "react-bootstrap";
- // 주소 검색 컴포넌트
+import { Container, Form, Button, Spinner } from "react-bootstrap";
 import AddDeliveryAddress from "./AddDeliveryAddress";
 
 const AddOrEditDeliveryInfo = () => {
-  const { deliveryId } = useParams(); // 배송지 ID 파라미터
+  const { deliveryInfoId } = useParams(); // 배송지 ID 파라미터
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: "",
-    address: "",
-    contact: "",
-    postalCode: "",
+    buyerName: "",
+    deliveryAddress: "",
+    deliveryPhoneNumber: "",
+    zipCode: "",
   });
 
+  const [loading, setLoading] = useState(false); // 로딩 상태 추가
+
   useEffect(() => {
-    if (deliveryId) {
-      // 배송지 수정 모드: 기존 데이터 불러오기
+    if (deliveryInfoId) {
+      setLoading(true); // 로딩 시작
       axios
-        .get(`/api/deliveryInfo/${deliveryId}`)
+        .get(`/api/deliveryInfo/${deliveryInfoId}`)
         .then((response) => {
-          const delivery = response.data;
+          const deliveryInfo = response.data;
           setFormData({
-            name: delivery.name,
-            address: delivery.address,
-            contact: delivery.contact,
-            postalCode: delivery.postalCode,
+            buyerName: deliveryInfo.buyerName || "",
+            deliveryAddress: deliveryInfo.deliveryAddress || "",
+            deliveryPhoneNumber: deliveryInfo.deliveryPhoneNumber || "",
+            zipCode: deliveryInfo.zipCode || "",
           });
         })
         .catch((err) => {
           console.error("배송지 정보를 불러오는 중 오류 발생:", err);
           alert("배송지 정보를 불러오는 중 오류가 발생했습니다.");
-        });
+        })
+        .finally(() => setLoading(false)); // 로딩 종료
     }
-  }, [deliveryId]);
+  }, [deliveryInfoId]);
 
   // 폼 데이터 변경 핸들러
   const handleChange = (e) => {
@@ -47,8 +49,8 @@ const AddOrEditDeliveryInfo = () => {
   const handleAddressSelected = (addressData) => {
     setFormData((prev) => ({
       ...prev,
-      address: addressData.address,
-      postalCode: addressData.postcode,
+      deliveryAddress: addressData.deliveryAddress,
+      zipCode: addressData.zipCode,
     }));
   };
 
@@ -56,13 +58,13 @@ const AddOrEditDeliveryInfo = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const apiUrl = deliveryId ? `/api/deliveryInfo/${deliveryId}` : "/api/deliveryInfo";
-    const httpMethod = deliveryId ? "put" : "post";
+    const apiUrl = deliveryInfoId ? `/api/deliveryInfo/${deliveryInfoId}` : "/api/deliveryInfo";
+    const httpMethod = deliveryInfoId ? "put" : "post";
 
     axios[httpMethod](apiUrl, formData)
       .then(() => {
-        alert(deliveryId ? "배송지가 수정되었습니다!" : "배송지가 추가되었습니다!");
-        navigate("/delivery");
+        alert(deliveryInfoId ? "배송지가 수정되었습니다!" : "배송지가 추가되었습니다!");
+        navigate("/deliveryInfo");
       })
       .catch((err) => {
         console.error("배송지 처리 중 오류 발생:", err);
@@ -70,18 +72,30 @@ const AddOrEditDeliveryInfo = () => {
       });
   };
 
+  // 로딩 중 표시
+  if (loading) {
+    return (
+      <Container className="text-center" style={{ padding: "20px" }}>
+        <Spinner animation="border" variant="primary" />
+        <p className="mt-3" style={{ fontSize: "1.2rem", color: "#555" }}>
+          배송지 정보를 불러오는 중입니다...
+        </p>
+      </Container>
+    );
+  }
+
   return (
-    <Container style={{ maxWidth: "500px", marginTop: "20px" }}>
-      <h3 className="mb-4">{deliveryId ? "배송지 수정" : "배송지 추가"}</h3>
+    <Container style={{ maxWidth: "500px", padding: "20px" }}>
+      <h3 className="mb-4">{deliveryInfoId ? "배송지 수정" : "배송지 추가"}</h3>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>배송지 이름</Form.Label>
+          <Form.Label>이름</Form.Label>
           <Form.Control
             type="text"
-            name="name"
-            value={formData.name}
+            name="buyerName"
+            value={formData.buyerName}
             onChange={handleChange}
-            placeholder="배송지 이름 입력"
+            placeholder="이름 입력"
             required
           />
         </Form.Group>
@@ -91,15 +105,15 @@ const AddOrEditDeliveryInfo = () => {
           <AddDeliveryAddress onAddressSelected={handleAddressSelected} />
           <Form.Control
             type="text"
-            name="address"
-            value={formData.address}
+            name="deliveryAddress"
+            value={formData.deliveryAddress}
             placeholder="주소"
             readOnly
           />
           <Form.Control
             type="text"
-            name="postalCode"
-            value={formData.postalCode}
+            name="zipCode"
+            value={formData.zipCode}
             placeholder="우편번호"
             readOnly
           />
@@ -109,18 +123,22 @@ const AddOrEditDeliveryInfo = () => {
           <Form.Label>연락처</Form.Label>
           <Form.Control
             type="text"
-            name="contact"
-            value={formData.contact}
+            name="deliveryPhoneNumber"
+            value={formData.deliveryPhoneNumber}
             onChange={handleChange}
             placeholder="연락처 입력"
             required
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
-          {deliveryId ? "수정하기" : "추가하기"}
+        <Button style={{
+            backgroundColor: "#FF6347",  // 버튼 배경색
+            borderColor: "#FF6347",      // 버튼 테두리 색
+            color: "#fff",               // 버튼 텍스트 색
+        }} type="submit">
+          {deliveryInfoId ? "수정하기" : "추가하기"}
         </Button>
-        <Button variant="secondary" style={{ marginLeft: "10px" }} onClick={() => navigate("/delivery")}>
+        <Button variant="secondary" style={{ marginLeft: "10px", backgroundColor: "#DCDCDC", borderColor: "#DCDCDC", color: "#000",  }} onClick={() => navigate("/deliveryInfo")}>
           취소하기
         </Button>
       </Form>
