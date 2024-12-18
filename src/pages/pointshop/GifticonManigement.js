@@ -105,19 +105,20 @@ const GifticonManagement = () => {
 
         <CommonModal
           show={showAlert}
-          onHide={() => setShowAlert(false)}
+          onHide={() => {
+            setShowAlert(false);
+            navigate("/login");
+          }}
           title="로그인 필요"
           body="로그인이 필요한 서비스입니다. 로그인 화면으로 이동합니다."
           footer={
-            <Button
-              style={{ backgroundColor: "#feb98e", border: "none" }}
-              onClick={() => {
-                setShowAlert(false);
-                navigate("/login");
-              }}
+            <button
+              className="modal-confirm-button"
+              style={{ backgroundColor: "#feb98e", border: 'none' }}
+              onClick={() => navigate("/login")}
             >
               확인
-            </Button>
+            </button>
           }
         />
 
