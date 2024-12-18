@@ -69,7 +69,13 @@ const CommunityMain = () => {
         <Link to={`/searchTopics`} className="link-unstyled">
           <SearchBar/>
         </Link>
-        <Button onClick={navigateAddTopic}>게시글 작성</Button>
+        <div style={{ display: "flex", justifyContent: "flex-end", marginRight: '20px'}}>
+          <Button 
+            style={{ backgroundColor: "#FF6347", borderColor: "#FF6347" }}
+            onClick={navigateAddTopic}>
+              게시글 작성
+          </Button>
+        </div>
       </div>
 
       <ButtonGroup className="button-group">

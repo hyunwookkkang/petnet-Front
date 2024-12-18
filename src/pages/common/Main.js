@@ -59,7 +59,12 @@ function Main() {
             to="/community"
             className={({ isActive }) => (isActive ? "nav-icon-item active" : "nav-icon-item")}
           >
-            <LocalLibraryIcon style={{ fontSize: "40px", color: "#feb98e" }} />
+            {/* <LocalLibraryIcon style={{ fontSize: "40px", color: "#feb98e" }} /> */}
+            <img 
+              src="/assets/mainIcon/commu-ion.png" 
+              alt="커뮤니티" 
+              style={{ width: "70px", height: "70px" }} 
+            />
             <div className="icon-label">커뮤니티</div>
           </NavLink>
 
@@ -68,7 +73,12 @@ function Main() {
             to="/placeMap"
             className={({ isActive }) => (isActive ? "nav-icon-item active" : "nav-icon-item")}
           >
-            <MapIcon style={{ fontSize: "40px", color: "#feb98e" }} />
+            {/* <MapIcon style={{ fontSize: "40px", color: "#feb98e" }} /> */}
+            <img 
+              src="/assets/mainIcon/placeMap-icon.png" 
+              alt="동반지도" 
+              style={{ width: "70px", height: "70px" }} 
+            />
             <div className="icon-label">동반지도</div>
           </NavLink>
 
@@ -77,7 +87,12 @@ function Main() {
             to="/shop/products"
             className={({ isActive }) => (isActive ? "nav-icon-item active" : "nav-icon-item")}
           >
-            <LocalMallIcon style={{ fontSize: "40px", color: "#feb98e" }} />
+            <img 
+              src="/assets/mainIcon/shop-icon.png" 
+              alt="쇼핑몰" 
+              style={{ width: "70px", height: "70px" }} 
+            />
+            {/* <LocalMallIcon style={{ fontSize: "40px", color: "#feb98e" }} /> */}
             <div className="icon-label">쇼핑몰</div>
           </NavLink>
 
@@ -86,7 +101,12 @@ function Main() {
             to="/pointshop-page"
             className={({ isActive }) => (isActive ? "nav-icon-item active" : "nav-icon-item")}
           >
-            <StorefrontIcon style={{ fontSize: "40px", color: "#feb98e" }} />
+            <img 
+              src="/assets/mainIcon/pointshop-icon.png" 
+              alt="포인트샵" 
+              style={{ width: "70px", height: "70px" }} 
+            />
+            {/* <StorefrontIcon style={{ fontSize: "40px", color: "#feb98e" }} /> */}
             <div className="icon-label">포인트샵</div>
           </NavLink>
 
@@ -95,7 +115,12 @@ function Main() {
             to="/cashbook"
             className={({ isActive }) => (isActive ? "nav-icon-item active" : "nav-icon-item")}
           >
-            <SavingsIcon style={{ fontSize: "40px", color: "#feb98e" }} />
+            <img 
+              src="/assets/mainIcon/cash-icon.png" 
+              alt="가계부" 
+              style={{ width: "70px", height: "70px" }} 
+            />
+            {/* <SavingsIcon style={{ fontSize: "40px", color: "#feb98e" }} /> */}
             <div className="icon-label">가계부</div>
           </NavLink>
 
@@ -104,7 +129,12 @@ function Main() {
             to="/pointQuiz"
             className={({ isActive }) => (isActive ? "nav-icon-item active" : "nav-icon-item")}
           >
-            <QuizIcon style={{ fontSize: "40px", color: "#feb98e" }} />
+            <img 
+              src="/assets/mainIcon/quiz-icon.png" 
+              alt="퀴즈" 
+              style={{ width: "70px", height: "70px" }} 
+            />
+            {/* <QuizIcon style={{ fontSize: "40px", color: "#feb98e" }} /> */}
             <div className="icon-label">퀴즈</div>
           </NavLink>
 
@@ -113,7 +143,12 @@ function Main() {
             to="/placeSearch"
             className={({ isActive }) => (isActive ? "nav-icon-item active" : "nav-icon-item")}
           >
-            <SearchIcon style={{ fontSize: "40px", color: "#feb98e" }} />
+            <img 
+              src="/assets/mainIcon/placeMap-search-icon.png" 
+              alt="장소검색" 
+              style={{ width: "70px", height: "70px" }} 
+            />
+            {/* <SearchIcon style={{ fontSize: "40px", color: "#feb98e" }} /> */}
             <div className="icon-label">장소검색</div>
           </NavLink>
 
@@ -122,7 +157,12 @@ function Main() {
             to="/my/orders"
             className={({ isActive }) => (isActive ? "nav-icon-item active" : "nav-icon-item")}
           >
-            <ShoppingBasketOutlinedIcon style={{ fontSize: "40px", color: "#feb98e" }} />
+            <img 
+              src="/assets/mainIcon/shop-oder-icon.png" 
+              alt="주문내역" 
+              style={{ width: "70px", height: "70px" }} 
+            />
+            {/* <ShoppingBasketOutlinedIcon style={{ fontSize: "40px", color: "#feb98e" }} /> */}
             <div className="icon-label">주문내역</div>
           </NavLink>
         </div>
