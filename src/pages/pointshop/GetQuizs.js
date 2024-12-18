@@ -87,7 +87,7 @@ const GetQuizs = () => {
         }}>퀴즈 관리</h1>
       {!isAdding && !editingQuiz && (
         <div className="mb-3 text-end">
-          <button className="quiz-button add-button" onClick={() => setIsAdding(true)}>
+          <button className="quiz-button add-button" onClick={() => setIsAdding(true)} style={{fontSize: '16px'}}>
             추가
           </button>
         </div>
@@ -95,10 +95,10 @@ const GetQuizs = () => {
       <Table bordered hover>
         <thead>
           <tr>
-            <th>퀴즈 ID</th>
-            <th>문제 및 보기</th>
-            <th>정답</th>
-            <th style={{ width: '120px', textAlign: 'center' }}>작업</th>
+            <th style={{ textAlign: 'center',fontSize: '16px' }}>퀴즈 ID</th>
+            <th style={{textAlign: 'center',fontSize: '16px' }}>문제 및 보기</th>
+            <th style={{ textAlign: 'center',fontSize: '16px' }}>정답</th>
+            <th style={{ width: '120px', textAlign: 'center',fontSize: '16px' }}>수정/삭제/저장</th>
           </tr>
         </thead>
         <tbody>
@@ -112,6 +112,7 @@ const GetQuizs = () => {
                   onChange={(e) => handleInputChange('quizContent', e.target.value)}
                   placeholder="퀴즈 문제 입력"
                   className="mb-2"
+                  style={{fontSize: '18px'}}
                 />
                 {[1, 2, 3, 4].map((num) => (
                   <Form.Control
@@ -121,6 +122,7 @@ const GetQuizs = () => {
                     onChange={(e) => handleInputChange(`quizOption${num}`, e.target.value)}
                     className="mb-2"
                     placeholder={`보기 ${num} 입력`}
+                    style={{fontSize: '16px'}}
                   />
                 ))}
               </td>
@@ -158,6 +160,7 @@ const GetQuizs = () => {
                     value={editingQuiz.quizContent}
                     onChange={(e) => handleEditChange('quizContent', e.target.value)}
                     className="mb-2"
+                    
                   />
                   {[1, 2, 3, 4].map((num) => (
                     <Form.Control
@@ -182,7 +185,7 @@ const GetQuizs = () => {
                   </Form.Select>
                 </td>
                 <td className="table-cell">
-                <div className="button-container">
+                <div className="button-container" >
                   <button className="quiz-button save-button" onClick={handleUpdateQuiz}>
                     저장
                   </button>
@@ -196,20 +199,21 @@ const GetQuizs = () => {
               <tr key={index}>
                 <td>{quiz.quizId}</td>
                 <td>
-                  <div>{quiz.quizContent}</div>
+                  <div  style={{fontSize: '16px'}}>{quiz.quizContent}</div>
                   {[1, 2, 3, 4].map((num) => (
-                    <div key={num}>{`${num}. ${quiz[`quizOption${num}`]}`}</div>
+                    <div key={num} style={{fontSize: '15px'}}>{`${num}. ${quiz[`quizOption${num}`]}`}</div>
                   ))}
                 </td>
                 <td>{quiz.answer}</td>
                 <td className="table-cell">
                 <div className="button-container">
-                  <button className="quiz-button edit-button" onClick={() => setEditingQuiz(quiz)}>
+                  <button className="quiz-button edit-button" onClick={() => setEditingQuiz(quiz)} style={{fontSize: '16px'}}>
                     수정
                   </button>
                   <button
                     className="quiz-button delete-button"
                     onClick={() => handleDeleteQuiz(quiz.quizId)}
+                    style={{fontSize: '16px'}}
                   >
                     삭제
                   </button>

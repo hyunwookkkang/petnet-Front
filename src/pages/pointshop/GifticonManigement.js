@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback  } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useUser } from "../../components/contexts/UserContext";
-import { Container, Card, CardContent, CardMedia, Typography, Button } from "@mui/material";
+import { Container, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import CommonModal from "../../components/common/modal/CommonModal";
 import "../../styles/common/Card.css";
 import "../../styles/pointshop/GifticonManagement.css";
+
 
 const GifticonManagement = () => {
   const [radioValue, setRadioValue] = useState('logs'); // 'logs' or 'list'
@@ -27,7 +28,7 @@ const GifticonManagement = () => {
     if (!userId) setShowAlert(true);
   }, [userId]);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!userId) return;
 
     setLoading(true);
@@ -63,30 +64,30 @@ const GifticonManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
-  const loadMoreData = () => {
+  const loadMoreData = useCallback(() => {
     if (loading || !hasMore) return;
-
+  
     const allData = radioValue === 'logs' ? gifticonsLog : gifticons;
     const newPage = page + 1;
     const newVisibleData = allData.slice(0, newPage * 5);
-
+  
     setVisibleData(newVisibleData);
     setPage(newPage);
     setHasMore(newVisibleData.length < allData.length);
-  };
+  }, [loading, hasMore, radioValue, gifticonsLog, gifticons, page]);
 
   useEffect(() => {
     if (userId) fetchData();
-  }, [userId]);
+  }, [userId, fetchData]);
 
   useEffect(() => {
     const allData = radioValue === 'logs' ? gifticonsLog : gifticons;
     setVisibleData(allData.slice(0, 5));
     setPage(1);
     setHasMore(allData.length > 5);
-  }, [radioValue]);
+  }, [radioValue, gifticonsLog, gifticons]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,7 +97,7 @@ const GifticonManagement = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [radioValue, page, hasMore]);
+  }, [loadMoreData]);
 
   return (
     <div className="gifticon-management-container">

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Modal } from "react-bootstrap";
 import { useUser } from "../../components/contexts/UserContext";
-import CommonModal from "../../components/common/modal/CommonModal";
 import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
-import "../../styles/pointshop/GetGifticon.css"; // CSS 파일 import
+import "../../styles/pointshop/GetGifticon.css";
 
 const GetGifticon = () => {
   const { gifticonId } = useParams();
@@ -13,13 +13,15 @@ const GetGifticon = () => {
   const [loading, setLoading] = useState(true);
   const { userId } = useUser();
   const navigate = useNavigate();
-  const [showAlert, setShowAlert] = useState(false); // 모달 상태
-  const [alertMessage, setAlertMessage] = useState(""); // 모달 메시지
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showModal, setShowModal] = useState(false); // 이미지 모달 상태
+  const [selectedImage, setSelectedImage] = useState(""); // 선택된 이미지 URL
 
   useEffect(() => {
     const fetchGifticon = async () => {
       if (!userId) {
-        setAlertMessage("로그인이 필요합니다.");
+        setAlertMessage("다시 한번 로그인 부탁드립니다.");
         setShowAlert(true);
         return;
       }
@@ -63,6 +65,11 @@ const GetGifticon = () => {
     }
   };
 
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setShowModal(true);
+  };
+
   if (loading) {
     return <div className="gifticon-loading">기프티콘 상세 정보를 불러오는 중입니다...</div>;
   }
@@ -83,6 +90,8 @@ const GetGifticon = () => {
               src={`/api/images/${imageId}`}
               alt={`기프티콘 이미지 ${imageId}`}
               className="gifticon-image"
+              style={{ cursor: "pointer" }}
+              onClick={() => handleImageClick(`/api/images/${imageId}`)}
             />
           ))}
         </div>
@@ -101,34 +110,22 @@ const GetGifticon = () => {
           <button
             onClick={handleUpdateGifticon}
             className="use-gifticon-button"
-            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#EEA092")}
-            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#FF6347")}
           >
             기프티콘 사용하기
           </button>
         )}
       </div>
 
-      <CommonModal
-        show={showAlert}
-        onHide={() => {
-          setShowAlert(false);
-          navigate("/");
-        }}
-        title="알림"
-        body={<div>{alertMessage}</div>}
-        footer={
-          <button
-            className="alert-confirm-button"
-            onClick={() => {
-              setShowAlert(false);
-              navigate("/");
-            }}
-          >
-            확인
-          </button>
-        }
-      />
+      {/* 이미지 모달 */}
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Body>
+          <img
+            src={selectedImage}
+            alt="확대된 이미지"
+            style={{ width: "100%", height: "auto", borderRadius: "10px" }}
+          />
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

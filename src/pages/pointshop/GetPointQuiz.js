@@ -141,7 +141,8 @@ const GetPointQuiz = () => {
                   color="info"
                   onClick={() => handleAnswerSelection(num)}
                   sx={{ margin: "10px auto", padding: "12px 20px", width: "80%", backgroundColor: userAnswers[currentQuiz.quizId] === num ? "#FF6347" : "#FFFFFF",
-                    color: userAnswers[currentQuiz.quizId] === num ? "#FFFFFF" : "#34495E", fontWeight: "bold", 
+                    color: userAnswers[currentQuiz.quizId] === num ? "#FFFFFF" : "#34495E", 
+                    fontSize: '18px',
                     borderRadius: "8px", border: "2px solid #FEBE98",  fontFamily: "'Ownglyph_ParkDaHyun', sans-serif" }}
                 >
                   {num}. {currentQuiz[`quizOption${num}`]}
@@ -185,11 +186,11 @@ const GetPointQuiz = () => {
             <tbody>
               {quizzes.map((quiz) => (
                 <tr key={quiz.quizId} style={{ backgroundColor: "#F7F9F9" }}>
-                  <td style={{ color: "#34495E" }}>{quiz.quizContent}</td>
-                  <td style={{ color: userAnswers[quiz.quizId] === quiz.answer ? "#27AE60" : "#E74C3C", fontWeight: "bold" }}>
+                  <td style={{ color: "#34495E" ,fontSize: '15px'}}>{quiz.quizContent}</td>
+                  <td style={{ color: userAnswers[quiz.quizId] === quiz.answer ? "#27AE60" : "#E74C3C", fontWeight: "bold" ,fontSize: '16px'}}>
                     {userAnswers[quiz.quizId] ? `${userAnswers[quiz.quizId]}. ${quiz[`quizOption${userAnswers[quiz.quizId]}`]}` : "미응답"}
                   </td>
-                  <td style={{ color: "#34495E", fontWeight: "bold" }}>{`${quiz.answer}. ${quiz[`quizOption${quiz.answer}`]}`}</td>
+                  <td style={{ color: "#34495E",fontSize: '16px', fontWeight: "bold" }}>{`${quiz.answer}. ${quiz[`quizOption${quiz.answer}`]}`}</td>
                 </tr>
               ))}
             </tbody>

@@ -140,6 +140,7 @@ const PointShopAdminPage = () => {
             fontWeight: 'bold',
             cursor: 'pointer',
             textDecoration: 'underline',
+            fontSize: '18px',
           }}
         >
           {params.value}
