@@ -17,8 +17,6 @@ const CommentEditModal = ({ showModal, setShowModal, modalTitle,
 
   const { nickname } = useUser();
 
-  console.log(comment);
-
 
   const setContentHandler = (content) => {
     setComment((prevComment) => ({...prevComment, content: content}));

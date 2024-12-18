@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import { Container } from "react-bootstrap";
 
-import TopicSearchBar from "../../../components/community/topic/TopicSearchBar";
-import useFetchGetTopics from "../../../components/community/topic/useFetchGetTopics";
+import TopicSearchBar from "../../components/community/topic/TopicSearchBar";
+import useFetchGetTopics from "../../components/community/topic/useFetchGetTopics";
 
-import "../../../styles/Main.css"; // 기존 스타일 재사용
+import "../../styles/Main.css"; // 기존 스타일 재사용
 
 
 const SearchTopics = () => {

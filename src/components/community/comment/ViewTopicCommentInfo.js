@@ -4,6 +4,7 @@ import LoginModal from "../../common/modal/LoginModal";
 import CommentAddModal from "./CommentAddModal";
 import CommentUpdateModal from "./CommentUpdateModal";
 import CommentDeleteModal from "./CommentDeleteModal";
+import CommentVoteButton from "./CommentVoteButton";
 import ViewTopicComments from "./ViewTopicComments";
 
 import { useUser } from "../../contexts/UserContext";
@@ -16,6 +17,8 @@ const ViewCommentInfo = ({comment, setComments, isReComment}) => {
 
   const { userId } = useUser(); // 사용자 ID 가져오기
 
+  const [likeCount, setLikeCount] = useState(comment.likeCount);
+  const [reCommentCount/*, setReCommentCount*/] = useState(comment.reCommentCount);
   const [reComments, setReComments] = useState([]);
 
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -38,10 +41,7 @@ const ViewCommentInfo = ({comment, setComments, isReComment}) => {
   // 답글 목록 갱신 -> 답글 수 갱신
   // const setReCommentsHandler = (newRecomments) => {
   //   setReComments(newRecomments);
-  //   setComment((prevComment) => ({
-  //     ...prevComment, 
-  //     reCommentCount: reComments.length
-  //   }));
+  //   setReCommentCount(reComments.length);
   // }
   // 무한 랜더링 발생
 
@@ -121,8 +121,12 @@ const ViewCommentInfo = ({comment, setComments, isReComment}) => {
   const CommentFooter = () => (
     <div className="comment-footer">
 
-      <span className="comment-likes">
-        ❤️ {comment.likeCount}
+      <span className="comment-likes" style={{display: 'flex'}}>
+        <CommentVoteButton 
+          commentId={comment.commentId} 
+          setLikeCount={setLikeCount} 
+        />
+        {likeCount}
       </span>
 
       { isReComment ? '' : (
@@ -130,7 +134,7 @@ const ViewCommentInfo = ({comment, setComments, isReComment}) => {
           className="comment-reply-button"
           onClick={() => addReCommentHandler()}
         >
-          답글달기 ({comment.reCommentCount})
+          답글달기 ({reCommentCount})
         </button>
       )}
 

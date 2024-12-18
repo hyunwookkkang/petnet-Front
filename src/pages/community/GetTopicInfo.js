@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from "axios";
 
-import TopicVoteButton from "../../../components/community/topic/TopicVoteButton";
-import TopicScrapButton from "../../../components/community/topic/TopicScrapButton";
-import TopicDeleteModal from "../../../components/community/topic/TopicDeleteModal";
-import ViewTopicCommentBox from "../../../components/community/comment/ViewTopicCommentBox";
+import TopicVoteButton from "../../components/community/topic/TopicVoteButton";
+import TopicScrapButton from "../../components/community/topic/TopicScrapButton";
+import TopicDeleteModal from "../../components/community/topic/TopicDeleteModal";
+import ViewTopicCommentBox from "../../components/community/comment/ViewTopicCommentBox";
 
-import { useUser } from "../../../components/contexts/UserContext";
-import useFetchTopicInfo from "../../../components/community/topic/useFetchGetTopic";
+import { useUser } from "../../components/contexts/UserContext";
+import useFetchTopicInfo from "../../components/community/topic/useFetchGetTopic";
 
-import "../../../styles/Main.css"; // 기존 스타일 재사용
-import "../../../styles/community/TopicInfo.css";
-import '../../../styles/community/quill.snow.css'; // quill editor font size
+import "../../styles/Main.css"; // 기존 스타일 재사용
+import "../../styles/community/TopicInfo.css";
+import '../../styles/community/quill.snow.css'; // quill editor font size
 
 
 const GetTopicInfo = () => {
@@ -27,6 +27,7 @@ const GetTopicInfo = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isAuthor, setIsAutor] = useState(false); // 로그인 = 작성자? 확인
 
+  
   useEffect(() => {
     if (topic) {
       // 조회수 증가 axios patch 요청 보내기
@@ -63,7 +64,6 @@ const GetTopicInfo = () => {
     return <div>Error: {error}</div>;
   }
 
-  // <Link to={`/comments/${topicId}`}>link to the topic's comments</Link>
 
   return (
 

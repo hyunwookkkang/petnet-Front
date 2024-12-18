@@ -8,6 +8,10 @@ import useFetchGetVote from './useFetchGetVote';
 import useFetchAddVote from './useFetchAddVote';
 import LoginModal from '../../common/modal/LoginModal';
 
+import "../../../styles/Main.css";
+import "../../../styles/community/Comment.css";
+
+
 const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
 
   const { userId } = useUser();
@@ -22,21 +26,15 @@ const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
 
   const [votedCount, setVotedCount] = useState(voteCount);
   const [isVoted, setIsVoted] = useState(false);
-  const [vote, setVote] = useState({
+
+  const [vote] = useState({
     "userId": userId || '',
     "targetTopicId": topicId,
     "isLike": isLike
   });
 
-  useEffect(() => {
-    setVote({
-      "userId": userId || '',
-      "targetTopicId": topicId,
-      "isLike": isLike
-    });
-  }, [userId, topicId, isLike]);
 
-  useEffect(() => {   
+  useEffect(() => { 
     const fetchVote = async () => {
       const aleadyVoted = await fetchGetVote(vote);
       setIsVoted(aleadyVoted);
