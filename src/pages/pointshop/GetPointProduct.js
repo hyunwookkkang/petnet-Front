@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Modal } from "react-bootstrap"; // React-Bootstrap Modal 추가
 import "../../styles/common/Button.css"; // .modal-button 클래스 포함
 import { useUser } from "../../components/contexts/UserContext";
 import CommonModal from "../../components/common/modal/CommonModal";
@@ -15,6 +16,8 @@ const GetPointProduct = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [showAlert, setShowAlert] = useState(false); // 로그인 모달 상태
+  const [showModal, setShowModal] = useState(false); // 이미지 확대 모달 상태
+  const [modalImage, setModalImage] = useState(""); // 모달에 표시할 이미지 URL
 
   useEffect(() => {
     fetchProductDetail();
@@ -33,9 +36,14 @@ const GetPointProduct = () => {
     }
   };
 
+  const handleImageClick = (imageUrl) => {
+    setModalImage(imageUrl);
+    setShowModal(true); // 모달 열기
+  };
+
   const handlePurchase = async () => {
     if (!userId) {
-      setShowAlert(true); // 로그인 모달 표시
+      setShowAlert(true);
       return;
     }
 
@@ -43,15 +51,13 @@ const GetPointProduct = () => {
       await axios.post(
         `/api/pointshop/pointProducts/${productId}`,
         { userId },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
       showSuccessToast("구매가 완료되었습니다!");
       navigate("/pointProducts");
     } catch (error) {
       console.error("Error purchasing product:", error);
-      showErrorToast("구매에 실패했습니다. 다시 시도해 주세요.");
+      showErrorToast("포인트가 부족합니다.");
     }
   };
 
@@ -70,11 +76,14 @@ const GetPointProduct = () => {
   return (
     <div className="get-point-product-container">
       <div className="product-card">
+      <h1 className="point-shop-title">포인트 상품 정보</h1>
         {product.imageIds && (
           <img
             src={`/api/images/${product.imageIds}`}
             alt={product.productName}
             className="product-image"
+            style={{ cursor: "pointer" }} // 클릭 가능한 스타일
+            onClick={() => handleImageClick(`/api/images/${product.imageIds}`)}
           />
         )}
         <div className="product-content">
@@ -99,6 +108,19 @@ const GetPointProduct = () => {
           </div>
         </div>
       </div>
+
+      {/* 이미지 확대 모달 */}
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Body>
+          <img
+            src={modalImage}
+            alt="확대된 이미지"
+            style={{ width: "100%", height: "auto" }}
+          />
+        </Modal.Body>
+      </Modal>
+
+      {/* 로그인 모달 */}
       <CommonModal
         show={showAlert}
         onHide={() => setShowAlert(false)}

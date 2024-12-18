@@ -56,7 +56,7 @@ const PointProducts = () => {
     <div className="point-products-container">
       <h1 className="point-shop-title">포인트 상점</h1>
 
-      {/* 브랜드 필터 버튼들 */}
+      {/* 브랜드 필터 버튼*/}
       <div className="brand-filter-container">
         {brandOptions.map((brand) => {
           const isSelected = selectedBrands.includes(brand.value);
@@ -72,7 +72,7 @@ const PointProducts = () => {
         })}
       </div>
 
-      {/* 상품 리스트: 3열 레이아웃 */}
+      {/* 상품 리스트*/}
       <div className="product-grid">
         {pointProducts.length === 0 ? (
           <p className="no-products">상품이 없습니다.</p>
@@ -92,7 +92,6 @@ const PointProducts = () => {
                 />
               </div>
 
-              {/* 상품 정보 */}
               <div className="product-info">
                 <p className="product-brand">{product.brandCategory}</p>
                 <h3 className="product-name">{product.productName}</h3>

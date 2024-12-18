@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
-import "../../styles/pointshop/GetPointLog.css"; // CSS 파일 import
+import axios from 'axios';
+import "../../styles/pointshop/GetPointLog.css";
 import { useUser } from "../../components/contexts/UserContext";
 import CommonModal from "../../components/common/modal/CommonModal";
-import "../../styles/pointshop/GetPointProduct.css"
-// 로컬 시간대에 맞게 날짜를 변환하는 함수
-const formatLocalDate = (dateStr) => {
-  const date = new Date(dateStr); // UTC 시간을 로컬 시간대로 변환
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // 월을 2자리로 표시
-  const day = String(date.getDate()).padStart(2, '0'); // 일을 2자리로 표시
-  const hours = String(date.getHours()).padStart(2, '0'); // 시간을 2자리로 표시
-  const minutes = String(date.getMinutes()).padStart(2, '0'); // 분을 2자리로 표시
-  const seconds = String(date.getSeconds()).padStart(2, '0'); // 초를 2자리로 표시
+import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined'; // 포인트 아이콘 추가
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`; // YYYY-MM-DD HH:MM:SS 형식
+// 날짜 포맷팅
+const formatLocalDate = (dateStr) => {
+  const date = new Date(dateStr);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} 
+          ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
 };
 
 const GetPointLog = () => {
@@ -24,17 +20,10 @@ const GetPointLog = () => {
   const [currentApi, setCurrentApi] = useState('getPointLog');
   const [userPoint, setUserPoint] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+
   const { userId } = useUser();
   const navigate = useNavigate();
-
-  // 오늘 날짜 (YYYY-MM-DD)
   const todayDate = new Date().toISOString().slice(0, 10);
-
-  const apiEndpoints = (userId) => ({
-    getPointLog: `/api/pointshop/point/${userId}/getPointLog`,
-    getPointAddLog: `/api/pointshop/point/${userId}/getPointAddLog`,
-    getPointUpdateLog: `/api/pointshop/point/${userId}/getPointUpdateLog`,
-  });
 
   const reasonMapping = {
     0: '이벤트 발생',
@@ -47,37 +36,38 @@ const GetPointLog = () => {
     8: '상품 구매',
   };
 
+  const apiEndpoints = (userId) => ({
+    getPointLog: `/api/pointshop/point/${userId}/getPointLog`,
+    getPointAddLog: `/api/pointshop/point/${userId}/getPointAddLog`,
+    getPointUpdateLog: `/api/pointshop/point/${userId}/getPointUpdateLog`,
+  });
+
   useEffect(() => {
     if (!userId) {
       setShowAlert(true);
       return;
     }
 
-    const fetchPointLogs = async () => {
+    const fetchLogs = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const response = await fetch(apiEndpoints(userId)[currentApi]);
-        if (!response.ok) {
-          throw new Error('Failed to fetch point logs.');
-        }
-        const data = await response.json();
-
-        const formattedData = data.map((log, index) => ({
+        const response = await axios.get(apiEndpoints(userId)[currentApi]);
+        const formattedData = response.data.map((log, index) => ({
           id: index + 1,
           ...log,
           reasonText: reasonMapping[log.reason] || `알 수 없음(${log.reason})`,
-          pointLogDate: formatLocalDate(log.pointLogDate), // 로컬 시간대로 변환
+          pointLogDate: formatLocalDate(log.pointLogDate),
         }));
 
         setPointLogs(formattedData);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching point logs:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPointLogs();
+    fetchLogs();
   }, [currentApi, userId]);
 
   useEffect(() => {
@@ -88,14 +78,10 @@ const GetPointLog = () => {
 
     const fetchUserPoint = async () => {
       try {
-        const response = await fetch(`/api/pointshop/point/${userId}/getUserPoint`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch user point.');
-        }
-        const data = await response.json();
-        setUserPoint(data);
+        const response = await axios.get(`/api/pointshop/point/${userId}/getUserPoint`);
+        setUserPoint(response.data);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching user points:", error);
       }
     };
 
@@ -109,16 +95,6 @@ const GetPointLog = () => {
     { field: 'pointAmount', headerName: '포인트 변경량', width: 150 },
   ];
 
-  // 오늘 날짜에 reason 별로 적립 기록 있는지 확인
-  const reasonsToCheck = [1, 2, 3, 4]; 
-  const todayCheck = {};
-  reasonsToCheck.forEach(r => {
-    todayCheck[r] = pointLogs.some(log => {
-      const logDate = log.pointLogDate.slice(0, 10); // YYYY-MM-DD
-      return logDate === todayDate && log.reason === String(r); // String(r)로 비교
-    });
-  });
-
   const checkItems = [
     { reason: 1, label: '오늘 장소 리뷰' },
     { reason: 2, label: '오늘 퀴즈 성공' },
@@ -127,45 +103,40 @@ const GetPointLog = () => {
   ];
 
   return (
-    <div className="point-log-container">
+    <div className="point-log-container" style={{ fontFamily: "Ownglyph_ParkDaHyun, sans-serif" }}>
       <div className="point-log-header">
         <h1 className="point-log-title">포인트 내역</h1>
-        <div className="point-log-userpoint">
-          <h5> 현재 포인트: {userPoint !== null ? userPoint : '불러오는 중...'}</h5>
+        <div className="my-user-info-box text-center">
+          <p className="my-icon-text" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <PaidOutlinedIcon sx={{ color: "#FEBE98", marginRight: "6px", fontSize: "28px" }} />
+            <span style={{ fontWeight: "bold", fontSize: "24px", color: "#FEBE98" }}>
+              {userPoint !== null ? userPoint : '0'}P
+            </span>
+          </p>
         </div>
       </div>
 
       <div className="today-check-container">
-        {checkItems.map(item => {
-          const isO = todayCheck[item.reason]; 
-          const textColorClass = isO ? 'text-o' : 'text-x'; 
-          return (
-            <div key={item.reason} className={`today-log-card ${textColorClass}`}>
-              {item.label}: {isO ? '⭕' : '❌'}
-            </div>
-          );
-        })}
+        {checkItems.map(item => (
+          <div
+            key={item.reason}
+            className={`today-log-card ${pointLogs.some(log => log.pointLogDate.slice(0, 10) === todayDate && log.reason === String(item.reason)) ? 'text-o' : 'text-x'}`}
+          >
+            {item.label}: {pointLogs.some(log => log.pointLogDate.slice(0, 10) === todayDate && log.reason === String(item.reason)) ? '⭕' : '❌'}
+          </div>
+        ))}
       </div>
 
       <div className="button-group">
-        <button
-          onClick={() => setCurrentApi('getPointLog')}
-          className={`log-button ${currentApi === 'getPointLog' ? 'active' : ''}`}
-        >
-          전체 로그
-        </button>
-        <button
-          onClick={() => setCurrentApi('getPointAddLog')}
-          className={`log-button ${currentApi === 'getPointAddLog' ? 'active' : ''}`}
-        >
-          적립 로그
-        </button>
-        <button
-          onClick={() => setCurrentApi('getPointUpdateLog')}
-          className={`log-button ${currentApi === 'getPointUpdateLog' ? 'active' : ''}`}
-        >
-          사용 로그
-        </button>
+        {["getPointLog", "getPointAddLog", "getPointUpdateLog"].map((apiKey) => (
+          <button
+            key={apiKey}
+            onClick={() => setCurrentApi(apiKey)}
+            className={`log-button ${currentApi === apiKey ? 'active' : ''}`}
+          >
+            {apiKey === "getPointLog" ? "전체 로그" : apiKey === "getPointAddLog" ? "적립 로그" : "사용 로그"}
+          </button>
+        ))}
       </div>
 
       {loading ? (
@@ -176,23 +147,25 @@ const GetPointLog = () => {
             rows={pointLogs}
             columns={columns}
             pageSize={10}
-            style={{ backgroundColor: '#FFFFFF', border: 'none' }}
+            style={{ backgroundColor: '#FFFFFF', border: 'none', fontFamily: 'Ownglyph_ParkDaHyun, sans-serif' }}
           />
         </div>
       )}
 
+      {/* 포인트 이용 안내 */}
       <div className="product-info-box">
         <h2>포인트 이용 안내</h2>
         <ul>
           <li>장소 리뷰 작성 시 100P 적립 (하루에 한 번)</li>
-          <li>퀴즈 참여 시, 10문제 중 7문제 이상 맞추면 100P 적립 (하루에 한 번)</li>
+          <li>퀴즈 참여 시 100P 적립 (하루에 한 번)</li>
           <li>상품 리뷰 작성 시 100P 적립 (하루에 한 번)</li>
           <li>게시글 등록 시 100P 적립 (하루에 한 번)</li>
-          <li>인기 게시글로 선정된 경우 200P 적립 (일일 제한 없음)</li>
+          <li>인기 게시글 선정 시 200P 적립 (제한 없음)</li>
           <li>매년 1월 1일, 보유 포인트 소멸</li>
         </ul>
       </div>
 
+      {/* 로그인 모달 */}
       <CommonModal
         show={showAlert}
         onHide={() => {
@@ -200,14 +173,12 @@ const GetPointLog = () => {
           navigate("/login");
         }}
         title="로그인 필요"
-        body={<div>로그인이 필요한 서비스입니다.<br /> 로그인 화면으로 이동합니다.</div>}
+        body="로그인이 필요한 서비스입니다. 로그인 화면으로 이동합니다."
         footer={
-          <button className="modal-confirm-button"
-          style={{ backgroundColor: "#feb98e", border: "none" }}
-            onClick={() => {
-              setShowAlert(false);
-              navigate("/login");
-            }}
+          <button
+            className="modal-confirm-button"
+            style={{ backgroundColor: "#feb98e", border: 'none' }}
+            onClick={() => navigate("/login")}
           >
             확인
           </button>

@@ -62,7 +62,7 @@ const PointShopAdminPage = () => {
     try {
       await axios.patch(`/api/pointshop/pointProducts/Admin/${productId}`);
       showSuccessToast('상품 상태가 성공적으로 변경되었습니다.');
-      fetchProducts(); // 상태 업데이트를 위해 데이터 다시 불러오기
+      fetchProducts(); 
     } catch (error) {
       console.error('Error toggling product stock:', error);
       showErrorToast('상품 상태 변경에 실패했습니다.');
@@ -72,7 +72,7 @@ const PointShopAdminPage = () => {
   const columns = [
     {
       field: 'Delete',
-      headerName: '',
+      headerName: '삭제',
       width: 60,
       renderCell: (params) => (
         <IconButton
@@ -89,7 +89,7 @@ const PointShopAdminPage = () => {
     },
     {
       field: 'Detail',
-      headerName: '',
+      headerName: '상세보기',
       width: 60,
       renderCell: (params) => (
         <IconButton
@@ -111,7 +111,7 @@ const PointShopAdminPage = () => {
             onClick={() => handleToggleStock(params.row.productId)}
             aria-label="toggle"
             style={{
-              color: params.row.productStock === 1 ? '#ECB392  ' : '#FF6347 ', // 초록색(1) / 빨간색(0)
+              color: params.row.productStock === 1 ? '#ECB392  ' : '#FF6347 ',
             }}
           >
             <ChangeCircleSharpIcon />
@@ -127,11 +127,11 @@ const PointShopAdminPage = () => {
         </div>
       ),
     },
-    { field: 'productId', headerName: '상품ID', width: 100 },
+    { field: 'productId', headerName: '상품ID', width: 50 },
     {
       field: 'productName',
       headerName: '포인트 상품명(수정)',
-      width: 200,
+      width: 130,
       renderCell: (params) => (
         <span
           onClick={() => navigate(`/put-point-product/${params.row.productId}`)}
@@ -146,10 +146,10 @@ const PointShopAdminPage = () => {
         </span>
       ),
     },
-    { field: 'productAddDate', headerName: '등록 일자', width: 250 },
-    { field: 'validityDate', headerName: '유효 기간', width: 150 },
-    { field: 'price', headerName: '포인트 가격', width: 150 },
-    { field: 'brandCategory', headerName: '브랜드 카테고리', width: 200 },
+    { field: 'productAddDate', headerName: '등록 일자', width: 150 },
+    { field: 'validityDate', headerName: '유효 기간', width: 50 },
+    { field: 'price', headerName: '포인트 가격', width: 80 },
+    { field: 'brandCategory', headerName: '브랜드 카테고리', width: 100 },
   ];
 
   return (
@@ -160,6 +160,7 @@ const PointShopAdminPage = () => {
         border: 'none',
         borderRadius: '10px',
         boxShadow: '0 5px 20px rgba(0, 0, 0, 0.15)',
+        fontFamily: "Ownglyph_ParkDaHyun, sans-serif" 
       }}
     >
       <h1
@@ -203,6 +204,17 @@ const PointShopAdminPage = () => {
             columns={columns}
             pageSize={10}
             getRowId={(row) => row.productId}
+            sx={{
+              fontFamily: "'Ownglyph_ParkDaHyun', sans-serif",
+              '& .MuiDataGrid-columnHeaders': {
+                fontWeight: 'bold',
+                color: '#febe98',
+              },
+              '& .MuiDataGrid-cell': {
+                color: '#333333',
+                fontSize: '14px',
+              },
+            }}
           />
         </div>
       )}
