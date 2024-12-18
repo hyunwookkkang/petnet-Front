@@ -19,6 +19,8 @@ const GetPointProduct = () => {
   const [showModal, setShowModal] = useState(false); // 이미지 확대 모달 상태
   const [modalImage, setModalImage] = useState(""); // 모달에 표시할 이미지 URL
 
+
+  
   // fetchProductDetail을 useCallback으로 감싸기
   const fetchProductDetail = useCallback(async () => {
     try {
