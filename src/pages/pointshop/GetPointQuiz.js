@@ -186,7 +186,7 @@ const GetPointQuiz = () => {
             <tbody>
               {quizzes.map((quiz) => (
                 <tr key={quiz.quizId} style={{ backgroundColor: "#F7F9F9" }}>
-                  <td style={{ color: "#34495E" ,fontSize: '15px'}}>{quiz.quizContent}</td>
+                  <td style={{ color: "#34495E" ,fontSize: '16px'}}>{quiz.quizContent}</td>
                   <td style={{ color: userAnswers[quiz.quizId] === quiz.answer ? "#27AE60" : "#E74C3C", fontWeight: "bold" ,fontSize: '16px'}}>
                     {userAnswers[quiz.quizId] ? `${userAnswers[quiz.quizId]}. ${quiz[`quizOption${userAnswers[quiz.quizId]}`]}` : "미응답"}
                   </td>
