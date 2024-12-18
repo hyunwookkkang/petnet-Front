@@ -48,6 +48,12 @@ const EditTopicInfo = () => {
   
   // 폼 초기화
   useEffect(() => {
+    // 로그인 검사
+    if (!userId) {
+      setShowLoginModal(true);
+      return;
+    }
+
     if (topic) {
       setTitle(topic.title);
       setCategory(topic.category);
@@ -93,12 +99,6 @@ const EditTopicInfo = () => {
 
   const submitTopicHandler = async (e) => {
     e.preventDefault();
-    
-    // 로그인 검사
-    if (!userId) {
-      setShowLoginModal(true);
-      return;
-    }
 
     // 에디터 내용이 비어있는지 확인
     if (!content.replace(/<[^>]*>/g, '').trim()) 
@@ -254,10 +254,10 @@ const EditTopicInfo = () => {
 
       </div>
 
+
       <LoginModal 
         showModal={showLoginModal} 
         setShowModal={setShowLoginModal}
-        message="로그인 정보가 만료되었습니다."
         required={true}
       />
 
