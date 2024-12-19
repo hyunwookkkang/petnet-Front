@@ -91,7 +91,7 @@ const AdminMainPage = () => {
                   </ListGroup.Item>
                   <ListGroup.Item
                     className="my-flex-between"
-                    onClick={() => navigate("/shop/purhcase/all")}
+                    onClick={() => navigate("/shop/purchase/all")}
                   >
                     주문내역관리
                     <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />

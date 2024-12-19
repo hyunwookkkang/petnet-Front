@@ -5,7 +5,7 @@ import axios from "axios";
 import { Spinner, Button } from "react-bootstrap";
 import "../../../styles/pointshop/point.css";
 
-const Purchases = () => {
+const ManagePurchases = () => {
   const [purchases, setPurchases] = useState([]); // 구매 데이터
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [hasMore, setHasMore] = useState(true); // 무한 스크롤 여부
@@ -13,8 +13,7 @@ const Purchases = () => {
   const navigate = useNavigate();
 
   // API 엔드포인트
-  const apiEndpoint = () => `/api/shop/purchases`;
-  
+  const apiEndpoint = () => `/api/shop/purchases/manage`;
 
   // 구매 데이터 가져오기
   const fetchPurchases = async (page) => {
@@ -108,7 +107,7 @@ const Purchases = () => {
 
   // 상품 행 클릭 이벤트
   const handleRowClick = (params) => {
-    navigate(`/shop/purchase/${params.id}`);
+    navigate(`/shop/purchases/form/${params.id}`);
   };
 
   return (
@@ -136,4 +135,4 @@ const Purchases = () => {
   );
 };
 
-export default Purchases;
+export default ManagePurchases;
