@@ -60,7 +60,7 @@
   color: #FF6347;
 }
 
-.button-group {
+.point-button-group {
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
