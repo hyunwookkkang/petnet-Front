@@ -90,3 +90,10 @@ body {
     max-width: 1200px;
   }
 }
+.ant-card, .ant-table, .ant-btn, .ant-tag, .ant-statistic {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif !important; /* Ant Design 컴포넌트에 적용 */
+}
+
+.ant-modal {
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif !important; /* Modal에도 적용 */
+}

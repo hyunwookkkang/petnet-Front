@@ -64,12 +64,13 @@ const GetPointLog = () => {
       title: "순번",
       dataIndex: "key",
       key: "key",
-      width: 80,
+      width: 60,
     },
     {
       title: "이유",
       dataIndex: "reasonText",
       key: "reasonText",
+      width: 75,
     },
     {
       title: "날짜",
@@ -77,7 +78,7 @@ const GetPointLog = () => {
       key: "pointLogDate",
     },
     {
-      title: "포인트 변경량",
+      title: "포인트 변동량",
       dataIndex: "pointAmount",
       key: "pointAmount",
     },
@@ -108,28 +109,40 @@ const GetPointLog = () => {
       </Card>
 
       {/* 오늘 기록 체크 */}
-      <div style={{ marginBottom: "20px", display: "flex", gap: "10px", flexWrap: "wrap" }}>
-        {checkItems.map((item) => (
-          <Tag
-            key={item.reason}
-            color={pointLogs.some(
-              (log) =>
-                log.pointLogDate.slice(0, 10) === todayDate &&
-                log.reason === String(item.reason)
-            )
-              ? "green"
-              : "volcano"}
-          >
-            {item.label}: {pointLogs.some(
-              (log) =>
-                log.pointLogDate.slice(0, 10) === todayDate &&
-                log.reason === String(item.reason)
-            )
-              ? "⭕"
-              : "❌"}
-          </Tag>
-        ))}
-      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "15px" }}>
+    {checkItems.map((item) => (
+      <Tag
+        key={item.reason}
+        style={{
+          fontSize: "16px",
+          padding: "8px 16px",
+          borderRadius: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "200px",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+        color={pointLogs.some(
+          (log) =>
+            log.pointLogDate.slice(0, 10) === todayDate &&
+            log.reason === String(item.reason)
+        )
+          ? "green"
+          : "volcano"}
+      >
+        {item.label}:{" "}
+        {pointLogs.some(
+          (log) =>
+            log.pointLogDate.slice(0, 10) === todayDate &&
+            log.reason === String(item.reason)
+        )
+          ? "⭕"
+          : "❌"}
+      </Tag>
+    ))}
+  </div>
 
       {/* 버튼 그룹 */}
       <Space style={{ marginBottom: "20px" }}>
@@ -138,6 +151,8 @@ const GetPointLog = () => {
           style={{
             backgroundColor: currentApi === "getPointLog" ? "#FEBE98" : "#DCDCDC",
             color: "#FFFFFF",
+            border: "#FFFFFF",
+            fontSize: "20px"
           }}
           onClick={() => handleApiChange("getPointLog")}
         >
@@ -148,6 +163,8 @@ const GetPointLog = () => {
           style={{
             backgroundColor: currentApi === "getPointAddLog" ? "#FEBE98" : "#DCDCDC",
             color: "#FFFFFF",
+            border: "#FFFFFF",
+            fontSize: "20px"
           }}
          onClick={() => handleApiChange("getPointAddLog")}
         >
@@ -158,6 +175,8 @@ const GetPointLog = () => {
           style={{
             backgroundColor: currentApi === "getPointUpdateLog" ? "#FEBE98" : "#DCDCDC",
             color: "#FFFFFF",
+            border: "#FFFFFF",
+            fontSize: "20px"
           }}
           onClick={() => handleApiChange("getPointUpdateLog")}
         >
