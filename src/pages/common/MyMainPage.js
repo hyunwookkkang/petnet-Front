@@ -34,9 +34,28 @@ const MyMainPage = () => {
                     <p>닉네임: {userInfo.nickname}</p>
                     <p>아이디: {userInfo.userId}</p>
                   </Col>
-                  <Col className="text-end">
-                    <p className="points-display">내 보유 포인트: {userInfo.points}P</p>
+
+                  <Col xs="auto" className="my-icon-container" onClick={() => navigate("/shop/purchase/my")}>
+                    <p className="my-icon-text">
+                      <span style={{ fontSize: '24px', color: "#FEBE98" }}><ShoppingBasketOutlinedIcon /></span>
+                      주문내역
+                    </p>
                   </Col>
+
+                  <Col xs="auto" className="my-icon-container" onClick={() => navigate("/gifticons")}>
+                    <p className="my-icon-text">
+                      <span style={{ fontSize: '24px', color: "#FEBE98" }}><RedeemIcon /></span>
+                      기프티콘
+                    </p>
+                  </Col>
+
+                  {/* <Col xs="auto" className="my-icon-container" onClick={() => navigate("/cashbook")}>
+                    <p className="my-icon-text">
+                      <span style={{ fontSize: '24px', color: "#FEBE98" }}><SavingsIcon /></span>
+                      가계부
+                    </p>
+                  </Col> */}
+                  <hr style={{ border: "0.5px solid #FEBE98", width: "100%" }} />
                 </Row>
               </Card.Body>
             </Card>

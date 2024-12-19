@@ -2,9 +2,15 @@
 /* Carousel Image */
 /*******************************************************************************/
 .carousel {
+<<<<<<< HEAD
   width: flex;
   height: 400px; /* Carousel의 고정 높이 */
   overflow: hidden; /* 내부 내용이 넘치지 않도록 설정 */
+=======
+  width: 100%;
+  height: 280px; /* Carousel의 높이 */
+  overflow: hidden; /* 넘침 숨기기 */
+>>>>>>> main
   position: relative;
 }
 

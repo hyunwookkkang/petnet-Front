@@ -64,12 +64,15 @@ function App() {
           <Route path="/updateUser" element={<UpdateUser />} />
           {/* END : 사용자 로그인 페이지 */}
 
-          {/* START : map-page */}
-          <Route path="/placeMap" element={<PlaceMap />} />
-          <Route path="/place/:placeId" element={<PlaceInfo />} />
-          {/* <Route path="/places" element={<PlaceMap />} /> */}
-          {/* <Route path="/placeInfo" element={<PlaceInfo />} /> */}
-          {/* END : map-page */}
+            {/* START : map-page */}
+            <Route path="/placeMap" element={<PlaceMap />} />
+            <Route path="/placeInfo/:placeId" element={<PlaceInfo />} />
+            <Route path="/placeFavorite" element={<Favorites />} />
+            <Route path="/placeFavorite/:favoriteId" element={<FavoriteInfo />} />
+            <Route path="/placeSearch" element={<PlaceSearch />} />
+            <Route path="/addPlace" element={<AddPlace />} />
+            <Route path="/my/placeposts" element={<GetMyPlacePosts />} />
+            {/* END : map-page */}
 
           {/* START : shop-page */}
           {/* END : shop-page */}

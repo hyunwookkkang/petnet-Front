@@ -1,0 +1,127 @@
+.point-log-container {
+  padding: 20px;
+  background: #FFFFFF;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.point-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.point-log-title {
+  color: #FEBE98;
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.point-log-userpoint {
+  background-color: #FFFFFF;
+  color: #FEBE98;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.point-today-check-container {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+.point-today-log-card {
+  background: #fdfdfd;
+  border-radius: 8px;
+  padding: 10px 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  flex: 1;
+  max-width: 25%;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-overflow: clip;
+}
+
+.point-text-o {
+  color: #FEBE98 ;
+}
+
+.point-text-x {
+  color: #FF6347;
+}
+
+.point-button-group {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.point-log-button {
+  flex: 1;
+  background-color: #FFFFFF;
+  color: #FEBE98;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #EDEDED;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.point-log-button.active {
+  background-color: #FEBE98;
+  color: #FFFFFF;
+  border-color: #FEBE98;
+}
+
+.point-loading-text {
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2rem;
+  color: #DCDCDC;
+}
+
+.point-datagrid-container {
+  height: 600px;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  background: #FFFFFF;
+}
+
+.point-modal-confirm-button {
+  background-color: #FF6347;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.point-log-header .my-user-info-box {
+  padding: 10px;
+  background-color: #fff; /* 배경 색상 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+}
+
+.point-log-header .my-icon-text {
+  font-size: 18px;
+  color: #666;
+  margin: 0; /* 기본 여백 제거 */
+}

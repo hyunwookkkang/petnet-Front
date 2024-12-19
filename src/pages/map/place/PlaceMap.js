@@ -2,7 +2,11 @@ import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Container, ButtonGroup, Button } from "react-bootstrap";
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography, CardMedia } from "@mui/material";
+import "../../../styles/common/Font.css";
+import "../../../styles/common/Card.css";
+import "../../../styles/place/Place.css";
+
 
 const PlaceMap = () => {
   const [places, setPlaces] = useState([]);
@@ -122,11 +126,19 @@ const PlaceMap = () => {
 
   return (
     <Container>
-      <ButtonGroup className="button-group">
-        <Button className="button-click" onClick={() => handleFilter("전체")}>전체</Button>
-        <Button className="button-click" onClick={() => handleFilter("식당")}>식당</Button>
-        <Button className="button-click" onClick={() => handleFilter("카페")}>카페</Button>
-        <Button className="button-click" onClick={() => handleFilter("여행지")}>여행지</Button>
+      <ButtonGroup className="place-button-group" style={{ marginBottom: "10px" }}>
+        <Button className="place-button-click" onClick={() => handleFilter("전체")}>
+          전체
+        </Button>
+        <Button className="place-button-click" onClick={() => handleFilter("식당")}>
+          식당
+        </Button>
+        <Button className="place-button-click" onClick={() => handleFilter("카페")}>
+          카페
+        </Button>
+        <Button className="place-button-click" onClick={() => handleFilter("여행지")}>
+          여행지
+        </Button>
       </ButtonGroup>
 
       <div id="google-map" style={{ width: "100%", height: "400px", marginBottom: "20px" }} />
@@ -139,31 +151,40 @@ const PlaceMap = () => {
         endMessage={<p style={{ textAlign: "center" }}>모든 데이터를 불러왔습니다.</p>}
       >
         <Container>
-          {filteredPlaces.map((place, index) => (
-            <Link to={`/place/${place.placeId}`} key={index} style={{ textDecoration: 'none' }}>
-              <Card key={index} sx={{ display: 'flex', mb: 3 }}>
-                <CardMedia
-                  component="img"
-                  sx={{ width: 151 }}
-                  image={`https://maps.googleapis.com/maps/api/place/photo?key=내지도키&photo_reference=${place.photoRef}`} // 수정: API 키 없는 경우 기본값 추가 고려
-                  alt={place.fcltyNm}
-                />
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <CardContent>
-                    <Typography component="div" variant="h5">
-                      {place.fcltyNm}
-                    </Typography>
-                    <Typography variant="subtitle1" color="text.secondary">
-                      운영시간: {place.operTime}
-                    </Typography>
-                    <Typography variant="subtitle1" color="text.secondary">
-                      거리: ~{(place.distance || 0).toFixed(1)}km
-                    </Typography>
-                  </CardContent>
-                </Box>
-              </Card>
-            </Link>
-          ))}
+          {filteredPlaces.map((place, index) => {
+            const photoReference = photoReferences[place.placeId];
+            const imageSrc = photoReference
+              ? `/api/proxy/place/photo?photoReference=${photoReference}`
+              : "https://via.placeholder.com/151";
+
+            return (
+              <Link
+                to={{
+                  pathname: `/placeInfo/${place.placeId}`,
+                  state: { photoReferences: photoReferences[place.placeId] || [] },
+                }}
+                key={index}
+                style={{ textDecoration: "none" }}
+              >
+                <Card sx={{ display: "flex", mb: 3 }} className="common-card">
+                  <CardMedia
+                    component="img"
+                    sx={{ width: 151 }}
+                    image={imageSrc}
+                    alt={place.fcltyNm}
+                  />
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <CardContent>
+                    <div style={{fontSize: '18px'}}>{place.fcltyNm}</div>
+                    <div style={{fontSize: '14px'}}>나와의 거리: ~{(place.distance || 0).toFixed(1)}km</div>
+                    <div style={{fontSize: '11px'}}>{place.operTime}</div>
+                    <div style={{fontSize: '9px'}}>{place.rdnmadrNm}</div>
+                    </CardContent>
+                  </Box>
+                </Card>
+              </Link>
+            );
+          })}
         </Container>
       </InfiniteScroll>
     </Container>

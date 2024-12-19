@@ -5,6 +5,12 @@ import PlaceModal from "./PostModal";
 import PostItem from "./PostItem";
 //css
 import "../../../styles/place/PlacePosts.css";
+<<<<<<< HEAD
+=======
+import { useNavigate } from "react-router-dom";
+import LoginModal from "../../../components/common/modal/LoginModal";
+import PlacePostInfoModal from "./PlacePostInfoModal";
+>>>>>>> main
 
 const PlacePosts = ({ placeId }) => {
   const [posts, setPosts] = useState([]); // 리뷰 목록
@@ -16,7 +22,33 @@ const PlacePosts = ({ placeId }) => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
 
+<<<<<<< HEAD
   // Fetch
+=======
+  const [posts, setPosts] = useState([]);
+  const [place, setPlace] = useState(null);
+  const [updatePost, setUpdatePost] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  // 상세보기 모달 상태
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+
+  // 상세 모달 열기
+  const openInfoModal = (post) => {
+    setSelectedPost(post);
+    setIsInfoModalOpen(true);
+  };
+
+  // 상세 모달 닫기
+  const closeInfoModal = () => {
+    setSelectedPost(null);
+    setIsInfoModalOpen(false);
+  };
+
+  // 장소 데이터 Fetch
+>>>>>>> main
   useEffect(() => {
     fetch(`/api/map/placePosts/${placeId}`)
       .then((response) => response.json())
@@ -24,6 +56,7 @@ const PlacePosts = ({ placeId }) => {
       .catch((error) => console.error("에러가 발생했숨당:", error));
   }, [placeId]);
 
+<<<<<<< HEAD
   const handlePostSubmit = () => {
     const url = updatePost
       ? `/api/map/placePosts/${updatePost.id}`
@@ -57,6 +90,32 @@ const PlacePosts = ({ placeId }) => {
         setPosts((prev) => prev.filter((p) => p.id !== postId));
       })
       .catch((error) => console.error("삭제가되긋냐~:", error));
+=======
+  // 리뷰 목록 Fetch
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get(`/api/map/placePosts/${placeId}`);
+      const uniquePosts = response.data.reduce((acc, current) => {
+        const x = acc.find((item) => item.postId === current.postId);
+        if (!x) acc.push(current);
+        return acc;
+      }, []);
+      setPosts(uniquePosts);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (userId) fetchPosts();
+    else navigate("/login");
+  }, [placeId, userId, navigate]);
+
+  // 폼 초기화
+  const resetForm = () => {
+    setUpdatePost(null);
+    setIsModalOpen(false);
+>>>>>>> main
   };
 
   return (
@@ -91,6 +150,7 @@ const PlacePosts = ({ placeId }) => {
           required
         />
 
+<<<<<<< HEAD
         {/* Images */}
         <div className="review-images">
           {(updatePost?.images || newPost.images).map((image, index) => (
@@ -104,6 +164,22 @@ const PlacePosts = ({ placeId }) => {
       </PlaceModal>
 
       {/* Posts List */}
+=======
+      {/* 리뷰 작성/수정 모달 */}
+      <PostModal
+        title={updatePost ? "리뷰 수정하기" : "리뷰 작성하기"}
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setUpdatePost(null); // 상태 리셋
+        }}
+        onSubmit={fetchPosts}
+        post={updatePost} // 수정 모드인지 여부를 확인
+        placeId={placeId}
+      />
+
+      {/* 리뷰 목록 */}
+>>>>>>> main
       <div className="post-list">
         {posts.map((post) => (
           <PostItem
@@ -114,7 +190,13 @@ const PlacePosts = ({ placeId }) => {
               setUpdatePost(posts.find((p) => p.id === id));
               setIsModalOpen(true);
             }}
+<<<<<<< HEAD
             onDelete={handlePostDelete}
+=======
+            onDelete={() => {
+              setPosts((prev) => prev.filter((p) => p.id !== post.id));
+            }}
+>>>>>>> main
           />
         ))}
       </div>
