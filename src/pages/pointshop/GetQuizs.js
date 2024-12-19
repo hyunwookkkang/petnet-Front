@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Form } from 'react-bootstrap';
 import "../../styles/pointshop/GetQuizs.css";
+import { showErrorToast, showSuccessToast } from "../../components/common/alert/CommonToast";
 
 const GetQuizs = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -30,6 +31,24 @@ const GetQuizs = () => {
   }, []);
 
   const handleSaveQuiz = async () => {
+
+  if (!newQuiz.quizContent.trim()) {
+    showErrorToast("퀴즈 내용을 입력해주세요.");
+    return;
+  }
+
+  const emptyOption = [1, 2, 3, 4].find((i) => !newQuiz[`quizOption${i}`].trim());
+  if (emptyOption) {
+    showErrorToast(`보기 ${emptyOption}를 입력해주세요.`);
+    return;
+  }
+
+  if (!newQuiz.answer) {
+    showErrorToast("정답을 선택해주세요.");
+    return;
+  }
+
+    
     try {
       await axios.post('/api/pointshop/quizs', newQuiz);
       fetchQuizzes();
