@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { Snackbar } from '@mui/material';
 import { Grow } from '@mui/material';
@@ -42,6 +43,7 @@ const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
     fetchVote();
   }, [fetchGetVote, vote]);
 
+  
   // 버튼 클릭 시 처리
   const voteTopic = async () => {
     //로그인 검사
@@ -72,43 +74,47 @@ const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
     }
   };
 
+
   return (
 
     <div>
 
-        <button 
-          onClick={() => voteTopic()}
-          disabled={loading || loadingGet || loadingAdd}
-        > 
-          { isLike ? (
-            <><FaThumbsUp/> 좋아요 </>
-          ) : (
-            <><FaThumbsDown/> 싫어요 </>
-          )} 
-          ({votedCount}) 
-        </button>
+      <Button
+        className='topic-vote-button'
+        onClick={() => voteTopic()}
+        disabled={loading || loadingGet || loadingAdd}
+      > 
+        { isLike ? 
+          <><FaThumbsUp/> 좋아요</>
+        : <><FaThumbsDown/> 싫어요</>
+        }
+        <br/>
+        ( { voteCount < 1000 ?
+            voteCount
+          : '999+' } ) 
+      </Button>
 
 
-        <Snackbar
-          open={votedMessage}
-          TransitionComponent={Grow}
-          message={ '이미 ' + (isLike ? '좋아요' : '싫어요') + ' 한 게시글 입니다' }
-          autoHideDuration={1200}
-          onClose={() => setVotedMessage(false)}
-        />
+      <Snackbar
+        open={votedMessage}
+        TransitionComponent={Grow}
+        message={ '이미 ' + (isLike ? '좋아요' : '싫어요') + ' 한 게시글 입니다' }
+        autoHideDuration={1200}
+        onClose={() => setVotedMessage(false)}
+      />
 
-        <Snackbar
-          open={errorMessage}
-          TransitionComponent={Grow}
-          message={'vote fetch error'}
-          autoHideDuration={1200}
-          onClose={() => setErrorMessage(false)}
-        />
-        
-        <LoginModal 
-          showModal={showLoginModal} 
-          setShowModal={setShowLoginModal}
-        />
+      <Snackbar
+        open={errorMessage}
+        TransitionComponent={Grow}
+        message={'vote fetch error'}
+        autoHideDuration={1200}
+        onClose={() => setErrorMessage(false)}
+      />
+      
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+      />
 
     </div>
 

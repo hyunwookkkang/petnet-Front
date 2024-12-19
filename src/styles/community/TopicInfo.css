@@ -5,12 +5,11 @@
 }
 
 .topic-view > * {
-   padding : 1%
+   padding : 1%;
 }
 
 
 .topic-title {
-   display: flex;
    margin-bottom: 0%;
 }
 
@@ -43,6 +42,16 @@
    color: #555;
 }
 
+.topic-view-count {
+   background-color: #DCDCDC;
+   text-align: center;
+   margin-right: 3px;
+   border-radius: 33px;
+   padding: 0 6px 0 6px;
+   display: flex;
+   gap: 6px;
+}
+
 
 .topic-content {
    padding-top: 3%;
@@ -51,34 +60,13 @@
 
 
 .topic-votes {
-   display: flex;
-   justify-content: space-between; /* 버튼들 사이에 간격을 띄워줍니다 */
-   width: 50vw; /* 화면의 가로 50% 차지 */
-   aspect-ratio: 3 / 2; /* 가로 3: 세로 2 비율 */
-   padding: 10px; /* 여백 추가 (필요시 조정) */
+   justify-content: center;   /* 중앙 정렬 */
+   align-items: center;       /* 세로 중앙 정렬 */
+   display: flex;             /* 가로로 배치 */
+   gap: 10%;                  /* 버튼 간의 간격을 설정 */
+   padding: 5%
 }
 
-
-.topic-scrap button,
-.topic-votes button,
-.topic-hashtag {
-   background-color: #FF6347;
-   color: white;
-   border: none;
-   padding: 8px 12px;
-   border-radius: 4px;
-   cursor: pointer;
-}
-
-.topic-scrap button:hover,
-.topic-votes button:hover,
-.topic-hashtag:hover {
-   background-color: #ECB392;
-}
-
-.topic-hashtags {
-   margin: 16px 0;
-}
 
 .topic-hashtag {
    margin: 4px;
@@ -86,9 +74,15 @@
    font-size: 14px;
    background-color: #e9ecef;
    color: #FF6347;
+   border: none;
+   border-radius: 4px;
 }
 
 .topic-hashtag:hover {
    background-color: #ECB392;
    color: white;
+}
+
+.topic-hashtag-area {
+   margin: 16px 0;
 }

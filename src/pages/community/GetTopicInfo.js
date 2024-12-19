@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Button } from "react-bootstrap";
 import { FaUser } from "react-icons/fa";
 import axios from "axios";
 
 import TopicVoteButton from "../../components/community/topic/TopicVoteButton";
 import TopicScrapButton from "../../components/community/topic/TopicScrapButton";
 import TopicDeleteModal from "../../components/community/topic/TopicDeleteModal";
-import ViewTopicCommentBox from "../../components/community/comment/ViewTopicCommentBox";
+import ViewTopicCommentsBox from "../../components/community/comment/ViewTopicCommentsBox";
 
 import { useUser } from "../../components/contexts/UserContext";
 import useFetchTopicInfo from "../../components/community/topic/useFetchGetTopic";
@@ -75,9 +76,7 @@ const GetTopicInfo = () => {
         <h1>
           [{topic.categoryStr}] {topic.title}
         </h1>
-        <div className="topic-scrap">
-          <TopicScrapButton topicId={topic.topicId}/>
-        </div>
+        <TopicScrapButton topicId={topic.topicId}/>
       </div>
 
       <div className="topic-header">
@@ -89,46 +88,70 @@ const GetTopicInfo = () => {
           </span>
           { isAuthor ? (
             <div>
-              <Link to={`/editTopic/${topicId}`}>
-                <button>수정</button>
-              </Link>
-              &nbsp;
-              <button onClick={() => setShowDeleteModal(true)}>삭제</button>
+              <Button 
+                as={Link} 
+                to={`/editTopic/${topicId}`} 
+                variant='link'
+                className="topic-text-button"
+              >
+                수정
+              </Button>
+              <Button 
+                variant='link'
+                className="topic-text-button"
+                onClick={() => setShowDeleteModal(true)}
+              >
+                삭제
+              </Button>
             </div>
           ) : "" }
         </div>
         {/* 날짜 및 조회수 */}
         <div className="topic-meta">
           <div>
-            <p>등록 &nbsp;{topic.addDateStr}</p>
-            { topic.updateDate ? (
+              <p>등록 &nbsp;{topic.addDateStr}</p>
+            { topic.updateDate ? 
               <p>수정 &nbsp;{topic.updateDateStr}</p>
-            ) : "" }
+            : '' }
           </div>
-          <p>조회 {topic.viewCount}</p>
+          <div className='topic-view-count'>
+            <p>조회</p> 
+            <p>
+              { topic.viewCount < 1000000 ?
+                topic.viewCount
+              : '999999+' }
+            </p>
+          </div>
         </div>
       </div>
 
       {/* 게시글 본문 */}
       <div 
-        className="topic-content"
+        className="topic-content" 
         dangerouslySetInnerHTML={{ __html: topic.content }}
       />
 
-
       {/* 좋아요 / 싫어요 버튼 */}
       <div className="topic-votes">
-        <TopicVoteButton topicId={topic.topicId} voteCount={topic.likeCount} isLike={true}/>
-        <TopicVoteButton topicId={topic.topicId} voteCount={topic.dislikeCount} isLike={false}/>
+        <TopicVoteButton 
+          topicId={topic.topicId} 
+          voteCount={topic.likeCount} 
+          isLike={true} 
+        />
+        <TopicVoteButton 
+          topicId={topic.topicId} 
+          voteCount={topic.dislikeCount} 
+          isLike={false} 
+        />
       </div>
 
       {/* 해시태그 */}
-      <div>
-        {topic.hashtags.map((content) => (
-          <button
-            key={content}
-            className="topic-hashtag"
-            onClick={() => hashtagClickHandler(content)}
+      <div className="topic-hashtag-area">
+        { topic.hashtags.map((content) => (
+          <button 
+            key={content} 
+            className="topic-hashtag" 
+            onClick={() => hashtagClickHandler(content)} 
           >
             # {content}
           </button>
@@ -137,14 +160,14 @@ const GetTopicInfo = () => {
 
       {/* 댓글 목록 */}
       <div>
-        <ViewTopicCommentBox targetTopic={topic}/>
+        <ViewTopicCommentsBox targetTopic={topic} />
       </div>
 
 
-      <TopicDeleteModal
+      <TopicDeleteModal 
         showModal={showDeleteModal} 
-        setShowModal={setShowDeleteModal}
-        topic={topic}
+        setShowModal={setShowDeleteModal} 
+        topic={topic} 
       />
 
     </div>

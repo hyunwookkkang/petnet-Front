@@ -1,87 +1,104 @@
 
+/* 게시글의 댓글 상단 바 */
+
 .topic-comments-bar {
-  display: flex;
   justify-content: space-between;
-  align-items: center;
+  display: flex;
   padding: 12px 16px;
   background-color: #f8f9fa;
   border: 1px solid #DCDCDC;
   font-size: 16px;
 }
 
-
 .comment-count {
   font-weight: bold;
   color: #333;
+  margin: 0;
+  display: flex;
+  gap: 6px;
 }
 
-.view-comments-button {
-  background: none;
-  color: #007bff;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  text-decoration: underline;
+.comment-count p {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
 }
 
-.view-comments-button:hover {
-  color: #0056b3;
+.comment-count p:last-child {
+  background-color: #DCDCDC;
+  border-radius: 33px;
+  padding: 0 9px 0 9px;
+  color: #FF6347;
 }
 
+.add-comment-button {
+  padding: 1px 9px;
+  border: 2px solid #c6c6c6;
+  background-color: #DCDCDC;
+  color: #333;
+}
+ 
+.add-comment-button:hover {
+  color: #FF6347;
+}
+
+
+
+/* 개별 댓글 */
 
 .comment-container {
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 10px 0;
-  }
+  font-size: 16px;
+  padding: 6px 0;
+  border-bottom: 1px solid #DCDCDC;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
   
-  .comment-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-  }
+.comment-username {
+  font-weight: bold;
+}
+
+.comment-options {
+  font-size: 12px;
+  color: #888;
+}
+
+.comment-option {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.comment-content {
+  margin: 5px 0;
+}
+
+.comment-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #888;
+  font-size: 12px;
+}
   
-  .comment-username {
-    font-weight: bold;
-  }
-  
-  .comment-options {
-    font-size: 12px;
-    color: #888;
-  }
-  
-  .comment-option {
-    margin-left: 10px;
+.comment-likes {
     cursor: pointer;
-  }
+}
   
-  .comment-content {
-    margin: 5px 0;
-  }
-  
-  .comment-footer {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #888;
-    font-size: 12px;
-  }
-  
-  .comment-likes {
-    cursor: pointer;
-  }
-  
-  .comment-reply-button {
-    border: none;
-    background: none;
-    color: #3b6de8;
-    cursor: pointer;
-  }
-  
-  .comment-date {
-    margin-left: auto;
-  }
+.comment-reply-button {
+  border: none;
+  background: none;
+  color: #3b6de8;
+  cursor: pointer;
+}
+
+.comment-date {
+  margin-left: auto;
+}
   
 
 /* 댓글 작성 폼 */

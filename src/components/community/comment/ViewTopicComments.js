@@ -1,12 +1,9 @@
 import React, { useEffect } from "react";
 
-import ViewTopicCommentInfo from "./ViewTopicCommentInfo";
+import ViewTopicCommentBox from "./ViewTopicCommentBox";
 
 import useFetchGetTopicComments from "./useFetchGetTopicComments";
 import useFetchGetReComments from "./useFetchGetReComments";
-
-import "../../../styles/Main.css";
-import "../../../styles/community/Comment.css";
 
 
 const ViewTopicComments = ({targetTopic, targetComment, comments, setComments}) => {
@@ -32,11 +29,10 @@ const ViewTopicComments = ({targetTopic, targetComment, comments, setComments}) 
 
 
   const commentsView = comments.map((comment) => (
-    <ViewTopicCommentInfo 
+    <ViewTopicCommentBox 
       key={comment.commentId}
       comment={comment}
       setComments={setComments}
-      isReComment={targetComment}
     />
   ));
   

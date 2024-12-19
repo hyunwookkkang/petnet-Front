@@ -17,7 +17,6 @@ import "../../../styles/community/Comment.css";
 const CommentVoteButton = ({ commentId, setLikeCount }) => {
 
   const { userId } = useUser();
-
   const { fetchGetVote, loading: getLoading } = useFetchGetVote();
   const { fetchAddVote, loading: addLoading } = useFetchAddVote();
   const { fetchDeleteVote, loading: deleteLoading } = useFetchDeleteVote();
