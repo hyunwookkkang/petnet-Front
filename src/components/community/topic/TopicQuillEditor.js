@@ -1,8 +1,9 @@
 import React, { useMemo, memo } from 'react'
 import ReactQuill from 'react-quill'; 
 
-import 'react-quill/dist/quill.snow.css'; // react-quill과 css파일 import 하기
+import "../../../styles/Main.css"; // 기존 스타일 재사용
 import '../../../styles/community/QuillEditor.css';
+import 'react-quill/dist/quill.snow.css'; // react-quill과 css파일 import 하기
 
 const TopicQuillEditor = memo(({ quillRef, htmlContent, setHtmlContent, api }) => {
 

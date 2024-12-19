@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { FaUser } from "react-icons/fa";
 import axios from "axios";
 
 import TopicVoteButton from "../../components/community/topic/TopicVoteButton";
@@ -67,72 +68,71 @@ const GetTopicInfo = () => {
 
   return (
 
-    <div className="post-view">
+    <div className="topic-view">
 
-      {/* 제목 */}
-      <div className="post-header">
-        <h1 className="post-title">
+      {/* 제목과 스크랩 */}
+      <div className="post-header topic-title">
+        <h1>
           [{topic.categoryStr}] {topic.title}
         </h1>
+        <div className="topic-scrap">
+          <TopicScrapButton topicId={topic.topicId}/>
+        </div>
       </div>
 
-      {/* 작성자와 버튼 */}
-      <div className="post-header">
-        <span className="post-author">{topic.author.nickname}</span>
-        { isAuthor ? (
-          <div>
-            <Link to={`/editTopic/${topicId}`}>
-              <button>수정</button>
-            </Link>
-            &nbsp;
-            <button onClick={() => setShowDeleteModal(true)}>삭제</button>
-          </div>
-        ) : "" }
-      </div>
-
-      {/* 날짜 및 조회수 */}
-      <div className="post-meta">
-        <div className="post-dates">
-          <p>등록: {topic.addDateStr}</p>
-          { topic.updateDate ? (
-            <p>수정: {topic.updateDateStr}</p>
+      <div className="topic-header">
+        {/* 작성자와 버튼 */}
+        <div className="post-header">
+          <span className="topic-author">
+            <FaUser style={{ marginRight: '5px', fontSize: '20px' }} /> 
+            {topic.author.nickname}
+          </span>
+          { isAuthor ? (
+            <div>
+              <Link to={`/editTopic/${topicId}`}>
+                <button>수정</button>
+              </Link>
+              &nbsp;
+              <button onClick={() => setShowDeleteModal(true)}>삭제</button>
+            </div>
           ) : "" }
         </div>
-        <p className="post-views">조회수: {topic.viewCount}</p>
+        {/* 날짜 및 조회수 */}
+        <div className="topic-meta">
+          <div>
+            <p>등록 &nbsp;{topic.addDateStr}</p>
+            { topic.updateDate ? (
+              <p>수정 &nbsp;{topic.updateDateStr}</p>
+            ) : "" }
+          </div>
+          <p>조회 {topic.viewCount}</p>
+        </div>
       </div>
 
       {/* 게시글 본문 */}
-      <div dangerouslySetInnerHTML={{ __html: topic.content }}/>
-
-
-      {/* 이미지 가져오기 테스트 */}
-      <div dangerouslySetInnerHTML={{ __html: `<img src="/api/images/local/23" alt="" />` }}/>
-      <br/>
+      <div 
+        className="topic-content"
+        dangerouslySetInnerHTML={{ __html: topic.content }}
+      />
 
 
       {/* 좋아요 / 싫어요 버튼 */}
-      <div className="post-feedback">
+      <div className="topic-votes">
         <TopicVoteButton topicId={topic.topicId} voteCount={topic.likeCount} isLike={true}/>
         <TopicVoteButton topicId={topic.topicId} voteCount={topic.dislikeCount} isLike={false}/>
       </div>
 
       {/* 해시태그 */}
-      <div className="post-hashtags">
+      <div>
         {topic.hashtags.map((content) => (
           <button
             key={content}
-            className="hashtag-button"
+            className="topic-hashtag"
             onClick={() => hashtagClickHandler(content)}
           >
             # {content}
           </button>
         )) }
-      </div>
-
-      {/* 기타 버튼 */}
-      <div className="post-extras">
-        <TopicScrapButton topicId={topic.topicId}/>
-        {/* <button onClick={onReport}>신고</button> */}
       </div>
 
       {/* 댓글 목록 */}

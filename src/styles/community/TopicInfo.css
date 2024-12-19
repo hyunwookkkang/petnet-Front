@@ -1,40 +1,68 @@
-/* PostView.css */
 
-.post-view {
-   padding: 16px;
-   font-family: Arial, sans-serif;
+.topic-view {
+   padding-left: 3%;
+   padding-right: 3%;
 }
 
-.post-title {
-   font-size: 24px;
-   font-weight: bold;
-   margin-bottom: 8px;
+.topic-view > * {
+   padding : 1%
 }
 
-.post-header {
+
+.topic-title {
    display: flex;
-   align-items: center;
-   justify-content: space-between;
-   margin-bottom: 8px;
+   margin-bottom: 0%;
 }
 
-.post-author {
+.topic-title > * {
+   font-weight: bold;
+}
+
+
+.topic-header {
+   padding-top: 3%;
+   padding-bottom: 2%;
+   border-top: 1px solid #DCDCDC;
+   border-bottom: 1px solid #DCDCDC;
+}
+
+.topic-author {
    font-size: 16px;
    font-weight: bold;
 }
 
-.post-actions,
-.post-feedback,
-.post-extras {
+.topic-meta {
    display: flex;
-   gap: 8px;
+   justify-content: space-between;
+   align-items: flex-start;
 }
 
-.post-actions button,
-.post-feedback button,
-.post-extras button,
-.hashtag-button {
-   background-color: #007bff;
+.topic-meta * {
+   margin: 0;
+   font-size: 14px;
+   color: #555;
+}
+
+
+.topic-content {
+   padding-top: 3%;
+   font-size: 16px;
+}
+
+
+.topic-votes {
+   display: flex;
+   justify-content: space-between; /* 버튼들 사이에 간격을 띄워줍니다 */
+   width: 50vw; /* 화면의 가로 50% 차지 */
+   aspect-ratio: 3 / 2; /* 가로 3: 세로 2 비율 */
+   padding: 10px; /* 여백 추가 (필요시 조정) */
+}
+
+
+.topic-scrap button,
+.topic-votes button,
+.topic-hashtag {
+   background-color: #FF6347;
    color: white;
    border: none;
    padding: 8px 12px;
@@ -42,66 +70,25 @@
    cursor: pointer;
 }
 
-.post-feedback button:hover,
-.post-actions button:hover,
-.post-extras button:hover,
-.hashtag-button:hover {
-   background-color: #0056b3;
+.topic-scrap button:hover,
+.topic-votes button:hover,
+.topic-hashtag:hover {
+   background-color: #ECB392;
 }
 
-.post-meta {
-   display: flex;
-   justify-content: space-between;
-   align-items: flex-start;
-   margin-bottom: 16px;
-}
-
-.post-dates {
-   display: flex;
-   flex-direction: column;
-}
-
-.post-dates p {
-   margin: 0;
-   font-size: 14px;
-   color: #555;
-}
-
-.post-views {
-   font-size: 14px;
-   color: #555;
-}
-
-.post-content {
-   font-size: 16px;
-   margin-bottom: 16px;
-   line-height: 1.5;
-}
-
-.post-hashtags {
+.topic-hashtags {
    margin: 16px 0;
 }
 
-.hashtag-button {
+.topic-hashtag {
    margin: 4px;
    padding: 4px 8px;
    font-size: 14px;
    background-color: #e9ecef;
-   color: #007bff;
+   color: #FF6347;
 }
 
-.hashtag-button:hover {
-   background-color: #007bff;
+.topic-hashtag:hover {
+   background-color: #ECB392;
    color: white;
-}
-
-.post-comments-bar {
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   margin-top: 16px;
-   padding: 12px 16px;
-   background-color: #f8f9fa;
-   border-top: 1px solid #e9ecef;
-   font-size: 16px;
 }

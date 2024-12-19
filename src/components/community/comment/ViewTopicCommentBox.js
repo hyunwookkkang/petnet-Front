@@ -32,7 +32,7 @@ const ViewTopicCommentBox = ({targetTopic}) => {
   
 
   const CommentsHeader = () => (
-    <div className="post-comments-bar">
+    <div className="topic-comments-bar">
       <span className="comment-count">댓글 ({targetTopic.commentCount})</span>
       <button 
         className="view-comments-button" 

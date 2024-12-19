@@ -149,10 +149,10 @@ const EditTopicInfo = () => {
 
 
   return (
-    <Container className="d-flex justify-content-center">
+    <Container className="d-flex justify-content-center" style={{ width: '90%' }}>
       <div>
         
-        <h2>{topic ? '게시글 수정' : '새 게시글 작성'}</h2>
+        <h2>{topic ? '게시글 수정' : '게시글 '}</h2>
 
         <Form onSubmit={submitTopicHandler}>
 
