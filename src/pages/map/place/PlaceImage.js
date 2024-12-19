@@ -83,7 +83,7 @@ const PlaceImage = ({ place }) => {
       {images.length > 0 ? (
         images.map((image, index) => (
           <Carousel.Item key={index}>
-            <img src={image} alt={`Slide ${index + 1}`} className="d-block w-100" />
+            {/* <img src={image} alt={`Slide ${index + 1}`} className="d-block w-100" /> */}
           </Carousel.Item>
         ))
       ) : (

@@ -1,8 +1,28 @@
+/* 초기화 및 수평 스크롤 방지 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* 패딩과 border를 너비에 포함 */
+}
+
+
+html, body {
+  margin: 0 auto !important;
+  padding: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow-x: hidden !important; /* 수평 스크롤 방지 */
+  box-sizing: border-box !important;
+  font-family: 'Ownglyph_ParkDaHyun', sans-serif !important;
+  background-color: #fff;
+}
+
+/* 공통 스타일 */
 .App {
   text-align: center;
   padding-top: 60px; /* 상단 네비게이션 높이 추가 */
   padding-bottom: 60px; /* 하단 네비게이션 높이 추가 */
-  
+  overflow-x: hidden; /* 추가 수평 스크롤 방지 */
 }
 
 .App-logo {
@@ -25,6 +45,8 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  width: 100%; /* 화면 너비에 맞춤 */
+  padding: 0 10px; /* 좌우 여백 추가 */
 }
 
 .App-link {
@@ -40,6 +62,7 @@
   }
 }
 
+/* 폰트 설정 */
 @font-face {
   font-family: 'Ownglyph_ParkDaHyun';
   src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2411-3@1.0/Ownglyph_ParkDaHyun.woff2') format('woff2');
@@ -47,29 +70,25 @@
   font-style: normal;
 }
 
-body {
-  font-family: 'Ownglyph_ParkDaHyun', sans-serif !important;
-  background-color: #fff;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden; /* 수평 스크롤 방지 */
-}
-
+/* 메인 컨테이너 스타일 */
 .container {
   max-width: 600px !important;
   margin: 0 auto !important;
-  padding: 0 0px !important;
-  background-color: #fff !important;
+  padding: 0 !important;
+  background-color: #fff;
 }
 
 @media (max-width: 768px) {
   .container {
     max-width: 100%;
-    padding: 0 10px; /* 좌우 여백 축소 */
+    margin: 0 auto !important; /* 중앙 정렬 유지 */
+    padding: 0 10px !important; 
   }
-  .top-navigation,
-  .navigation {
-    max-width: 100%; /* 네비게이션도 전체 너비 사용 */
+
+  .top-navigation, .navigation {
+    max-width: 100%;
+    width: 100%;
+    padding: 0;
   }
 }
 
@@ -89,4 +108,9 @@ body {
   .navigation {
     max-width: 1200px;
   }
+}
+
+/* 수평 스크롤 방지 */
+body, .App {
+  overflow-x: hidden; /* 강제로 수평 스크롤 방지 */
 }

@@ -1,0 +1,40 @@
+/* 모달 전체 스타일 */
+.postModal-custom-modal .ant-modal-title {
+    font-family: 'Ownglyph_ParkDaHyun'; /* 제목 폰트 변경 */
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .postModal-custom-modal .ant-btn-primary {
+    background-color: #ff6347 !important; /* OK 버튼 색상 */
+    border-color: #ff6347 !important;
+    font-family: 'Ownglyph_ParkDaHyun';
+    font-weight: bold;
+  }
+  
+  .postModal-custom-modal .ant-btn {
+    font-family: 'Ownglyph_ParkDaHyun'; /* 모든 버튼에 적용 */
+    font-size: 16px;
+  }
+  
+  /* 방문 날짜 라벨 스타일 */
+  .postModal-date-picker-label {
+    font-family: 'Ownglyph_ParkDaHyun';
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* 리뷰 내용 스타일 */
+  .postModal-text-area-label {
+    font-family: 'Ownglyph_ParkDaHyun';
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* 업로드 버튼 스타일 */
+  .postModal-upload-button {
+    font-family: "Arial, sans-serif";
+    color: #FEBE98;
+  }
+  
