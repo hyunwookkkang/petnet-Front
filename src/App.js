@@ -154,7 +154,7 @@ function App() {
             <Route path="/shop/purchase/my" element={<Purchases />} />
             <Route path="/shop/purchase/all" element={<ManagePurchases />} />
             <Route path="/shop/purchase/:purchaseId" element={<PurchaseInfo />} />
-             <Route path="/deliveryInfo" element={<DeliveryInfos />} />
+            <Route path="/deliveryInfo" element={<DeliveryInfos />} />
             <Route path="/deliveryInfo/form/:deliveryInfoId?" element={<AddOrEditDeliveryInfo />} />
             {/* END : shop-page */}
 
