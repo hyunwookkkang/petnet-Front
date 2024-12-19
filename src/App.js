@@ -21,7 +21,9 @@ import ProductImage from "./pages/shop/product/ProductImage";
 import ProductInfo from "./pages/shop/product/ProductInfo";
 import Products from "./pages/shop/product/Products";
 import Wishes from "./pages/shop/product/Wishes";
-import ProductPost from "./pages/shop/productPost/ProductPosts";
+import DeliveryInfos from "./pages/shop/purchase/DeliveryInfos";
+import AddOrEditDeliveryInfo from "./pages/shop/purchase/AddOrEditDeliveryInfo";
+import ProductPosts from "./pages/shop/productPost/ProductPosts";
 import AddPurchase from "./pages/shop/purchase/AddPurchase";
 import Purchases from "./pages/shop/purchase/Purchases";
 
@@ -78,8 +80,7 @@ import GetBudgetSettings from "./pages/cashbook/GetBudgetSettings";
 
 // Admin 관련 페이지 (잘못된 경로 수정)
 import AdminMainPage from "./pages/common/AdminMainPage";
-import DeliveryInfos from "./pages/shop/purchase/DeliveryInfos";
-import AddOrEditDeliveryInfo from "./pages/shop/purchase/AddOrEditDeliveryInfo";
+
 
 
 
@@ -142,7 +143,7 @@ function App() {
             <Route path="/shop/products/:productId/image" element={<ProductImage />} />
             <Route path="/shop/products/cart/:userId" element={<Carts/>} />
             <Route path="/shop/products/wish/:userId" element={<Wishes />} />
-            <Route path=".shop/productPost/:productId" element={<ProductPost />} />
+            <Route path=".shop/productPost/:productId" element={<ProductPosts />} />
             <Route path="/shop/purchase" element={<AddPurchase />} />
             <Route path="/shop/purchase/my" element={<Purchases />} />
             <Route path="/deliveryInfo" element={<DeliveryInfos />} />

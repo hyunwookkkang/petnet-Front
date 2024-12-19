@@ -20,7 +20,7 @@ const ProductPosts = ({ productId }) => {
   }); // 새 리뷰
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
   const [showLoginModal, setShowLoginModal] = useState(false); // 로그인 모달 상태
-
+  const [hasMorePosts, setHasMorePosts] = useState(true); // 더 이상 불러올 포스트가 있는지 여부
   const [error, setError] = useState(null);
 
   // 상품 데이터 Fetch
@@ -71,6 +71,11 @@ const ProductPosts = ({ productId }) => {
         });
 
         setPosts(uniquePosts); // 중복되지 않는 포스트만 설정
+
+        // 더 이상 불러올 포스트가 있는지 여부 확인 (마지막 페이지인지)
+        if (fetchedPosts.length === 0) {
+          setHasMorePosts(false);
+        }
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -201,10 +206,7 @@ const ProductPosts = ({ productId }) => {
         {posts.map((post) => (
           <ProductPostItem
             key={post.productPostId}
-            post={{
-              ...post,
-              userId: post.userId, // userId로 수정
-            }}
+            post={post}
             isUserPost={post.userId === userId}
             onEdit={(id) => {
               setUpdatePost(posts.find((p) => p.productPostId === id));
@@ -215,6 +217,8 @@ const ProductPosts = ({ productId }) => {
             }}
           />
         ))}
+        {/* 더 이상 불러올 리뷰가 없을 때 표시할 메시지 */}
+        {!hasMorePosts && <p>모든 상품 리뷰를 불러왔습니다.</p>}
       </div>
     </div>
   );
