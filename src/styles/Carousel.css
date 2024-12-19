@@ -1,6 +1,6 @@
 .carousel {
   width: 100%;
-  height: 400px; /* Carousel의 높이 */
+  height: 280px; /* Carousel의 높이 */
   overflow: hidden; /* 넘침 숨기기 */
   position: relative;
 }

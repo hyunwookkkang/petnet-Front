@@ -1,0 +1,26 @@
+.place-info-button-group {
+  display: flex !important;
+  justify-content: space-between !important; /* 버튼 사이를 균등 분배 */
+  gap: 10px !important; /* 버튼 간 간격 */
+  margin-bottom: 20px !important; /* 하단 여백 추가 */
+}
+
+.place-info-button {
+  background-color: #feb98e !important; /* 버튼 배경색 */
+  padding: 4px 1px !important; /* 내부 여백 */
+  border: none; /* 기본 테두리 제거 */
+  border-radius: 5px !important; /* 모서리를 둥글게 */
+  text-align: center !important; /* 텍스트 중앙 정렬 */
+  font-size: 1rem; /* 글자 크기 */
+  line-height: 1.5; /* 줄 높이 */
+  color: white; /* 텍스트 색상 */
+  cursor: pointer; /* 마우스 커서 모양 변경 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  width: 22%; /* 버튼 너비를 일정하게 설정 */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* 전환 효과 */
+}
+
+.place-info-button:hover {
+  background-color: #ffa96c; /* 호버 시 배경색 변경 */
+  transform: scale(1.05); /* 호버 시 확대 효과 */
+}

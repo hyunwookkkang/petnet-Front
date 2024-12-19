@@ -1,266 +1,213 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Container, Card, Button, Modal, Form } from "react-bootstrap";
+import { Modal, Upload, DatePicker, Input, Image, Button, Card } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { useUser } from "../../../components/contexts/UserContext";
-import { Link } from "react-router-dom"; // Link 컴포넌트 추가
-import { showErrorToast } from "../../../components/common/alert/CommonToast";
-import CommonModal from "../../../components/common/modal/CommonModal";
+import { showErrorToast, showSuccessToast } from "../../../components/common/alert/CommonToast";
+
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 const GetMyPlacePosts = () => {
-    const { userId } = useUser();
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [showModal, setShowModal] = useState(false); // 수정 모달 상태
-    const [currentPost, setCurrentPost] = useState(null); // 현재 수정 중인 포스트
-    const [showConfirmModal, setShowConfirmModal] = useState(false); // 삭제 확인 모달 상태
-    const [selectedPostId, setSelectedPostId] = useState(null); // 선택된 postId
+  const { userId } = useUser();
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [currentPost, setCurrentPost] = useState(null);
+  const [fileList, setFileList] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
 
+  // 리뷰 목록 가져오기
+  useEffect(() => {
+    if (userId) fetchMyPlacePosts();
+  }, [userId]);
 
-    useEffect(() => {
-        if (userId) {
-            fetchMyPlacePosts();
-        } else {
-            console.log("userId 없음");
-        }
-    }, [userId]);
-
-    const fetchMyPlacePosts = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.get(`/api/map/placePosts/user`, {
-                params: { userId },
-                withCredentials: true,
-            });
-        
-            // 중복된 postId 제거
-            const uniquePosts = response.data.reduce((acc, current) => {
-                const exists = acc.find((item) => item.postId === current.postId);
-                if (!exists) {
-                acc.push(current);
-                }
-                return acc;
-            }, []);
-        
-            setPosts(uniquePosts); // 중복 제거된 데이터 상태 업데이트
-            setLoading(false);
-            } catch (error) {
-            console.error("Error fetching place posts:", error);
-            setLoading(false);
-            }
-        };
-    
-    
-
-    const handleEdit = (post) => {
-        // 모달창 띄울 때 post 데이터가 제대로 있는지 확인하고, 비어있다면 기본값 설정
-        setCurrentPost({
-            ...post,
-            content: post.content || "",
-            visitDate: post.visitDate || ""
-        });
-        setShowModal(true); // 모달 열기
-    };
-
-    const openConfirmModal = (postId) => {
-        setSelectedPostId(postId);
-        setShowConfirmModal(true);
-        };
-
-        const handleDeleteConfirmed = async () => {
-                if (selectedPostId) {
-                try {
-                    await axios.delete(`/api/map/placePosts/${selectedPostId}`, {
-                    params: { userId },
-                    });
-                    setPosts((prev) => prev.filter((post) => post.postId !== selectedPostId));
-                    setShowConfirmModal(false);
-                    setSelectedPostId(null);
-                } catch (error) {
-                    console.error("Error deleting post:", error);
-                    showErrorToast("삭제 중 문제가 발생했습니다.");
-                }
-                }
-            };
-
-    const handleSave = async () => {
-        if (!currentPost.content?.trim() || !currentPost.visitDate) {
-            showErrorToast("모든 필드를 입력해주세요.");
-            return;
-        }
-
-        console.log("CurrentPost on save:", currentPost);
-
-        try {
-            await axios.put(
-                `/api/map/placePosts/${currentPost.postId}`,
-                currentPost,
-                {
-                    params: { userId },
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-            setPosts((prev) =>
-                prev.map((post) =>
-                    post.postId === currentPost.postId ? currentPost : post
-                )
-            );
-            setShowModal(false);
-            setCurrentPost(null);
-        } catch (error) {
-            console.error("Error updating post:", error);
-            showErrorToast("수정 중 문제가 발생했습니다.");
-        }
-    };
-
-    if (loading) {
-        return <p>리뷰 목록을 불러오는 중입니다...</p>;
+  const fetchMyPlacePosts = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/map/placePosts/user?userId=${userId}`);
+      const data = await response.json();
+      setPosts(data || []);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching place posts:", error);
+      setLoading(false);
     }
+  };
 
-    if (posts.length === 0) {
-        return <p>작성한 리뷰가 없습니다.</p>;
-    }
-
-    return (
-        <Container style={{ maxWidth: "600px" }}>
-            <h2 className="text-center mb-4" style={{ color: "#FF6347", fontWeight: "bold" }}>
-                내가 쓴 리뷰
-            </h2>
-            {posts.map((post, index) => (
-                // key를 postId 대신 index로 사용 (임시방편)
-                <Card key={post.postId || index} className="mb-4 border-0 shadow-sm">
-                    <Card.Body>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
-                            <div>
-                                <Card.Title style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-                                    {/* Link 컴포넌트로 감싸기 */}
-                                    <Link to={`/place/${post.placeId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                        {post.fcltyNm}
-                                    </Link>
-                                </Card.Title>
-                                <Card.Subtitle className="mb-2 text-muted" style={{ fontSize: "0.9rem" }}>
-                                    작성일: {new Date(post.addDate).toLocaleDateString()} <br />
-                                    방문일: {new Date(post.visitDate).toLocaleDateString()}
-                                </Card.Subtitle>
-                            </div>
-                            <div>
-                                <Button
-                                    style={{
-                                        backgroundColor: "#FF6347",
-                                        border: "none",
-                                        fontWeight: "bold",
-                                        marginRight: "5px",
-                                    }}
-                                    onClick={() => handleEdit(post)}
-                                >
-                                    수정
-                                </Button>
-                                <Button
-                                    style={{
-                                        backgroundColor: "#DCDCDC",
-                                        color: "#000",
-                                        border: "none",
-                                        fontWeight: "bold",
-                                    }}
-                                    onClick={() => openConfirmModal(post.postId)} // 모달 열기
-                                    >
-                                    삭제
-                                </Button>
-
-                                <CommonModal
-                                    show={showConfirmModal}
-                                    onHide={() => setShowConfirmModal(false)} // 모달 닫기
-                                    title="삭제 확인"
-                                    body="정말 삭제하시겠습니까?"
-                                    footer={
-                                        <>
-                                        <Button 
-                                            variant="secondary"
-                                            onClick={() => setShowConfirmModal(false)}
-                                        >
-                                            취소
-                                        </Button>
-                                        <Button 
-                                            style={{ backgroundColor: "#FF6347", border: "none" }}
-                                            onClick={handleDeleteConfirmed} // 삭제 실행
-                                        >
-                                            삭제
-                                        </Button>
-                                        </>
-                                    }
-                                    backdropStyle={{
-                                        backgroundColor: "rgba(234, 234, 234, 0.74)", // 불투명 회색 배경
-                                        zIndex: 1040, // 모달 뒤로 설정
-                                    }}
-                                />
-
-                            </div>
-                        </div>
-                        <Card.Text className="mt-2" style={{ fontSize: "1rem", color: "#333" }}>
-                            작성 내용<br/>{post.content}
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-            ))}
-
-            {/* 수정 모달 */}
-            {currentPost && (
-                <Modal show={showModal} onHide={() => setShowModal(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>리뷰 수정</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form>
-                            <Form.Group>
-                                <Form.Label>방문 날짜</Form.Label>
-                                <Form.Control
-                                    type="date"
-                                    value={currentPost.visitDate || ""}
-                                    onChange={(e) =>
-                                        setCurrentPost({ ...currentPost, visitDate: e.target.value })
-                                    }
-                                />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>리뷰 내용</Form.Label>
-                                <Form.Control
-                                    as="textarea"
-                                    rows={3}
-                                    value={currentPost.content || ""}
-                                    onChange={(e) =>
-                                        setCurrentPost({ ...currentPost, content: e.target.value })
-                                    }
-                                />
-                            </Form.Group>
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button 
-                            style={{
-                                backgroundColor: "#DCDCDC",
-                                border: "none",
-                                marginRight: "5px",
-                            }}
-                            onClick={() => setShowModal(false)}
-                        >
-                            취소
-                        </Button>
-                        <Button 
-                            style={{
-                                backgroundColor: "#FF6347",
-                                border: "none",
-                                marginRight: "5px",
-                            }}
-                            onClick={handleSave}
-                        >
-                            저장
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            )}
-        </Container>
+  const handleEdit = (post) => {
+    setCurrentPost(post);
+    setExistingImages(
+      post.images?.map((image, index) => ({
+        uid: `existing-${index}`,
+        name: `Existing Image ${index + 1}`,
+        status: "done",
+        url: `/api/images/${image}`,
+      })) || []
     );
+    setFileList([]);
+    setShowModal(true);
+  };
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
+
+  const handleFileChange = ({ fileList: newFileList }) => setFileList(newFileList);
+
+  const handleDeleteImage = (uid) => {
+    setExistingImages((prev) => prev.filter((image) => image.uid !== uid));
+  };
+
+  const handleSave = async () => {
+    if (!currentPost.content?.trim() || !currentPost.visitDate) {
+      showErrorToast("모든 필드를 입력해주세요.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("content", currentPost.content);
+    formData.append("visitDate", currentPost.visitDate);
+
+    // 기존 이미지 추가
+    existingImages.forEach((image) => {
+      if (image.url) {
+        const imageName = image.url.split("/").pop();
+        formData.append("existingImages", imageName);
+      }
+    });
+
+    // 새 이미지 추가
+    fileList.forEach((file) => {
+      if (file.originFileObj) {
+        formData.append("newImages", file.originFileObj);
+      }
+    });
+
+    try {
+      const response = await fetch(`/api/map/placePosts/${currentPost.postId}?userId=${userId}`, {
+        method: "PUT",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("서버 오류 발생");
+      }
+
+      showSuccessToast("리뷰가 성공적으로 수정되었습니다.");
+      setShowModal(false);
+      setCurrentPost(null);
+      fetchMyPlacePosts();
+    } catch (error) {
+      console.error("Error updating post:", error);
+      showErrorToast("리뷰 수정 중 오류가 발생했습니다.");
+    }
+  };
+
+  if (loading) return <p>리뷰 목록을 불러오는 중입니다...</p>;
+  if (posts.length === 0) return <p>작성한 리뷰가 없습니다.</p>;
+
+  return (
+    <div style={{ maxWidth: "800px", margin: "auto" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>내가 쓴 리뷰</h2>
+      {posts.map((post) => (
+        <Card key={post.postId} style={{ marginBottom: "20px" }}>
+          <Card.Meta
+            title={post.fcltyNm}
+            description={
+              <>
+                <p>작성일: {new Date(post.addDate).toLocaleDateString()}</p>
+                <p>방문일: {new Date(post.visitDate).toLocaleDateString()}</p>
+                <p>{post.content}</p>
+              </>
+            }
+          />
+          <Button style={{ marginTop: "10px" }} onClick={() => handleEdit(post)}>
+            수정
+          </Button>
+        </Card>
+      ))}
+
+      {/* 수정 모달 */}
+      <Modal
+        title="리뷰 수정"
+        visible={showModal}
+        onCancel={() => setShowModal(false)}
+        onOk={handleSave}
+      >
+        <div style={{ marginBottom: "10px" }}>
+          <label>방문 날짜</label>
+          <DatePicker
+          style={{ width: "100%" }}
+          onChange={(date, dateString) =>
+            setCurrentPost({ ...currentPost, visitDate: dateString })
+          }
+        />
+        </div>
+
+        <div style={{ marginBottom: "10px" }}>
+          <label>리뷰 내용</label>
+          <Input.TextArea
+            rows={4}
+            value={currentPost?.content || ""}
+            onChange={(e) =>
+              setCurrentPost({ ...currentPost, content: e.target.value })
+            }
+          />
+        </div>
+
+        <div style={{ marginBottom: "10px" }}>
+          <label>기존 이미지</label>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+            {existingImages.map((image) => (
+              <div key={image.uid} style={{ position: "relative" }}>
+                <Image
+                  src={image.url}
+                  style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                  preview={{ src: image.url }}
+                />
+                <Button
+                  type="text"
+                  danger
+                  style={{ position: "absolute", top: 0, right: 0 }}
+                  onClick={() => handleDeleteImage(image.uid)}
+                >
+                  X
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ marginBottom: "10px" }}>
+          <label>새 이미지 추가</label>
+          <Upload
+            listType="picture-card"
+            fileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleFileChange}
+          >
+            {fileList.length + existingImages.length >= 3 ? null : (
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            )}
+          </Upload>
+        </div>
+      </Modal>
+    </div>
+  );
 };
 
 export default GetMyPlacePosts;

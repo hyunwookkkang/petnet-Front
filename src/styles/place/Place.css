@@ -13,36 +13,37 @@
     padding: 0px; /* 카드 내부의 padding을 없애서 여백을 없앰 */
   }
   
-  .button-group {
-    display: flex;
+  .place-button-group {
+    display: flex !important;
     justify-content: space-between; /* 버튼들을 한 줄로 정렬 */
-    gap: 10px; /* 버튼 간 간격 */
+    gap: 10px !important; /* 버튼 간 간격 */
     flex-wrap: wrap; /* 버튼이 넘칠 경우 자동으로 다음 줄로 이동 */
     width: 100%; /* ButtonGroup이 카드 너비에 맞게 확장되도록 설정 */
     overflow: hidden; /* ButtonGroup이 카드 영역을 넘지 않도록 설정 */
   }
   
-  .button-click {
-    flex: 1 1 auto; /* 버튼이 유동적으로 크기를 맞추게 설정 */
-    max-width: 180px; /* 버튼의 최대 너비 제한 */
-    min-width: 100px; /* 버튼의 최소 너비 제한 */
+  .place-button-click {
+    width: 50px; /* 버튼의 고정된 너비 설정 */
+    height: 40px; /* 버튼의 고정된 높이 설정 */
     padding: 10px;
     text-align: center;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
+    background-color: #FEBE98;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: calc(0.8rem + 1vw); /* 화면 크기에 따라 글자 크기 자동 조정 */
+    font-size: 1rem; /* 일정한 글자 크기 */
     line-height: 1.4;
     white-space: nowrap; /* 줄바꿈을 하지 않도록 설정 */
     word-wrap: break-word; /* 긴 단어 줄바꿈 */
     box-sizing: border-box; /* padding, border 포함하여 크기 계산 */
   }
   
-  /*.button-click:hover {
-    background-color: #ff6d6d; /* 버튼 호버 시 배경색 변경
-    font-size: calc(1rem + 1vw); /* 약간 커지는 효과 
-  } */
+  
+  
+  .place-button-click:hover {
+    background-color: #ff6d6d !important; 
+    
+  } 
   
   @media screen and (max-width: 1024px) {
     .button-click {

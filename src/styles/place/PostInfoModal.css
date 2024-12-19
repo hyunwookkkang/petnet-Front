@@ -1,0 +1,55 @@
+/* 리뷰 컨테이너 */
+.postInfo-review-container {
+    font-family: "Noto Sans KR", sans-serif;
+    color: #555;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* 상단 이미지와 작성자 정보 */
+  .postInfo-review-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 왼쪽 정렬 */
+    margin-bottom: 15px;
+  }
+  
+  .postInfo-review-extra-images {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px; /* 이미지와 작성자 정보 사이 여백 */
+  }
+  
+  .postInfo-extra-image {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  /* 작성자 정보 */
+  .postInfo-review-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .postInfo-review-author,
+  .postInfo-review-visit-date {
+    margin: 3px 0;
+    font-size: 14px;
+    color: #777;
+  }
+  
+  /* 리뷰 내용 */
+  .postInfo-review-content {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #444;
+    margin-top: 15px;
+  }
+  
+  .postInfo-extra-image:hover {
+    opacity: 0.8; /* 마우스 오버 시 약간 흐릿하게 */
+    transition: opacity 0.3s ease;
+  }

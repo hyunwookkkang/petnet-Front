@@ -8,11 +8,11 @@ import "./styles/Responsive.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  //<React.StrictMode>
     <>
       <App />
       <ToastContainer position="top-right" autoClose={3000} /> {/* ToastContainer 추가 */}
     </>
-  </React.StrictMode>
+  //</React.StrictMode>
 );
 

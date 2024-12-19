@@ -132,7 +132,7 @@ function App() {
 
             {/* START : map-page */}
             <Route path="/placeMap" element={<PlaceMap />} />
-            <Route path="/place/:placeId" element={<PlaceInfo />} />
+            <Route path="/placeInfo/:placeId" element={<PlaceInfo />} />
             <Route path="/placeFavorite" element={<Favorites />} />
             <Route path="/placeFavorite/:favoriteId" element={<FavoriteInfo />} />
             <Route path="/placeSearch" element={<PlaceSearch />} />
