@@ -136,7 +136,7 @@ const MyMainPage = () => {
                 <ListGroup.Item
                   key="myReviews"
                   className="my-flex-between"
-                  onClick={() => navigate("/my/reviews")}
+                  onClick={() => navigate("/shop/productPost/my")}
                 >
                   내 상품 리뷰 보기
                   <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
@@ -144,7 +144,7 @@ const MyMainPage = () => {
                 <ListGroup.Item
                   key="myWishlist"
                   className="my-flex-between"
-                  onClick={() => navigate("/my/wishlist")}
+                  onClick={() => navigate("/shop/products/wish/:userId")}
                 >
                   찜한 상품 보기
                   <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />

@@ -14,6 +14,7 @@ const Purchases = () => {
 
   // API 엔드포인트
   const apiEndpoint = () => `/api/shop/purchases`;
+  
 
   // 구매 데이터 가져오기
   const fetchPurchases = async (page) => {
@@ -102,12 +103,12 @@ const Purchases = () => {
     { field: "paymentAmount", headerName: "결제 금액", width: 150 },
     { field: "productName", headerName: "상품명", width: 200 },
     { field: "orderQuantity", headerName: "구매 수량", width: 150 },
-    { field: "purchase_status", headerName: "구매 상태", width: 150 }
+    { field: "purchaseStatus", headerName: "구매 상태", width: 150 }
   ];
 
   // 상품 행 클릭 이벤트
   const handleRowClick = (params) => {
-    navigate(`/shop/purchases/form/${params.id}`);
+    navigate(`/shop/purchase/${params.id}`);
   };
 
   return (
