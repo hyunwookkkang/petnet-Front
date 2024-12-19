@@ -13,7 +13,7 @@ const DeleteModal = ({ show, onClose, onDelete }) => (
       <Button variant="secondary" onClick={onClose}>
         취소
       </Button>
-      <Button style={{ backgroundColor: "#ff6347", color: "#fff", border: "none"}}  onClick={onDelete}>
+      <Button variant="danger" onClick={onDelete}>
         삭제
       </Button>
     </Modal.Footer>

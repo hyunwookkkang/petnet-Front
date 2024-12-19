@@ -27,85 +27,6 @@
   font-size: 40px;
   cursor: pointer;
 }
-/*******************************************************************************/
-/*  Main Navigation Icon CSS */
-/*******************************************************************************/
-
-/* main-navigation: 아이콘 네비게이션 바 스타일 */
-.main-icon-navigation {
-  /* display: flex; */
-  justify-content: space-around;
-  align-items: center;
-  background-color: #ffffff; /* 배경색 */
-  padding: 0px; /* 내부 패딩 */
-  border-radius: 15px; /* 모서리 둥글게 */
-  margin: 20px auto; /* 상하 마진, 좌우 중앙 정렬 */
-  max-width: 800px; /* 최대 너비 설정 */
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 그림자 추가 */
-}
-
-/* nav-icon-item: 개별 네비게이션 아이템 스타일 */
-.nav-icon-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-decoration: none;
-  color: inherit;
-  transition: color 0.3s;
-}
-
-.nav-icon-item:hover {
-  color: #feb98e; /* 호버 시 색상 변경 */
-}
-
-.nav-icon-item.active {
-  color: #313131; /* 활성화된 아이템 색상 */
-}
-
-/* icon-label: 아이콘 아래 레이블 스타일 */
-.icon-label {
-  font-size: 14px;
-  margin-top: 5px;
-  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
-
-}
-
-/* icon-sections: 섹션들 컨테이너 스타일 */
-.icon-sections {
-  display: flex;
-  flex-wrap: wrap; /* 아이템들을 여러 줄로 배치 */
-  justify-content: space-between; /* 아이템들이 좌우에 균등하게 배치 */
-  gap: 3%; /* 아이템들 간의 간격 */
-  margin-top: 30px;
-}
-
-/* section: 개별 섹션 스타일 */
-.icon-section {
-  background-color: #feb98e;
-  border-radius: 15px;
-  padding: 20px;
-  width: 200px;
-  text-align: center;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.icon-section:hover {
-  background-color: #e68a5c; /* 호버 시 배경색 변경 */
-}
-.icon-sections .nav-icon-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: calc(25% - 15px); /* 각 아이콘이 4개씩 1줄에 배치되도록 width 조정 (간격 제외) */
-  text-align: center;
-}
-
-.icon-sections .nav-icon-item .icon-label {
-  margin-top: 8px; /* 아이콘과 텍스트 간의 간격 */
-}
-
 
 /*******************************************************************************/
 /* Common CSS */
@@ -115,12 +36,12 @@
 .sections {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   pointer-events: auto;
-  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
 }
 
 .section {
+
   border: 2px solid #febe98;
   border-radius: 8px;
   padding: 15px;
@@ -134,13 +55,6 @@
   background-color: #febe98;
   color: white;
 }
-
-.section-image {
-  width: 100%;  /* 가로 크기 100% */
-  height: 400px;  /* 자동으로 세로 크기 비율 맞추기 */
-  margin-bottom: 20px; /* 이미지 아래에 여백 추가 */
-}
-
 
 /*******************************************************************************/
 /* Button CSS */
@@ -280,42 +194,3 @@
   font-size: 16px;
 }
 
-/* 기본 탭 제목 색상 */
-.custom-tab-title {
-  color: #FF6347 !important; /* 기본 색상 */
-}
-
-/* 활성화된 탭 제목 색상 */
-.custom-tab-title.active {
-  color: #313131 !important; /* 활성화된 탭은 다른 색상 */
-}
-
-
-/*******************************************************************************/
-/* Topic CSS */
-/*******************************************************************************/
-
-
-.topic-section {
-  border: 2px solid #febe98 !important;
-  border-radius: 8px !important;
-  padding: 15px !important;
-  text-align: center;
-  transition: background-color 0.3s;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-.topic-section-item {
-  font-size: 16px;
-  color: #666;
-  padding: 10px;
-  border-top: 1px solid #ddd;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.link-unstyled {
-  text-decoration: none;
-  color: inherit; /* 기본 색상 유지 */
-}

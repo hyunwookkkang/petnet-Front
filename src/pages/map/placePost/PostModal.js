@@ -22,10 +22,10 @@ const PostModal = ({ title, isOpen, onClose, onSubmit, children }) => {
 
         {/* Modal Footer */}
         <div className="modal-footer">
-          <button type="button" className="modal-cancel" onClick={onClose}>
+          <button className="modal-cancel" onClick={onClose}>
             취소
           </button>
-          <button type="button" className="modal-submit" onClick={onSubmit}>
+          <button className="modal-submit" onClick={onSubmit}>
             저장
           </button>
         </div>

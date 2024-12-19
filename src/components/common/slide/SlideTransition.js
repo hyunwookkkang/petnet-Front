@@ -42,7 +42,7 @@ export default function TransitionsSnackbar() {
         open={state.open}
         onClose={handleClose}
         TransitionComponent={state.Transition}
-        message="삭제되었습니다"
+        message="포인트적립이 완료되었습니다."
         key={state.Transition.name}
         autoHideDuration={1200}
       />
