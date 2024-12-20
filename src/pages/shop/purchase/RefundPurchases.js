@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Spinner, Button, Form, Card } from "react-bootstrap";
+import { Spinner, Button, Card } from "react-bootstrap";
 import "../../../styles/pointshop/point.css";
 
-const Purchases = () => {
+const RefundPurchases = () => {
   const [purchases, setPurchases] = useState([]); // 구매 데이터
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [hasMore, setHasMore] = useState(true); // 무한 스크롤 여부
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지
-  const [selectedPurchases, setSelectedPurchases] = useState([]); // 선택된 구매 항목
   const navigate = useNavigate();
 
   // API 엔드포인트
-  const apiEndpoint = () => `/api/shop/purchases`;
+  const apiEndpoint = () => `/api/shop/purchases/refund`;
 
   // 구매 데이터 가져오기
   const fetchPurchases = async (page) => {
@@ -29,50 +28,24 @@ const Purchases = () => {
       if (data.length === 0) {
         setHasMore(false); // 더 이상 데이터가 없을 때
       } else {
-        setPurchases((prevPurchases) => [
-          ...prevPurchases,
-          ...data.map((purchase) => ({
+        // 중복 제거 로직
+        setPurchases((prevPurchases) => {
+          const newPurchases = data.map((purchase) => ({
             ...purchase,
             id: purchase.purchaseId, // 각 구매에 고유 id 추가
-          })),
-        ]);
+          }));
+          // 기존 데이터와 비교하여 중복 제거
+          const uniquePurchases = newPurchases.filter(
+            (newPurchase) => !prevPurchases.some((purchase) => purchase.id === newPurchase.id)
+          );
+          return [...prevPurchases, ...uniquePurchases];
+        });
       }
     } catch (error) {
       console.error("Error fetching purchases:", error);
       setHasMore(false); // 에러가 발생하면 더 이상 데이터가 없다고 처리
     } finally {
       setLoading(false); // 로딩 종료
-    }
-  };
-
-  // 체크박스 변경 처리
-  const handleCheckboxChange = (purchaseId, checked) => {
-    setSelectedPurchases((prevSelected) => {
-      if (checked) {
-        return [...prevSelected, purchaseId];
-      } else {
-        return prevSelected.filter((id) => id !== purchaseId);
-      }
-    });
-  };
-
-  // 구매 상태를 텍스트로 변환하는 함수
-  const getPurchaseStatus = (status) => {
-    switch (Number(status)) {
-      case 0:
-        return "상품 준비중";
-      case 1:
-        return "배송중";
-      case 2:
-        return "배송완료";
-      case 3:
-        return "배송확인";
-      case 4:
-        return "환불진행중";
-      case 5:
-        return "환불 완료";
-      default:
-        return "알 수 없음";
     }
   };
 
@@ -119,42 +92,32 @@ const Purchases = () => {
     );
   }
 
+  // 상태 텍스트 반환 함수
+  const getPurchaseStatus = (status) => {
+    switch (status) {
+      case 0: return "상품 준비중";
+      case 1: return "배송중";
+      case 2: return "배송완료";
+      case 3: return "배송확인";
+      case 4: return "환불진행중";
+      case 5: return "환불 완료";
+      default: return "알 수 없음";
+    }
+  };
+
   return (
     <div style={{ padding: "20px", backgroundColor: "#FFF5EF", border: "2px solid #FF7826" }}>
       <div style={{ marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1 style={{ color: "#FF7826" }}>구매 목록</h1>
-        <Button
-          onClick={() => alert("배송 상태 변경")}
-          disabled={selectedPurchases.length === 0}
-          style={{ backgroundColor: "#FF7826", border: "none" }}
-        >
-          배송상태 변경
-        </Button>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         {purchases.map((purchase) => (
           <Card
             key={purchase.id}
+            style={{ width: "100%", padding: "20px", marginBottom: "20px", position: "relative", cursor: "pointer" }}
             onClick={() => navigate(`/shop/purchase/${purchase.id}`)}
-            style={{
-              width: "100%",
-              padding: "20px",
-              marginBottom: "20px",
-              position: "relative",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              backgroundColor: "#fff",
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-            }}
           >
-            <Form.Check
-              type="checkbox"
-              label="선택"
-              disabled={Number(purchase.purchaseStatus) < 2 || Number(purchase.purchaseStatus) >= 3}
-              onChange={(e) => handleCheckboxChange(purchase.id, e.target.checked)}
-              style={{ position: "absolute", top: "50%", right: "10px", transform: "translateY(-50%)" }}
-            />
             <Card.Body style={{ textAlign: "left" }}>
               <Card.Title>{purchase.productName}</Card.Title>
               <Card.Text>
@@ -184,4 +147,4 @@ const Purchases = () => {
   );
 };
 
-export default Purchases;
+export default RefundPurchases;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Col, Row, Table, Spinner, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 import { useUser } from "../../../components/contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const AddPurchase = () => {
   const { userId } = useUser();
@@ -14,6 +15,8 @@ const AddPurchase = () => {
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [selectedCard, setSelectedCard] = useState("366");
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [showPaymentSuccessModal, setShowPaymentSuccessModal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let script = document.querySelector('script[src="https://cdn.iamport.kr/v1/iamport.js"]');
@@ -145,10 +148,38 @@ const AddPurchase = () => {
               imp_uid: rsp.imp_uid,
               merchant_uid: rsp.merchant_uid,
             });
-
+  
             if (response.status === 200) {
               alert("결제가 성공적으로 처리되었습니다.");
-              window.location.href = response.data.redirectUrl;
+  
+              // 상품별로 Purchase 객체 생성
+              const purchasePromises = items.map((item) => {
+                const purchaseData = {
+                  userId: userId, // 사용자 ID
+                  buyProduct: item.product.productId, // 해당 상품 수량
+                  paymentId: rsp.imp_uid, // 결제 ID (imp_uid)
+                  paidDate: new Date().toISOString(), // 결제 날짜
+                  paymentAmount: (item.product.price*(1-(item.product.discount/100))) * item.quantity , // 해당 상품 결제 금액
+                  productName: item.product.productName, // 상품 이름
+                  orderQuantity: item.quantity, // 상품 수량
+                  deliveryAddress: deliveryInfo?.deliveryAddress, // 배송 주소 
+                  zipCode: deliveryInfo?.zipCode, // 우편번호
+                  buyerName: deliveryInfo?.buyerName,
+                  deliveryPhoneNumber: deliveryInfo?.deliveryPhoneNumber, // 전화번호
+                  paymentOption: paymentMethod, // 결제 방법 (카드 또는 간편 결제)
+                  cardOption: selectedCard || "simple", // 카드 옵션
+                  purchaseStatus: "completed", // 결제 상태 (완료)
+                  itemId: item.itemId,
+                };
+  
+                // 각 상품을 DB에 저장하기 위한 POST 요청
+                return axios.post("/api/shop/purchases", purchaseData);
+              });
+  
+              // 모든 상품에 대한 Purchase 데이터를 DB에 저장
+              await Promise.all(purchasePromises);
+  
+              window.location.href = response.data.redirectUrl; // 리디렉션 URL
             } else {
               alert("결제 검증 실패: " + response.data);
             }
