@@ -18,7 +18,7 @@ const ViewTopicCommentBox = ({comment, setComments}) => {
 
   return (
 
-    <div>
+    <div className={ comment.targetComment ? 're-comment' : 'comment' }> 
       
       <ViewTopicCommentInfo 
         comment={comment}
@@ -28,7 +28,7 @@ const ViewTopicCommentBox = ({comment, setComments}) => {
       />
 
       {(comment.reCommentCount + reCommentCount > 0) ? (
-        <ViewTopicComments
+        <ViewTopicComments 
           targetTopic={null}
           targetComment={comment}
           comments={reComments}

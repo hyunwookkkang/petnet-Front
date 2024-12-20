@@ -49,35 +49,42 @@
 
 .comment-container {
   font-size: 16px;
-  padding: 6px 0;
+  padding: 6px;
+  margin-left: 0;
+}
+
+.comment {
   border-bottom: 1px solid #DCDCDC;
+}
+
+.re-comment {
+  margin-left: 33px;
+  border-top: 1px solid #DCDCDC;
 }
 
 .comment-header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
-}
-  
-.comment-username {
-  font-weight: bold;
-}
-
-.comment-options {
-  font-size: 12px;
+  font-size: 14px;
   color: #888;
 }
 
-.comment-option {
-  margin-left: 10px;
+.comment-options {
   cursor: pointer;
+  display: flex;
+  gap: 10px;
 }
 
-.comment-content {
-  margin: 5px 0;
+.comment-image {
+  max-width: 240px; /* 최대 너비를 부모 요소의 너비로 제한 */
+  max-height: 120px; /* 최대 높이를 400px로 제한 */
+  width: auto; /* 비율을 유지한 채 크기 조정 */
+  height: auto;
 }
 
 .comment-footer {
+  margin-top: 5px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -86,7 +93,8 @@
 }
   
 .comment-likes {
-    cursor: pointer;
+  display: flex;
+  gap: 3px;
 }
   
 .comment-reply-button {
@@ -94,6 +102,8 @@
   background: none;
   color: #3b6de8;
   cursor: pointer;
+  display: flex;
+  gap: 3px;
 }
 
 .comment-date {

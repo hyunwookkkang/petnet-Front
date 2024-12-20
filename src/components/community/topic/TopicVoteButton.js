@@ -89,8 +89,8 @@ const TopicVoteButton = ({ topicId, voteCount, isLike }) => {
         : <><FaThumbsDown/> 싫어요</>
         }
         <br/>
-        ( { voteCount < 1000 ?
-            voteCount
+        ( { votedCount < 1000 ?
+            votedCount
           : '999+' } ) 
       </Button>
 

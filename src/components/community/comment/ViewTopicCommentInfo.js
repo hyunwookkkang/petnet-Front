@@ -76,7 +76,7 @@ const ViewTopicCommentInfo = ({comment, setComments, setReComments, reCommentCou
       <div className="comment-header">
 
         {/* 작성자 닉네임 */}
-        <span className="comment-username">
+        <span>
           {comment.author.nickname}
         </span>
 
@@ -100,9 +100,13 @@ const ViewTopicCommentInfo = ({comment, setComments, setReComments, reCommentCou
       {/* Content */}
       <div>
         { comment.imageId ? (
-          <img src={`/api/images/${comment.imageId}`} alt=""/>
+          <img 
+            className="comment-image"
+            src={`/api/images/${comment.imageId}`} 
+            alt="&nbsp; < failed to load img file >"
+          />
         ) : (
-          <p className="comment-content">{comment.content}</p>
+          <span>{comment.content}</span>
         )}
       </div>
       
@@ -110,7 +114,7 @@ const ViewTopicCommentInfo = ({comment, setComments, setReComments, reCommentCou
       <div className="comment-footer">
 
         {/* 좋아요 버튼 및 좋아요 갯수 */}
-        <span className="comment-likes" style={{display: 'flex'}}>
+        <span className="comment-likes">
           <CommentVoteButton 
             commentId={comment.commentId} 
             setLikeCount={setLikeCount} 

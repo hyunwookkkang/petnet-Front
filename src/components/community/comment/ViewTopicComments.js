@@ -52,7 +52,7 @@ const ViewTopicComments = ({targetTopic, targetComment, comments, setComments}) 
 
     <div>
 
-      <ul>
+      <ul style={{ paddingInlineStart: '0' }}>
         { commentsView }
       </ul>
 
