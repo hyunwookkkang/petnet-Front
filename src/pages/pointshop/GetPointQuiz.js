@@ -201,7 +201,7 @@ const GetPointQuiz = () => {
                 다시 도전
               </Button>
             )}
-            <Button variant="success" onClick={() => navigate("/pointshop-page")} style={{ backgroundColor: "#EEA092", borderColor: "#EEA092", color: "#FFFFFF" }}>
+            <Button variant="success" onClick={() => {window.location.href = "/pointshop-page";}} style={{ backgroundColor: "#EEA092", borderColor: "#EEA092", color: "#FFFFFF" }}>
               종료하기
             </Button>
           </div>

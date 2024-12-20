@@ -37,7 +37,7 @@ const PointShopAdminPage = () => {
       showSuccessToast("상품이 성공적으로 삭제되었습니다.");
     } catch (error) {
       console.error("Error deleting product:", error);
-      showErrorToast("기프티콘 발급된 상품이라 삭제가 불가능합니다.");
+      showErrorToast("기프티콘 발급된 상품이라 삭제가 불가능합니다. 상태를 변경시키고 모든 기프티콘이 만료가 되면 삭제가 가능합니다. ");
     } finally {
       setShowDeleteModal(false);
     }

@@ -119,7 +119,7 @@ const GetPointLog = () => {
   };
 
   return (
-    <div style={{ padding: "10px", backgroundColor: "#F0F0F0", minHeight: "100vh" }}>
+    <div style={{ padding: "5px", backgroundColor: "#F0F0F0", minHeight: "100vh" }}>
       <h1 style={{  textAlign: "center"}}>포인트 내역 </h1>
       {/* 헤더 */}
       <div style={{display: "flex",justifyContent: "flex-end",alignItems: "center",backgroundColor: "#F0F0F0",}}>
@@ -140,7 +140,7 @@ const GetPointLog = () => {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "5px",
+          gap: "1px",
         }}
       >
         {checkItems.map((item) => (
