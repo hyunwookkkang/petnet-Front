@@ -1,0 +1,83 @@
+
+
+.topic-section {
+  border: 2px solid #febe98 !important;
+  border-radius: 8px !important;
+  padding: 15px !important;
+  text-align: center;
+  transition: background-color 0.3s;
+  pointer-events: auto;
+  cursor: pointer;
+  margin-bottom: 20px !important;
+}
+
+.topic-section-item {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #666;
+  padding: 2px;
+  border-top: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.topic-section-item > div {
+  margin-bottom: 0 !important;
+}
+
+.topic-section-item strong {
+  font-size: 15px;
+}
+
+.topics-normal-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;  /* 세로 방향으로 공간 분배 */
+  position: relative;
+  padding: 15px;
+  background-color: #fff;
+  border: 2px solid #FEBE98 ;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.topics-normal-item:hover {
+  background-color: #DCDCDC ;
+}
+
+.topics-header {
+  display: flex;
+  justify-content: space-between; /* 좌우로 공간 분배 */
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.topics-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.topics-comments {
+  align-self: flex-end;  /* 우측에 배치 */
+}
+
+.topics-footer {
+  display: flex;
+  justify-content: space-between;  /* 좌우로 공간 분배 */
+  align-items: flex-end;
+}
+
+.topics-author {
+  align-self: flex-start;  /* 좌측 하단 */
+}
+
+.topics-date {
+  align-self: flex-end;  /* 우측 하단 */
+}
+
+
+.topics-normal-item .scrap-button > svg {
+  transform: scale(0.9);
+}
+

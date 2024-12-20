@@ -113,7 +113,13 @@ const GifticonManagement = () => {
           footer={
             <button
               className="modal-confirm-button"
-              style={{ backgroundColor: "#feb98e", border: 'none' }}
+              style={{  backgroundColor: "#FEBE98 ",
+                border: "none",
+                padding: "10px 20px",
+                color: "white",
+                fontSize: "16px",
+                borderRadius: "5px",
+                cursor: "pointer", }}
               onClick={() => navigate("/login")}
             >
               확인

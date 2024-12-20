@@ -353,26 +353,19 @@
 /*******************************************************************************/
 
 
-.topic-section {
-  border: 2px solid #febe98 !important;
-  border-radius: 8px !important;
-  padding: 15px !important;
-  text-align: center;
-  transition: background-color 0.3s;
-  pointer-events: auto;
-  cursor: pointer;
+.topic-taps {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 10%);
 }
 
-.topic-section-item {
-  font-size: 16px;
-  color: #666;
-  padding: 10px;
-  border-top: 1px solid #ddd;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+.topic-tap {
+  min-width: 60px !important; /* 버튼의 최소 너비 */
 }
 
 .link-unstyled {
   text-decoration: none;
   color: inherit; /* 기본 색상 유지 */
 }
+
+

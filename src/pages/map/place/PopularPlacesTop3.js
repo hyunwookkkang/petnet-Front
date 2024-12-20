@@ -56,7 +56,25 @@ const PopularPlacesTop3 = () => {
 
     return (
         <Container className="place-section"> {/* className 변경 */}
-            {/* <h2 className="custom-font popular-places-title">🔥좋아요 인기 Top3 장소🔥</h2> */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <h3 style={{ textAlign: "left", paddingLeft: "4px", marginTop: "3px", marginBottom: "0px" }}>좋아요 인기 Top3 장소</h3>
+                <span
+                onClick={() => navigate("/map-main")}
+                style={{
+                    textAlign: "right",
+                    cursor: "pointer",
+                    color: "#FF6347",
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    paddingRight: "1px",
+                }}
+                >
+                더 보러가기 &gt;
+                </span>
+            </div>
+                <p style={{ textAlign: "left", paddingLeft: "4px", margin: "0px", fontSize: "12px" }}>핫 한 장소 라인업, 이제 펫 넷에서!</p>
+
+            
             <Carousel className="popular-place-carousel">
                 {popularPlaces.map((place, index) => (
                 <Carousel.Item key={place.placeId}>

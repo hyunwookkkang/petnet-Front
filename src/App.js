@@ -84,6 +84,7 @@ import SearchExpenses from "./pages/cashbook/SearchExpenses";
 
 // Admin 관련 페이지 (잘못된 경로 수정)
 import AdminMainPage from "./pages/common/AdminMainPage";
+import PopularPlacesInfo from "./pages/map/place/PopularPlacesInfo";
 
 
 
@@ -140,6 +141,7 @@ function App() {
             <Route path="/placeSearch" element={<PlaceSearch />} />
             <Route path="/addPlace" element={<AddPlace />} />
             <Route path="/my/placeposts" element={<GetMyPlacePosts />} />
+            <Route path="/popularPlacesInfo" element={<PopularPlacesInfo />} />
             {/* END : map-page */}
 
             {/* START : shop-page */}

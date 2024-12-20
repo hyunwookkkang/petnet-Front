@@ -5,6 +5,7 @@ import "../../styles/Main.css";
 // Import Components
 import PopularPlacesTop3 from "./../map/place/PopularPlacesTop3";
 import MainImage from "./MainImage";
+import ViewHotTopicsCard from "../../components/community/topic/ViewHotTopicsCard";
 
 function AdBanner({ onAdEnd }) {
   return (
@@ -222,6 +223,9 @@ function Main() {
 
                 {/* 섹션들 */}
       <div className="sections">
+        <br/>
+      <PopularPlacesTop3 />
+      <br/>
       <h2 style= {{textAlign: "left"}}>포인트 상점</h2>
         <div
           className="section"
@@ -259,18 +263,10 @@ function Main() {
 
         <br/>
         <h2 style= {{textAlign: "left"}}>커뮤니티</h2>
-        <div 
-          className="section"
-          onClick={() => handleNavigation("/community")}
-          style={{ cursor: "pointer" }}
-        >
-          <h2>커뮤니티</h2>
-          <p>이거 뭐가 좋아요? 궁금할 땐 모두와 함께 이야기해봐요!</p>
-        </div>
+        <ViewHotTopicsCard />
 
         <br/>
-            <h2 style={{ textAlign: "left", paddingLeft: "4px" }}>좋아요 인기 Top3 장소</h2>
-            <PopularPlacesTop3 />
+            
           </div>
         </>
       )}
