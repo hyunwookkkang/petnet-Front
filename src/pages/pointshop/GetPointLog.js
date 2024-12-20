@@ -119,7 +119,7 @@ const GetPointLog = () => {
   };
 
   return (
-    <div style={{ padding: "10px", backgroundColor: "#F0F0F0", minHeight: "100vh" }}>
+    <div style={{ padding: "5px", backgroundColor: "#F0F0F0", minHeight: "100vh" }}>
       <h1 style={{  textAlign: "center"}}>포인트 내역 </h1>
       {/* 헤더 */}
       <div style={{display: "flex",justifyContent: "flex-end",alignItems: "center",backgroundColor: "#F0F0F0",}}>
@@ -130,25 +130,33 @@ const GetPointLog = () => {
       {/* 오늘 기록 체크 */}
       <div
         style={{
+          border: "1px solid #E0E0E0",
+          borderRadius: "5px",
+          backgroundColor: "#FFFFFF",
+          marginBottom: "10px",
+        }}
+      >
+      <div
+        style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "5px",
+          gap: "1px",
         }}
       >
         {checkItems.map((item) => (
-          <div key={item.reason} style={{ fontSize: "16px", marginBottom: "10px" }}>
+          <div key={item.reason} style={{ fontSize: "16px" }}>
             {item.label}
             {isCompleted(item.reason) ? ":✅" : ":❎"}
           </div>
         ))}
       </div>
-
+      </div>
       {/* 버튼 그룹 */}
       <Space style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center", 
-        marginBottom: "20px", 
+        marginBottom: "10px", 
         wigth: "100%"
         
       }}>

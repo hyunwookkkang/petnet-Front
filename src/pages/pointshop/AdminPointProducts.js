@@ -37,7 +37,7 @@ const PointShopAdminPage = () => {
       showSuccessToast("상품이 성공적으로 삭제되었습니다.");
     } catch (error) {
       console.error("Error deleting product:", error);
-      showErrorToast("기프티콘 발급된 상품이라 삭제가 불가능합니다.");
+      showErrorToast("기프티콘 발급된 상품이라 삭제가 불가능합니다. 상태를 변경시키고 모든 기프티콘이 만료가 되면 삭제가 가능합니다. ");
     } finally {
       setShowDeleteModal(false);
     }
@@ -93,7 +93,7 @@ const PointShopAdminPage = () => {
                   <span
                     style={{ color: product.productStock === 1 ? "#52c41a" : "#FF6347", fontWeight: "bold" }}
                   >
-                    상태: {product.productStock === 1 ? "활성" : "비활성"}
+                    상태: {product.productStock === 1 ? "구매가능" : "구매불가"}
                   </span>
                 </div>
               }
