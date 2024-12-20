@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ListGroup, Image, Container, Card } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import "../../../styles/place/PopularPlaces.css"; // 스타일 파일 임포트
+import { useNavigate } from "react-router-dom";
+import { Container, Card } from "react-bootstrap";
 
 const PopularPlaces = () => {
   const [popularPlaces, setPopularPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
       .get("/api/map/favorites/popular")
       .then((response) => {
+        console.log(response.data); // 데이터 확인용 로그
         setPopularPlaces(response.data);
         setLoading(false);
       })
@@ -31,33 +32,90 @@ const PopularPlaces = () => {
     return <div className="text-center text-danger">{error}</div>;
   }
 
+  if (!popularPlaces.length) {
+    return <div className="text-center">표시할 인기 장소가 없습니다.</div>;
+  }
+
+  const handleNavigation = (placeId) => {
+    navigate(`/placeInfo/${placeId}`);
+  };
+
   return (
-    <Container fluid className="mt-4 content-wrapper">
-      <Card className="popular-places-card">
-        <Card.Header className="text-center mb-4 custom-font">
-          🔥좋아요 인기 Top10 장소!🔥
-        </Card.Header>
-        <ListGroup variant="flush" className="popular-places-list">
-          {popularPlaces.map((place, index) => (
-            <ListGroup.Item key={place.placeId} className="popular-place-item">
-              <Link to={`/place/${place.placeId}`} className="place-link">
-                {place.imageUrl && (
-                  <Image
-                    src={place.imageUrl}
-                    alt={place.placeName}
-                    rounded
-                    className="place-avatar"
-                  />
-                )}
-                <div className="place-details">
-                  <h5 className="place-name">{`${index + 1}위: ${place.placeName}`}</h5>
-                  <p className="place-like">{`좋아요: ${place.likeCount}`}</p>
-                </div>
-              </Link>
-            </ListGroup.Item>
-          ))}
-        </ListGroup>
-      </Card>
+    <Container
+      fluid
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        maxWidth: "800px",
+        margin: "0 auto",
+        padding: "20px",
+        backgroundColor: "#F9ECE8",
+        overflow: "visible", // 자식 콘텐츠가 잘리지 않도록 설정
+        borderRadius: "15px", // 모서리 둥글게 만들기
+      }}
+    >
+      <h2 style={{ marginBottom: "20px", fontWeight: "bold", textAlign: "center", color: "#363636"}}>
+        🔥 인기 Top10 장소 🔥
+      </h2>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)", // 2열 그리드
+          gap: "20px", // 카드 간격
+        }}
+      >
+        {popularPlaces.map((place, index) => (
+          <Card
+            key={place.placeId}
+            onClick={() => handleNavigation(place.placeId)}
+            style={{
+              cursor: "pointer",
+              padding: "20px",
+              borderColor: "#feb98e",
+              borderRadius: "10px",
+              textAlign: "center",
+              transition: "transform 0.2s",
+              backgroundColor: "#ffffff", // 디버깅용 배경색
+              minHeight: "200px", // 최소 높이 설정
+            }}
+          >
+            <Card.Title 
+            style={{ 
+              fontSize: "1.1rem", 
+              fontWeight: "bold",
+              color:
+                index === 0 ? "#FF6347" :
+                index === 1 ? "#EEA092" :
+                index === 2 ? "#ECB392" :
+                "#363636" 
+            }}>
+                <div>{index + 1}위</div> {place.placeName}
+            </Card.Title>
+
+            <Card.Img
+              variant="top"
+              src={place.imageUrl || "https://via.placeholder.com/151"}
+              alt={place.placeName}
+              style={{
+                width: "100%",
+                height: "150px",
+                objectFit: "cover", // 이미지 비율 유지
+                borderRadius: "5px",
+                marginBottom: "15px",
+              }}
+            />
+            <Card.Body>
+              
+              <Card.Text style={{ fontSize: "0.9rem", color: "#555" }}>
+                ❤️좋아요 {place.likeCount}개❤️ <br/>
+                <div style={{fontSize: '11px'}}>🐈입장 {place.entrnPosblPetSizeValue}🐈</div>
+                <div style={{fontSize: '9px'}}>{place.rdnmadrNm}</div>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        ))}
+      </div>
     </Container>
   );
 };

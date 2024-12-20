@@ -1,119 +1,106 @@
-/* src/styles/place/PopularPlaces.css */
+/* PopularPlaces.css */
 
-/* Card 전체 스타일 */
-.popular-places-card {
-  background-color: #ffffff; /* 카드 배경색 */
-  border: 2px solid #feb98e; /* 기본 테두리 제거 */
-  border-radius: 15px; /* 모서리 둥글게 */
-  padding: 10px; /* 내부 패딩 */
-  margin: 50px;
-  color: rgb(0, 0, 0); /* 텍스트 색상 */
-}
-
-/* 카드 헤더 스타일 */
-.popular-places-card .card-header {
-  background-color: transparent; /* 카드 헤더 배경 투명하게 */
-  border-bottom: 2px solid #feb98e; /* 하단 테두리 2px, solid, #feb98e */
-  font-size: 1.5rem; /* 폰트 크기 조정 */
-  color: rgb(0, 0, 0); /* 텍스트 색상 */
-}
-
-/* 인기 장소 목록 스타일 */
-.popular-places-list {
-  width: 100%; /* 전체 너비를 100%로 설정 */
-  margin: 0; /* 기본 여백 제거 */
-  padding: 0; /* 기본 여백 제거 */
+/* .popular-places-container 스타일 */
+.popular-places-container,
+.popular-section {
   display: flex;
-  flex-direction: column; /* 리스트 아이템들을 세로로 배치 */
-  gap: 10px; /* 아이템들 사이에 여백 추가 */
-}
-
-/* 개별 리스트 아이템 스타일 */
-.popular-place-item {
-  display: flex;
+  flex-direction: column;
   align-items: center;
-  transition: background-color 0.3s, transform 0.3s;
-  border: 2px solid #feb98e;
-  border-radius: 8px;
-  margin-bottom: 3px;
-  padding: 5px;
-  background-color: #ffffff; /* 배경색을 흰색으로 설정 */
-  color: #313131; /* 텍스트 색상 조정 */
+  min-height: 300px; /* 최소 높이 지정 */
+  padding: 0px 20px;
 }
 
-/* hover 효과 제거 */
-.popular-place-item:hover {
-  background-color: #feb98e; /* hover 시 배경색 유지 */
-  /* transform: none; hover 시 변형 제거 */
+/* Carousel 스타일 */
+.popular-place-carousel {
+  width: 100%;
+  max-width: 800px; /* 캐러셀의 최대 너비 설정 */
+  margin-bottom: 20px; /* 캐러셀과 버튼 사이의 간격 줄임 */
+  
 }
 
-/* 링크 스타일링 */
-.place-link {
+/* Carousel Item 스타일 */
+.popular-place-carousel-item {
   display: flex;
+  justify-content: center;
   align-items: center;
-  text-decoration: none;
-  color: inherit;
+  height: auto; /* Carousel Item의 높이를 자동으로 조절 */
+  padding: 10px; /* 아이템과 테두리 사이에 패딩 추가 */
+}
+
+/* Card 스타일 */
+.popular-place-card {
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  overflow: visible; /* overflow: hidden에서 visible로 변경 */
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+  max-width: 100%; /* 카드 너비가 너무 커지지 않도록 제한 */
+
+}
+
+.popular-place-card.visible {
+  opacity: 1;
+  border: none;
+  transform: translateY(0);
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.popular-place-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* 이미지 스타일 */
+.place-image {
+  height: 200px;
+  object-fit: cover;
   width: 100%;
 }
 
-/* 아바타 이미지 스타일링 */
-.place-avatar {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  margin-right: 20px;
-  border: 2px solid #feb98e; /* 아바타 테두리 추가 */
-  border-radius: 8px; /* 이미지 모서리 둥글게 */
-}
-
-/* 장소 상세 정보 스타일링 */
+/* 카드 내부 텍스트 스타일 */
 .place-details {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  padding: 20px;
+  text-align: center;
 }
 
-/* 커스텀 폰트 적용 */
-.custom-font {
-  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
-}
-
-/* 장소 이름 스타일링 */
 .place-name {
-  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
-  font-size: 1.2rem;
-  margin-bottom: 5px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
 }
 
-/* 좋아요 수 스타일링 */
 .place-like {
-  font-family: 'Ownglyph_ParkDaHyun', sans-serif;
-  font-size: 0.9rem;
-  color: #757575;
+  font-size: 1rem;
+  color: #666;
+  white-space: pre-wrap; /* 텍스트 줄바꿈 허용 */
 }
 
-/* "더 확인하러 가기!" 버튼 스타일 */
-.see-more-button {
-  background-color: #feb98e !important;
-  color: white;
-  padding: 10px 20px;
-  border: none !important;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.see-more-button:hover {
-  background-color: #fd7e50 !important;
+/* 버튼 컨테이너 */
+.button-container {
+  margin-top: 20px; /* 버튼과 아래 요소 간의 간격을 늘림 */
+  text-align: center;
 }
 
-/*******************************************************************************/
-/* Common CSS */
-/*******************************************************************************/
-
-/* 공통 섹션 스타일 */
-.popular-sections {
+.place-sections {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -121,7 +108,7 @@
   font-family: 'Ownglyph_ParkDaHyun', sans-serif;
 }
 
-.popular-section {
+.place-section {
   border: 2px solid #febe98;
   border-radius: 8px;
   padding: 15px;

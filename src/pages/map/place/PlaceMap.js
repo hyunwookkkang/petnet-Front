@@ -5,6 +5,8 @@ import { Container, ButtonGroup, Button } from "react-bootstrap";
 import { Box, Card, CardContent, Typography, CardMedia } from "@mui/material";
 import "../../../styles/common/Font.css";
 import "../../../styles/common/Card.css";
+import "../../../styles/place/Place.css";
+
 
 const PlaceMap = ({ dbFcltyNm }) => {
   const [places, setPlaces] = useState([]);
@@ -218,17 +220,17 @@ const PlaceMap = ({ dbFcltyNm }) => {
 
   return (
     <Container>
-      <ButtonGroup className="button-group" style={{ marginBottom: "10px" }}>
-        <Button className="button-click" onClick={() => handleFilter("전체")}>
+      <ButtonGroup className="place-button-group" style={{ marginBottom: "10px" }}>
+        <Button className="place-button-click" onClick={() => handleFilter("전체")}>
           전체
         </Button>
-        <Button className="button-click" onClick={() => handleFilter("식당")}>
+        <Button className="place-button-click" onClick={() => handleFilter("식당")}>
           식당
         </Button>
-        <Button className="button-click" onClick={() => handleFilter("카페")}>
+        <Button className="place-button-click" onClick={() => handleFilter("카페")}>
           카페
         </Button>
-        <Button className="button-click" onClick={() => handleFilter("여행지")}>
+        <Button className="place-button-click" onClick={() => handleFilter("여행지")}>
           여행지
         </Button>
       </ButtonGroup>
@@ -252,7 +254,7 @@ const PlaceMap = ({ dbFcltyNm }) => {
             return (
               <Link
                 to={{
-                  pathname: `/place/${place.placeId}`,
+                  pathname: `/placeInfo/${place.placeId}`,
                   state: { photoReferences: photoReferences[place.placeId] || [] },
                 }}
                 key={index}
@@ -267,15 +269,10 @@ const PlaceMap = ({ dbFcltyNm }) => {
                   />
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <CardContent>
-                      <Typography component="div" variant="h5" className="common-content common-title">
-                        <h3>{place.fcltyNm}</h3>
-                      </Typography>
-                      <Typography variant="subtitle1" color="text.secondary" className="common-content common-title">
-                        운영시간: {place.operTime}
-                      </Typography>
-                      <Typography variant="subtitle1" color="text.secondary" className="common-content common-title">
-                        거리: ~{(place.distance || 0).toFixed(1)}km
-                      </Typography>
+                    <div style={{fontSize: '18px'}}>{place.fcltyNm}</div>
+                    <div style={{fontSize: '14px'}}>나와의 거리: ~{(place.distance || 0).toFixed(1)}km</div>
+                    <div style={{fontSize: '11px'}}>{place.operTime}</div>
+                    <div style={{fontSize: '9px'}}>{place.rdnmadrNm}</div>
                     </CardContent>
                   </Box>
                 </Card>
