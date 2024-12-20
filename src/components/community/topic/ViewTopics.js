@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import useFetchGetTopics from "./useFetchGetTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
+import "../../../styles/community/TopicListView.css";
 
 
 const ViewTopics = ({search}) => {
@@ -28,10 +29,16 @@ const ViewTopics = ({search}) => {
     <div key={topic.topicId}>
 
       <Link className="link-unstyled" to={`/getTopic/${topic.topicId}`}>
-        <h2>제목: {topic.title}</h2>
-        <p>작성일: {topic.addDateStr}</p>
-        <p>작성자: {topic.author.userId}</p>
-        <p>댓글수: {topic.commentCount}</p>
+        <li className="topics-normal-item">
+          <div className="topics-header">
+            <strong className="topics-title">[{topic.categoryStr}] {topic.title}</strong>
+            <span className="topics-comments">댓글 {topic.commentCount}</span>
+          </div>
+          <div className="topics-footer">
+            <span className="topics-author">{topic.author.nickname}</span>
+            <span className="topics-date">{topic.addDateStr}</span>
+          </div>
+        </li>
       </Link>
 
     </div>
@@ -54,12 +61,13 @@ const ViewTopics = ({search}) => {
 
     <div>
 
-      <h1>View Topics</h1>
       <br/>
       { topics.length === 0 ? (
-        <p>게시글이 없습니다</p> // topics가 빈 배열일 경우
+        <p>아직 게시글이 없습니다</p> // topics가 빈 배열일 경우
       ) : (
-        <ul>{ topicsView }</ul> // topics 배열에 데이터가 있을 경우
+        <ul style={{ paddingInlineStart: '0' }}>
+          { topicsView }
+        </ul> // topics 배열에 데이터가 있을 경우
       )}
 
   </div>

@@ -8,6 +8,7 @@
   background-color: #f8f9fa;
   border: 1px solid #DCDCDC;
   font-size: 16px;
+  margin-bottom: 4px;
 }
 
 .comment-count {
@@ -49,7 +50,7 @@
 
 .comment-container {
   font-size: 16px;
-  padding: 6px;
+  padding: 6px 8px;
   margin-left: 0;
 }
 
@@ -93,8 +94,16 @@
 }
   
 .comment-likes {
-  display: flex;
-  gap: 3px;
+  justify-content: center;   /* 중앙 정렬 */
+  align-items: center;       /* 세로 중앙 정렬 */
+  display: flex;             /* 가로로 배치 */
+  gap: 4px;
+}
+
+.comment-likes * {
+  justify-content: center;   /* 중앙 정렬 */
+  align-items: center;       /* 세로 중앙 정렬 */
+  display: flex;             /* 가로로 배치 */
 }
   
 .comment-reply-button {

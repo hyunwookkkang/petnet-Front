@@ -43,6 +43,9 @@
 }
 
 .topic-view-count {
+   justify-content: center;   /* 중앙 정렬 */
+   align-items: center;       /* 세로 중앙 정렬 */
+   display: flex;             /* 가로로 배치 */
    background-color: #DCDCDC;
    text-align: center;
    margin-right: 3px;

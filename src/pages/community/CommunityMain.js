@@ -10,6 +10,8 @@ import ViewAllTopics from "../../components/community/topic/ViewAllTopics";
 import ViewHotTopics from "../../components/community/topic/ViewHotTopics";
 
 import "../../styles/Main.css"; // 기존 스타일 재사용
+import "../../styles/community/TopicListView.css";
+import "../../styles/community/TopicInfo.css";
 
 
 const CommunityMain = () => {
@@ -78,12 +80,12 @@ const CommunityMain = () => {
         </div>
       </div>
 
-      <ButtonGroup className="button-group">
-        <Button className="button-click" onClick={() => categoryChangehandler('all')}>전체</Button>
-        <Button className="button-click" onClick={() => categoryChangehandler('hot')}>인기</Button>
-        <Button className="button-click" onClick={() => categoryChangehandler('1')}>잡담</Button>
-        <Button className="button-click" onClick={() => categoryChangehandler('2')}>질문</Button>
-        <Button className="button-click" onClick={() => categoryChangehandler('3')}>후기</Button>
+      <ButtonGroup className="button-group topic-taps" >
+        <Button className="button-click topic-tap" onClick={() => categoryChangehandler('all')}>전체</Button>
+        <Button className="button-click topic-tap" onClick={() => categoryChangehandler('hot')}>인기</Button>
+        <Button className="button-click topic-tap" onClick={() => categoryChangehandler('1')}>잡담</Button>
+        <Button className="button-click topic-tap" onClick={() => categoryChangehandler('2')}>질문</Button>
+        <Button className="button-click topic-tap" onClick={() => categoryChangehandler('3')}>후기</Button>
       </ButtonGroup>
 
       { topicsComponent }

@@ -14,7 +14,8 @@ const ViewAllTopics = () => {
 
       <Row lg={1} className="g-4">
         <Col>
-
+          
+          <br/>
           <ViewHotTopicsCard />
           <ViewTopicsCard category='1' />
           <ViewTopicsCard category='2' />
