@@ -5,6 +5,7 @@ import "../../styles/Main.css";
 // Import Components
 import PopularPlacesTop3 from "./../map/place/PopularPlacesTop3";
 import MainImage from "./MainImage";
+import ViewHotTopicsCard from "../../components/community/topic/ViewHotTopicsCard";
 
 function AdBanner({ onAdEnd }) {
   return (
@@ -262,14 +263,7 @@ function Main() {
 
         <br/>
         <h2 style= {{textAlign: "left"}}>커뮤니티</h2>
-        <div 
-          className="section"
-          onClick={() => handleNavigation("/community")}
-          style={{ cursor: "pointer" }}
-        >
-          <h2>커뮤니티</h2>
-          <p>이거 뭐가 좋아요? 궁금할 땐 모두와 함께 이야기해봐요!</p>
-        </div>
+        <ViewHotTopicsCard />
 
         <br/>
             

@@ -1,74 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import LoginModal from "../../common/modal/LoginModal";
-import CommentAddModal from "./CommentAddModal";
+import ViewTopicCommentInfo from "./ViewTopicCommentInfo";
 import ViewTopicComments from "./ViewTopicComments";
 
-import { useUser } from "../../contexts/UserContext";
 
-import "../../../styles/Main.css";
-import "../../../styles/community/Comment.css";
+const ViewTopicCommentBox = ({comment, setComments}) => {
 
-
-const ViewTopicCommentBox = ({targetTopic}) => {
-
-  const { userId } = useUser(); // 사용자 ID 가져오기
-
-  const [comments, setComments] = useState([]);
-
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [reComments, setReComments] = useState([]);
+  const [reCommentCount, setReCommentCount] = useState(comment.reCommentCount);
 
 
-  // 댓글 등록 버튼 클릭 시 처리
-  const addCommentHandler = () => {
-    // 로그인 검사
-    if (!userId) {
-      setShowLoginModal(true);
-      return;
-    }
-    setShowAddModal(true);
-  }
-  
+  // 답글 갯수 갱신
+  useEffect(() => {
+    setReCommentCount(reComments.length);
+  }, [reComments]);
 
-  const CommentsHeader = () => (
-    <div className="topic-comments-bar">
-      <span className="comment-count">댓글 ({targetTopic.commentCount})</span>
-      <button 
-        className="view-comments-button" 
-        onClick={() => addCommentHandler(null)}
-      >
-        댓글 쓰기
-      </button>
-    </div>
-  );
 
   return (
 
-    <div>
+    <div className={ comment.targetComment ? 're-comment' : 'comment' }> 
       
-      <CommentsHeader />
-
-      <ViewTopicComments 
-        targetTopic={targetTopic}
-        targetComment={null}
-        comments={comments}
+      <ViewTopicCommentInfo 
+        comment={comment}
         setComments={setComments}
+        setReComments={setReComments}
+        reCommentCount={reCommentCount}
       />
 
-
-      <CommentAddModal
-        showModal={showAddModal}
-        setShowModal={setShowAddModal}
-        targetTopic={targetTopic}
-        targetComment={null}
-        setComments={setComments}
-      />
-
-      <LoginModal 
-        showModal={showLoginModal} 
-        setShowModal={setShowLoginModal}
-      />
+      {(comment.reCommentCount + reCommentCount > 0) ? (
+        <ViewTopicComments 
+          targetTopic={null}
+          targetComment={comment}
+          comments={reComments}
+          setComments={setReComments}
+        />
+      ) : '' }
 
     </div>
 

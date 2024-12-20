@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import { Container, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
+import { FaThumbsUp } from "react-icons/fa";
 
 import useFetchHotTopics from "./useFetchGetHotTopics";
 
@@ -23,44 +24,63 @@ const ViewHotTopicsCard = () => {
 
   const topicsCardView = topics.map((topic) => (
 
-    <ul className="list-unstyled" key={topic.topicId}>
+    <ul 
+      key={topic.topicId}
+      className="list-unstyled" 
+      style={{ marginBottom: '0' }}
+    >
 
       <Link className="link-unstyled" to={`/getTopic/${topic.topicId}`}>
-        <li className="topic-section-item" >
-          <strong>
-            [{topic.categoryStr}] {topic.title}
-          </strong>
-          <br/>
-          작성일: {topic.addDateStr}
-          <br/>
-          작성자: {topic.author.userId}
-          <br/>
-          좋아요수: {topic.likeCount}
+        <li className="topic-section-item">
+
+          <div className="topics-header">
+            <strong className="topics-title">
+              [{topic.categoryStr}] {topic.title}
+            </strong>
+
+            <span className="comment-likes">
+              <FaThumbsUp style={{ fontSize: '12' }}/>
+              <div>
+                { topic.likeCount < 10000 ?
+                  topic.likeCount
+                : '9999+' }
+              </div>
+            </span>
+          </div>
+            
+          <div className="topics-footer">
+            <span className="topics-author">
+              {topic.author.nickname}
+            </span>
+
+            <span className="topics-date">
+              {topic.addDateYMD}
+            </span>
+          </div>
+
         </li>
       </Link>
-
+      
     </ul>
 
   ));
 
   return (
 
-    <Container fluid className="mt-4">
+    <Card className="topic-section container">
 
-          <Card className="topic-section">
-            <Card.Body>
+      <Card.Body>
 
-              <Card.Title className="section-title">
-                금주의 인기글
-              </Card.Title>
+        <Card.Title className="section-title">
+          금주의 인기글
+        </Card.Title>
 
-              {/* topics 배열을 순회하며 각 topic을 출력 */}
-              { topicsCardView }
+        {/* topics 배열을 순회하며 각 topic을 출력 */}
+        { topicsCardView }
 
-            </Card.Body>
-          </Card>
+      </Card.Body>
 
-    </Container>
+    </Card>
 
   );
 

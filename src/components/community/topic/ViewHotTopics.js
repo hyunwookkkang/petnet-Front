@@ -5,7 +5,6 @@ import useFetchHotTopics from "./useFetchGetHotTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 
-
 const ViewHotTopics = () => {
 
   // 페이지 초기화
@@ -26,10 +25,16 @@ const ViewHotTopics = () => {
     <div key={topic.topicId}>
 
       <Link className="link-unstyled" to={`/getTopic/${topic.topicId}`}>
-        <h2>제목: {topic.title}</h2>
-        <p>작성일: {topic.addDateStr}</p>
-        <p>작성자: {topic.author.userId}</p>
-        <p>좋아요수: {topic.likeCount}</p>
+        <li className="topics-normal-item">
+          <div className="topics-header">
+            <strong className="topics-title">[{topic.categoryStr}] {topic.title}</strong>
+            <span className="topics-comments">댓글 {topic.commentCount}</span>
+          </div>
+          <div className="topics-footer">
+            <span className="topics-author">{topic.author.nickname}</span>
+            <span className="topics-date">{topic.addDateStr}</span>
+          </div>
+        </li>
       </Link>
 
     </div>
@@ -40,12 +45,15 @@ const ViewHotTopics = () => {
 
     <div>
 
-      <h1>View Hot Topics</h1>
+      <h1>금주의 인기글</h1>
       <br/>
-      <ul>
-        {/* topics 배열을 순회하며 각 topic을 출력 */}
-        { topicsView }
-      </ul>
+      { topics.length === 0 ? (
+        <p>아직 인기 게시글이 없습니다</p> // topics가 빈 배열일 경우
+      ) : (
+        <ul style={{ paddingInlineStart: '0' }}>
+          { topicsView }
+        </ul> // topics 배열에 데이터가 있을 경우
+      )}
 
     </div>
 

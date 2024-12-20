@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { Snackbar } from '@mui/material';
 import { Grow } from '@mui/material';
+
+import LoginModal from '../../common/modal/LoginModal';
 
 import { useUser } from '../../contexts/UserContext';
 import useFetchGetScrap from './useFetchGetScrap';
 import useFetchAddScrap from './useFetchAddScrap';
 import useFetchDeleteScrap from './useFetchDeleteScrap';
-import LoginModal from '../../common/modal/LoginModal';
+
+import '../../../styles/community/TopicButton.css'
+
 
 const TopicScrapButton = ({ topicId }) => {
 
@@ -24,6 +29,7 @@ const TopicScrapButton = ({ topicId }) => {
 
   const [isScrap, setIsScrap] = useState(false);
 
+
   useEffect(() => {   
     const fetchScrap = async () => {
       const aleadyScrap = await fetchGetScrap(userId, topicId);
@@ -31,6 +37,7 @@ const TopicScrapButton = ({ topicId }) => {
     }
     fetchScrap();
   }, [fetchGetScrap, userId, topicId]);
+
 
   // 스크랩 버튼 클릭 시 처리
   const scrapTopicHandler = async () => {
@@ -63,16 +70,17 @@ const TopicScrapButton = ({ topicId }) => {
 
     <div>
 
-        <button 
+        <Button 
+          variant="link"
+          className='scrap-button'
           onClick={() => scrapTopicHandler()}
           disabled={loading || loadingGet || loadingAdd || loadingDel}
         > 
-          { isScrap ? (
-            <><FaBookmark/> 스크랩 취소 </>
-          ) : (
-            <><FaRegBookmark/> 스크랩 </>
-          )} 
-        </button>
+          { isScrap ?
+            <FaBookmark/>
+          : <FaRegBookmark/>
+          }
+        </Button>
 
 
         <Snackbar

@@ -38,17 +38,35 @@ const ViewTopicsCard = ({category}) => {
 
   const topicsCardView = topics.map((topic) => (
 
-    <ul className="list-unstyled" key={topic.topicId}>
+    <ul 
+      key={topic.topicId}
+      className="list-unstyled" 
+      style={{ marginBottom: '0' }}
+    >
 
       <Link className="link-unstyled" to={`/getTopic/${topic.topicId}`}>
         <li className="topic-section-item">
-          <strong>{topic.title}</strong>
-          <br/>
-          작성일: {topic.addDateStr}
-          <br/>
-          작성자: {topic.author.userId}
-          <br/>
-          댓글수: {topic.commentCount}
+
+          <div className="topics-header">
+            <strong className="topics-title">
+              [{topic.categoryStr}] {topic.title}
+            </strong>
+
+            <span className="topics-comments">
+              댓글 {topic.commentCount}
+            </span>
+          </div>
+            
+          <div className="topics-footer">
+            <span className="topics-author">
+              {topic.author.nickname}
+            </span>
+
+            <span className="topics-date">
+              {topic.addDateYMD}
+            </span>
+          </div>
+
         </li>
       </Link>
       
@@ -70,9 +88,8 @@ const ViewTopicsCard = ({category}) => {
 
   return (
 
-    <Container fluid className="mt-4">
+    <Card className="topic-section container">
 
-      <Card className="topic-section">
         <Card.Body>
 
           <Card.Title className="section-title">
@@ -83,9 +100,8 @@ const ViewTopicsCard = ({category}) => {
           { topicsCardView }
 
         </Card.Body>
-      </Card>
-
-    </Container>
+        
+    </Card>
 
   );
 
