@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 
-import useFetchHotTopics from "./useFetchGetHotTopics";
+import useFetchGetHotTopics from "./useFetchGetHotTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 
+
 const ViewHotTopics = () => {
 
+  const { fetchGetHotTopics, loading, error } = useFetchGetHotTopics();
+    
+  const [topics, setTopics] = useState([]);
+
+
   // 페이지 초기화
-  const { topics, loading, error } = useFetchHotTopics();
+  useEffect(() => {
+    const fetchTopics = async () => {
+      const response = await fetchGetHotTopics();
+      setTopics(response || []);
+    };
+    fetchTopics();
+  },[fetchGetHotTopics]);
   
+
   // 로딩 중일 때 표시할 메시지
   if (loading) {
     return <div>Loading...</div>;
@@ -20,8 +33,8 @@ const ViewHotTopics = () => {
     return <div>Error: {error}</div>;
   }
 
-  const topicsView = topics.map((topic) => (
 
+  const topicsView = topics.map((topic) => (
     <div key={topic.topicId}>
 
       <Link className="link-unstyled" to={`/getTopic/${topic.topicId}`}>
@@ -38,9 +51,9 @@ const ViewHotTopics = () => {
       </Link>
 
     </div>
-
   ));
 
+  
   return (
 
     <div>

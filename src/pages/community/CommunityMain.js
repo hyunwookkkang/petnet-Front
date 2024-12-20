@@ -22,7 +22,7 @@ const CommunityMain = () => {
 
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  const [topicsComponent, setTopicsComponent] = useState();
+  const [topicsComponent, setTopicsComponent] = useState(null);
   const [topicTab, setTopicTab] = useState('all');
 
   const [search, setSearch] = useState({
@@ -30,6 +30,7 @@ const CommunityMain = () => {
     condition: '',
     keyword: ''
   });
+  
 
   useEffect(() => {
     switch (topicTab) {
@@ -80,12 +81,32 @@ const CommunityMain = () => {
         </div>
       </div>
 
-      <ButtonGroup className="button-group topic-taps" >
-        <Button className="button-click topic-tap" onClick={() => categoryChangehandler('all')} style={{border: "none"}}>전체</Button>
-        <Button className="button-click topic-tap" onClick={() => categoryChangehandler('hot')} style={{border: "none"}}>인기</Button>
-        <Button className="button-click topic-tap" onClick={() => categoryChangehandler('1')} style={{border: "none"}}>잡담</Button>
-        <Button className="button-click topic-tap" onClick={() => categoryChangehandler('2')} style={{border: "none"}}>질문</Button>
-        <Button className="button-click topic-tap" onClick={() => categoryChangehandler('3')} style={{border: "none"}}>후기</Button>
+      <ButtonGroup className="topic-tap-group" >
+        <Button 
+          className="topic-tap" 
+          onClick={() => categoryChangehandler('all')}
+        > 전체 
+        </Button>
+        <Button 
+          className="topic-tap" 
+          onClick={() => categoryChangehandler('hot')}
+        > 인기 
+        </Button>
+        <Button 
+          className="topic-tap" 
+          onClick={() => categoryChangehandler('1')}
+        > 잡담 
+        </Button>
+        <Button 
+          className="topic-tap" 
+          onClick={() => categoryChangehandler('2')}
+        > 질문 
+        </Button>
+        <Button 
+          className="topic-tap" 
+          onClick={() => categoryChangehandler('3')}
+        > 후기 
+        </Button>
       </ButtonGroup>
 
       { topicsComponent }

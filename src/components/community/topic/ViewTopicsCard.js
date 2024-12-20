@@ -5,39 +5,47 @@ import { Container, Card } from "react-bootstrap";
 import useFetchGetTopics from "./useFetchGetTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
+import useFetchGetHotTopics from "./useFetchGetHotTopics";
+import { FaThumbsUp } from "react-icons/fa";
 
 
-const ViewTopicsCard = ({category}) => {
+const ViewTopicsCard = ({category, title}) => {
 
-  const { fetchGetTopics, loading, error } = useFetchGetTopics();
+  const { fetchGetTopics, loading: cLoading, error: cError } = useFetchGetTopics();
+  const { fetchGetHotTopics, loading: hLoading, error: hError } = useFetchGetHotTopics();
 
-  const [topicCategory, setTopicCategory] = useState('');
   const [topics, setTopics] = useState([]);
+
 
   // 페이지 초기화
   useEffect(() => {
     const search = {
       "category": category
     }
+    const fetchTopics = (category === 'hot') ? fetchGetHotTopics : fetchGetTopics;
 
-    switch(category) {
-      case '1': setTopicCategory('잡담'); break;
-      case '2': setTopicCategory('질문'); break;
-      case '3': setTopicCategory('후기'); break;
-      default: setTopicCategory('???');
-    }
-
-    const fetchTopics = async () => {
-      const response = await fetchGetTopics(search);
+    const callFetchTopics = async () => {
+      const response = await fetchTopics(search);
       setTopics(response || []);
     };
-    fetchTopics();
+    callFetchTopics();
 
-  },[fetchGetTopics, category]);
-  
+  },[category, fetchGetTopics, fetchGetHotTopics]);
+
+
+  const TopicLikeCount = ({likeCount}) => {
+    return (
+      <span className="comment-likes">
+        <FaThumbsUp style={{ fontSize: '12' }}/>
+        <div>
+          { likeCount < 10000 ?
+            likeCount : '9999+' }
+        </div>
+      </span>
+    );
+  }
 
   const topicsCardView = topics.map((topic) => (
-
     <ul 
       key={topic.topicId}
       className="list-unstyled" 
@@ -51,17 +59,19 @@ const ViewTopicsCard = ({category}) => {
             <strong className="topics-title">
               [{topic.categoryStr}] {topic.title}
             </strong>
-
             <span className="topics-comments">
               댓글 {topic.commentCount}
             </span>
           </div>
-            
+          
           <div className="topics-footer">
-            <span className="topics-author">
-              {topic.author.nickname}
-            </span>
-
+            { category === 'hot' ? ( 
+              <TopicLikeCount likeCount={topic.likeCount} />
+            ): (
+              <span className="topics-author">
+                {topic.author.nickname}
+              </span>
+            )}
             <span className="topics-date">
               {topic.addDateYMD}
             </span>
@@ -71,18 +81,17 @@ const ViewTopicsCard = ({category}) => {
       </Link>
       
     </ul>
-
   ));
 
   
   // 로딩 중일 때 표시할 메시지
-  if (loading) {
+  if (cLoading || hLoading) {
     return <div>Loading...</div>;
   }
 
   // 에러가 발생했을 때 표시할 메시지
-  if (error) {
-    return <div>Error: {error}</div>;
+  if (cError || hError) {
+    return <div>Error: { cError || hError }</div>;
   }
 
 
@@ -93,7 +102,7 @@ const ViewTopicsCard = ({category}) => {
         <Card.Body>
 
           <Card.Title className="section-title">
-            { topicCategory }
+            { title }
           </Card.Title>
 
           {/* topics 배열을 순회하며 각 topic을 출력 */}

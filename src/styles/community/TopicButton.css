@@ -1,3 +1,4 @@
+
 /* 텍스트 링크 버튼 */
 .topic-text-button {
   padding: 0;                     /* 패딩 제거 */
@@ -35,7 +36,7 @@
 
 /* topic-vote-button 클래스 */
 .topic-vote-button {
-  background-color: #FF6347;
+  background-color: #FF6347 !important;
   color: white;
   border: none;
   padding: 8px 12px;
