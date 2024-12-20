@@ -103,14 +103,13 @@ const GetQuizs = () => {
         textAlign: 'center',
         color: '#febe98',
         fontSize: '2.2rem',
-        fontWeight: 'bold',
         marginBottom: '20px',
       }}>퀴즈 관리</h1>
 
       {!isAdding && !editingQuiz && (
         <div className="mb-3 text-end">
-          <button className="quiz-button add-button" onClick={() => setIsAdding(true)} style={{ fontSize: '16px' }}>
-            추가
+          <button className="quiz-button add-button" onClick={() => setIsAdding(true)} style={{ fontSize: '16px',marginRight: '10px'}}>
+            퀴즈 추가
           </button>
         </div>
       )}
@@ -121,7 +120,7 @@ const GetQuizs = () => {
             <th style={{ textAlign: 'center', fontSize: '16px' }}>퀴즈 ID</th>
             <th style={{ textAlign: 'center', fontSize: '16px' }}>문제 및 보기</th>
             <th style={{ textAlign: 'center', fontSize: '16px' }}>정답</th>
-            <th style={{ width: '120px', textAlign: 'center', fontSize: '16px' }}>수정/삭제/저장</th>
+            <th style={{ width: '100px', textAlign: 'center', fontSize: '16px' }}>수정/삭제</th>
           </tr>
         </thead>
         <tbody>

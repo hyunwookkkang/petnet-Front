@@ -93,7 +93,7 @@ const PointShopAdminPage = () => {
                   <span
                     style={{ color: product.productStock === 1 ? "#52c41a" : "#FF6347", fontWeight: "bold" }}
                   >
-                    상태: {product.productStock === 1 ? "활성" : "비활성"}
+                    상태: {product.productStock === 1 ? "구매가능" : "구매불가"}
                   </span>
                 </div>
               }

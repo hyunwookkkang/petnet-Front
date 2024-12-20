@@ -130,25 +130,33 @@ const GetPointLog = () => {
       {/* 오늘 기록 체크 */}
       <div
         style={{
+          border: "1px solid #E0E0E0",
+          borderRadius: "5px",
+          backgroundColor: "#FFFFFF",
+          marginBottom: "10px",
+        }}
+      >
+      <div
+        style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
           gap: "5px",
         }}
       >
         {checkItems.map((item) => (
-          <div key={item.reason} style={{ fontSize: "16px", marginBottom: "10px" }}>
+          <div key={item.reason} style={{ fontSize: "16px" }}>
             {item.label}
             {isCompleted(item.reason) ? ":✅" : ":❎"}
           </div>
         ))}
       </div>
-
+      </div>
       {/* 버튼 그룹 */}
       <Space style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center", 
-        marginBottom: "20px", 
+        marginBottom: "10px", 
         wigth: "100%"
         
       }}>
