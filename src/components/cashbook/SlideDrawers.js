@@ -109,7 +109,26 @@ const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
   );
 
   return (
-    <div className={`cashbook-slide-drawer open ${isOpen ? "open" : ""}`}>
+    <div
+      className={`cashbook-slide-drawer ${isOpen ? "open" : ""}`}
+      style={{
+        position: "fixed",
+        top: 0,
+        right: isOpen ? 0 : "-100%", // 슬라이드 열리고 닫히는 효과
+        width: "400px",
+        height: "100%",
+        backgroundColor: "#fff",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        padding: "20px",
+        zIndex: 1300,
+        transition: "right 0.3s ease-in-out", // 슬라이드 애니메이션
+        overflowY: "auto", // 스크롤 추가
+        borderTopLeftRadius: "20px", // 왼쪽 상단 둥글게
+        borderBottomLeftRadius: "20px", // 왼쪽 하단 둥글게
+        borderTopRightRadius: "0", // 오른쪽 상단 둥글지 않게
+        borderBottomRightRadius: "0", // 오른쪽 하단 둥글지 않게
+      }}
+    >
       {/* 닫기 버튼 */}
       <button className="cashbook-close-btn" onClick={onClose}>
         ×

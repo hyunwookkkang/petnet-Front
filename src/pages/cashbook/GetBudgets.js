@@ -2,24 +2,40 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/cashbook/GetBudgets.css";
 import { Link } from "react-router-dom";
-import { useUser } from "../../components/contexts/UserContext";
-import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBowlFood,
+  faBone,
+  faBath,
+  faPumpMedical,
+  faScissors,
+  faHeart,
+  faWalking,
+  faFutbol,
+} from "@fortawesome/free-solid-svg-icons";
+import { faHospital } from "@fortawesome/free-regular-svg-icons";
 
 const GetBudgets = () => {
+  const categoryIcons = {
+    사료: <FontAwesomeIcon icon={faBowlFood} />,
+    간식: <FontAwesomeIcon icon={faBone} />,
+    장난감: <FontAwesomeIcon icon={faFutbol} />,
+    산책용품: <FontAwesomeIcon icon={faWalking} />,
+    의류: <FontAwesomeIcon icon={faHeart} />,
+    미용용품: <FontAwesomeIcon icon={faBath} />,
+    위생용품: <FontAwesomeIcon icon={faPumpMedical} />,
+    병원비: <FontAwesomeIcon icon={faHospital} />,
+    미용비: <FontAwesomeIcon icon={faScissors} />,
+    기타: <FontAwesomeIcon icon={faHeart} />,
+  };
+
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalBudget, setTotalBudget] = useState(0);
   const [totalUsed, setTotalUsed] = useState(0);
   const [overBudget, setOverBudget] = useState(0);
-  const { userId } = useUser();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
-    }
-  }, [userId, navigate]);
+  const userId = "user01"; // 로그인 사용자 ID (예시)
 
   // 예산 데이터 가져오기
   const fetchBudgets = async () => {
@@ -29,11 +45,7 @@ const GetBudgets = () => {
         `/api/cashbook/budget/getActiveBudgets/${userId}`
       );
       const budgetsData = response.data;
-      // 여기가 정상적으로 데이터가 넘어오는지 확인
 
-      console.log("API 응답 데이터:", budgetsData); // 콘솔에 데이터 출력
-
-      setBudgets(budgetsData);
       // 총액 계산
       const totalBudgetAmount = budgetsData.reduce(
         (sum, budget) => sum + budget.budgetAmount,
@@ -81,21 +93,20 @@ const GetBudgets = () => {
   }
 
   return (
-    <div className="cashbook-budgets-container">
-      <div className="cashbook-budgets-header">
-        <h2>예산금액</h2>
-        <button className="cashbook-reset-button" onClick={handleReset}>
+    <div className="budgets-container">
+      <div className="budgets-header">
+        <h2>예산</h2>
+        <button className="reset-button" onClick={handleReset}>
           초기화
         </button>
 
-        <button className="cashbook-settings-button">
+        <button className="settings-button">
           <Link to="/GetBudgetSettings">예산설정</Link>
         </button>
       </div>
-      <div className="cashbook-budgets-summary">
+      <div className="budgets-summary">
         <div>전체예산: {totalBudget.toLocaleString()}원</div>
         <div>사용금액: {totalUsed.toLocaleString()}원</div>
-
         {overBudget > 0 ? (
           <div style={{ color: "red" }}>
             초과금액: {overBudget.toLocaleString()}원
@@ -104,42 +115,48 @@ const GetBudgets = () => {
           <div>남은금액: {(totalBudget - totalUsed).toLocaleString()}원</div>
         )}
       </div>
+      <div className="budgets-list">
+        {budgets.map((budget) => {
+          const usedAmount = budget.usedAmount || 0;
+          const budgetAmount = budget.budgetAmount || 0;
+          const progressPercentage = (usedAmount / budgetAmount) * 100;
 
-      <div className="cashbook-budgets-list">
-        {budgets
-          .filter((budget) => budget && budget.budgetAmount) // null 체크 및 조건 추가
-          .map((budget) => {
-            const usedAmount = budget.usedAmount || 0; // null 또는 undefined 방지
-            const budgetAmount = budget.budgetAmount || 0;
+          // progress bar 색상
+          const progressColor = progressPercentage > 100 ? "danger" : "success";
 
-            return (
-              <div
-                className="cashbook-budget-item"
-                key={budget.expenseCategory}
-              >
-                <div className="cashbook-budget-category">
-                  {budget.expenseCategory}
-                </div>
-                <div className="cashbook-budget-details">
-                  <div>예산: {budgetAmount.toLocaleString()}원</div>
-                  <div>사용금액: {usedAmount.toLocaleString()}원</div>
-                  <div
-                    style={{
-                      color: usedAmount > budgetAmount ? "red" : "green",
-                    }}
-                  >
-                    {usedAmount > budgetAmount
-                      ? `초과금액: ${(
-                          usedAmount - budgetAmount
-                        ).toLocaleString()}원`
-                      : `남은금액: ${(
-                          budgetAmount - usedAmount
-                        ).toLocaleString()}원`}
-                  </div>
-                </div>
+          return (
+            <div className="budget-item" key={budget.expenseCategory}>
+              <div className="budget-info">
+                <div>{categoryIcons[budget.expenseCategory]}</div>
+                <div>예산: {budgetAmount.toLocaleString()}원</div>
+                <div>사용금액: {usedAmount.toLocaleString()}원</div>
+                <div>남은금액: {budgetAmount - usedAmount}</div>
               </div>
-            );
-          })}
+
+              <div className="progress-container">
+                <progress
+                  className={`progress-bar bg-${progressColor}`}
+                  value={progressPercentage}
+                  max={100}
+                  style={{
+                    width: "100%",
+                    height: "30px",
+                    borderRadius: "10px",
+                  }}
+                ></progress>
+                <span
+                  style={{
+                    textAlign: "center",
+                    width: "100%",
+                    color: progressColor === "danger" ? "red" : "green",
+                  }}
+                >
+                  {progressPercentage.toFixed(2)}%
+                </span>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

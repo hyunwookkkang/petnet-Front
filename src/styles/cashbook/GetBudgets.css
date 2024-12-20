@@ -1,84 +1,149 @@
-.cashbook-budgets-container {
-  padding: 20px;
+.budgets-container {
+  padding: 40px;
   background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
-.cashbook-budgets-header {
+.budgets-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.cashbook-budgets-header h2 {
-  margin: 0;
+.budgets-header h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
 }
 
-.cashbook-reset-button,
-.cashbook-ettings-button {
-  padding: 8px 16px;
+.reset-button,
+.settings-button {
+  padding: 10px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
 }
 
-.cashbook-reset-button {
+.reset-button {
   background-color: #f44336;
   color: white;
-  margin-right: 10px;
+  margin-right: 15px;
 }
 
-.cashbook-reset-button:hover {
+.reset-button:hover {
   background-color: #d32f2f;
 }
 
-.cashbook-settings-button {
+.settings-button {
   background-color: #4caf50;
   color: white;
 }
 
-.cashbook-settings-button:hover {
+.settings-button:hover {
   background-color: #388e3c;
 }
 
-.cashbook-budgets-summary {
+.budgets-summary {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  font-size: 16px;
+  margin-bottom: 30px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.cashbook-budgets-list {
+.budgets-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 
-.cashbook-budget-item {
+.budget-item {
   display: flex;
-  justify-content: space-between; /* 각 항목을 좌우로 균등 분포 */
-  align-items: center; /* 세로 중앙 정렬 */
-
+  flex-direction: column;
   background-color: #fff;
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.cashbook-budget-category {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.cashbook-budget-details {
+.budget-category {
   display: flex;
-  gap: 20px; /* 각 항목 사이의 간격 설정 */
-  font-size: 14px;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
   color: #333;
 }
-.cashbook-budget-details > div {
+
+.budget-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.budget-info div {
+  flex: 1;
   text-align: center;
+}
+
+.budget-info .progress-container {
+  flex: 2;
+  margin-top: 10px;
+}
+
+.progress-container {
+  width: 100%;
+  margin-top: 10px;
+}
+
+progress {
+  width: 100%;
+  height: 30px;
+  border-radius: 10px;
+}
+
+progress[value] {
+  background-color: #e0e0e0;
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+}
+
+progress[value]::-webkit-progress-value {
+  border-radius: 10px;
+  background-color: #4caf50;
+}
+
+.progress-bar {
+  height: 30px;
+  border-radius: 10px;
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.budget-details {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.budget-details div:last-child {
+  margin-top: 10px;
+  font-size: 18px;
 }

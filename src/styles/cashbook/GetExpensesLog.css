@@ -3,9 +3,10 @@
   text-align: center; /* 텍스트를 가운데 정렬 */
   margin: 20px 0; /* 위아래 여백을 각각 20px 설정 */
   font-size: 1.5rem; /* 글자 크기를 1.5rem로 설정 */
-  color: #ecb392; /* 텍스트 색상을 빨간색으로 설정 (주로 금액 표시) */
-}
+  margin-top: 35px;
 
+  color: black;
+}
 /* 지출 카드의 전체 스타일 */
 .cashbook-expense-card {
   display: flex; /* 플렉스 박스 레이아웃 적용 */
@@ -26,6 +27,9 @@
 /* 마우스를 카드 위에 올렸을 때 */
 .cashbook-expense-card:hover {
   transform: scale(1.02); /* 카드를 1.02배 확대 */
+  background-color: #eaeaf3; /* 연한 회색 */
+  transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 /* 카드 내부 왼쪽, 가운데, 오른쪽 영역 스타일 설정 */
@@ -44,13 +48,19 @@
 
 /* 카드 내부 가운데 영역 스타일 */
 .cashbook-expense-center {
-  flex: 1; /* 가운데 영역을 확장해 여유 공간 차지 */
+  flex: inline; /* 가운데 영역을 확장해 여유 공간 차지 */
   text-align: center; /* 텍스트를 가운데 정렬 */
   font-weight: bold; /* 텍스트를 굵게 표시 */
+  display: inline; /* 텍스트 길이만큼만 배경 적용 */
+  background-color: #ffe5e5; /* 연한 배경색 */
+  color: #ff6347; /* 아이콘 색상 */
+  border-radius: 10%; /* 원형으로 만듦 */
+  padding: 5px;
+  margin-right: 5px;
 }
 
 /* 카드 내부 오른쪽 영역 스타일 */
-.cashbook-xpense-right {
+.cashbook-expense-right {
   text-align: right; /* 텍스트를 오른쪽 정렬 */
   color: #ff6347; /* 텍스트 색상을 빨간색으로 설정 (주로 금액 표시) */
   font-weight: bold; /* 텍스트를 굵게 표시 */
@@ -64,7 +74,20 @@
 }
 
 .cashbook-date-header {
-  font-size: 1.4rem; /* 글자 크기 줄임 */
-  font-weight: normal; /* 굵기를 조절하려면 normal로 변경 */
-  margin: 10px 0; /* 상하 여백 조절 */
+  display: inline-block; /* 블록 요소로 표시 */
+  font-size: 1.1rem; /* 글자 크기 */
+  font-weight: bold; /* 글자 굵기 */
+  color: #ffffff; /* 글자 색상 */
+  background-color: #dc3545; /* 배경색 (Bootstrap danger 색상) */
+  padding: 8px 12px; /* 안쪽 여백 */
+  margin: 10px 0 15px 0; /* 여백 설정 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.custom-hr {
+  border: none; /* 기본 border 제거 */
+  border-top: 3px solid #e7162b; /* 구분선 두께와 색상 설정 */
+  margin: 10px 0; /* 상하 여백 */
+  width: 100%; /* 구분선 너비 */
 }

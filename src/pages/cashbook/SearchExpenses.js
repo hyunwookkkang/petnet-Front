@@ -16,12 +16,12 @@ const SearchExpenses = () => {
   const { userId } = useUser();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
-    }
-  }, [userId, navigate]);
+  // useEffect(() => {
+  //   if (!userId) {
+  //     alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+  //     navigate("/login");
+  //   }
+  // }, [userId, navigate]);
 
   const formatDateToStartOfDay = (date) => {
     const d = new Date(date);
@@ -38,26 +38,57 @@ const SearchExpenses = () => {
   const handleSearch = async () => {
     setSearching(true); // 검색 시작
     try {
-      const response = await fetch("/api/cashbook/expense/searchExpensesLog", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-          startDate: startDate ? formatDateToStartOfDay(startDate) : null,
-          endDate: endDate ? formatDateToEndOfDay(endDate) : null,
-          animalCategory,
-          expenseCategory,
-          paymentOption,
-        }),
-      });
+      // 검색 결과 요청
+      const searchResponse = await fetch(
+        "/api/cashbook/expense/searchExpensesLog",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId,
+            startDate: startDate ? formatDateToStartOfDay(startDate) : null,
+            endDate: endDate ? formatDateToEndOfDay(endDate) : null,
+            animalCategory,
+            expenseCategory,
+            paymentOption,
+          }),
+        }
+      );
 
-      if (!response.ok) throw new Error("서버 응답이 올바르지 않습니다.");
+      if (!searchResponse.ok)
+        throw new Error("검색 결과를 불러오지 못했습니다.");
 
-      const data = await response.json();
-      setResults(data.expenses || []);
-      setTotalExpense(data.totalExpense || 0);
+      const searchData = await searchResponse.json();
+      setResults(searchData.expenses || []); // 검색 결과 업데이트
+
+      // *** 검색 결과가 없을 때 총 지출 금액 초기화 ***
+      if (searchData.expenses && searchData.expenses.length === 0) {
+        setTotalExpense(0);
+        return; // 결과가 없으므로 이후 총 금액 요청을 생략
+      }
+
+      // *** 총 지출 금액 요청 추가 ***
+      const totalAmountResponse = await fetch(
+        "/api/cashbook/expense/getTotalAmount",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId,
+            startDate: startDate ? formatDateToStartOfDay(startDate) : null,
+            endDate: endDate ? formatDateToEndOfDay(endDate) : null,
+            animalCategory,
+            expenseCategory,
+            paymentOption,
+          }),
+        }
+      );
+
+      if (!totalAmountResponse.ok)
+        throw new Error("총 지출 금액을 불러오지 못했습니다.");
+
+      const totalAmount = await totalAmountResponse.json();
+      setTotalExpense(totalAmount); // 총 지출 금액 업데이트
     } catch (error) {
       console.error("검색 중 오류 발생:", error);
     } finally {
@@ -121,26 +152,7 @@ const SearchExpenses = () => {
       </div>
 
       {/* 검색 버튼 */}
-      <button
-        className="cashbook-searches-button"
-        onClick={handleSearch}
-        style={{
-          padding: "15px 30px",
-          backgroundColor: "#ff6b6b",
-          color: "white",
-          border: "none",
-          borderRadius: "20px",
-          fontSize: "17px",
-          cursor: "pointer",
-          boxSizing: "border-box",
-          marginTop: "20px",
-          marginLeft: "auto", // 버튼을 왼쪽에서부터 자동으로 배치
-          marginRight: "auto", // 버튼을 오른쪽에서부터 자동으로 배치
-          display: "block", // 버튼을 블록 레벨로 설정
-          width: "300px !important", // 버튼의 너비를 300px로 고정
-          height: "60px", // 버튼의 높이를 60px로 고정
-        }}
-      >
+      <button className="cashbook-searches-button" onClick={handleSearch}>
         검색
       </button>
 
@@ -149,13 +161,12 @@ const SearchExpenses = () => {
         <div className="cashbook-search-status">검색 중...</div>
       ) : (
         <>
-          {/* 결과 표시 */}
-          {results.length > 0 && (
-            <div className="cashbook-search-total-expense">
-              총 지출 금액: {totalExpense.toLocaleString()} 원
-            </div>
-          )}
+          {/* 총 지출 금액 표시 */}
+          <div className="cashbook-search-total-expense">
+            총 지출 금액: {totalExpense.toLocaleString()} 원
+          </div>
 
+          {/* 결과 표시 */}
           <div className="cashbook-results-section">
             {results.length > 0 ? (
               results.map((expense) => (
@@ -168,7 +179,7 @@ const SearchExpenses = () => {
                           {
                             month: "2-digit",
                             day: "2-digit",
-                            weekday: "short", // 요일 추가
+                            weekday: "short",
                           }
                         )}
                       </strong>
@@ -178,7 +189,7 @@ const SearchExpenses = () => {
                           {
                             hour: "2-digit",
                             minute: "2-digit",
-                            hour12: false, // 24시간 형식
+                            hour12: false,
                           }
                         )}
                       </span>

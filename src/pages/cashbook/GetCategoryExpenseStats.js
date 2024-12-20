@@ -6,22 +6,22 @@ import { useUser } from "../../components/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { ProgressBar, Container, Row, Col } from "react-bootstrap";
 
-const GetCategoryExpenseStats = () => {
+const GetCategoryExpenseStats = ({ year }) => {
   const [stats, setStats] = useState([]); // 원본 데이터
   const [pieData, setPieData] = useState(null); // 원형 차트 데이터
   const [totalExpense, setTotalExpense] = useState(0); // 총합
-  const [year] = useState(new Date().getFullYear()); // 현재 연도
+
   const { userId } = useUser(""); // 사용자 ID
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
-      return;
-    }
+    // if (!userId) {
+    //   alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+    //   navigate("/login");
+    //   return;
+    // }
     fetchCategoryExpenseStats();
-  }, [userId, navigate]);
+  }, [userId, navigate, year]);
 
   // API 데이터 가져오기
   const fetchCategoryExpenseStats = async () => {

@@ -6,7 +6,7 @@ import { useUser } from "../../components/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import GetAnnualExpenseStatsModal from "./GetAnnualExpenseStatsModal";
 
-const GetAnnualExpenseStats = () => {
+const GetAnnualExpenseStats = ({ year, setYear }) => {
   const [stats, setStats] = useState([]); // 월별 지출 데이터 상태
   const [chartData, setChartData] = useState(null); // Chart.js 데이터 상태
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // 선택된 연도
@@ -15,19 +15,19 @@ const GetAnnualExpenseStats = () => {
   const { userId } = useUser(""); // 사용자 ID 가져오기
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
-      return;
-    }
-  }, [userId, navigate]);
+  // useEffect(() => {
+  //   if (!userId) {
+  //     alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+  //     navigate("/login"); // 로그인 페이지로 리다이렉트
+  //     return;
+  //   }
+  // }, [userId, navigate]);
 
   // API 호출 함수
   const fetchAnnualExpenseStats = async () => {
     try {
       const response = await fetch(
-        `/api/cashbook/expense/${userId}/${selectedYear}/getAnnualExpenseStats`
+        `/api/cashbook/expense/${userId}/${year}/getAnnualExpenseStats`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -65,7 +65,7 @@ const GetAnnualExpenseStats = () => {
   // 컴포넌트 마운트 시 데이터 가져오기
   useEffect(() => {
     fetchAnnualExpenseStats();
-  }, [selectedYear, selectedMonth]); // year와 month가 변경되면 데이터를 새로 가져옵니다.
+  }, [year]); // year와 month가 변경되면 데이터를 새로 가져옵니다.
 
   // 합계 계산
   const calculateTotalExpense = () => {
@@ -89,7 +89,7 @@ const GetAnnualExpenseStats = () => {
   return (
     <div className="cashbook-annual-expense-stats">
       <h3 className="cashbook-annual-expense-statsh2">
-        {selectedYear}년 월별 지출 통계
+        {year}년 월별 지출 통계
       </h3>
 
       {/* Chart.js 막대그래프 */}

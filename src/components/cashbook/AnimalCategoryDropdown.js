@@ -2,25 +2,28 @@ import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDog, faCat } from "@fortawesome/free-solid-svg-icons";
 
-const AnimalCategoryDropdown = ({ onSelect, initialValue }) => {
+const AnimalCategoryDropdown = ({ onSelect, selectedValue }) => {
   const [isAnimalDropDownOpen, setIsAnimalDropDownOpen] = useState(false);
-  const [selected, setSelected] = useState(
-    initialValue
-      ? { label: initialValue, icon: null } // 초기값 설정
-      : { label: "카테고리를 선택하세요", icon: null }
-  );
-  const dropdownRef = useRef(null); // 드롭다운 영역 참조
-
-  useEffect(() => {
-    if (initialValue) {
-      setSelected({ label: initialValue, icon: null }); // 초기값 업데이트
-    }
-  }, [initialValue]);
+  const dropdownRef = useRef(null);
 
   const options = [
     { value: "강아지", label: "강아지", icon: faDog },
     { value: "고양이", label: "고양이", icon: faCat },
   ];
+
+  // 초기값 설정
+  const findInitialOption = () =>
+    options.find((option) => option.value === selectedValue) || {
+      label: "카테고리를 선택하세요",
+      icon: null,
+    };
+
+  const [selected, setSelected] = useState(findInitialOption());
+
+  useEffect(() => {
+    // selectedValue 변경 시 상태 업데이트
+    setSelected(findInitialOption());
+  }, [selectedValue]);
 
   const handleSelect = (option) => {
     setSelected(option);
@@ -32,21 +35,17 @@ const AnimalCategoryDropdown = ({ onSelect, initialValue }) => {
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsAnimalDropDownOpen(false); // 드롭다운 닫기
+        setIsAnimalDropDownOpen(false);
       }
     };
-
-    document.addEventListener("mousedown", handleOutsideClick); // 이벤트 리스너 추가
+    document.addEventListener("mousedown", handleOutsideClick);
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClick); // 이벤트 리스너 제거
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
   return (
-    <div
-      ref={dropdownRef} // 드롭다운 영역 참조 설정
-      style={{ position: "relative", width: "100%" }}
-    >
+    <div ref={dropdownRef} style={{ position: "relative", width: "100%" }}>
       <label>동물 카테고리</label>
       <div
         onClick={() => setIsAnimalDropDownOpen((prev) => !prev)}

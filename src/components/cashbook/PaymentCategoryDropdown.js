@@ -6,20 +6,9 @@ import {
   faMoneyBill1, // 현금 아이콘
 } from "@fortawesome/free-solid-svg-icons";
 
-const PaymentCategoryDropdown = ({ onSelect, initialValue }) => {
+const PaymentCategoryDropdown = ({ onSelect, selectedValue }) => {
   const [isPaymentDropDownOpen, setIsPaymentDropDownOpen] = useState(false); // 드롭다운 열림/닫힘 상태
-  const [selected, setSelected] = useState(
-    initialValue
-      ? { label: initialValue, icon: faCreditCard }
-      : { label: "카테고리를 선택하세요", icon: null }
-  );
   const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    if (initialValue) {
-      setSelected({ label: initialValue, icon: faCreditCard }); // 초기값 업데이트
-    }
-  }, [initialValue]);
 
   const options = [
     {
@@ -38,6 +27,20 @@ const PaymentCategoryDropdown = ({ onSelect, initialValue }) => {
       icon: <FontAwesomeIcon icon={faMoneyBill1} />,
     },
   ];
+
+  // 초기값에 맞는 옵션 찾기
+  const findInitialOption = () =>
+    options.find((option) => option.value === selectedValue) || {
+      label: "카테고리를 선택하세요",
+      icon: null,
+    };
+
+  const [selected, setSelected] = useState(findInitialOption());
+
+  // 초기값 변경 시 상태 업데이트
+  useEffect(() => {
+    setSelected(findInitialOption());
+  }, [selectedValue]);
 
   const handleSelect = (option) => {
     setSelected(option);
@@ -96,9 +99,9 @@ const PaymentCategoryDropdown = ({ onSelect, initialValue }) => {
             zIndex: 10,
           }}
         >
-          {options.map((option, index) => (
+          {options.map((option) => (
             <div
-              key={index}
+              key={option.value}
               onClick={() => handleSelect(option)}
               style={{
                 padding: "8px",

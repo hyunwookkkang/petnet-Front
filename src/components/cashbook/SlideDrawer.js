@@ -7,10 +7,7 @@ import GetLoadExpenseLog from "../../pages/cashbook/GetLoadExpenseLog";
 import AnimalCategoryDropdown from "./AnimalCategoryDropdown";
 import ExpenseCategoryDropdown from "./ExpenseCategoryDropdown";
 import PaymentCategoryDropdown from "./PaymentCategoryDropdown";
-import {
-  showSuccessToast,
-  showErrorToast,
-} from "../../components/common/alert/CommonToast";
+import { showSuccessToast, showErrorToast } from "../common/alert/CommonToast";
 
 // SlideDrawer 컴포넌트
 const SlideDrawer = ({
@@ -19,7 +16,7 @@ const SlideDrawer = ({
   onAddExpense = () => {},
   activeButton,
   setActiveButton,
-  purchaseData, // <-- App에서 전달받은 purchaseData
+  selectedData, // App 컴포넌트에서 전달된 데이터
 }) => {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -33,41 +30,61 @@ const SlideDrawer = ({
   const { userId } = useUser(); // 사용자 ID 가져오기
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   console.log(userId);
+  //   if (!userId) {
+  //     alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+  //     navigate("/login"); // 로그인 페이지로 리다이렉트
+  //     return;
+  //   }
+  // }, [userId, navigate]);
+
+  // selectedData가 있을 경우 입력 필드에 채우기
   useEffect(() => {
-    console.log(userId);
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
-      return;
+    if (selectedData) {
+      const {
+        expenseDate,
+        time,
+        amount,
+        animalCategory,
+        expenseCategory,
+        expenseContent,
+        paymentOption,
+      } = selectedData;
+
+      setDate(expenseDate || "");
+      setTime(time || "");
+      setAmount(amount || "");
+      setAnimalCategory(animalCategory || "선택");
+      setExpenseCategory(expenseCategory || "선택");
+      setExpenseContent(expenseContent || "");
+      setPaymentOption(paymentOption || "선택");
     }
-  }, [userId, navigate]);
+  }, [selectedData]);
 
   // ★ [핵심] 클릭된 카드 데이터를 입력 폼에 자동으로 채우는 함수
   const handleSelectPurchase = (purchaseData) => {
     console.log("선택된 데이터:", purchaseData);
+    console.log("expenseDate:", purchaseData.expenseDate); // 수정된 부분
+    console.log(
+      "최종 서버로 전송될 expenseDate:",
+      new Date(`${date}T${time}`).toISOString()
+    );
 
-    //////////////////////////////////////////////////////////////////////////
-    // purchaseData가 있을 때 입력 필드에 반영
-    // 날짜 및 시간 파싱
-    const dateObj = new Date(purchaseData.paidDate);
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
-    const day = String(dateObj.getDate()).padStart(2, "0");
-    const parsedDate = `${year}-${month}-${day}`;
+    if (purchaseData.expenseDate) {
+      // expenseDate를 Date 객체로 변환
 
-    const hours = String(dateObj.getHours()).padStart(2, "0");
-    const minutes = String(dateObj.getMinutes()).padStart(2, "0");
-    const parsedTime = `${hours}:${minutes}`;
-
-    // 폼 데이터에 값 넣기
-    setDate(parsedDate);
-    setTime(parsedTime);
-    setAmount(purchaseData.paymentAmount);
+      const dateObj = new Date(purchaseData.expenseDate);
+      setDate(dateObj.toISOString().split("T")[0]); // 날짜
+      setTime(dateObj.toTimeString().split(" ")[0]); // 시간
+    }
+    setAmount(purchaseData.amount || "");
     setAnimalCategory(purchaseData.animalCategory || "선택");
-    setExpenseCategory(purchaseData.productCategory || "선택");
-    setExpenseContent(purchaseData.productName || "");
-    setPaymentOption(purchaseData.paymentMethod || "선택");
+    setExpenseCategory(purchaseData.expenseCategory || "선택");
+    setExpenseContent(purchaseData.expenseContent || "");
+    setPaymentOption(purchaseData.paymentOption || "선택");
   };
+
   //////////////////////////////////////////////////////////////////////////
 
   const resetFields = () => {
@@ -83,9 +100,10 @@ const SlideDrawer = ({
     if (isOpen) {
       const now = new Date();
       const currentDate = now.toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식
-      const currentTime = now.toTimeString().split(" ")[0].slice(0, 5); // 'HH:MM' 형식
+      const currentTime = now.toTimeString().split(" ")[0].slice(0, 8); // 'HH:MM:SS' 형식
       setDate(currentDate);
       setTime(currentTime);
+
       resetFields(); // 나머지 필드 초기화
     }
   }, [isOpen]);
@@ -98,7 +116,7 @@ const SlideDrawer = ({
       expenseCategory,
       expenseContent,
       paymentOption,
-      expenseDate: `${date}T${time}:00`,
+      expenseDate: `${date}T${time}`, // 로컬 시간 그대로 전달
       memo,
     };
 
@@ -118,6 +136,9 @@ const SlideDrawer = ({
       alert("카테고리를 선택해주세요.");
       return;
     }
+
+    console.log("전송 데이터:", data);
+    console.log("expenseDate 확인:", new Date(`${date}T${time}`).toISOString());
 
     try {
       const response = await fetch(`/api/cashbook/expense/addExpenseLog`, {
@@ -194,11 +215,12 @@ const SlideDrawer = ({
         setActiveButton={setActiveButton}
       />
 
-      {/* 카드 클릭 시 폼에 값 채우기 */}
+      {/* 자동 등록 버튼 클릭 시 */}
       {activeButton === "auto" && (
         <GetLoadExpenseLog onSelectPurchase={handleSelectPurchase} />
       )}
 
+      {/* 수동 등록 */}
       {activeButton === "manual" && (
         <>
           {/* 날짜와 시간 */}
@@ -263,11 +285,17 @@ const SlideDrawer = ({
 
           {/* 동물 카테고리 */}
           <div style={{ marginBottom: "25px" }}>
-            <AnimalCategoryDropdown onSelect={setAnimalCategory} />
+            <AnimalCategoryDropdown
+              onSelect={(selectedValue) => setAnimalCategory(selectedValue)} // 선택된 값으로 상태 업데이트
+              selectedValue={animalCategory} // 현재 선택된 값을 드롭다운에 전달
+            />
           </div>
           {/* 지출 카테고리 */}
           <div style={{ marginBottom: "25px" }}>
-            <ExpenseCategoryDropdown onSelect={setExpenseCategory} />
+            <ExpenseCategoryDropdown
+              onSelect={(selectedValue) => setExpenseCategory(selectedValue)} // 선택된 값 업데이트
+              selectedValue={expenseCategory} // 현재 선택된 값을 유지
+            />
           </div>
 
           {/* 지출 내용 */}
@@ -284,7 +312,10 @@ const SlideDrawer = ({
 
           {/* 결제 수단 */}
           <div style={{ marginBottom: "25px" }}>
-            <PaymentCategoryDropdown onSelect={setPaymentOption} />
+            <PaymentCategoryDropdown
+              onSelect={(selectedValue) => setPaymentOption(selectedValue)} // 선택된 값으로 상태 업데이트
+              selectedValue={paymentOption} // 현재 선택된 값을 유지
+            />
           </div>
 
           {/* 메모 */}
@@ -367,7 +398,15 @@ const App = () => {
   // 슬라이드 열기/닫기 토글 함수
   // - 슬라이드의 상태가 true이면 닫고, false이면 열리도록 상태를 변경
   const [slideMode, setSlideMode] = useState("manual");
+  const [selectedData, setSelectedData] = useState(null); // 선택된 데이터 저장
   const toggleSlide = () => setIsSlideOpen((prev) => !prev);
+
+  // 슬라이드 열기 + 데이터 설정
+  const handleOpenSlideWithData = (data) => {
+    setSelectedData(data); // 선택된 데이터를 상태에 저장
+    setSlideMode("manual"); // 수동 등록 모드로 설정
+    setIsSlideOpen(true); // 슬라이드 열기
+  };
 
   return (
     <>
@@ -382,8 +421,10 @@ const App = () => {
         onClose={toggleSlide}
         activeButton={slideMode}
         setActiveButton={setSlideMode}
+        selectedData={selectedData} // 선택된 데이터 전달
       />
       {/* 펫넷 상점 로딩 SlideDrawer */}
+      {/* handleOpenSlideWithData를 자식 컴포넌트로 전달 */}
     </>
   );
 };

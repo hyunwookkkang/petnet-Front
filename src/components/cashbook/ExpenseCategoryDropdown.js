@@ -12,20 +12,9 @@ import { faHospital } from "@fortawesome/free-regular-svg-icons";
 import { faWalking } from "@fortawesome/free-solid-svg-icons"; // 산책용품 아이콘 추가
 import { faFutbol } from "@fortawesome/free-regular-svg-icons"; // 장난감 아이콘 추가
 
-const ExpenseCategoryDropdown = ({ onSelect, initialValue }) => {
+const ExpenseCategoryDropdown = ({ onSelect, selectedValue }) => {
   const [isExpenseDropDownOpen, setIsExpenseDropDownOpen] = useState(false);
-  const [selected, setSelected] = useState(
-    initialValue
-      ? { label: initialValue, icon: null } // 초기값 설정
-      : { label: "카테고리를 선택하세요", icon: null }
-  );
   const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    if (initialValue) {
-      setSelected({ label: initialValue, icon: null }); // 초기값 업데이트
-    }
-  }, [initialValue]);
 
   const options = [
     {
@@ -37,12 +26,12 @@ const ExpenseCategoryDropdown = ({ onSelect, initialValue }) => {
     {
       value: "장난감",
       label: "장난감",
-      icon: <FontAwesomeIcon icon={faFutbol} />, // 장난감 아이콘
+      icon: <FontAwesomeIcon icon={faFutbol} />,
     },
     {
       value: "산책용품",
       label: "산책용품",
-      icon: <FontAwesomeIcon icon={faWalking} />, // 산책용품 아이콘
+      icon: <FontAwesomeIcon icon={faWalking} />,
     },
     { value: "의류", label: "의류", icon: <FontAwesomeIcon icon={faHeart} /> },
     {
@@ -65,12 +54,22 @@ const ExpenseCategoryDropdown = ({ onSelect, initialValue }) => {
       label: "미용비",
       icon: <FontAwesomeIcon icon={faScissors} />,
     },
-    {
-      value: "기타",
-      label: "기타",
-      icon: <FontAwesomeIcon icon={faHeart} />,
-    },
+    { value: "기타", label: "기타", icon: <FontAwesomeIcon icon={faHeart} /> },
   ];
+
+  // 초기값에 맞는 옵션 찾기
+  const findInitialOption = () =>
+    options.find((option) => option.value === selectedValue) || {
+      label: "카테고리를 선택하세요",
+      icon: null,
+    };
+
+  const [selected, setSelected] = useState(findInitialOption());
+
+  // 초기값 변경 시 상태 업데이트
+  useEffect(() => {
+    setSelected(findInitialOption());
+  }, [selectedValue]);
 
   const handleSelect = (option) => {
     setSelected(option);
@@ -78,6 +77,7 @@ const ExpenseCategoryDropdown = ({ onSelect, initialValue }) => {
     onSelect(option.value);
   };
 
+  // 바깥 클릭 감지
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

@@ -8,14 +8,14 @@
   background-color: white; /* 배경색을 흰색으로 설정 */
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5); /* 왼쪽에서 우측으로 그림자 추가 */
   transform: translateX(100%); /* 슬라이드가 오른쪽으로 벗어나 있는 상태 */
-  transition: transform 0.3s ease-in-out; /* 슬라이드 애니메이션 효과 (0.3초) */
   padding: 20px; /* 패널 내 여백 */
   border-top-right-radius: 0; /* 오른쪽 상단 모서리는 둥글지 않게 */
   border-bottom-right-radius: 0; /* 오른쪽 하단 모서리도 둥글지 않게 */
   border-top-left-radius: 20px; /* 왼쪽 상단 모서리만 둥글게 */
   border-bottom-left-radius: 20px; /* 왼쪽 하단 모서리만 둥글게 */
-  overflow-y: auto; /* 세로 방향 스크롤 추가 (내용이 많을 경우) */
+  overflow: visible !important; /* 자식 요소가 잘리지 않도록 설정 */
   z-index: 1500;
+  transition: transform 2s ease-in-out !important; /* 슬라이드 열고 닫을 때 애니메이션 적용 */
 }
 
 /* 슬라이드가 열린 상태에서 애니메이션을 통해 화면에 보이게 */
@@ -127,7 +127,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
   padding: 20px; /* 내부 여백 */
   text-align: center; /* 텍스트 중앙 정렬 */
-  z-index: 3000; /* 다른 요소들보다 위에 표시 */
+  z-index: 9999 !important; /* 다른 요소들보다 위에 표시 */
 }
 
 /* 액션 버튼들을 가로로 배치 */
@@ -154,4 +154,17 @@
   padding: 10px 20px; /* 내부 여백 10px 20px */
   cursor: pointer; /* 클릭 가능한 포인터 커서 */
   border-radius: 4px; /* 둥근 모서리 */
+}
+
+select {
+  width: 100%; /* 부모 요소에 맞추기 */
+  max-width: 360px; /* 드롭다운의 최대 너비를 제한 */
+  overflow: hidden; /* 내용이 초과되면 숨김 */
+  text-overflow: ellipsis; /* 초과된 텍스트는 ...으로 표시 */
+}
+
+.select option {
+  white-space: nowrap; /* 항목이 잘리지 않도록 설정 */
+  overflow: hidden; /* 필요 시 스크롤 추가 */
+  text-overflow: ellipsis; /* 긴 텍스트 줄임표 처리 */
 }
