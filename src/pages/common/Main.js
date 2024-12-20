@@ -222,6 +222,9 @@ function Main() {
 
                 {/* 섹션들 */}
       <div className="sections">
+        <br/>
+      <PopularPlacesTop3 />
+      <br/>
       <h2 style= {{textAlign: "left"}}>포인트 상점</h2>
         <div
           className="section"
@@ -269,8 +272,7 @@ function Main() {
         </div>
 
         <br/>
-            <h2 style={{ textAlign: "left", paddingLeft: "4px" }}>좋아요 인기 Top3 장소</h2>
-            <PopularPlacesTop3 />
+            
           </div>
         </>
       )}
