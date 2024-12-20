@@ -7,15 +7,15 @@ const ProductPostItem = ({ post, isUserPost, onEdit, onDelete }) => (
     <div className="post-header">
       <strong>작성자: {post.userId || "닉네임 로딩 중..."}</strong>
       <div className="post-dates">
-        <span>작성일: {post.addDate}</span>
-        <span>최종 수정일: {post.updateDate}</span>
+        <span>작성일: {post.addDate}<br/></span>
+        <span>최종 수정일: {post.updateDate || post.addDate}</span>
       </div>
     </div>
 
     {/* Images */}
     <div className="post-images">
       {(post.images || []).map((image, index) => (
-        <img key={index} src={image} alt={`리뷰 이미지 ${index + 1}`} className="post-image" />
+        <img key={index} src={`/api/imgaes/${image}`} alt={`리뷰 이미지 ${index + 1}`} className="post-image" />
       ))}
     </div>
 
