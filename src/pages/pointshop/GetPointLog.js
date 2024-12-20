@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Card, Statistic, Modal, Space} from "antd";
+import { Table, Button, Card, Statistic, Space} from "antd";
 import { DollarCircleOutlined } from "@ant-design/icons"; // Ant Design 아이콘
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../components/contexts/UserContext";
+import CommonModal from "../../components/common/modal/CommonModal";
 
 const GetPointLog = () => {
   const [pointLogs, setPointLogs] = useState([]);
@@ -224,16 +225,25 @@ const GetPointLog = () => {
       </Card>
 
       {/* 모달 */}
-      <Modal
-        visible={showAlert}
-        onOk={() => navigate("/login")}
-        onCancel={() => setShowAlert(false)}
-        title="로그인 필요"
-        okText="확인"
-        cancelText="취소"
-      >
-        로그인이 필요한 서비스입니다. 로그인 화면으로 이동합니다.
-      </Modal>
+      <CommonModal
+  show={showAlert}
+  onHide={() => setShowAlert(false)}
+  title="로그인 필요"
+  body="로그인이 필요한 서비스입니다. 로그인 화면으로 이동합니다."
+  footer={
+    <Button
+      type="primary"
+      style={{
+        backgroundColor: "#FEBE98 ",
+        border: "none",
+        color: "white",
+      }}
+      onClick={() => navigate("/login")}
+    >
+      확인
+    </Button>
+  }
+/>
     </div>
   );
 };
