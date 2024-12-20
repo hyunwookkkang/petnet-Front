@@ -82,13 +82,7 @@ const AdminMainPage = () => {
                     상품관리
                     <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
                   </ListGroup.Item>
-                  <ListGroup.Item
-                    className="my-flex-between"
-                    onClick={() => navigate("/coupon-management")}
-                  >
-                    쿠폰관리
-                    <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
-                  </ListGroup.Item>
+                 
                   <ListGroup.Item
                     className="my-flex-between"
                     onClick={() => navigate("/shop/purchase/all")}

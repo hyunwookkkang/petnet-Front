@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Card, Button, Spinner, Row, Col, Table, Modal, Form } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 const PurchaseInfo = () => {
+  const navigate = useNavigate();
   const { purchaseId } = useParams(); // URL에서 purchaseId 가져오기
   const [purchase, setPurchase] = useState(null); // 구매 정보 저장
   const [loading, setLoading] = useState(true); // 로딩 상태 관리
@@ -12,6 +13,10 @@ const PurchaseInfo = () => {
   const [showDeliveryModal, setShowDeliveryModal] = useState(false); // 배송지 선택 모달 상태
   const [deliveryList, setDeliveryList] = useState([]); // 배송지 목록
   const [isFetchingDelivery, setIsFetchingDelivery] = useState(false); // 배송지 로딩 상태
+  const [showCancelModal, setShowCancelModal] = useState(false); // 결제 취소 모달 상태
+  const [paymentId, setPaymentId] = useState(null); // 결제 ID 상태
+  const [paymentAmount, setPaymentAmount] = useState(0); // 결제 금액 상태
+  const [cancelReason, setCancelReason] = useState(''); // 취소 사유 상태
 
   // API 호출: 구매 정보 가져오기
   const fetchPurchaseDetails = async () => {
@@ -23,6 +28,9 @@ const PurchaseInfo = () => {
         ...response.data,
         zipCode: response.data.zipCode || '', // zipCode는 hidden 처리
       });
+          // 결제 관련 정보 설정
+      setPaymentId(response.data.paymentId);
+      setPaymentAmount(response.data.paymentAmount);
     } catch (error) {
       console.error("Error fetching purchase details:", error);
     } finally {
@@ -156,6 +164,37 @@ const handleSaveDeliveryChanges = async () => {
     return `${year}-${month}-${day}`;
   };
 
+  // 결제 취소 모달 열기
+  const handleShowCancelModal = () => {
+    setShowCancelModal(true);
+  };
+
+  // 결제 취소 모달 닫기
+  const handleCloseCancelModal = () => {
+    setShowCancelModal(false);
+    setCancelReason("");
+  };
+
+  // 결제 취소 처리
+  const handleCancelPurchase = async () => {
+    try {
+      await axios.post(`/api/shop/purchases/cancel`, {
+        purchaseId : purchase.purchaseId,
+        paymentId: paymentId,
+        comment: cancelReason,
+        paymentAmount: paymentAmount
+      });
+      alert("결제가 성공적으로 취소되었습니다.");
+      // 결제 취소 후 /shop/purchase/my로 리디렉션
+      navigate('/shop/purchase/my'); 
+    } catch (error) {
+      console.error("Error canceling purchase:", error);
+      alert("결제 취소 중 오류가 발생했습니다.");
+    } finally {
+      handleCloseCancelModal();
+    }
+  };
+
   return (
     <div style={{ padding: "20px", backgroundColor: "#FFF5EF", border: "2px solid #FF7826" }}>
       <h1 style={{ color: "#FF7826", marginBottom: "20px" }}>구매 상세 정보</h1>
@@ -163,11 +202,12 @@ const handleSaveDeliveryChanges = async () => {
       <Card className="mb-4">
         <Card.Body>
           <h5>기본 정보</h5>
+          <p hidden>{purchase.paymentId}</p>
           <Table bordered>
             <tbody>
               <tr>
                 <td><strong>주문번호</strong></td>
-                <td>{purchase.paymentId}</td>
+                <td>{purchase.purchaseId}</td>
               </tr>
               <tr>
                 <td><strong>결제 수단</strong></td>
@@ -179,7 +219,7 @@ const handleSaveDeliveryChanges = async () => {
               </tr>
               <tr>
                 <td><strong>배송상태</strong></td>
-                <td>{purchase.purchaseStatus === '0' ? "결제 완료" : "상태 불명"}</td>
+                <td>{getPurchaseStatus(purchase.purchaseStatus)}</td>
               </tr>
             </tbody>
           </Table>
@@ -289,57 +329,107 @@ const handleSaveDeliveryChanges = async () => {
             </Button>
           )}
           {isEditingDelivery && (
-            <Button variant="success " style={{backgroundColor: "#FF6347", border: "none"}} 
+            <Button variant="success " style={{backgroundColor: "#4CAF50", border: "none"}} 
             onClick={handleSaveDeliveryChanges} className="me-2">
-              저장하기
+              변경 내용 저장
             </Button>
-          )}
-          {isEditingDelivery && (
-            <Button variant="success" style={{backgroundColor: "#DCDCDC", border: "none"}} 
-            onClick={handleCancelEditDelivery} className="me-2">
-            취소하기
-            </Button>  
-          )}
-        </Col>
-      </Row>
-
-      {/* 배송지 선택 모달 */}
-      <Modal show={showDeliveryModal} onHide={handleCloseDeliveryModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>배송지 선택</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ maxHeight: '400px', overflowY: 'auto' }}>
-          {isFetchingDelivery ? (
-            <Spinner animation="border" role="status" />
-          ) : (
-            <div>
-              <ul>
-                {deliveryList.map((delivery) => (
-                  <li key={delivery.deliveryInfoId}>
-                    <Button
-                      variant="outline-primary"
-                      onClick={() => handleDeliverySelect(delivery)}
-                      style={{ textAlign: "left", marginBottom: "10px", width: "100%" }}
-                    >
-                      • {delivery.buyerName} <br/>
-                      • {delivery.deliveryAddress} <br/>
-                      • {delivery.deliveryPhoneNumber}
-                      <p hidden> {delivery.zipCode} </p>
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseDeliveryModal}>
-            Close
+        )}
+        {isEditingDelivery && (
+          <Button variant="danger" style={{ backgroundColor: "#FF6347", border: "none" }}
+            onClick={handleCancelEditDelivery}>
+            취소
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
-  );
+        )}
+        {purchase.purchaseStatus < 4 && (
+          <Button 
+            variant="danger" 
+            style={{ backgroundColor: "#FF4500", border: "none" }}
+            onClick={handleShowCancelModal}
+          >
+            결제 취소
+          </Button>
+        )}
+
+      </Col>
+    </Row>
+
+    {/* 배송지 선택 모달 */}
+    <Modal show={showDeliveryModal} onHide={handleCloseDeliveryModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>배송지 선택</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {isFetchingDelivery ? (
+          <div className="text-center">
+            <Spinner animation="border" variant="primary" />
+            <p className="mt-3">배송지를 불러오는 중입니다...</p>
+          </div>
+        ) : (
+          <Table bordered>
+            <thead>
+              <tr>
+                <th>구매자 이름</th>
+                <th>주소</th>
+                <th>전화번호</th>
+                <th>선택</th>
+              </tr>
+            </thead>
+            <tbody>
+              {deliveryList.map((delivery, index) => (
+                <tr key={index}>
+                  <td>{delivery.buyerName}</td>
+                  <td>{delivery.deliveryAddress}</td>
+                  <td>{delivery.deliveryPhoneNumber}</td>
+                  <td>
+                    <Button variant="outline-primary" onClick={() => handleDeliverySelect(delivery)}>
+                      선택
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseDeliveryModal}>
+          닫기
+        </Button>
+      </Modal.Footer>
+    </Modal>
+
+    {/* 결제 취소 모달 */}
+    <Modal show={showCancelModal} onHide={handleCloseCancelModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>결제 취소</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Form.Group controlId="cancelReason">
+            <Form.Label>취소 사유</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={cancelReason}
+              onChange={(e) => setCancelReason(e.target.value)}
+              placeholder="취소 사유를 입력하세요."
+            />
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseCancelModal}>
+          닫기
+        </Button>
+        <Button variant="danger" style={{ backgroundColor: "#FF4500", border: "none" }}
+          onClick={handleCancelPurchase}>
+          결제 취소
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  </div>
+);
 };
 
 export default PurchaseInfo;
+

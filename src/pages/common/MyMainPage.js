@@ -162,7 +162,7 @@ const MyMainPage = () => {
                 <ListGroup.Item
                   key="myRefunds"
                   className="my-flex-between"
-                  onClick={() => navigate("/my/refunds")}
+                  onClick={() => navigate("/shop/purchase/refund")}
                 >
                   내 환불 내역 보기
                   <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
@@ -175,14 +175,7 @@ const MyMainPage = () => {
                   내 배송지 관리
                   <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
                 </ListGroup.Item>
-                <ListGroup.Item
-                  key="myCoupons"
-                  className="my-flex-between"
-                  onClick={() => navigate("/my/coupons")}
-                >
-                  보유중인 쿠폰
-                  <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
-                </ListGroup.Item>
+                
               </ListGroup>
             </Card.Body>
           </Card>
