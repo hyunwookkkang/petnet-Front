@@ -23,6 +23,7 @@ const GetQuizs = () => {
       setQuizzes(response.data);
     } catch (error) {
       console.error('Error fetching quizzes:', error);
+      showErrorToast("퀴즈를 가져오는 중 오류가 발생했습니다.");
     }
   };
 
@@ -31,24 +32,22 @@ const GetQuizs = () => {
   }, []);
 
   const handleSaveQuiz = async () => {
+    if (!newQuiz.quizContent.trim()) {
+      showErrorToast("퀴즈 내용을 입력해주세요.");
+      return;
+    }
 
-  if (!newQuiz.quizContent.trim()) {
-    showErrorToast("퀴즈 내용을 입력해주세요.");
-    return;
-  }
+    const emptyOption = [1, 2, 3, 4].find((i) => !newQuiz[`quizOption${i}`].trim());
+    if (emptyOption) {
+      showErrorToast(`보기 ${emptyOption}를 입력해주세요.`);
+      return;
+    }
 
-  const emptyOption = [1, 2, 3, 4].find((i) => !newQuiz[`quizOption${i}`].trim());
-  if (emptyOption) {
-    showErrorToast(`보기 ${emptyOption}를 입력해주세요.`);
-    return;
-  }
+    if (!newQuiz.answer) {
+      showErrorToast("정답을 선택해주세요.");
+      return;
+    }
 
-  if (!newQuiz.answer) {
-    showErrorToast("정답을 선택해주세요.");
-    return;
-  }
-
-    
     try {
       await axios.post('/api/pointshop/quizs', newQuiz);
       fetchQuizzes();
@@ -61,8 +60,10 @@ const GetQuizs = () => {
         answer: '',
       });
       setIsAdding(false);
+      showSuccessToast("퀴즈가 성공적으로 추가되었습니다.");
     } catch (error) {
       console.error('Error saving quiz:', error);
+      showErrorToast("퀴즈를 저장하는 중 오류가 발생했습니다.");
     }
   };
 
@@ -71,8 +72,10 @@ const GetQuizs = () => {
       await axios.put(`/api/pointshop/quizs/${editingQuiz.quizId}`, editingQuiz);
       fetchQuizzes();
       setEditingQuiz(null);
+      showSuccessToast("퀴즈가 성공적으로 수정되었습니다.");
     } catch (error) {
       console.error('Error updating quiz:', error);
+      showErrorToast("퀴즈를 수정하는 중 오류가 발생했습니다.");
     }
   };
 
@@ -80,8 +83,10 @@ const GetQuizs = () => {
     try {
       await axios.delete(`/api/pointshop/quizs/${quizId}`);
       fetchQuizzes();
+      showSuccessToast("퀴즈가 성공적으로 삭제되었습니다.");
     } catch (error) {
       console.error('Error deleting quiz:', error);
+      showErrorToast("퀴즈를 삭제하는 중 오류가 발생했습니다.");
     }
   };
 
@@ -103,14 +108,13 @@ const GetQuizs = () => {
         textAlign: 'center',
         color: '#febe98',
         fontSize: '2.2rem',
-        fontWeight: 'bold',
         marginBottom: '20px',
       }}>퀴즈 관리</h1>
 
       {!isAdding && !editingQuiz && (
         <div className="mb-3 text-end">
-          <button className="quiz-button add-button" onClick={() => setIsAdding(true)} style={{ fontSize: '16px' }}>
-            추가
+          <button className="quiz-button add-button" onClick={() => setIsAdding(true)} style={{ fontSize: '16px',marginRight: '10px'}}>
+            퀴즈 추가
           </button>
         </div>
       )}
@@ -121,7 +125,7 @@ const GetQuizs = () => {
             <th style={{ textAlign: 'center', fontSize: '16px' }}>퀴즈 ID</th>
             <th style={{ textAlign: 'center', fontSize: '16px' }}>문제 및 보기</th>
             <th style={{ textAlign: 'center', fontSize: '16px' }}>정답</th>
-            <th style={{ width: '120px', textAlign: 'center', fontSize: '16px' }}>수정/삭제/저장</th>
+            <th style={{ width: '100px', textAlign: 'center', fontSize: '16px' }}>수정/삭제</th>
           </tr>
         </thead>
         <tbody>

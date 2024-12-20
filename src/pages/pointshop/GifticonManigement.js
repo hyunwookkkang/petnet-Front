@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useCallback  } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -7,7 +7,6 @@ import { Container, Card, CardContent, CardMedia, Typography } from "@mui/materi
 import CommonModal from "../../components/common/modal/CommonModal";
 import "../../styles/common/Card.css";
 import "../../styles/pointshop/GifticonManagement.css";
-
 
 const GifticonManagement = () => {
   const [radioValue, setRadioValue] = useState('logs'); // 'logs' or 'list'
@@ -22,7 +21,6 @@ const GifticonManagement = () => {
   const [visibleData, setVisibleData] = useState([]); 
   const [page, setPage] = useState(1); 
   const [hasMore, setHasMore] = useState(true);
-
 
   useEffect(() => {
     if (!userId) setShowAlert(true);
@@ -115,7 +113,13 @@ const GifticonManagement = () => {
           footer={
             <button
               className="modal-confirm-button"
-              style={{ backgroundColor: "#feb98e", border: 'none' }}
+              style={{  backgroundColor: "#FEBE98 ",
+                border: "none",
+                padding: "10px 20px",
+                color: "white",
+                fontSize: "16px",
+                borderRadius: "5px",
+                cursor: "pointer", }}
               onClick={() => navigate("/login")}
             >
               확인
@@ -152,15 +156,25 @@ const GifticonManagement = () => {
                 key={gifticon.voucherId}
                 className="common-card"
                 onClick={() => navigate(`/gifticons/${gifticon.voucherId}`)}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", height: "150px", display: "flex", justifyContent: "space-between" }}
               >
-                <CardMedia component="img" sx={{ width: 151 }} image={imageUrl} alt="상품 이미지" />
-                <CardContent>
-                  <Typography variant="h5" style={{ fontFamily: "'Ownglyph_ParkDaHyun', sans-serif", fontWeight: "normal" }}>{product?.productName || "상품명 없음"}</Typography>
-                  <Typography variant="subtitle1" color="#777" style={{ fontFamily: "'Ownglyph_ParkDaHyun', sans-serif", fontWeight: "normal" }}>
+                <CardMedia component="img" sx={{ width: 150, height: 150 }} image={imageUrl} alt="상품 이미지" />
+                <CardContent style={{ flexGrow: 1, overflow: "hidden" }}>
+                  <Typography
+                    variant="h5"
+                    style={{ 
+                      fontFamily: "'Ownglyph_ParkDaHyun', sans-serif", 
+                      fontWeight: "normal", 
+                      fontSize: "clamp(16px, 2.5vw, 22px)", 
+                      overflowWrap: "break-word" 
+                    }}
+                  >
+                    {product?.productName || "상품명 없음"}
+                  </Typography>
+                  <Typography variant="subtitle1" color="#777" style={{ fontFamily: "'Ownglyph_ParkDaHyun', sans-serif", fontWeight: "normal", fontSize: "clamp(14px, 2.2vw, 18px)" }}>
                     브랜드: {product?.brandCategory || "브랜드 없음"}
                   </Typography>
-                  <Typography variant="subtitle1" color="#FF6347" style={{ fontFamily: "'Ownglyph_ParkDaHyun', sans-serif", fontWeight: "normal" }}>
+                  <Typography variant="subtitle1" color="#FF6347" style={{ fontFamily: "'Ownglyph_ParkDaHyun', sans-serif", fontWeight: "normal", fontSize: "clamp(14px, 2.2vw, 18px)" }}>
                     {radioValue === 'logs'
                       ? `${gifticon.validityDate} 까지 사용가능`
                       : `사용 날짜: ${gifticon.expirationDate || "N/A"}`}

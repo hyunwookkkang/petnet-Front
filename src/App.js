@@ -29,6 +29,7 @@ import DeliveryInfos from "./pages/shop/purchase/DeliveryInfos";
 import ManagePurchases from "./pages/shop/purchase/ManagePurchases";
 import PurchaseInfo from "./pages/shop/purchase/PurchaseInfo";
 import Purchases from "./pages/shop/purchase/Purchases";
+import RefundPurchases from "./pages/shop/purchase/RefundPurchases";
 
 // 사용자 페이지
 import Login from "./pages/user/Login";
@@ -84,6 +85,7 @@ import SearchExpenses from "./pages/cashbook/SearchExpenses";
 // Admin 관련 페이지 (잘못된 경로 수정)
 import AdminMainPage from "./pages/common/AdminMainPage";
 import PopularPlacesInfo from "./pages/map/place/PopularPlacesInfo";
+
 
 
 
@@ -158,6 +160,7 @@ function App() {
             <Route path="/shop/purchase/:purchaseId" element={<PurchaseInfo />} />
             <Route path="/deliveryInfo" element={<DeliveryInfos />} />
             <Route path="/deliveryInfo/form/:deliveryInfoId?" element={<AddOrEditDeliveryInfo />} />
+            <Route path="/shop/purchase/refund" element={<RefundPurchases />} />
             {/* END : shop-page */}
 
             {/* START : community-page */}

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Card, Statistic, Modal, Space} from "antd";
+import { Table, Button, Card, Statistic, Space} from "antd";
 import { DollarCircleOutlined } from "@ant-design/icons"; // Ant Design 아이콘
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../components/contexts/UserContext";
+import CommonModal from "../../components/common/modal/CommonModal";
 
 const GetPointLog = () => {
   const [pointLogs, setPointLogs] = useState([]);
@@ -119,7 +120,7 @@ const GetPointLog = () => {
   };
 
   return (
-    <div style={{ padding: "10px", backgroundColor: "#F0F0F0", minHeight: "100vh" }}>
+    <div style={{ padding: "5px", backgroundColor: "#F0F0F0", minHeight: "100vh" }}>
       <h1 style={{  textAlign: "center"}}>포인트 내역 </h1>
       {/* 헤더 */}
       <div style={{display: "flex",justifyContent: "flex-end",alignItems: "center",backgroundColor: "#F0F0F0",}}>
@@ -130,25 +131,33 @@ const GetPointLog = () => {
       {/* 오늘 기록 체크 */}
       <div
         style={{
+          border: "1px solid #E0E0E0",
+          borderRadius: "5px",
+          backgroundColor: "#FFFFFF",
+          marginBottom: "10px",
+        }}
+      >
+      <div
+        style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "5px",
+          gap: "1px",
         }}
       >
         {checkItems.map((item) => (
-          <div key={item.reason} style={{ fontSize: "16px", marginBottom: "10px" }}>
+          <div key={item.reason} style={{ fontSize: "16px" }}>
             {item.label}
             {isCompleted(item.reason) ? ":✅" : ":❎"}
           </div>
         ))}
       </div>
-
+      </div>
       {/* 버튼 그룹 */}
       <Space style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center", 
-        marginBottom: "20px", 
+        marginBottom: "10px", 
         wigth: "100%"
         
       }}>
@@ -216,16 +225,25 @@ const GetPointLog = () => {
       </Card>
 
       {/* 모달 */}
-      <Modal
-        visible={showAlert}
-        onOk={() => navigate("/login")}
-        onCancel={() => setShowAlert(false)}
-        title="로그인 필요"
-        okText="확인"
-        cancelText="취소"
-      >
-        로그인이 필요한 서비스입니다. 로그인 화면으로 이동합니다.
-      </Modal>
+      <CommonModal
+  show={showAlert}
+  onHide={() => setShowAlert(false)}
+  title="로그인 필요"
+  body="로그인이 필요한 서비스입니다. 로그인 화면으로 이동합니다."
+  footer={
+    <Button
+      type="primary"
+      style={{
+        backgroundColor: "#FEBE98 ",
+        border: "none",
+        color: "white",
+      }}
+      onClick={() => navigate("/login")}
+    >
+      확인
+    </Button>
+  }
+/>
     </div>
   );
 };

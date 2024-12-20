@@ -10,6 +10,8 @@ function PointShopMain() {
   const navigate = useNavigate();
   const [visibleButtons, setVisibleButtons] = useState(0);
 
+  
+
   const handleNavigation = (path) => {
     navigate(`/${path}`);
   };
@@ -94,16 +96,15 @@ function PointShopMain() {
                 opacity: 0,
               }}
             ></div>
-            <div className="card-content" style={{ padding: '20px' }}>
-              <div className="option-text-container" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <div className="card-content" style={{ padding: '5px' }}>
+              <div className="option-text-container" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                 {option.icon}
                 <div>
-                  <h2 className="option-title" style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>{option.title}</h2>
+                  <h2 className="option-title" style={{ fontSize: 'clamp(1.2rem, 2vw, 2.3rem)', fontWeight: 'bold', margin: 0 }}>{option.title}</h2>
                   <p className="option-description" style={{
-                    fontSize: '1rem',
+                    fontSize: 'clamp(0.9rem, 2vw, 1.2rem)',
                     color: '#666',
-                    whiteSpace: 'nowrap', // 텍스트를 한 줄로 유지
-                    textOverflow: 'ellipsis', // 말줄임표 추가
+                    whiteSpace: 'normal',
                     margin: 0, // 불필요한 여백 제거
                   }}>
                     {option.description}
