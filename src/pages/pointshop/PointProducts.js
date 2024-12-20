@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Container, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { AppstoreOutlined, BarsOutlined } from "@ant-design/icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/pointshop/PointProducts.css";
 
@@ -53,27 +52,40 @@ const PointProducts = () => {
 
   return (
     <div className="point-products-container">
-      <div className="d-flex justify-content-between align-items-center mb-3" >
+      <div className="d-flex justify-content-between align-items-center mb-3">
         <h1 className="point-shop-title text-center" style={{ flex: 1, textAlign: "center" }}>포인트 상점</h1>
         <button
           onClick={() => setIsGridView(!isGridView)}
           className="view-toggle-button"
           style={{
-            background: isGridView ? "#f0f0f0" : "#d9d9d9",
-            border: "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "40px",
+            height: "40px",
+            background: "#f0f0f0",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
             cursor: "pointer",
-            fontSize: "24px",
-            color: "#333",
-            marginRight: "10px",
-            padding: "3px 3px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-            transition: "background 0.3s, transform 0.3s", //애니메이션
           }}
         >
-          {isGridView ? <BarsOutlined /> : <AppstoreOutlined />}
+          {isGridView ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <div style={{ width: "20px", height: "3px", backgroundColor: "#333" }} />
+              <div style={{ width: "20px", height: "3px", backgroundColor: "#333" }} />
+              <div style={{ width: "20px", height: "3px", backgroundColor: "#333" }} />
+            </div>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 10px)", gap: "4px" }}>
+              <div style={{ width: "10px", height: "10px", backgroundColor: "#333" }} />
+              <div style={{ width: "10px", height: "10px", backgroundColor: "#333" }} />
+              <div style={{ width: "10px", height: "10px", backgroundColor: "#333" }} />
+              <div style={{ width: "10px", height: "10px", backgroundColor: "#333" }} />
+            </div>
+          )}
         </button>
       </div>
-      
+
       {/* 브랜드 필터 버튼 */}
       <div className="brand-filter-container">
         {brandOptions.map((brand) => {
