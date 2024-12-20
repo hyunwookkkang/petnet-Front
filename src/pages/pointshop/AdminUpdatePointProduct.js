@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { Form, Input, InputNumber, Select, Upload, Button } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
 
@@ -7,16 +9,10 @@ const AdminUpdatePointProduct = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    productName: "",
-    price: "",
-    validityDate: "",
-    brandCategory: "",
-    imageFiles: null,
-  });
-
-  const [originalData, setOriginalData] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [form] = Form.useForm();
+  const [fileList, setFileList] = useState([]); // 이미지 파일 리스트
+  const [imagePreview, setImagePreview] = useState(null); // 미리보기 이미지 URL
+  const [originalData, setOriginalData] = useState(null); // 기존 상품 데이터
   const [loading, setLoading] = useState(true);
 
   // 기존 상품 데이터 가져오기
@@ -24,75 +20,55 @@ const AdminUpdatePointProduct = () => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`/api/pointshop/pointProducts/${productId}`);
-        setOriginalData(response.data);
-        setFormData({
-          productName: response.data.productName || "",
-          price: response.data.price || "",
-          validityDate: response.data.validityDate || "",
-          brandCategory: response.data.brandCategory || "",
-          imageFiles: null,
+        const product = response.data;
+        setOriginalData(product);
+        setImagePreview(product.imageIds ? `/api/images/${product.imageIds}` : null);
+        form.setFieldsValue({
+          productName: product.productName,
+          price: product.price,
+          validityDate: product.validityDate,
+          brandCategory: product.brandCategory,
         });
-        // 기존 이미지
-        if (response.data.imageIds) {
-          setImagePreview(`/api/images/${response.data.imageIds}`);
-        }
       } catch (error) {
         console.error("Error fetching product data:", error);
+        showErrorToast("상품 정보를 가져오는 데 실패했습니다.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchProduct();
-  }, [productId]);
+  }, [productId, form]);
 
-  // 입력값 변경
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  // 이미지 파일 변경
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData((prevData) => ({
-      ...prevData,
-      imageFiles: file,
-    }));
-    if (file) {
+  // 업로드된 파일 리스트 처리
+  const handleUploadChange = ({ fileList }) => {
+    setFileList(fileList);
+    if (fileList.length > 0) {
+      const file = fileList[0].originFileObj;
       setImagePreview(URL.createObjectURL(file));
+    } else {
+      setImagePreview(originalData?.imageIds ? `/api/images/${originalData.imageIds}` : null);
     }
   };
 
-  //제출
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async (values) => {
     const bodyData = new FormData();
-    bodyData.append("productName", formData.productName || originalData.productName);
-    bodyData.append("price", formData.price || originalData.price);
-    bodyData.append("validityDate", formData.validityDate || originalData.validityDate);
-    bodyData.append("brandCategory", formData.brandCategory || originalData.brandCategory);
+    bodyData.append("productName", values.productName);
+    bodyData.append("price", values.price);
+    bodyData.append("validityDate", values.validityDate);
+    bodyData.append("brandCategory", values.brandCategory);
 
-    if (formData.imageFiles) {
-      bodyData.append("imageFiles", formData.imageFiles);
+    if (fileList.length > 0) {
+      bodyData.append("imageFiles", fileList[0].originFileObj);
     }
 
     try {
-      const response = await axios.put(`/api/pointshop/pointProducts/Admin/${productId}`, bodyData);
-
-      if (response.status === 200) {
-        showSuccessToast("상품이 성공적으로 수정되었습니다.");
-        navigate("/point-product-management");
-      } else {
-        showErrorToast("상품 수정에 실패했습니다.");
-      }
+      await axios.put(`/api/pointshop/pointProducts/Admin/${productId}`, bodyData);
+      showSuccessToast("상품이 성공적으로 수정되었습니다.");
+      navigate("/point-product-management");
     } catch (error) {
       console.error("Error updating product:", error);
-      showErrorToast("서버와 통신 중 문제가 발생했습니다.");
+      showErrorToast("상품 수정에 실패했습니다.");
     }
   };
 
@@ -105,90 +81,99 @@ const AdminUpdatePointProduct = () => {
   }
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "0 auto" }}>
-      <h1 style={{ textAlign: "center" }}>포인트 상품 수정</h1>
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-        <div>
-          <label>포인트 상품명:</label>
-          <input
-            type="text"
-            name="productName"
-            value={formData.productName}
-            onChange={handleInputChange}
-            style={{ width: "100%", padding: "10px", marginTop: "5px" }}
-          />
-        </div>
+    <div style={{ padding: "24px", maxWidth: "600px", margin: "0 auto" }}>
+      <h1 style={{ textAlign: "center", marginBottom: "24px", color: "#FEBE98" }}>포인트 상품 수정</h1>
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={handleSubmit}
+        style={{
+          backgroundColor: "#fff",
+          padding: "24px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Form.Item
+          label="포인트 상품명"
+          name="productName"
+          rules={[{ required: true, message: "상품명을 입력해주세요." }]}
+        >
+          <Input placeholder="상품명을 입력해주세요" />
+        </Form.Item>
 
-        <div>
-          <label>포인트 가격:</label>
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleInputChange}
-            style={{ width: "100%", padding: "10px", marginTop: "5px" }}
-          />
-        </div>
+        <Form.Item
+          label="포인트 가격"
+          name="price"
+          rules={[{ required: true, message: "가격을 입력해주세요." }]}
+        >
+          <InputNumber placeholder="가격을 입력해주세요" style={{ width: "100%" }} />
+        </Form.Item>
 
-        <div>
-          <label>유효 기간(일):</label>
-          <input
-            type="number"
-            name="validityDate"
-            value={formData.validityDate}
-            onChange={handleInputChange}
-            style={{ width: "100%", padding: "10px", marginTop: "5px" }}
-          />
-        </div>
+        <Form.Item
+          label="유효 기간 (일)"
+          name="validityDate"
+          rules={[{ required: true, message: "유효 기간을 선택해주세요." }]}
+        >
+          <Select placeholder="유효 기간을 선택해주세요">
+            {Array.from({ length: 30 }, (_, i) => i + 1).map((value) => (
+              <Select.Option key={value} value={value}>
+                {value} 일
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
 
-        <div>
-          <label>브랜드 카테고리:</label>
-          <select
-            name="brandCategory"
-            value={formData.brandCategory}
-            onChange={handleInputChange}
-            style={{ width: "100%", padding: "10px", marginTop: "5px" }}
-          >
-            <option value="">선택</option>
-            <option value="GS">GS</option>
-            <option value="CU">CU</option>
-            <option value="이마트24">이마트24</option>
-          </select>
-        </div>
+        <Form.Item
+          label="브랜드 카테고리"
+          name="brandCategory"
+          rules={[{ required: true, message: "브랜드를 선택해주세요." }]}
+        >
+          <Select placeholder="브랜드를 선택해주세요">
+            <Select.Option value="CU">CU</Select.Option>
+            <Select.Option value="GS25">GS25</Select.Option>
+            <Select.Option value="이마트24">이마트24</Select.Option>
+          </Select>
+        </Form.Item>
 
-        <div>
-          <label>상품 이미지:</label>
+        <Form.Item
+          label="상품 이미지"
+          rules={[{ required: true, message: "상품 이미지를 업로드해주세요." }]}
+        >
           {imagePreview && (
             <img
               src={imagePreview}
               alt="이미지 미리보기"
-              style={{ width: "100%", height: "auto", marginBottom: "10px" }}
+              style={{ width: "100%", height: "auto", marginBottom: "10px", borderRadius: "8px" }}
             />
           )}
-          <label>변경할 이미지 선택:</label>
-          <input
-            type="file"
-            accept="image/*"
-            className="form-control"
-            id="imageInput"
-            onChange={handleFileChange}
-          />
-        </div>
+          <Upload
+            listType="picture"
+            maxCount={1}
+            beforeUpload={() => false}
+            onChange={handleUploadChange}
+            fileList={fileList}
+          >
+            <Button
+              icon={<UploadOutlined style={{ fontWeight: "bold", fontSize: "18px" }} />}
+              style={{ backgroundColor: "#FFFFFF", borderColor: "#FEBE98", color: "#FEBE98" }}
+            >
+              이미지 업로드
+            </Button>
+          </Upload>
+        </Form.Item>
 
-        <button
-          type="submit"
-          style={{
-            backgroundColor: "#FF7826",
-            color: "#FFF",
-            padding: "10px 20px",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          수정하기
-        </button>
-      </form>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            block
+            style={{ backgroundColor: "#FEBE98", borderColor: "#FEBE98", color: "#FFFFFF" }}
+          >
+            수정하기
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

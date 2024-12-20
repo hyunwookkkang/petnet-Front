@@ -6,6 +6,8 @@ import AddFavoriteItemModal from "../favorite/AddFavoriteItemModal";
 import axios from "axios";
 import PlacePosts from "../placePost/PlacePosts";
 import "../../../styles/Main.css";
+import "../../../styles/place/PlaceInfoButton.css";
+
 import { showErrorToast, showSuccessToast } from "../../../components/common/alert/CommonToast";
 import PlaceImage from './PlaceImage';
 import { Heart, HeartFill } from "react-bootstrap-icons";
@@ -21,11 +23,14 @@ const PlaceInfo = () => {
   // **1. 장소 정보 및 좋아요 상태 초기화**
  // **1. 좋아요 상태 및 장소 정보 초기화**
   useEffect(() => {
+
+    let isMounted = true; // 컴포넌트 언마운트 체크
+    
   const fetchData = async () => {
     try {
       // 장소 정보 가져오기
-      const placeResponse = await axios.get(`/api/map/places/${placeId}`);
-      setPlace(placeResponse.data);
+      const response = await axios.get(`/api/map/places/${placeId}`);
+      setPlace(response.data);
 
       // 좋아요 상태 가져오기
       const favoriteResponse = await axios.get(`/api/map/favorites/getFavoriteId`, {
@@ -137,11 +142,12 @@ if (!place) return <div>...🐾🐾🐾🐾조금만 기다려주세용</div>;
             </Card.Body>
             <div
               style={{
-                fontSize: '50px',
-                marginLeft: '20px'
+                fontSize: '30px',
+                marginLeft: '20px',
+                color: '#FF6347 '
               }}
             >
-              🐾 {place.fcltyNm} 🐾
+              {place.fcltyNm}
             </div>
             <div>
               
@@ -150,32 +156,34 @@ if (!place) return <div>...🐾🐾🐾🐾조금만 기다려주세용</div>;
         </Col>
       </Row>
 
-      <div className="button-group"> 
-      <Button className="button-click">
-        <div>
-          내부입장 <br />
-          {place.inPlaceAcptPosblAt}
-        </div>
-      </Button>
-      <Button className="button-click">
-        <div>
-          외부입장 <br />
-          {place.outPlaceAcptPosblAt}
-        </div>
-      </Button>
-      <Button className="button-click">
-        <div>
-          입장제한 <br />
-          {place.entrnPosblPetSizeValue}
-        </div>
-      </Button>
-      <Button className="button-click">
-        <div>
-          주차 <br />
-          {place.parkngPosblAt}
-        </div>
-      </Button>
+      <div className="place-info-button-group">
+        <button className="place-info-button">
+          <div>
+            내부입장 <br />
+            {place.inPlaceAcptPosblAt}
+          </div>
+        </button>
+        <button className="place-info-button">
+          <div>
+            외부입장 <br />
+            {place.outPlaceAcptPosblAt}
+          </div>
+        </button>
+        <button className="place-info-button">
+          <div>
+            입장제한 <br />
+            {place.entrnPosblPetSizeValue}
+          </div>
+        </button>
+        <button className="place-info-button">
+          <div>
+            주차 <br />
+            {place.parkngPosblAt}
+          </div>
+        </button>
       </div>
+
+
 
       {/* 탭 구성 */}
       <Tabs
@@ -198,48 +206,48 @@ if (!place) return <div>...🐾🐾🐾🐾조금만 기다려주세용</div>;
               fontSize: '30px',
               marginLeft: '20px'
             }}>
-            <strong>시설명: {place.fcltyNm}</strong>
+            {place.fcltyNm}
           </p>
             <div
               style={{
-                fontSize: '20px',
-                marginLeft: '20px'
+                fontSize: '18px',
+                marginLeft: '10px'
               }}
             >
               
             <p>
-              <strong>🏪 장소 정보: </strong>
+              🏪 장소 정보: 
               {place.ctgryThreeNm}
             </p>
             <p>
-              <strong>🕒 운영시간:</strong>
+              🕒 운영시간:
               {place.operTime}
             </p>
             <p>
-              <strong>📞 전화번호:</strong> {place.telNo}
+              📞 전화번호: {place.telNo}
             </p>
             
             <p>
-              <strong>🅿️ 주차 가능:</strong>{" "}
+              🅿️ 주차 가능:{" "}
               {place.parkngPosblAt === "Y" ? "가능" : "불가능"}
             </p>
             <p>
-              <strong>🗺️ 도로명주소: </strong>
+              🗺️ 도로명주소: 
               {place.rdnmadrNm}
             </p>
             <p>
-              <strong>📆 휴무일안내: </strong>
+              📆 휴무일안내: 
               {place.rstdeGuidCn}
             </p>
             <p>
-              <strong>🐶 반려동물 제한:</strong> {place.petLmttMtrCn || "없음"}
+              🐶 반려동물 제한: {place.petLmttMtrCn || "없음"}
             </p>
             <p>
-              <strong>🐈 반려동물 제한 몸무게: </strong>
+              🐈 반려동물 제한 몸무게: 
               {place.entrnPosblPetSizeValue}
             </p>
             <p>
-              <strong>🖥️ 홈페이지: </strong>
+              🖥️ 홈페이지: 
               {place.hmpgUrl}
             </p>
             </div>           

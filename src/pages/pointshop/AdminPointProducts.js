@@ -1,19 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { useNavigate } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import InfoIcon from '@mui/icons-material/Info';
-import ChangeCircleSharpIcon from '@mui/icons-material/ChangeCircleSharp';
-import axios from 'axios';
-import CommonModal from '../../components/common/modal/CommonModal';
+import React, { useEffect, useState } from "react";
+import { Card, Row, Button } from "antd";
+import { DeleteOutlined, SwapOutlined, FileImageOutlined, EditOutlined } from "@ant-design/icons";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
-
-const formatLocalDate = (dateStr) => {
-  const date = new Date(dateStr);
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} 
-    ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}`;
-};
+import CommonModal from "../../components/common/modal/CommonModal";
 
 const PointShopAdminPage = () => {
   const [products, setProducts] = useState([]);
@@ -28,14 +19,10 @@ const PointShopAdminPage = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('/api/pointshop/pointProducts/Admin');
-      const formattedData = response.data.map((product) => ({
-        ...product,
-        productAddDate: formatLocalDate(product.productAddDate),
-      }));
-      setProducts(formattedData);
+      const response = await axios.get("/api/pointshop/pointProducts/Admin");
+      setProducts(response.data);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error("Error fetching products:", error);
     } finally {
       setLoading(false);
     }
@@ -46,13 +33,11 @@ const PointShopAdminPage = () => {
 
     try {
       await axios.delete(`/api/pointshop/pointProducts/Admin/${selectedProduct.productId}`);
-      setProducts((prevProducts) =>
-        prevProducts.filter((product) => product.productId !== selectedProduct.productId)
-      );
-      showSuccessToast('상품이 성공적으로 삭제되었습니다.');
+      setProducts((prevProducts) => prevProducts.filter((product) => product.productId !== selectedProduct.productId));
+      showSuccessToast("상품이 성공적으로 삭제되었습니다.");
     } catch (error) {
-      console.error('Error deleting product:', error);
-      showErrorToast('서버 오류가 발생했습니다. 해당 상품 기프티콘을 가지고 있는 회원이 있을 수 있습니다. 다시 시도해 주세요.');
+      console.error("Error deleting product:", error);
+      showErrorToast("기프티콘 발급된 상품이라 삭제가 불가능합니다.");
     } finally {
       setShowDeleteModal(false);
     }
@@ -61,183 +46,101 @@ const PointShopAdminPage = () => {
   const handleToggleStock = async (productId) => {
     try {
       await axios.patch(`/api/pointshop/pointProducts/Admin/${productId}`);
-      showSuccessToast('상품 상태가 성공적으로 변경되었습니다.');
-      fetchProducts(); 
+      showSuccessToast("상품 상태가 성공적으로 변경되었습니다.");
+      fetchProducts();
     } catch (error) {
-      console.error('Error toggling product stock:', error);
-      showErrorToast('상품 상태 변경에 실패했습니다.');
+      console.error("Error toggling stock:", error);
+      showErrorToast("상품 상태 변경에 실패했습니다.");
     }
   };
 
-  const columns = [
-    {
-      field: 'Delete',
-      headerName: '삭제',
-      width: 60,
-      renderCell: (params) => (
-        <IconButton
-          onClick={() => {
-            setSelectedProduct(params.row);
-            setShowDeleteModal(true);
-          }}
-          aria-label="delete"
-          style={{ color: '#a9a9a9' }}
-        >
-          <DeleteIcon />
-        </IconButton>
-      ),
-    },
-    {
-      field: 'Detail',
-      headerName: '상세보기',
-      width: 60,
-      renderCell: (params) => (
-        <IconButton
-          onClick={() => navigate(`/get-point-product/${params.row.productId}`)}
-          aria-label="detail"
-          style={{ color: '#febe98' }}
-        >
-          <InfoIcon />
-        </IconButton>
-      ),
-    },
-    {
-      field: 'Toggle',
-      headerName: '상태 변경',
-      width: 120,
-      renderCell: (params) => (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <IconButton
-            onClick={() => handleToggleStock(params.row.productId)}
-            aria-label="toggle"
-            style={{
-              color: params.row.productStock === 1 ? '#ECB392  ' : '#FF6347 ',
-            }}
-          >
-            <ChangeCircleSharpIcon />
-          </IconButton>
-          <span
-            style={{
-              fontWeight: 'bold',
-              color: params.row.productStock === 1 ? '#ECB392  ' : '#FF6347 ', 
-            }}
-          >
-            {params.row.productStock === 1 ? '활성' : '비활성'}
-          </span>
-        </div>
-      ),
-    },
-    { field: 'productId', headerName: '상품ID', width: 50 },
-    {
-      field: 'productName',
-      headerName: '포인트 상품명(수정)',
-      width: 130,
-      renderCell: (params) => (
-        <span
-          onClick={() => navigate(`/put-point-product/${params.row.productId}`)}
-          style={{
-            color: '#febe98',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            textDecoration: 'underline',
-            fontSize: '18px',
-          }}
-        >
-          {params.value}
-        </span>
-      ),
-    },
-    { field: 'productAddDate', headerName: '등록 일자', width: 150 },
-    { field: 'validityDate', headerName: '유효 기간', width: 50 },
-    { field: 'price', headerName: '포인트 가격', width: 80 },
-    { field: 'brandCategory', headerName: '브랜드 카테고리', width: 100 },
-  ];
-
   return (
-    <div
-      style={{
-        padding: '20px',
-        backgroundColor: '#ffffff',
-        border: 'none',
-        borderRadius: '10px',
-        boxShadow: '0 5px 20px rgba(0, 0, 0, 0.15)',
-        fontFamily: "Ownglyph_ParkDaHyun, sans-serif" 
-      }}
-    >
-      <h1
-        style={{
-          textAlign: 'center',
-          color: '#febe98',
-          fontSize: '2.2rem',
-          fontWeight: 'bold',
-          marginBottom: '20px',
-        }}
-      >
-        포인트 상품 관리
-      </h1>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px 0' }}>
-        <button
-          onClick={() => navigate('AdminAddPointProduct')}
+    <div style={{ padding: "20px" }}>
+      <h1 style={{ textAlign: "center", color: "#FEBE98" }}>포인트 상품 관리</h1>
+
+      <div style={{ textAlign: "right", marginBottom: "10px" }}>
+        <Button
+          type="primary"
           style={{
-            backgroundColor: '#ffffff',
-            color: '#febe98',
-            border: '2px solid #febe98',
-            padding: '12px 20px',
-            cursor: 'pointer',
-            borderRadius: '8px',
-            fontSize: '16px',
-            fontWeight: 'bold',
-            boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
-            transition: 'all 0.3s ease',
+            backgroundColor: "#FEBE98",
+            borderColor: "#FEBE98",
           }}
+          onClick={() => navigate("AdminAddPointProduct")}
         >
-          포인트 상품 추가
-        </button>
+        포인트 상품 추가
+        </Button>
       </div>
+
       {loading ? (
-        <p style={{ textAlign: 'center', fontSize: '18px', color: '#dcdcdc' }}>
-          상품 정보를 불러오는 중입니다...
-        </p>
+        <p style={{ textAlign: "center", width: "100%" }}>로딩 중...</p>
       ) : (
-        <div style={{ height: 600, width: '100%' }}>
-          <DataGrid
-            rows={products}
-            columns={columns}
-            pageSize={10}
-            getRowId={(row) => row.productId}
-            sx={{
-              fontFamily: "'Ownglyph_ParkDaHyun', sans-serif",
-              '& .MuiDataGrid-columnHeaders': {
-                fontWeight: 'bold',
-                color: '#febe98',
-              },
-              '& .MuiDataGrid-cell': {
-                color: '#333333',
-                fontSize: '14px',
-              },
-            }}
-          />
-        </div>
+        <Row gutter={[0, 16]} style={{ flexDirection: "column" }}>
+          {products.map((product) => (
+            <Card
+              key={product.productId}
+              hoverable
+              style={{
+                border: "1px solid #bfbfbf", // 카드 테두리
+              }}
+              title={
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span
+                    onClick={() => navigate(`/get-point-product/${product.productId}`)}
+                    style={{ cursor: "pointer", color: "#FEBE98", fontWeight: "bold" }}
+                  >
+                    {product.productName}
+                  </span>
+                  <span
+                    style={{ color: product.productStock === 1 ? "#52c41a" : "#FF6347", fontWeight: "bold" }}
+                  >
+                    상태: {product.productStock === 1 ? "구매가능" : "구매불가"}
+                  </span>
+                </div>
+              }
+              actions={[
+                <DeleteOutlined
+                  style={{ color: "#FF6347", cursor: "pointer" }}
+                  onClick={() => {
+                    setSelectedProduct(product);
+                    setShowDeleteModal(true);
+                  }}
+                />,
+                <EditOutlined
+                  style={{ color: "#FF8000", cursor: "pointer" }}
+                  onClick={() => navigate(`/put-point-product/${product.productId}`)}
+                />,
+                <SwapOutlined
+                  style={{ color: product.productStock === 1 ? "#52c41a" : "#FF6347", cursor: "pointer" }}
+                  onClick={() => handleToggleStock(product.productId)}
+                />,
+              ]}
+            >
+              <p>상품 ID: {product.productId}</p>
+              <p>등록일: {new Date(product.productAddDate).toLocaleDateString().replace(/\.$/, "")}</p>
+              <p>유효 기간: {product.validityDate}일</p>
+              <p>포인트 가격: {product.price}P</p>
+              <p>브랜드: {product.brandCategory}</p>
+            </Card>
+          ))}
+        </Row>
       )}
+
       <CommonModal
         show={showDeleteModal}
         onHide={() => setShowDeleteModal(false)}
         title="삭제 확인"
-        body={<div>{selectedProduct?.productName}를 삭제하시겠습니까?</div>}
+        body={<div>{selectedProduct?.productName}을(를) 삭제하시겠습니까?</div>}
         footer={
-          <button
+          <Button
             style={{
-              backgroundColor: '#febe98',
-              color: '#ffffff',
-              border: 'none',
-              padding: '10px 20px',
-              borderRadius: '5px',
-              cursor: 'pointer',
+              backgroundColor: "#FF6347",
+              color: "#FFFFFF",
+              border: "none",
             }}
             onClick={handleDelete}
           >
             확인
-          </button>
+          </Button>
         }
       />
     </div>

@@ -28,7 +28,7 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.today-check-container {
+.point-today-check-container {
   margin-bottom: 20px;
   display: flex;
   gap: 10px;
@@ -36,7 +36,7 @@
   width: 100%;
 }
 
-.today-log-card {
+.point-today-log-card {
   background: #fdfdfd;
   border-radius: 8px;
   padding: 10px 15px;
@@ -52,21 +52,21 @@
   text-overflow: clip;
 }
 
-.text-o {
+.point-text-o {
   color: #FEBE98 ;
 }
 
-.text-x {
+.point-text-x {
   color: #FF6347;
 }
 
-.button-group {
+.point-button-group {
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
 }
 
-.log-button {
+.point-log-button {
   flex: 1;
   background-color: #FFFFFF;
   color: #FEBE98;
@@ -80,20 +80,20 @@
   text-align: center;
 }
 
-.log-button.active {
+.point-log-button.active {
   background-color: #FEBE98;
   color: #FFFFFF;
   border-color: #FEBE98;
 }
 
-.loading-text {
+.point-loading-text {
   text-align: center;
   padding: 20px;
   font-size: 1.2rem;
   color: #DCDCDC;
 }
 
-.datagrid-container {
+.point-datagrid-container {
   height: 600px;
   width: 100%;
   border-radius: 10px;
@@ -102,7 +102,7 @@
   background: #FFFFFF;
 }
 
-.modal-confirm-button {
+.point-modal-confirm-button {
   background-color: #FF6347;
   color: #FFFFFF;
   border: none;

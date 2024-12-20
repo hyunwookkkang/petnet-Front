@@ -8,7 +8,7 @@ import '../../styles/pointshop/pointshopmain.css';
 
 function PointShopMain() {
   const navigate = useNavigate();
-  const [visibleButtons, setVisibleButtons] = useState(0); 
+  const [visibleButtons, setVisibleButtons] = useState(0);
 
   const handleNavigation = (path) => {
     navigate(`/${path}`);
@@ -42,12 +42,11 @@ function PointShopMain() {
   ];
 
   useEffect(() => {
-    // 버튼 타이머 설정
     if (visibleButtons < options.length) {
       const timer = setTimeout(() => {
         setVisibleButtons(visibleButtons + 1);
-      }, 300); // 0.3초 
-      return () => clearTimeout(timer); // 타이머 정리
+      }, 300);
+      return () => clearTimeout(timer);
     }
   }, [visibleButtons, options.length]);
 
@@ -100,7 +99,15 @@ function PointShopMain() {
                 {option.icon}
                 <div>
                   <h2 className="option-title" style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>{option.title}</h2>
-                  <p className="option-description" style={{ fontSize: '1rem', color: '#666' }}>{option.description}</p>
+                  <p className="option-description" style={{
+                    fontSize: '1rem',
+                    color: '#666',
+                    whiteSpace: 'nowrap', // 텍스트를 한 줄로 유지
+                    textOverflow: 'ellipsis', // 말줄임표 추가
+                    margin: 0, // 불필요한 여백 제거
+                  }}>
+                    {option.description}
+                  </p>
                 </div>
               </div>
             </div>

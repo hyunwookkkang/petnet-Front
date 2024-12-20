@@ -21,8 +21,13 @@ import ProductImage from "./pages/shop/product/ProductImage";
 import ProductInfo from "./pages/shop/product/ProductInfo";
 import Products from "./pages/shop/product/Products";
 import Wishes from "./pages/shop/product/Wishes";
-import ProductPost from "./pages/shop/productPost/ProductPosts";
+import MyProductPosts from "./pages/shop/productPost/MyProductPosts";
+import ProductPosts from "./pages/shop/productPost/ProductPosts";
+import AddOrEditDeliveryInfo from "./pages/shop/purchase/AddOrEditDeliveryInfo";
 import AddPurchase from "./pages/shop/purchase/AddPurchase";
+import DeliveryInfos from "./pages/shop/purchase/DeliveryInfos";
+import ManagePurchases from "./pages/shop/purchase/ManagePurchases";
+import PurchaseInfo from "./pages/shop/purchase/PurchaseInfo";
 import Purchases from "./pages/shop/purchase/Purchases";
 
 // 사용자 페이지
@@ -56,30 +61,31 @@ import PointShopMain from "./pages/pointshop/PointShopMain";
 // Community 관련 페이지
 import CommunityMain from "./pages/community/CommunityMain";
 import EditTopicInfo from "./pages/community/EditTopicInfo";
+import GetMyComments from "./pages/community/GetMyComments";
 import GetMyTopics from "./pages/community/GetMyTopics";
 import GetScrapTopics from "./pages/community/GetScrapTopics";
 import GetTopicInfo from "./pages/community/GetTopicInfo";
 import SearchTopics from "./pages/community/SearchTopics";
-import GetMyComments from "./pages/community/GetMyComments";
 
 // 가계부 관련 페이지
-import CashbookMain from "./pages/cashbook/CashbookMain";
-import GetExpensesLog from "./pages/cashbook/GetExpensesLog";
-import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
 import SlideDrawer from "./components/cashbook/SlideDrawer";
+import CashbookMain from "./pages/cashbook/CashbookMain";
+import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
+import GetExpensesLog from "./pages/cashbook/GetExpensesLog";
 
-import GetCalendarDashboard from "./pages/cashbook/GetCalendarDashboard";
-import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
-import SearchExpenses from "./pages/cashbook/SearchExpenses";
 import AddExpenseAuto from "./components/cashbook/AddExpenseAuto";
 import GetBudgets from "./pages/cashbook/GetBudgets";
 import GetBudgetSettings from "./pages/cashbook/GetBudgetSettings";
+import GetCalendarDashboard from "./pages/cashbook/GetCalendarDashboard";
+import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
+import SearchExpenses from "./pages/cashbook/SearchExpenses";
 
 
 // Admin 관련 페이지 (잘못된 경로 수정)
 import AdminMainPage from "./pages/common/AdminMainPage";
-import DeliveryInfos from "./pages/shop/purchase/DeliveryInfos";
-import AddOrEditDeliveryInfo from "./pages/shop/purchase/AddOrEditDeliveryInfo";
+
+
+
 
 
 
@@ -126,7 +132,7 @@ function App() {
 
             {/* START : map-page */}
             <Route path="/placeMap" element={<PlaceMap />} />
-            <Route path="/place/:placeId" element={<PlaceInfo />} />
+            <Route path="/placeInfo/:placeId" element={<PlaceInfo />} />
             <Route path="/placeFavorite" element={<Favorites />} />
             <Route path="/placeFavorite/:favoriteId" element={<FavoriteInfo />} />
             <Route path="/placeSearch" element={<PlaceSearch />} />
@@ -142,9 +148,12 @@ function App() {
             <Route path="/shop/products/:productId/image" element={<ProductImage />} />
             <Route path="/shop/products/cart/:userId" element={<Carts/>} />
             <Route path="/shop/products/wish/:userId" element={<Wishes />} />
-            <Route path=".shop/productPost/:productId" element={<ProductPost />} />
+            <Route path=".shop/productPost/:productId" element={<ProductPosts />} />
+            <Route path="/shop/productPost/my" element={<MyProductPosts />} />
             <Route path="/shop/purchase" element={<AddPurchase />} />
             <Route path="/shop/purchase/my" element={<Purchases />} />
+            <Route path="/shop/purchase/all" element={<ManagePurchases />} />
+            <Route path="/shop/purchase/:purchaseId" element={<PurchaseInfo />} />
             <Route path="/deliveryInfo" element={<DeliveryInfos />} />
             <Route path="/deliveryInfo/form/:deliveryInfoId?" element={<AddOrEditDeliveryInfo />} />
             {/* END : shop-page */}

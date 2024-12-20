@@ -109,7 +109,7 @@ const GetGifticon = () => {
         {!gifticon.isUsed && (
           <button
             onClick={handleUpdateGifticon}
-            className="use-gifticon-button"
+            className="point-use-gifticon-button"
           >
             기프티콘 사용하기
           </button>

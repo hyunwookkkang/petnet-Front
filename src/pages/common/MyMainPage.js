@@ -88,16 +88,14 @@ const MyMainPage = () => {
                     </p>
                   </Col>
 
-                  <Col xs="auto" className="my-icon-container" onClick={() => navigate("/cashbook")}>
+                  {/* <Col xs="auto" className="my-icon-container" onClick={() => navigate("/cashbook")}>
                     <p className="my-icon-text">
                       <span style={{ fontSize: '24px', color: "#FEBE98" }}><SavingsIcon /></span>
                       가계부
                     </p>
-                  </Col>
+                  </Col> */}
                   <hr style={{ border: "0.5px solid #FEBE98", width: "100%" }} />
                 </Row>
-
-
               </Card.Body>
                 <Button className = "my-get-point-button" onClick={() => navigate("/pointQuiz")}>
                   <PaidOutlinedIcon />&nbsp;퀴즈 맞추고 100P 받기!
@@ -136,7 +134,7 @@ const MyMainPage = () => {
                 <ListGroup.Item
                   key="myReviews"
                   className="my-flex-between"
-                  onClick={() => navigate("/my/reviews")}
+                  onClick={() => navigate("/shop/productPost/my")}
                 >
                   내 상품 리뷰 보기
                   <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
@@ -144,7 +142,7 @@ const MyMainPage = () => {
                 <ListGroup.Item
                   key="myWishlist"
                   className="my-flex-between"
-                  onClick={() => navigate("/my/wishlist")}
+                  onClick={() => navigate("/shop/products/wish/:userId")}
                 >
                   찜한 상품 보기
                   <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
