@@ -31,9 +31,7 @@ const CommentEditModal = ({ showModal, setShowModal, modalTitle,
         </strong>
       </p>
       { comment.targetComment ? (
-        <p>
-          {comment.targetComment.title} {comment.targetComment.author.nickname}
-        </p>
+        <p>{comment.targetComment.content}</p>
       ) : '' }
     </div>
   );

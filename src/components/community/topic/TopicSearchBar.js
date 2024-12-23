@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Form, ListGroup } from "react-bootstrap";
 
 import useFetchGetHashtags from "./useFetchGetHashtags";
@@ -6,7 +6,9 @@ import useFetchGetHashtags from "./useFetchGetHashtags";
 import "../../../styles/SearchBar.css"; // 검색 바 스타일 파일 (선택사항)
 
 
-const TopicSearchBar = ({search, setSearch}) => {
+const TopicSearchBar = ({search, setSearch, focus}) => {
+
+  const inputRef = useRef(null);
   
   const { fetchGetHashtags, /*loading: tagloading, error: tagError*/ } = useFetchGetHashtags();
 
@@ -25,6 +27,14 @@ const TopicSearchBar = ({search, setSearch}) => {
       setKeyword(search.keyword || '');
     }
   }, [search]);
+
+  // 최초 열람 시 커서 위치
+  useEffect(() => {
+    if (inputRef.current && focus) {
+      inputRef.current.focus();
+    }
+  }, [focus]);
+
 
   // 해시태그 자동완성
   useEffect(() => {
@@ -72,6 +82,7 @@ const TopicSearchBar = ({search, setSearch}) => {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           style={{ paddingRight: '30px' }}
+          ref={inputRef}
         />
 
         <ListGroup className="dropdown-suggestions search">

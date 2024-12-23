@@ -391,4 +391,8 @@
   color: inherit; /* 기본 색상 유지 */
 }
 
-
+.community-empty-list {
+  text-align: center;
+  margin: 5px;
+  color: #FF6347;
+}

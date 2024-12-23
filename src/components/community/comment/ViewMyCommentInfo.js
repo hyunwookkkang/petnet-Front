@@ -20,14 +20,8 @@ const ViewMyCommentInfo = ({comment, setComments}) => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-
-  useEffect(() => {
-    // 로그인 검사
-    if (!userId) {
-      setShowLoginModal(true);
-      return;
-    }
-  }, [userId]);
+  const targetTopicDeleted = comment.targetTopic && !comment.targetTopic.title;
+  const targetCommentDeleted = comment.targetComment && !comment.targetComment.content;
 
 
   // setComment 임의 지정
@@ -61,37 +55,46 @@ const ViewMyCommentInfo = ({comment, setComments}) => {
     setShowDeleteModal(true);
   }
 
+  const CommentHeaderExcept = () => (
+    <div className="comment-header">
+
+      <div>
+        { comment.targetComment ?
+          `삭제된 댓글입니다`
+        : `삭제된 게시글입니다`
+        }      
+      </div>
+
+      <div className="comment-options">
+        <span onClick={() => deleteCommentHandler()}>
+          삭제
+        </span>
+      </div>
+
+    </div>
+  );
 
   const CommentHeader = () => (
     <div className="comment-header">
 
-      <Link className="comment-options" to={`/getTopic/${comment.targetTopic.topicId}`}>
-        { comment.targetComment ? (
+      <Link 
+        className="comment-options" 
+        to={`/getTopic/${comment.targetTopic.topicId}`}
+      >
+        { comment.targetComment ?
           `(댓글) ${comment.targetComment.content}`
-        ) : (
-          `[${comment.targetTopic.categoryStr}] ${comment.targetTopic.title}`
-        )}
+        : `[${comment.targetTopic.categoryStr}] ${comment.targetTopic.title}`
+        }
       </Link>
 
-      { userId === comment.author.userId ? (
-        <div className="comment-options">
-
-          <span 
-            className="comment-option"
-            onClick={() => updateCommentHandler()}
-          >
-            수정
-          </span>
-
-          <span 
-            className="comment-option" 
-            onClick={() => deleteCommentHandler()}
-          >
-            삭제
-          </span>
-
-        </div>
-      ) : '' }
+      <div className="comment-options">
+        <span onClick={() => updateCommentHandler()}>
+          수정
+        </span>
+        <span onClick={() => deleteCommentHandler()}>
+          삭제
+        </span>
+      </div>
 
     </div>
   );
@@ -102,7 +105,7 @@ const ViewMyCommentInfo = ({comment, setComments}) => {
       { comment.imageId ? (
         <FaImage style={{ marginRight: '8px' }} />
       ) : ''}
-      <p className="comment-content">{comment.content}</p>
+      <span className="comment-content">{comment.content}</span>
 
     </div>
   );
@@ -116,7 +119,7 @@ const ViewMyCommentInfo = ({comment, setComments}) => {
       </span>
 
       <span>
-        답글 ({comment.reCommentCount})
+        답글 ( {comment.reCommentCount} )
       </span>
 
       <span className="comment-date">
@@ -130,9 +133,12 @@ const ViewMyCommentInfo = ({comment, setComments}) => {
 
   return (
 
-    <div className="comment-container">
+    <div className="comment-container comment">
       
-      <CommentHeader />
+      {( targetTopicDeleted || targetCommentDeleted ) ?
+        <CommentHeaderExcept />
+      : <CommentHeader /> 
+      }
       <CommentContent />
       <CommentFooter />
 

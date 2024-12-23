@@ -6,6 +6,7 @@ import "../../styles/Main.css";
 import PopularPlacesTop3 from "./../map/place/PopularPlacesTop3";
 import MainImage from "./MainImage";
 import ViewHotTopicsCard from "../../components/community/topic/ViewHotTopicsCard";
+import ViewTopicsCard from "../../components/community/topic/ViewTopicsCard";
 
 function AdBanner({ onAdEnd }) {
   return (
@@ -221,52 +222,54 @@ function Main() {
             <img src={images[imageIndex]} alt="슬라이드 이미지" />
           </div>
 
-                {/* 섹션들 */}
-      <div className="sections">
-        <br/>
-      <PopularPlacesTop3 />
-      <br/>
-      <h2 style= {{textAlign: "left"}}>포인트 상점</h2>
-        <div
-          className="section"
-          onClick={() => handleNavigation("/pointshop-page")}
-          style={{ cursor: "pointer" }}
-        >
-          <h2>포인트 상점</h2>
-          <p>
-            포인트로 행복을 쇼핑하세요!<br />
-            포인트 확인부터 기프티콘 구매까지, 손쉽게 원하는 것을 찾아보세요.
-          </p>
-          
-        </div>
+          {/* 섹션들 */}
+          <div className="sections">
 
-        <br/>
-        <h2 style= {{textAlign: "left"}}>가계부</h2>
-        <div
-          className="section"
-          onClick={() => handleNavigation("/cashbook")}
-          style={{cursor:"pointer"}}
-          >
-          <h2>가계부</h2>
-          <p>이번 달 막내한테 얼마나 썼을까? 클릭해서 확인하기!</p>
-        </div>
+            <br/>
+            <PopularPlacesTop3 />
+            <br/>
 
-        <br/>
-        <h2 style= {{textAlign: "left"}}>쇼핑몰</h2>
-        <div 
-          className="section"
-          onClick={() => handleNavigation("/shop/products")}
-          style={{ cursor: "pointer"}}>
-          <h2>쇼핑몰</h2>
-          <p>오늘의 할인상품은? 클릭해서 확인하기!</p>
-        </div>
+            <br/>
+            <ViewTopicsCard category='hot' title="금주의 인기 게시글" />
+            <br/>
 
-        <br/>
-        <h2 style= {{textAlign: "left"}}>커뮤니티</h2>
-        <ViewHotTopicsCard />
+            {/* <h2 style= {{textAlign: "left"}}>포인트 상점</h2> */}
+            <div
+              className="section"
+              onClick={() => handleNavigation("/pointshop-page")}
+              style={{ cursor: "pointer" }}
+            >
+              <h2>포인트 상점</h2>
+              <p>
+                포인트로 행복을 쇼핑하세요!<br />
+                포인트 확인부터 기프티콘 구매까지, 손쉽게 원하는 것을 찾아보세요.
+              </p>
+            </div>
+            <br/>
 
-        <br/>
-            
+            <br/>
+            {/* <h2 style= {{textAlign: "left"}}>가계부</h2> */}
+            <div
+              className="section"
+              onClick={() => handleNavigation("/cashbook")}
+              style={{cursor:"pointer"}}
+              >
+              <h2>가계부</h2>
+              <p>이번 달 막내한테 얼마나 썼을까? 클릭해서 확인하기!</p>
+            </div>
+            <br/>
+
+            <br/>
+            {/* <h2 style= {{textAlign: "left"}}>쇼핑몰</h2> */}
+            <div 
+              className="section"
+              onClick={() => handleNavigation("/shop/products")}
+              style={{ cursor: "pointer"}}>
+              <h2>쇼핑몰</h2>
+              <p>오늘의 할인상품은? 클릭해서 확인하기!</p>
+            </div>
+            <br/>
+              
           </div>
         </>
       )}

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
-import { Container, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
+import { FaThumbsUp } from "react-icons/fa";
 
 import useFetchGetTopics from "./useFetchGetTopics";
+import useFetchGetHotTopics from "./useFetchGetHotTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
-import useFetchGetHotTopics from "./useFetchGetHotTopics";
-import { FaThumbsUp } from "react-icons/fa";
 
 
 const ViewTopicsCard = ({category, title}) => {
 
-  const { fetchGetTopics, loading: cLoading, error: cError } = useFetchGetTopics();
-  const { fetchGetHotTopics, loading: hLoading, error: hError } = useFetchGetHotTopics();
+  const { fetchGetTopics /* , loading: cLoading, error: cError */ } = useFetchGetTopics();
+  const { fetchGetHotTopics /* , loading: hLoading, error: hError */ } = useFetchGetHotTopics();
 
   const [topics, setTopics] = useState([]);
 
@@ -20,7 +20,8 @@ const ViewTopicsCard = ({category, title}) => {
   // 페이지 초기화
   useEffect(() => {
     const search = {
-      "category": category
+      "category": category,
+      "offset": 4
     }
     const fetchTopics = (category === 'hot') ? fetchGetHotTopics : fetchGetTopics;
 
@@ -83,17 +84,6 @@ const ViewTopicsCard = ({category, title}) => {
     </ul>
   ));
 
-  
-  // 로딩 중일 때 표시할 메시지
-  if (cLoading || hLoading) {
-    return <div>Loading...</div>;
-  }
-
-  // 에러가 발생했을 때 표시할 메시지
-  if (cError || hError) {
-    return <div>Error: { cError || hError }</div>;
-  }
-
 
   return (
 
@@ -105,8 +95,11 @@ const ViewTopicsCard = ({category, title}) => {
             { title }
           </Card.Title>
 
-          {/* topics 배열을 순회하며 각 topic을 출력 */}
-          { topicsCardView }
+          { topics.length === 0 ? ( 
+            <h6><br/>아직 {title}이 없어요</h6>
+          ) : (
+            topicsCardView
+          )}
 
         </Card.Body>
         
