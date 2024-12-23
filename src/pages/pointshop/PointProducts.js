@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Container, Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { AppstoreOutlined, BarsOutlined } from "@ant-design/icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/pointshop/PointProducts.css";
 
@@ -53,29 +52,10 @@ const PointProducts = () => {
 
   return (
     <div className="point-products-container">
-      <div className="d-flex justify-content-between align-items-center mb-3" >
-        <h1 className="point-shop-title text-center" style={{ flex: 1, textAlign: "center" }}>포인트 상점</h1>
-        <button
-          onClick={() => setIsGridView(!isGridView)}
-          className="view-toggle-button"
-          style={{
-            background: isGridView ? "#f0f0f0" : "#d9d9d9",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "24px",
-            color: "#333",
-            marginRight: "10px",
-            padding: "3px 3px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-            transition: "background 0.3s, transform 0.3s", //애니메이션
-          }}
-        >
-          {isGridView ? <BarsOutlined /> : <AppstoreOutlined />}
-        </button>
-      </div>
-      
+      <h1 className="point-shop-title text-center">포인트 상점</h1>
+
       {/* 브랜드 필터 버튼 */}
-      <div className="brand-filter-container">
+      <div className="brand-filter-container mb-3">
         {brandOptions.map((brand) => {
           const isSelected = selectedBrands.includes(brand.value);
           return (
@@ -83,11 +63,64 @@ const PointProducts = () => {
               key={brand.value}
               onClick={() => handleBrandChange(brand.value)}
               className={`brand-button ${isSelected ? "selected" : "unselected"}`}
+              style={{
+                fontWeight: isSelected ? "bold" : "normal",
+                backgroundColor: isSelected ? "#fff" : "#F3F3F3",
+                border: isSelected ? "2px solid #999" : "1px solid #ccc",
+              }}
             >
               {brand.name}
             </button>
           );
         })}
+      </div>
+
+      {/* 뷰 토글 버튼 */}
+      <div className="view-toggle-buttons mb-3 d-flex justify-content-end">
+        <button
+          onClick={() => setIsGridView(false)}
+          className={`view-toggle-button ${!isGridView ? "selected" : "unselected"}`}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "35px",
+            height: "35px",
+            backgroundColor: !isGridView ? "#fff" : "#F3F3F3",
+            border: !isGridView ? "2px solid #999" : "1px solid #ccc",
+            borderRadius: "5px",
+            cursor: "pointer",
+            marginRight: "5px",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column", gap: "3px" }}>
+            <div style={{ width: "18px", height: "2px", backgroundColor: "#333" }} />
+            <div style={{ width: "18px", height: "2px", backgroundColor: "#333" }} />
+            <div style={{ width: "18px", height: "2px", backgroundColor: "#333" }} />
+          </div>
+        </button>
+        <button
+          onClick={() => setIsGridView(true)}
+          className={`view-toggle-button ${isGridView ? "selected" : "unselected"}`}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "35px",
+            height: "35px",
+            backgroundColor: isGridView ? "#fff" : "#F3F3F3",
+            border: isGridView ? "2px solid #999" : "1px solid #ccc",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 9px)", gap: "3px" }}>
+            <div style={{ width: "9px", height: "9px", backgroundColor: "#333" }} />
+            <div style={{ width: "9px", height: "9px", backgroundColor: "#333" }} />
+            <div style={{ width: "9px", height: "9px", backgroundColor: "#333" }} />
+            <div style={{ width: "9px", height: "9px", backgroundColor: "#333" }} />
+          </div>
+        </button>
       </div>
 
       {/* 상품 리스트 */}
