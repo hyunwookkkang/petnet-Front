@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { Card } from "react-bootstrap";
 import { FaThumbsUp } from "react-icons/fa";
 
-import useFetchHotTopics from "./useFetchGetHotTopics";
+import useFetchGetHotTopics from "./useFetchGetHotTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 
 
 const ViewHotTopicsCard = () => {
 
-  const { topics, loading, error } = useFetchHotTopics();
+  const { fetchGetHotTopics, loading, error } = useFetchGetHotTopics();
+    
+  const [topics, setTopics] = useState([]);
+
+
+  // 페이지 초기화
+  useEffect(() => {
+    const fetchTopics = async () => {
+      const response = await fetchGetHotTopics();
+      setTopics(response || []);
+    };
+    fetchTopics();
+  },[fetchGetHotTopics]);
 
 
   const TopicLikeCount = ({likeCount}) => {
