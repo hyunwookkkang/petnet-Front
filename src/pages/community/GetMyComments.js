@@ -61,7 +61,9 @@ const GetMyComments = () => {
         { comments.length === 0 ? (
           <p>내가 작성한 댓글이 없습니다</p>
         ) : (
-          <ul>{ commentsView }</ul>
+          <ul style={{ paddingInlineStart: '0' }}>
+            { commentsView }
+          </ul>
         )}
       </div>
 
