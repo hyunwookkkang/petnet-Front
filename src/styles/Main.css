@@ -353,14 +353,37 @@
 /*******************************************************************************/
 
 
-.topic-taps {
+.topic-tap-group {
   top: 50%;
   left: 50%;
+  width: 100%;
   transform: translate(-50%, 10%);
+  display: flex !important;
+  justify-content: space-between; /* 버튼들을 한 줄로 정렬 */
+  gap: 10px !important; /* 버튼 간 간격 */
+  flex-wrap: wrap; /* 버튼이 넘칠 경우 자동으로 다음 줄로 이동 */
+  overflow: hidden; /* ButtonGroup이 카드 영역을 넘지 않도록 설정 */ 
+  padding: 15px 5px;
 }
 
 .topic-tap {
-  min-width: 60px !important; /* 버튼의 최소 너비 */
+  width: 50px; /* 버튼의 고정된 너비 설정 */
+  height: 40px; /* 버튼의 고정된 높이 설정 */
+  padding: 10px;
+  text-align: center;
+  background-color: #feb98e !important;
+  border: none !important;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem; /* 일정한 글자 크기 */
+  line-height: 1.4;
+  white-space: nowrap; /* 줄바꿈을 하지 않도록 설정 */
+  word-wrap: break-word; /* 긴 단어 줄바꿈 */
+  box-sizing: border-box; /* padding, border 포함하여 크기 계산 */
+}
+
+.topic-tap:hover {
+  background-color: #ff6d6d !important;
 }
 
 .link-unstyled {

@@ -13,13 +13,13 @@ const GetAnnualExpenseStats = () => {
   const { userId } = useUser();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
-      return;
-    }
-  }, [userId, navigate]);
+  // useEffect(() => {
+  //   if (!userId) {
+  //     alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+  //     navigate("/login");
+  //     return;
+  //   }
+  // }, [userId, navigate]);
 
   const fetchAnnualExpenseStats = async () => {
     try {

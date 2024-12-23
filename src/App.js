@@ -69,17 +69,16 @@ import GetTopicInfo from "./pages/community/GetTopicInfo";
 import SearchTopics from "./pages/community/SearchTopics";
 
 // 가계부 관련 페이지
-import SlideDrawer from "./components/cashbook/SlideDrawer";
 import CashbookMain from "./pages/cashbook/CashbookMain";
-import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
 import GetExpensesLog from "./pages/cashbook/GetExpensesLog";
+import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
+import SlideDrawer from "./components/cashbook/SlideDrawer";
 
-import AddExpenseAuto from "./components/cashbook/AddExpenseAuto";
-import GetBudgets from "./pages/cashbook/GetBudgets";
-import GetBudgetSettings from "./pages/cashbook/GetBudgetSettings";
 import GetCalendarDashboard from "./pages/cashbook/GetCalendarDashboard";
 import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
 import SearchExpenses from "./pages/cashbook/SearchExpenses";
+import GetBudgets from "./pages/cashbook/GetBudgets";
+import GetBudgetSettings from "./pages/cashbook/GetBudgetSettings";
 
 
 // Admin 관련 페이지 (잘못된 경로 수정)
@@ -187,15 +186,14 @@ function App() {
             <Route path="/pointQuiz" element={<GetPointQuiz/>}/>
             {/* END : pointshop-page */}
 
-              {/* START : cashbook-page */}
-              <Route path="/cashbook" element={<CashbookMain />} />
+             {/* START : cashbook-page */}
+             <Route path="/cashbook" element={<CashbookMain />} />
               <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
               <Route
                 path="/GetCalendarsDashboard"
                 element={<GetCalendarsDashboard />}
               />
               <Route path="/SlideDrawer" element={<SlideDrawer />} />
-              <Route path="/AddExpenseAuto" element={<AddExpenseAuto />} />
 
               <Route
                 path="/GetstatisticsDashboards"

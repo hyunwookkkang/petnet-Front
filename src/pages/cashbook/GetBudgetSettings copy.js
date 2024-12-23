@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/cashbook/GetBudgetSettings.css";
+import { useUser } from "../../components/contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const GetBudgetSettings = () => {
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const { userId } = useUser();
+  const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (!userId) {
+  //     alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+  //     navigate("/login");
+  //   }
+  // }, [userId, navigate]);
+
   // 예산 데이터 가져오기
   useEffect(() => {
     const fetchBudgets = async () => {
       try {
-        const userId = "user01"; // 로그인 사용자 ID
         const response = await axios.get(
           `/api/cashbook/budget/getAllBudgets/${userId}`
         );
@@ -49,14 +60,19 @@ const GetBudgetSettings = () => {
   }
 
   return (
-    <div className="budget-settings-container">
-      <h2>예산 설정</h2>
-      <div className="budget-list">
+    <div className="cashbook-budget-settings-container">
+      <h2 className="cashbook-budget-h2">예산 설정</h2>
+      <div className="cashbook-budget-list">
         {budgets.map((budget, index) => (
-          <div className="budget-item" key={budget.expenseCategory}>
-            <div className="budget-icon">{/* 카테고리 아이콘 */}</div>
-            <div className="budget-category">{budget.expenseCategory}</div>
-            <div className="budget-amount">
+          <div
+            className="cashbook-budgetsetting-item"
+            key={budget.expenseCategory}
+          >
+            <div className="cashbook-budget-icon">{/* 카테고리 아이콘 */}</div>
+            <div className="cashbook-budget-category">
+              {budget.expenseCategory}
+            </div>
+            <div className="cashbook-budget-amount">
               <input
                 type="number"
                 value={budget.budgetAmount}
@@ -66,16 +82,16 @@ const GetBudgetSettings = () => {
               />
               원
             </div>
-            <div className="budget-edit">
+            <div className="cashbook-budget-edit">
               <button
-                className="edit-icon"
+                className="cashbook-edit-icon"
                 onClick={() => alert("수정 버튼 클릭")}
               >
                 ✏️
               </button>
             </div>
-            <div className="budget-toggle">
-              <label className="switch">
+            <div className="cashbook-budget-toggle">
+              <label className="cashbook-switch">
                 <input
                   type="checkbox"
                   checked={budget.isNotification}
@@ -87,13 +103,13 @@ const GetBudgetSettings = () => {
                     )
                   }
                 />
-                <span className="slider round"></span>
+                <span className="cashbook-slider round"></span>
               </label>
             </div>
           </div>
         ))}
       </div>
-      <button className="save-button" onClick={handleSave}>
+      <button className="cashbook-save-button" onClick={handleSave}>
         저장
       </button>
     </div>

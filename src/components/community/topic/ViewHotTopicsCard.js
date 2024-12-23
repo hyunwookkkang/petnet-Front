@@ -1,29 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import { Card } from "react-bootstrap";
 import { FaThumbsUp } from "react-icons/fa";
 
-import useFetchHotTopics from "./useFetchGetHotTopics";
+import useFetchGetHotTopics from "./useFetchGetHotTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 
 
 const ViewHotTopicsCard = () => {
 
-  const { topics, loading, error } = useFetchHotTopics();
-  
-  // 로딩 중일 때 표시할 메시지
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const { fetchGetHotTopics, loading, error } = useFetchGetHotTopics();
+    
+  const [topics, setTopics] = useState([]);
 
-  // 에러가 발생했을 때 표시할 메시지
-  if (error) {
-    return <div>Error: {error}</div>;
+
+  // 페이지 초기화
+  useEffect(() => {
+    const fetchTopics = async () => {
+      const response = await fetchGetHotTopics();
+      setTopics(response || []);
+    };
+    fetchTopics();
+  },[fetchGetHotTopics]);
+
+
+  const TopicLikeCount = ({likeCount}) => {
+    return (
+      <span className="comment-likes">
+        <FaThumbsUp style={{ fontSize: '12' }}/>
+        <div>
+          { likeCount < 10000 ?
+            likeCount : '9999+' }
+        </div>
+      </span>
+    );
   }
 
   const topicsCardView = topics.map((topic) => (
-
     <ul 
       key={topic.topicId}
       className="list-unstyled" 
@@ -37,22 +51,13 @@ const ViewHotTopicsCard = () => {
             <strong className="topics-title">
               [{topic.categoryStr}] {topic.title}
             </strong>
-
-            <span className="comment-likes">
-              <FaThumbsUp style={{ fontSize: '12' }}/>
-              <div>
-                { topic.likeCount < 10000 ?
-                  topic.likeCount
-                : '9999+' }
-              </div>
-            </span>
+            <TopicLikeCount likeCount={topic.likeCount} />
           </div>
             
           <div className="topics-footer">
             <span className="topics-author">
               {topic.author.nickname}
             </span>
-
             <span className="topics-date">
               {topic.addDateYMD}
             </span>
@@ -62,8 +67,19 @@ const ViewHotTopicsCard = () => {
       </Link>
       
     </ul>
-
   ));
+
+
+  // 로딩 중일 때 표시할 메시지
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  // 에러가 발생했을 때 표시할 메시지
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
 
   return (
 

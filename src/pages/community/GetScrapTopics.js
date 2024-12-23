@@ -12,6 +12,8 @@ import useFetchGetScrapTopics from "../../components/community/topic/useFetchGet
 import "../../styles/Main.css"; // 기존 스타일 재사용
 
 
+
+
 const GetScrapTopics = () => {
 
   const navigate = useNavigate();

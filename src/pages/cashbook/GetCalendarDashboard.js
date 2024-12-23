@@ -19,14 +19,14 @@ function GetCalendarDashboard() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log(userId);
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login"); // 로그인 페이지로 리다이렉트
-      return;
-    }
-  }, [userId, navigate]);
+  // useEffect(() => {
+  //   console.log(userId);
+  //   if (!userId) {
+  //     alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+  //     navigate("/login"); // 로그인 페이지로 리다이렉트
+  //     return;
+  //   }
+  // }, [userId, navigate]);
 
   const openDrawer = async (date) => {
     console.log("날짜 클릭:", date);

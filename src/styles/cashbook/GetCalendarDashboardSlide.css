@@ -15,6 +15,7 @@
   border-top-left-radius: 20px; /* 왼쪽 상단 모서리만 둥글게 */
   border-bottom-left-radius: 20px; /* 왼쪽 하단 모서리만 둥글게 */
   margin-bottom: 20px; /* 각 필드의 아래 여백 */
+  transition: transform 100s ease-in-out; /* 슬라이드 열고 닫을 때 애니메이션 적용 */
 }
 
 .cashbook-Calendar-slide-header {

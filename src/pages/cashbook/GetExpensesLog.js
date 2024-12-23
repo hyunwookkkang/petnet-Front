@@ -7,7 +7,6 @@ import LoginModal from "../../components/common/modal/LoginModal";
 import GetLoadExpenseLog from "../../pages/cashbook/GetLoadExpenseLog";
 import { useUser } from "../../components/contexts/UserContext";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { showErrorToast } from "../../components/common/alert/CommonToast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // 아이콘 추가
 import {
   faBowlFood,
@@ -19,6 +18,11 @@ import {
   faHeart,
   faDog,
 } from "@fortawesome/free-solid-svg-icons"; // 아이콘 임포트
+import {
+  faCreditCard,
+  faMobile,
+  faMoneyBill1,
+} from "@fortawesome/free-solid-svg-icons";
 
 const GetExpensesLog = ({ year, month }) => {
   const navigate = useNavigate();
@@ -40,18 +44,10 @@ const GetExpensesLog = ({ year, month }) => {
   const [hasMore, setHasMore] = useState(true);
   const [newExpense, setNewExpense] = useState(null); // 새로 추가된 지출 데이터
   const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 번호
-  const [error, setError] = useState(null); // 에러 상태
 
   useEffect(() => {
     if (!userId) {
       setShowLoginModal(true);
-      return;
-    }
-
-    if (!userId) {
-      setError("로그인이 필요합니다."); // 로그인이 필요한 경우 처리
-      showErrorToast("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
       return;
     }
   }, [userId, navigate]);
@@ -66,6 +62,9 @@ const GetExpensesLog = ({ year, month }) => {
     병원비: <FontAwesomeIcon icon={faHospital} />,
     미용비: <FontAwesomeIcon icon={faScissors} />,
     기타: <FontAwesomeIcon icon={faHeart} />,
+    카드결제: <FontAwesomeIcon icon={faCreditCard} />,
+    간편결제: <FontAwesomeIcon icon={faMobile} />,
+    현금: <FontAwesomeIcon icon={faMoneyBill1} />,
   };
 
   // 현재 지출 데이터 로그
@@ -160,6 +159,8 @@ const GetExpensesLog = ({ year, month }) => {
   const handleNewExpense = (expense) => {
     console.log("handleNewExpense 호출됨, newExpense:", expense);
     setNewExpense(expense); // 새로운 지출 데이터를 상태에 설정
+    setExpenses((prevExpenses) => [expense, ...prevExpenses]);
+    setMonthlyTotal((prevTotal) => prevTotal + Number(expense.amount)); // 월간 총액 갱신
   };
 
   // 특정 지출 항목 클릭 시 상세 데이터 로드
@@ -188,6 +189,11 @@ const GetExpensesLog = ({ year, month }) => {
 
   return (
     <div>
+      <LoginModal
+        showModal={showLoginModal}
+        setShowModal={setShowLoginModal}
+        required={true}
+      />
       <div className="cashbook-monthly-total">
         <h2>
           월간 지출 총액:{" "}
@@ -227,8 +233,8 @@ const GetExpensesLog = ({ year, month }) => {
                 <div key={`${expense.expenseId}-${index}`}>
                   {/* 날짜가 변경될 때마다 날짜 헤더와 <hr /> 삽입 */}
                   {currentDate !== previousDate && (
-                    <div>
-                      <hr />
+                    <div className="mb-3">
+                      <hr class="custom-hr" />
                       <h3 className="cashbook-date-header">
                         {new Date(expense.expenseDate).toLocaleDateString(
                           "ko-KR",
@@ -289,6 +295,7 @@ const GetExpensesLog = ({ year, month }) => {
                         {formatAmount(expense.amount)}
                       </span>
                       <div className="cashbook-expense-payment">
+                        {categoryIcons[expense.paymentOption]}{" "}
                         {expense.paymentOption}
                       </div>{" "}
                       {/* 결제수단을 금액 밑으로 이동 */}
@@ -334,7 +341,7 @@ const GetExpensesLog = ({ year, month }) => {
         onSelectPurchase={(purchase) => {
           // purchase 선택 처리 로직 필요시 작성
           // 필요하다면 이곳에서 handleUpdate 또는 fetchExpenses를 호출
-          setIsShopDrawerOpen(false);
+          setIsAddDrawerOpen(false);
         }}
       />
     </div>
