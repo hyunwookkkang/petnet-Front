@@ -5,11 +5,11 @@ import { Cart3, Heart, HeartFill } from "react-bootstrap-icons";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "../../../components/contexts/UserContext";
 import "../../../styles/place/Place.css";
-import ProductPost from "../productPost/ProductPosts";
-import ProductImage from "./ProductImage";
-import ProductPosts from "../productPost/ProductPosts";
+import ProductPost from "../productPost/GetProductPosts";
+import ProductImage from "./GetProductImage";
+import ProductPosts from "../productPost/GetProductPosts";
 
-const ProductInfo = () => {
+const GetProduct = () => {
   const { productId } = useParams();
   const { userId } = useUser();
   const navigate = useNavigate();
@@ -230,4 +230,4 @@ const ProductInfo = () => {
   );
 };
 
-export default ProductInfo;
+export default GetProduct;
