@@ -24,7 +24,7 @@ const GetTopicInfo = () => {
   const { topicId } = useParams(); // URL에서 topicId를 추출 (수정 시에 필요)
 
   const { userId } = useUser(); // 사용자 ID 가져오기
-  const { fetchGetTopic , loading /* , error */ } = useFetchGetTopic();
+  const { fetchGetTopic /* , loading , error */ } = useFetchGetTopic();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isAuthor, setIsAutor] = useState(false); // 로그인 = 작성자? 확인
@@ -36,8 +36,8 @@ const GetTopicInfo = () => {
   });
 
   
-  // 페이지 초기화
   useEffect(() => {
+    // 페이지 초기화
     const fetchTopic = async () => {
       const response = await fetchGetTopic(topic.topicId);
       setTopic(response);
@@ -52,11 +52,13 @@ const GetTopicInfo = () => {
         });
     };
     fetchIncreaseViewCount();
-
-    // 사용자 == 작성자 비교
-    setIsAutor(topic.author.userId === userId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  }, []);
+
+  // 사용자 == 작성자 비교
+  useEffect(() => {
+    setIsAutor(topic.author.userId === userId);
+  }, [topic.author.userId, userId]);
 
 
   const hashtagClickHandler = (tag) => {

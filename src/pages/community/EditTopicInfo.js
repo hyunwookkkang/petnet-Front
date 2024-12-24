@@ -8,7 +8,7 @@ import TopicQuillEditor from "../../components/community/topic/TopicQuillEditor"
 import HashtagEditChip from "../../components/community/topic/HashtagEditChip";
 
 import { useUser } from "../../components/contexts/UserContext";
-import useFetchTopicInfo from "../../components/community/topic/useFetchGetTopic";
+import useFetchGetTopic from "../../components/community/topic/useFetchGetTopic";
 import useFetchAddTopic from "../../components/community/topic/useFetchAddTopic";
 import useFetchUpdateTopic from "../../components/community/topic/useFetchUpdateTopic";
 import useFetchGetHashtags from "../../components/community/topic/useFetchGetHashtags";
@@ -23,16 +23,17 @@ const EditTopicInfo = () => {
   const navigate = useNavigate();
   const quillRef = useRef();
 
-  const { topicId } = useParams(null); // URL에서 topicId를 추출 (수정 시에 필요)
-  const { userId } = useUser(''); // 사용자 ID 가져오기
+  const { topicId } = useParams(); // URL에서 topicId를 추출 (수정 시에 필요)
+  const { userId } = useUser(); // 사용자 ID 가져오기
 
-  const { topic, loading, error } = useFetchTopicInfo(topicId); // 페이지 초기화
+  const { fetchGetTopic, loading , error } = useFetchGetTopic();
   const { fetchAddTopic, addLoading, addError } = useFetchAddTopic();
   const { fetchUpdateTopic, updateLoading, updateError } = useFetchUpdateTopic();
   const { fetchGetHashtags, /*loading: tagloading, error: tagError*/ } = useFetchGetHashtags();
 
   const [showLoginModal, setShowLoginModal] = useState(false);
-  
+
+  const [topic, setTopic] = useState();
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -53,10 +54,21 @@ const EditTopicInfo = () => {
       setShowLoginModal(true);
       return;
     }
+    // topicId가 있으면 기존 정보 불러오기
+    if (topicId) {
+      const fetchTopic = async () => {
+        const resTopic = await fetchGetTopic(topicId);
+        setTopic(resTopic);
+      };
+      fetchTopic();
+    }
+  }, [fetchGetTopic, topicId, userId]);
 
+  // 기존 topic 정보로 화면 구성
+  useEffect(() => {
     if (topic) {
-      setTitle(topic.title);
       setCategory(topic.category);
+      setTitle(topic.title);
       setContent(topic.content);
       setHashtags(topic.hashtags);
       setImageFiles(topic.imageFiles);
@@ -135,16 +147,16 @@ const EditTopicInfo = () => {
   };
 
 
+  if (loading || addLoading || updateLoading) {
+    return <div>Loading...</div>;
+  }
+
   if ((topicId && error) || addError || updateError) {
     return <div>Error: {error || addError || updateError}</div>;
   }
 
   if (topicId && !isAuthor) {
     return <div>Error: you are not author</div>;
-  }
-
-  if (loading || addLoading || updateLoading) {
-    return <div>Loading...</div>;
   }
 
 
