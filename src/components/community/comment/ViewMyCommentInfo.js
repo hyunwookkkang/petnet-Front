@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { FaImage, FaHeart } from "react-icons/fa";
 
 import LoginModal from "../../common/modal/LoginModal";
@@ -9,7 +10,6 @@ import { useUser } from "../../contexts/UserContext";
 
 import "../../../styles/Main.css";
 import "../../../styles/community/Comment.css";
-import { Link } from "react-router-dom";
 
 
 const ViewMyCommentInfo = ({comment, setComments}) => {
@@ -55,14 +55,14 @@ const ViewMyCommentInfo = ({comment, setComments}) => {
     setShowDeleteModal(true);
   }
 
+
   const CommentHeaderExcept = () => (
     <div className="comment-header">
 
       <div>
         { comment.targetComment ?
           `삭제된 댓글입니다`
-        : `삭제된 게시글입니다`
-        }      
+        : `삭제된 게시글입니다` }      
       </div>
 
       <div className="comment-options">
@@ -83,8 +83,7 @@ const ViewMyCommentInfo = ({comment, setComments}) => {
       >
         { comment.targetComment ?
           `(댓글) ${comment.targetComment.content}`
-        : `[${comment.targetTopic.categoryStr}] ${comment.targetTopic.title}`
-        }
+        : `[${comment.targetTopic.categoryStr}] ${comment.targetTopic.title}` }
       </Link>
 
       <div className="comment-options">
@@ -102,9 +101,9 @@ const ViewMyCommentInfo = ({comment, setComments}) => {
   const CommentContent = () => (
     <div>
 
-      { comment.imageId ? (
+      { comment.imageId ?
         <FaImage style={{ marginRight: '8px' }} />
-      ) : ''}
+      : '' }
       <span className="comment-content">{comment.content}</span>
 
     </div>
@@ -137,8 +136,8 @@ const ViewMyCommentInfo = ({comment, setComments}) => {
       
       {( targetTopicDeleted || targetCommentDeleted ) ?
         <CommentHeaderExcept />
-      : <CommentHeader /> 
-      }
+      : <CommentHeader /> }
+      
       <CommentContent />
       <CommentFooter />
 
