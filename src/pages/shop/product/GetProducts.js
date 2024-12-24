@@ -1,32 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Card, Button, Spinner, Dropdown } from "react-bootstrap";
 import { Heart, HeartFill, Cart3 } from "react-bootstrap-icons";
 import { useUser } from "../../../components/contexts/UserContext";
-import { toast } from "react-toastify"; // react-toastify 추가
+import { toast } from "react-toastify";
 
-const Products = () => {
-  const [products, setProducts] = useState([]); // 상품 데이터
-  const [wishList, setWishList] = useState([]); // 위시리스트 상품 ID
-  const [cartList, setCartList] = useState([]); // 장바구니 상품 ID
-  const [loading, setLoading] = useState(true); // 로딩 상태
-  const [hasMore, setHasMore] = useState(true); // 무한 스크롤 여부
-  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지
+const GetProducts = () => {
+  const [products, setProducts] = useState([]);
+  const [wishList, setWishList] = useState([]);
+  const [cartList, setCartList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("상품 전체");
+  const [selectedAnimalCategory, setSelectedAnimalCategory] = useState("동물 전체");
   const navigate = useNavigate();
   const { userId } = useUser();
+  const location = useLocation();
 
-  const fetchProducts = async (page) => {
-    if (!hasMore) return; // 더 이상 데이터가 없으면 실행 안 함
+  const categories = [
+    "상품 전체", "사료", "간식", "장난감", "산책용품", "의류", "미용용품", "위생용품"
+  ];
+
+  const animalCategories = ["동물 전체", "강아지", "고양이"];
+
+  // fetchProducts 함수 수정
+  const fetchProducts = async (page, category = "상품 전체", animalCategory = "동물 전체") => {
+    if (!hasMore) return;
     setLoading(true);
 
     try {
-      const response = await axios.get(
-        `/api/shop/products?currentPage=${page}&pageSize=6`
-      );
+      let url = `/api/shop/products?currentPage=${page}&pageSize=6`;
+
+      // 상품 전체가 아니면 카테고리 추가
+      if (category !== "상품 전체") {
+        url += `&searchCategory1=${category}`;
+      }
+
+      // 동물 전체가 아니면 동물 카테고리 추가
+      if (animalCategory !== "동물 전체") {
+        url += `&searchCategory2=${animalCategory}`;
+      }
+
+      const response = await axios.get(url);
 
       if (response.data.length === 0) {
-        setHasMore(false); // 더 이상 데이터가 없을 때
+        setHasMore(false);
       } else {
         setProducts((prevProducts) => [
           ...prevProducts,
@@ -44,36 +64,47 @@ const Products = () => {
     }
   };
 
+  // fetchInitialData 함수 수정
   const fetchInitialData = async () => {
     setLoading(true);
     try {
-      const productsResponse = await axios.get(`/api/shop/products?currentPage=0&pageSize=6`); // 첫 페이지 상품
+      const params = new URLSearchParams(location.search);
+      const categoryParam = params.get("searchCategory1") || "상품 전체";
+      const animalCategoryParam = params.get("searchCategory2") || "동물 전체";
+
+      let productsResponse;
+      if (categoryParam === "상품 전체" && animalCategoryParam === "동물 전체") {
+        // "상품 전체"와 "동물 전체"일 경우 파라미터 없이 기본 데이터 가져오기
+        productsResponse = await axios.get(`/api/shop/products?currentPage=0&pageSize=6`);
+      } else {
+        // 필요한 카테고리 파라미터만 추가
+        productsResponse = await axios.get(
+          `/api/shop/products?currentPage=0&pageSize=6&${categoryParam !== "상품 전체" ? `searchCategory1=${categoryParam}` : ""}${animalCategoryParam !== "동물 전체" ? `&searchCategory2=${animalCategoryParam}` : ""}`
+        );
+      }
 
       let fetchedWishList = [];
       let fetchedCartList = [];
       if (userId) {
-        const wishListResponse = await axios.get(`/api/shop/products/wish/${userId}`); // 위시리스트
-        const cartListResponse = await axios.get(`/api/shop/products/cart/${userId}`); // 장바구니
+        const wishListResponse = await axios.get(`/api/shop/products/wish/${userId}`);
+        const cartListResponse = await axios.get(`/api/shop/products/cart/${userId}`);
         fetchedWishList = wishListResponse.data.map((wishItem) => wishItem.product.productId);
-        fetchedCartList = cartListResponse.data.map((cartItem) => cartItem.product.productId); // 장바구니 상품 ID
+        fetchedCartList = cartListResponse.data.map((cartItem) => cartItem.product.productId);
       }
 
-      // 상품 목록에 `isWished` 및 `isInCart` 플래그 추가
       const updatedProducts = productsResponse.data.map((product) => ({
         ...product,
-        isWished: fetchedWishList.includes(product.productId), // 위시리스트에 포함 여부
-        isInCart: fetchedCartList.includes(product.productId), // 장바구니에 포함 여부
+        isWished: fetchedWishList.includes(product.productId),
+        isInCart: fetchedCartList.includes(product.productId),
       }));
 
-      setWishList(fetchedWishList); // 위시리스트 상태 설정
-      setCartList(fetchedCartList); // 장바구니 상태 설정
-      setProducts(updatedProducts); // 상품 상태 설정
-      setHasMore(updatedProducts.length > 0); // 더 가져올 데이터가 있는지 설정
-
-      console.log("초기 로드 - 상품 목록:", updatedProducts);
+      setWishList(fetchedWishList);
+      setCartList(fetchedCartList);
+      setProducts(updatedProducts);
+      setHasMore(updatedProducts.length > 0);
     } catch (error) {
       console.error("초기 데이터 로드 오류:", error);
-      setHasMore(false); // 에러 발생 시 무한 스크롤 중지
+      setHasMore(false);
     } finally {
       setLoading(false);
     }
@@ -89,20 +120,16 @@ const Products = () => {
       let updatedWishList;
 
       if (wishList.includes(productId)) {
-        // 위시리스트에서 제거
         await axios.delete(`/api/shop/products/wish/${productId}`);
         updatedWishList = wishList.filter((id) => id !== productId);
         toast.success("찜 목록에서 제거되었습니다.");
       } else {
-        // 위시리스트에 추가
         await axios.post(`/api/shop/products/wish/${productId}`);
         updatedWishList = [...wishList, productId];
         toast.success("찜 목록에 물건이 추가되었습니다.");
       }
 
       setWishList(updatedWishList);
-
-      // 상품 목록에서 해당 상품의 isWished 값 업데이트
       setProducts((prevProducts) =>
         prevProducts.map((product) =>
           product.productId === productId
@@ -110,8 +137,6 @@ const Products = () => {
             : product
         )
       );
-
-      console.log("위시리스트 업데이트 완료:", updatedWishList);
     } catch (error) {
       console.error("위시리스트 업데이트 오류:", error);
     }
@@ -130,13 +155,8 @@ const Products = () => {
     }
 
     try {
-      // 장바구니에 추가 요청
       await axios.post(`/api/shop/products/cart/${productId}`, { productId });
-
-      // 장바구니 목록에 상품 추가
       setCartList((prevCartList) => [...prevCartList, productId]);
-
-      // 상품 목록에서 해당 상품의 isInCart 값 업데이트
       setProducts((prevProducts) =>
         prevProducts.map((product) =>
           product.productId === productId
@@ -144,10 +164,7 @@ const Products = () => {
             : product
         )
       );
-
-      // 장바구니 추가 후 Toast 메시지
       toast.success("장바구니에 물건이 추가되었습니다.");
-      console.log("장바구니에 상품 추가 완료");
     } catch (error) {
       console.error("장바구니 추가 오류:", error);
     }
@@ -158,18 +175,48 @@ const Products = () => {
     if (bottom && hasMore) {
       setCurrentPage((prevPage) => {
         const nextPage = prevPage + 1;
-        fetchProducts(nextPage);
+        fetchProducts(nextPage, selectedCategory, selectedAnimalCategory);
         return nextPage;
       });
-
-      // 스크롤을 50px 위로 올리기
       window.scrollBy(0, -50);
     }
   };
 
+  const handleCategoryChange = (category) => {
+    const params = new URLSearchParams(location.search);
+  
+    if (category === "상품 전체") {
+      params.delete("searchCategory1");
+    } else {
+      params.set("searchCategory1", category);
+    }
+  
+    navigate(`/shop/products?${params.toString()}`);
+    setSelectedCategory(category);
+    setCurrentPage(0); 
+    setProducts([]);
+    fetchProducts(0, category, selectedAnimalCategory);
+  };
+  
+  const handleAnimalCategoryChange = (animalCategory) => {
+    const params = new URLSearchParams(location.search);
+  
+    if (animalCategory === "동물 전체") {
+      params.delete("searchCategory2");
+    } else {
+      params.set("searchCategory2", animalCategory);
+    }
+  
+    navigate(`/shop/products?${params.toString()}`);
+    setSelectedAnimalCategory(animalCategory);
+    setCurrentPage(0); 
+    setProducts([]);
+    fetchProducts(0, selectedCategory, animalCategory);
+  };
+
   useEffect(() => {
     fetchInitialData();
-  }, [userId]); // userId 변경 시 데이터 재로드
+  }, [userId, location.search]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -182,9 +229,7 @@ const Products = () => {
     return (
       <div className="text-center py-5">
         <Spinner animation="border" variant="secondary" />
-        <p className="mt-3" style={{ fontSize: "1.5rem", color: "#888" }}>
-          로딩 중입니다...
-        </p>
+        <p className="mt-3" style={{ fontSize: "1.5rem", color: "#888" }}>로딩 중입니다...</p>
       </div>
     );
   }
@@ -193,42 +238,50 @@ const Products = () => {
     <Container className="py-4" style={{ background: "linear-gradient(135deg, #FFFFFF, #EDEDED)" }}>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div className="d-flex flex-grow-1 justify-content-center">
-          <h1 className="text-warning mb-0" style={{ fontSize: "2rem" }}>
-            상품 목록
-          </h1>
+          <h1 className="text-warning mb-0" style={{ fontSize: "2rem" }}>상품 목록</h1>
         </div>
         <div className="d-flex align-items-center">
-          <Button
-            variant="link"
-            className="text-dark fs-5 p-0 me-3"
-            onClick={() => navigate(`/shop/products/cart/${userId}`)}
-          >
-            <Cart3 />
-          </Button>
-          <Button
-            variant="link"
-            className="text-dark fs-5 p-0"
-            onClick={() => navigate(`/shop/products/wish/${userId}`)}
-          >
-            <Heart />
-          </Button>
+          <Button variant="link" className="text-dark fs-5 p-0 me-3" onClick={() => navigate(`/shop/products/cart/${userId}`)}><Cart3 /></Button>
+          <Button variant="link" className="text-dark fs-5 p-0" onClick={() => navigate(`/shop/products/wish/${userId}`)}><Heart /></Button>
         </div>
       </div>
 
-      <Row
-        className="g-0"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-        }}
-      >
+      <Row className="mb-3 g-0">
+        <Col xs="auto" className="pe-2">
+          <Dropdown onSelect={handleCategoryChange}>
+            <Dropdown.Toggle variant="light" style={{ width: '100%' }}>
+              {selectedCategory}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {categories.map((category) => (
+                <Dropdown.Item key={category} eventKey={category}>
+                  {category}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
+
+        <Col xs="auto" className="ps-2">
+          <Dropdown onSelect={handleAnimalCategoryChange}>
+            <Dropdown.Toggle variant="light" style={{ width: '100%' }}>
+              {selectedAnimalCategory}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {animalCategories.map((animalCategory) => (
+                <Dropdown.Item key={animalCategory} eventKey={animalCategory}>
+                  {animalCategory}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </Col>
+      </Row>
+
+      <Row className="g-0" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)" }}>
         {products.map((product) => (
           <Col key={product.productId}>
-            <Card
-              className="h-100 shadow-sm"
-              style={{ cursor: "pointer", border: "none" }}
-              onClick={() => navigate(`/shop/products/${product.productId}`)}
-            >
+            <Card className="h-100 shadow-sm" style={{ cursor: "pointer", border: "none" }} onClick={() => navigate(`/shop/products/${product.productId}`)}>
               <div className="overflow-hidden" style={{ height: "200px" }}>
                 <Card.Img
                   variant="top"
@@ -238,7 +291,7 @@ const Products = () => {
                 />
               </div>
 
-              <Card.Body style={{ padding: "20px" }}>
+              <Card.Body style={{ padding: "6px" }}>
                 <Card.Text className="text-muted mb-1" style={{ fontSize: "0.9rem" }}>
                   {product.animalCategory} / {product.productCategory}
                 </Card.Text>
@@ -270,7 +323,7 @@ const Products = () => {
                   variant="link"
                   className="text-danger fs-5 p-0"
                   onClick={(e) => {
-                    e.stopPropagation(); // 상세페이지로 이동하지 않게 막음
+                    e.stopPropagation();
                     toggleWish(product.productId);
                   }}
                 >
@@ -280,7 +333,7 @@ const Products = () => {
                   variant="link"
                   className="fs-5 p-0"
                   onClick={(e) => {
-                    e.stopPropagation(); // 상세페이지로 이동하지 않게 막음
+                    e.stopPropagation();
                     addToCart(product.productId);
                   }}
                 >
@@ -301,4 +354,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default GetProducts;

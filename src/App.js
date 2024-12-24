@@ -15,20 +15,20 @@ import UsingComponent from "./components/common/UsingComponent";
 
 // Shop 관련 페이지
 import AddOrEditProduct from "./pages/shop/product/AddOrEditProduct";
-import Carts from "./pages/shop/product/Carts";
+import GetCarts from "./pages/shop/product/GetCarts";
 import ManageProducts from "./pages/shop/product/ManageProducts";
-import ProductImage from "./pages/shop/product/ProductImage";
-import ProductInfo from "./pages/shop/product/ProductInfo";
-import Products from "./pages/shop/product/Products";
-import Wishes from "./pages/shop/product/Wishes";
-import MyProductPosts from "./pages/shop/productPost/MyProductPosts";
-import ProductPosts from "./pages/shop/productPost/ProductPosts";
+import GetProductImage from "./pages/shop/product/GetProductImage";
+import GetProduct from "./pages/shop/product/GetProduct";
+import GetProducts from "./pages/shop/product/GetProducts";
+import GetWishes from "./pages/shop/product/GetWishes";
+import GetMyProductPosts from "./pages/shop/productPost/GetMyProductPosts";
+import GetProductPosts from "./pages/shop/productPost/GetProductPosts";
 import AddOrEditDeliveryInfo from "./pages/shop/purchase/AddOrEditDeliveryInfo";
 import AddPurchase from "./pages/shop/purchase/AddPurchase";
-import DeliveryInfos from "./pages/shop/purchase/DeliveryInfos";
+import GetDeliveryInfos from "./pages/shop/purchase/GetDeliveryInfos";
 import ManagePurchases from "./pages/shop/purchase/ManagePurchases";
-import PurchaseInfo from "./pages/shop/purchase/PurchaseInfo";
-import Purchases from "./pages/shop/purchase/Purchases";
+import GetPurchase from "./pages/shop/purchase/GetPurchase";
+import GetPurchases from "./pages/shop/purchase/GetPurchases";
 import RefundPurchases from "./pages/shop/purchase/RefundPurchases";
 
 // 사용자 페이지
@@ -144,20 +144,20 @@ function App() {
             {/* END : map-page */}
 
             {/* START : shop-page */}
-            <Route path="/shop/products" element={<Products />} />
+            <Route path="/shop/products" element={<GetProducts />} />
             <Route path="shop/products/manage" element={<ManageProducts />} />
             <Route path="/shop/products/form/:productId?" element={<AddOrEditProduct />} />
-            <Route path="/shop/products/:productId" element={<ProductInfo/>} />
-            <Route path="/shop/products/:productId/image" element={<ProductImage />} />
-            <Route path="/shop/products/cart/:userId" element={<Carts/>} />
-            <Route path="/shop/products/wish/:userId" element={<Wishes />} />
-            <Route path=".shop/productPost/:productId" element={<ProductPosts />} />
-            <Route path="/shop/productPost/my" element={<MyProductPosts />} />
+            <Route path="/shop/products/:productId" element={<GetProduct/>} />
+            <Route path="/shop/products/:productId/image" element={<GetProductImage />} />
+            <Route path="/shop/products/cart/:userId" element={<GetCarts/>} />
+            <Route path="/shop/products/wish/:userId" element={<GetWishes />} />
+            <Route path=".shop/productPost/:productId" element={<GetProductPosts />} />
+            <Route path="/shop/productPost/my" element={<GetMyProductPosts />} />
             <Route path="/shop/purchase" element={<AddPurchase />} />
-            <Route path="/shop/purchase/my" element={<Purchases />} />
+            <Route path="/shop/purchase/my" element={<GetPurchases />} />
             <Route path="/shop/purchase/all" element={<ManagePurchases />} />
-            <Route path="/shop/purchase/:purchaseId" element={<PurchaseInfo />} />
-            <Route path="/deliveryInfo" element={<DeliveryInfos />} />
+            <Route path="/shop/purchase/:purchaseId" element={<GetPurchase />} />
+            <Route path="/deliveryInfo" element={<GetDeliveryInfos />} />
             <Route path="/deliveryInfo/form/:deliveryInfoId?" element={<AddOrEditDeliveryInfo />} />
             <Route path="/shop/purchase/refund" element={<RefundPurchases />} />
             {/* END : shop-page */}
