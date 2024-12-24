@@ -36,7 +36,7 @@ function PointShopMain() {
       path: 'pointLog',
     },
     {
-      title: '퀴즈 참여',
+      title: '퀴즈 참여하기',
       description: '퀴즈에 참여하고 포인트를 적립하세요.',
       icon: <QuizIcon className="option-icon" style={{ color: '#E91E63' }} />,
       path: 'pointQuiz',
