@@ -1,38 +1,37 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import axios from 'axios';
 
 
-function useFetchGetTopic(topicId) {
+function useFetchGetTopic() {
 
-  // 상태 관리: topic(게시글), loading(로딩 상태), error(에러 상태)
-  const [topic, setTopic] = useState();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
+  // 상태 관리: loading(로딩 상태), error(에러 상태)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // useEffect를 사용하여 컴포넌트가 마운트될 때 API 호출
-  useEffect(() => {
-  
-    // 비동기 함수로 API 호출
-    const fetchGetTopic = async () => {
-      // axios로 GET 요청 보내기
-      await axios.get(`/api/topics/${topicId}`)
-        .then(response => {
-          setTopic(response.data); // 받아온 데이터를 저장
-        })
-        .catch(err => {
-          console.log('axios fetch get topic error : ', err);
-          setError(`Error: ${err.response ? err.response.data : err.message}`); // 에러 처리
-        })  
-        .finally(() => {
-          setLoading(false); // 로딩 종료.
-        });
-    };
+  // 비동기 함수로 API 호출
+  const fetchGetTopic = useCallback(async (topicId) => {
+    // 상태 초기화
+    setLoading(true);
+    setError(null);
 
-    fetchGetTopic(); // API 호출 실행
+    // set query string
+    const request = `/api/topics/${topicId}`;
+    try {
+      // axios로 get 요청 보내기
+      const response = await axios.get(request);
+      return response.data;
+    } 
+    catch (err) {
+      console.error('axios fetch get topic error:', err);
+      setError(`Error: ${err.response ? err.response.data.message : err.message}`);
+      throw new Error(err);
+    } 
+    finally {
+      setLoading(false);
+    }
+  }, []);
 
-  }, [topicId]);
-
-  return { topic, loading, error }
+  return { fetchGetTopic, loading, error }
 }
 
 export default useFetchGetTopic;

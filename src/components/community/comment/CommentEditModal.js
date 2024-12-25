@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import { Form } from "react-bootstrap";
-import { FaImage } from "react-icons/fa";
+import { Button, Form, Image } from "react-bootstrap";
+import { FaImage, FaTimes } from "react-icons/fa";
 
 import CommonModal from "../../common/modal/CommonModal";
 
@@ -10,10 +10,11 @@ import "../../../styles/place/Modal.css";
 import "../../../styles/community/Comment.css";
 
 
-const CommentEditModal = ({ showModal, setShowModal, modalTitle, 
-                            comment, setComment, onSubmit, loading }) => {
+const CommentEditModal = ({ showModal, setShowModal, modalTitle, loading, onSubmit, 
+                              comment, setComment, imageFile, setImageFile }) => {
   
   const formRef = useRef(null); // form을 참조할 ref
+  const imageRef = useRef(null); // input 요소 참조
 
   const { nickname } = useUser();
 
@@ -21,6 +22,12 @@ const CommentEditModal = ({ showModal, setShowModal, modalTitle,
   const setContentHandler = (content) => {
     setComment((prevComment) => ({...prevComment, content: content}));
   }
+
+  const imageInputClickHandler = () => {
+    if (imageRef.current) {
+      imageRef.current.click();
+    }
+  };
   
 
   const ModalHeader = () => (
@@ -31,9 +38,7 @@ const CommentEditModal = ({ showModal, setShowModal, modalTitle,
         </strong>
       </p>
       { comment.targetComment ? (
-        <p>
-          {comment.targetComment.title} {comment.targetComment.author.nickname}
-        </p>
+        <p>{comment.targetComment.content}</p>
       ) : '' }
     </div>
   );
@@ -70,23 +75,57 @@ const CommentEditModal = ({ showModal, setShowModal, modalTitle,
           <ModalHeader />
     
           <div className="comment-post-header">
-            <div className="comment-post-username">{nickname}</div>
-            <button 
-              type="button" 
-              className="comment-post-image-button" 
-              /*onClick={() => alert('이미지 핸들')}*/>
-              <FaImage size={20} />
-            </button>
+            <div className="comment-post-username">
+              {nickname}
+            </div>
+
+            <input
+              type="file"
+              accept="image/*"
+              ref={imageRef}
+              style={{ display: "none" }} // 화면에 표시되지 않음
+              onChange={(e) => setImageFile(e.target.files[0])}
+            />
+
+ 
+            <div className="comment-image-btns">
+              { imageFile &&
+                <Button 
+                    variant='link'
+                    className="image-del-button"
+                    onClick={() => setImageFile(null)}
+                  >
+                    <FaTimes size={20} color="black" />
+                </Button>
+              }
+              <button 
+                type="button" 
+                className="comment-post-image-button" 
+                onClick={() => imageInputClickHandler()}
+              >
+                <FaImage size={20} />
+              </button>
+             </div>
           </div>
     
-          <textarea
-            className="review-textarea comment-post-content"
-            value={comment.content}
-            onChange={(e) => setContentHandler(e.target.value)}
-            placeholder="댓글 내용을 작성하세요. (500자 이내)"
-            maxLength={500}
-            required
-          />
+          { imageFile ? (
+            <div className="review-textarea comment-post-content">
+              <Image 
+                className="comment-post-image"
+                src={(URL.createObjectURL(imageFile))} 
+                alt="imageFile" 
+                rounded />
+            </div>
+          ) : (
+            <textarea
+              className="review-textarea comment-post-content"
+              value={comment.content}
+              onChange={(e) => setContentHandler(e.target.value)}
+              placeholder="댓글 내용을 작성하세요. (500자 이내)"
+              maxLength={500}
+              required={!imageFile}
+            />
+          )}
 
         </Form>
       }

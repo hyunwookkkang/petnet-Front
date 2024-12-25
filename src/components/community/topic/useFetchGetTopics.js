@@ -13,13 +13,14 @@ function useFetchGetTopics() {
     // 상태 초기화
     setLoading(true);
     setError(null);
-    const { category='', condition='', keyword='' } = search;
+    const { category='', condition='', keyword='', offset=0 } = search;
 
     // set query string
-    const request = `/api/topics`
-                  + `?searchCategory1=${category}`
+    const request = `/api/topics?`
+                  + `&searchCategory1=${category}`
                   + `&searchCondition=${condition}`
-                  + `&searchKeyword=${keyword}`;
+                  + `&searchKeyword=${keyword}`
+                  + `&offset=${offset}`;
 
     // const request = new URL(`http://localhost:8000/api/topics`);
     // const params = new URLSearchParams();

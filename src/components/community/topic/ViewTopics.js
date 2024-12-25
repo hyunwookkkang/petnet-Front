@@ -7,9 +7,9 @@ import "../../../styles/Main.css"; // 기존 스타일 재사용
 import "../../../styles/community/TopicListView.css";
 
 
-const ViewTopics = ({search}) => {
+const ViewTopics = ({ search }) => {
 
-  const { fetchGetTopics, loading, error } = useFetchGetTopics();
+  const { fetchGetTopics, error } = useFetchGetTopics();
   
   const [topics, setTopics] = useState([]);
 
@@ -45,11 +45,6 @@ const ViewTopics = ({search}) => {
     
   ));
 
-  
-  // 로딩 중일 때 표시할 메시지
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   // 에러가 발생했을 때 표시할 메시지
   if (error) {
@@ -61,9 +56,15 @@ const ViewTopics = ({search}) => {
 
     <div>
 
-      <br/>
+      <h1 style={{ margin: "15px" }}>
+        { search.categoryStr } 게시글
+      </h1>
+
       { topics.length === 0 ? (
-        <p>아직 게시글이 없습니다</p> // topics가 빈 배열일 경우
+        <h5 className="community-empty-list">
+          <br/>
+          아직 { search.categoryStr } 게시글이 없어요
+        </h5>
       ) : (
         <ul style={{ paddingInlineStart: '0' }}>
           { topicsView }
