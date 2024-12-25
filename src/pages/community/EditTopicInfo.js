@@ -202,9 +202,10 @@ const EditTopicInfo = () => {
           <Form.Group>
             <Form.Control
               type="text"
-              placeholder="제목"
+              placeholder="제목 (500자 이내)"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              maxLength={50}
               required
             />
           </Form.Group>

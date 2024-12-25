@@ -12,8 +12,8 @@ const CommentAddModal = ({showModal, setShowModal, targetTopic, targetComment, s
   const { userId } = useUser();
   const { fetchAddComment, loading } = useFetchAddComment();
 
+  const [imageFile, setImageFile] = useState(null);
   const [newComment, setNewComment] = useState({
-    'commentId': '',
     'author': { 'userId': userId },
     'targetTopic': targetTopic,
     'targetComment': targetComment,
@@ -29,7 +29,7 @@ const CommentAddModal = ({showModal, setShowModal, targetTopic, targetComment, s
     }
 
     try {
-      const resComment = await fetchAddComment(newComment);
+      const resComment = await fetchAddComment(newComment, imageFile);
       setCommentHandler(resComment);
       setShowModal(false);
       showSuccessToast(`댓글이 등록되었습니다`);
@@ -47,10 +47,12 @@ const CommentAddModal = ({showModal, setShowModal, targetTopic, targetComment, s
       showModal={showModal}
       setShowModal={setShowModal}
       modalTitle={'댓글 등록하기'}
+      loading={loading}
+      onSubmit={addCommentHandler}
       comment={newComment}
       setComment={setNewComment}
-      onSubmit={addCommentHandler}
-      loading={loading}
+      imageFile={imageFile}
+      setImageFile={setImageFile}
     />
 
   );

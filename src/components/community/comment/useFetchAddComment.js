@@ -21,11 +21,7 @@ function useFetchAddComment() {
 
     try {
       // axios로 post 요청 보내기
-      const response = await axios.post(`/api/comments`, comment, {
-        headers: { 
-          'Content-Type': 'multipart/form-data' 
-        }
-      });
+      const response = await axios.post(`/api/comments`, formData);
       return response.data;
     } 
     catch (err) {
