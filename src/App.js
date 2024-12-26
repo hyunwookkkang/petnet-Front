@@ -84,6 +84,8 @@ import GetBudgetSettings from "./pages/cashbook/GetBudgetSettings";
 // Admin 관련 페이지 (잘못된 경로 수정)
 import AdminMainPage from "./pages/common/AdminMainPage";
 import PopularPlacesInfo from "./pages/map/place/PopularPlacesInfo";
+import GetUsers from "./pages/user/GetUsers";
+import UserDetails from "./pages/user/GetUserDetails";
 
 
 
@@ -124,6 +126,8 @@ function App() {
             {/* START : user, admin 페이지 */}
             <Route path="/my" element={<MyMainPage />} />
             <Route path="/admin" element={<AdminMainPage />} />
+            <Route path="/users" element={<GetUsers />} />
+            <Route path="/users/:userId" element={<UserDetails />} />
             {/* END : user, admin 페이지 */}
 
             {/* START : 사용자 로그인 페이지 */}

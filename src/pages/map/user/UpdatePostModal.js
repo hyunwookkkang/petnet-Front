@@ -119,9 +119,15 @@ const UpdatePostModal = ({ isOpen, onClose, onSubmit, post }) => {
         <Button key="back" onClick={onClose}>
           취소
         </Button>,
-        <Button key="submit" type="primary" onClick={handleOk}>
-          저장
-        </Button>,
+        <Button
+        key="submit"
+        type="primary"
+        onClick={handleOk}
+        style={{ backgroundColor: '#febe98', borderColor: '#febe98' }}
+      >
+        저장
+      </Button>
+      ,
       ]}
     >
       <div style={{ marginBottom: "10px" }}>

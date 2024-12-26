@@ -85,7 +85,7 @@ const GetMyPlacePosts = () => {
             title={
               <span
                 onClick={() => handleNavigation(post.placeId)}
-                style={{ cursor: "pointer", color: "#1890ff" }}
+                style={{ cursor: "pointer", color: "#febe98" }}
               >
                 {post.fcltyNm || "시설 이름 없음"}
               </span>
