@@ -230,7 +230,7 @@ function Main() {
             <br/>
 
             <br/>
-            <ViewTopicsCard category='hot' title="금주의 인기 게시글" />
+            <ViewTopicsCard category='hot' title="금주의 인기 게시글" description="반려인들의 궁금증, 여기에 다 있다!" />
             <br/>
 
             {/* <h2 style= {{textAlign: "left"}}>포인트 상점</h2> */}

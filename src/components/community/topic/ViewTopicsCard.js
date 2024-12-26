@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card } from "react-bootstrap";
 import { FaThumbsUp } from "react-icons/fa";
 
@@ -9,12 +9,15 @@ import useFetchGetHotTopics from "./useFetchGetHotTopics";
 import "../../../styles/Main.css"; // 기존 스타일 재사용
 
 
-const ViewTopicsCard = ({category, title}) => {
+const ViewTopicsCard = ({category, title, description}) => {
 
   const { fetchGetTopics /* , loading: cLoading, error: cError */ } = useFetchGetTopics();
   const { fetchGetHotTopics /* , loading: hLoading, error: hError */ } = useFetchGetHotTopics();
 
   const [topics, setTopics] = useState([]);
+
+  const navigate = useNavigate();
+  
 
 
   // 페이지 초기화
@@ -91,9 +94,33 @@ const ViewTopicsCard = ({category, title}) => {
 
         <Card.Body>
 
-          <Card.Title className="section-title">
-            { title }
+          <Card.Title className="section-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom:"0px" }}>
+            <h3 style={{marginBottom:"0px"}}>{ title }</h3>
+            <span
+                onClick={() => navigate("/community")}
+                style={{
+                  cursor: "pointer",
+                  color: "#FF6347",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  }}
+              >
+                더 보러가기 &gt;
+              </span>
           </Card.Title>
+
+            {description && (
+            <div
+              style={{
+                textAlign: "left",
+                paddingLeft: "4px",
+                margin: "0px 0 15px 0",
+                fontSize: "12px",
+              }}
+            >
+              {description}
+            </div>
+            )}
 
           { topics.length === 0 ? ( 
             <h6><br/>아직 {title}이 없어요</h6>
