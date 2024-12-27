@@ -69,22 +69,16 @@ import GetTopicInfo from "./pages/community/GetTopicInfo";
 import SearchTopics from "./pages/community/SearchTopics";
 
 // 가계부 관련 페이지
-// import CashbookMain from "./pages/cashbook/CashbookMain";
-// import GetExpensesLog from "./pages/cashbook/GetExpensesLog";
-// import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
-// import SlideDrawer from "./components/cashbook/SlideDrawer";
-// import GetCalendarDashboard from "./pages/cashbook/GetCalendarDashboard";
-// import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
-// import SearchExpenses from "./pages/cashbook/SearchExpenses";
-// import GetBudgets from "./pages/cashbook/GetBudgets";
-// import GetBudgetSettings from "./pages/cashbook/GetBudgetSettings";
 import CashbookMain from "./pages/cashbook/CashbookMain";
 import HeaderCashbook from "./components/cashbook/HeaderCashbook";
 import SearchExpenses from "./pages/cashbook/SearchExpenses";
+
 import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
 import GetExpensesLog from "./pages/cashbook/GetExpensesLog";
 import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
 import GetCalendarDashboard from "./pages/cashbook/GetCalendarDashboard";
+// import SlideDrawer from "./components/cashbook/SlideDrawer";
+
 import GetBudgets from "./pages/cashbook/GetBudgets";
 import GetBudgetSettings from "./pages/cashbook/GetBudgetSettings";
 
@@ -189,29 +183,39 @@ function App() {
             <Route path="/pointQuiz" element={<GetPointQuiz/>}/>
             {/* END : pointshop-page */}
 
-            {/* START : cashbook-page */}
-            {/* 
-            <Route path="/cashbook" element={<CashbookMain />} />
-            <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
-            <Route path="/GetCalendarsDashboard" element={<GetCalendarsDashboard />} />
-            <Route path="/SlideDrawer" element={<SlideDrawer />} />
-            <Route path="/GetstatisticsDashboards" element={<GetstatisticsDashboards />} />
-            <Route path="/GetCalendarDashboard" element={<GetCalendarDashboard />} />
-            <Route path="/GetBudgets" element={<GetBudgets />} />
-            <Route path="/GetBudgetSettings" element={<GetBudgetSettings />} />
-            <Route path="/SearchExpenses" element={<SearchExpenses />} /> 
-            */}
-            <Route path="/cashbook" element={<CashbookMain />} />
-            <Route path="/HeaderCashbook" element={<HeaderCashbook />} />
-            <Route path="/SearchExpenses" element={<SearchExpenses />} />
-            <Route path="/GetstatisticsDashboards" element={<GetstatisticsDashboards />} />
-            <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
-            <Route path="/GetCalendarsDashboard" element={<GetCalendarsDashboard />} />
-            <Route path="/GetBudgets" element={<GetBudgets />} />
-            <Route path="/GetBudgetSettings" element={<GetBudgetSettings />} />
-            <Route path="/GetCalendarDashboard" element={<GetCalendarDashboard />} />
-            {/* END : cashbook-page */}
+             {/* START : cashbook-page */}
+             <Route path="/cashbook" element={<CashbookMain />} />
+              <Route path="/HeaderCashbook" element={<HeaderCashbook />} />
+              <Route path="/SearchExpenses" element={<SearchExpenses />} />
 
+              <Route
+                path="/GetstatisticsDashboards"
+                element={<GetstatisticsDashboards />}
+              />
+
+              <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
+
+              <Route
+                path="/GetCalendarsDashboard"
+                element={<GetCalendarsDashboard />}
+              />
+              <Route path="/GetBudgets" element={<GetBudgets />} />
+              <Route
+                path="/GetBudgetSettings"
+                element={<GetBudgetSettings />}
+              />
+              <Route
+                path="/GetCalendarDashboard"
+                element={<GetCalendarDashboard />}
+              />
+              {/*<Route path="/SlideDrawer" element={<SlideDrawer />} />
+       
+     
+
+              
+     
+              
+              {/* END : cashbook-page */}
           </Routes>
           </div>
         {/*하단 Nav 고정*/}
