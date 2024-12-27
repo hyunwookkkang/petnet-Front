@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import { showErrorToast } from '../../../components/common/alert/CommonToast';
 
 const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
   const [formData, setFormData] = useState({
@@ -36,11 +37,11 @@ const FavoriteModal = ({ show, onClose, onSubmit, favorite }) => {
   // 폼 제출 핸들러
   const handleSubmit = () => {
     if (!formData.favoriteName.trim()) {
-      alert("즐겨찾기 이름을 입력해주세요.");
+      showErrorToast("즐겨찾기 이름을 입력해주세요.");
       return;
     }
     if (formData.maxListCount !== "" && formData.maxListCount <= 0) {
-      alert("최대 리스트 개수는 1 이상이어야 합니다.");
+      showErrorToast("최대 리스트 개수는 1 이상이어야 합니다.");
       return;
     }
     const dataToSubmit = {

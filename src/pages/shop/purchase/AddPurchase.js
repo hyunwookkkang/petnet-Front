@@ -3,6 +3,7 @@ import { Card, Button, Col, Row, Table, Spinner, Modal, Form } from "react-boots
 import axios from "axios";
 import { useUser } from "../../../components/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import { showErrorToast, showSuccessToast } from '../../../components/common/alert/CommonToast';
 
 const AddPurchase = () => {
   const { userId } = useUser();
@@ -95,17 +96,17 @@ const AddPurchase = () => {
 
   const handlePayment = async () => {
     if (!deliveryInfo) {
-      alert("배송지 정보를 선택해 주세요.");
+      showErrorToast("배송지 정보를 선택해 주세요.");
       return;
     }
 
     if (!paymentMethod) {
-      alert("결제 수단을 선택해 주세요.");
+      showErrorToast("결제 수단을 선택해 주세요.");
       return;
     }
 
     if (paymentMethod === "card" && !selectedCard) {
-      alert("카드를 선택해 주세요.");
+      showErrorToast("카드를 선택해 주세요.");
       return;
     }
 
@@ -150,7 +151,7 @@ const AddPurchase = () => {
             });
   
             if (response.status === 200) {
-              alert("결제가 성공적으로 처리되었습니다.");
+              showSuccessToast("결제가 성공적으로 처리되었습니다.");
   
               // 상품별로 Purchase 객체 생성
               const purchasePromises = items.map((item) => {
@@ -181,20 +182,20 @@ const AddPurchase = () => {
   
               window.location.href = response.data.redirectUrl; // 리디렉션 URL
             } else {
-              alert("결제 검증 실패: " + response.data);
+              showErrorToast("결제 검증 실패: " + response.data);
             }
           } catch (error) {
             console.error("결제 검증 오류:", error);
-            alert("결제 검증 중 오류가 발생했습니다.");
+            showErrorToast("결제 검증 중 오류가 발생했습니다.");
           }
         } else {
           console.error("결제 실패:", rsp.error_msg);
-          alert(`결제 실패: ${rsp.error_msg}`);
+          showErrorToast(`결제 실패: ${rsp.error_msg}`);
         }
       });
     } catch (error) {
       console.error("결제 처리 중 오류:", error);
-      alert("결제 처리 중 오류가 발생했습니다.");
+      showErrorToast("결제 처리 중 오류가 발생했습니다.");
     } finally {
       setIsProcessingPayment(false);
     }

@@ -54,6 +54,7 @@ const EditTopicInfo = () => {
       setShowLoginModal(true);
       return;
     }
+    
     // topicId가 있으면 기존 정보 불러오기
     if (topicId) {
       const fetchTopic = async () => {

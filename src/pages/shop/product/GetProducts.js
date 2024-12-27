@@ -5,6 +5,8 @@ import { Container, Row, Col, Card, Button, Spinner, Dropdown } from "react-boot
 import { Heart, HeartFill, Cart3 } from "react-bootstrap-icons";
 import { useUser } from "../../../components/contexts/UserContext";
 import { toast } from "react-toastify";
+import { Snackbar } from "@mui/material";
+import LoginModal from "../../../components/common/modal/LoginModal";
 
 const GetProducts = () => {
   const [products, setProducts] = useState([]);
@@ -15,9 +17,13 @@ const GetProducts = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState("상품 전체");
   const [selectedAnimalCategory, setSelectedAnimalCategory] = useState("동물 전체");
-  const navigate = useNavigate();
   const { userId } = useUser();
+  const navigate = useNavigate();
   const location = useLocation();
+
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const categories = [
     "상품 전체", "사료", "간식", "장난감", "산책용품", "의류", "미용용품", "위생용품"
@@ -112,7 +118,7 @@ const GetProducts = () => {
 
   const toggleWish = async (productId) => {
     if (!userId) {
-      alert("로그인이 필요합니다.");
+      setShowLoginModal(true);
       return;
     }
 
@@ -144,13 +150,13 @@ const GetProducts = () => {
 
   const addToCart = async (productId) => {
     if (!userId) {
-      alert("로그인이 필요합니다.");
-      navigate("/login");
+      setShowLoginModal(true);
       return;
     }
 
     if (cartList.includes(productId)) {
-      alert("이미 장바구니에 있는 상품입니다.");
+      setSnackbarMessage("이미 장바구니에 있는 상품입니다.");
+      setShowSnackbar(true);
       return;
     }
 
@@ -350,6 +356,20 @@ const GetProducts = () => {
           <p className="text-muted">모든 데이터를 불러왔습니다.</p>
         </div>
       )}
+
+
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+      />
+
+      <Snackbar
+        open={showSnackbar}
+        message={snackbarMessage}
+        onClose={() => setShowSnackbar(false)}
+        autoHideDuration={1200}
+      />
+
     </Container>
   );
 };

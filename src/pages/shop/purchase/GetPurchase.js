@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Button, Spinner, Row, Col, Table, Modal, Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
+import { showErrorToast, showSuccessToast } from '../../../components/common/alert/CommonToast';
 import axios from "axios";
 
 const PurchaseInfo = () => {
@@ -184,12 +185,12 @@ const handleSaveDeliveryChanges = async () => {
         comment: cancelReason,
         paymentAmount: paymentAmount
       });
-      alert("결제가 성공적으로 취소되었습니다.");
+      showSuccessToast("결제가 성공적으로 취소되었습니다.");
       // 결제 취소 후 /shop/purchase/my로 리디렉션
       navigate('/shop/purchase/my'); 
     } catch (error) {
       console.error("Error canceling purchase:", error);
-      alert("결제 취소 중 오류가 발생했습니다.");
+      showErrorToast("결제 취소 중 오류가 발생했습니다.");
     } finally {
       handleCloseCancelModal();
     }
