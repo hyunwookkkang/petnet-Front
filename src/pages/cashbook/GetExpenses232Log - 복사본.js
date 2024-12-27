@@ -20,7 +20,6 @@ import {
   faDog,
 } from "@fortawesome/free-solid-svg-icons"; // 아이콘 임포트
 import CashbookControl from "./CashbookControl";
-import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 
 const GetExpensesLog = ({ year, month, onAddExpense }) => {
   const navigate = useNavigate();
@@ -38,7 +37,6 @@ const GetExpensesLog = ({ year, month, onAddExpense }) => {
   // 상세보기용 드로어 열림/닫힘 상태
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeScreen, setActiveScreen] = useState("manual");
-  const [sortOrder, setSortOrder] = useState("newest");
 
   useEffect(() => {
     if (!userId) {
@@ -94,35 +92,18 @@ const GetExpensesLog = ({ year, month, onAddExpense }) => {
       // Array.isArray(data.expenses) : 데이터가 배열인지 확인, 아닌경우를 방지, data.expenses.length > 0: 배열에 데이터가 있는지 확인
       if (Array.isArray(data.expenses) && data.expenses.length > 0) {
         // 새 데이터를 기존 데이터와 병합
-
-        const filteredExpenses = data.expenses.filter((expense) => {
-          const expenseDate = new Date(expense.expenseDate);
-          return (
-            expenseDate.getFullYear() === year &&
-            expenseDate.getMonth() + 1 === month
-          ); // <==============수정: 연도와 월이 정확히 맞는 데이터만 필터링
+        setExpenses((prev) => {
+          const newExpenses = data.expenses.filter(
+            (expense) =>
+              !prev.some(
+                (prevExpense) => prevExpense.expenseId === expense.expenseId
+              )
+          );
+          return [...prev, ...newExpenses];
         });
 
-        const uniqueExpenses = filteredExpenses.filter(
-          (expense) =>
-            !expenses.some(
-              (existing) => existing.expenseId === expense.expenseId
-            )
-        ); // <==============수정: 중복 제거 로직 추가
-
-        const sortedExpenses =
-          sortOrder === "newest"
-            ? [...expenses, ...uniqueExpenses].sort(
-                (a, b) => new Date(b.expenseDate) - new Date(a.expenseDate)
-              )
-            : [...expenses, ...uniqueExpenses].sort(
-                (a, b) => new Date(a.expenseDate) - new Date(b.expenseDate)
-              ); // <==============수정: 정렬 로직 추가
-
-        setExpenses(sortedExpenses);
-
         // 추가 데이터가 있는지 확인
-        if (uniqueExpenses.length < 10) {
+        if (data.expenses.length < 10) {
           // 한 페이지당 10개의 데이터를 가져오므로
           console.log("더 이상 데이터가 없습니다.");
           setHasMore(false); // 추가 데이터가 없을 경우
@@ -156,13 +137,7 @@ const GetExpensesLog = ({ year, month, onAddExpense }) => {
       setHasMore(true); //
       fetchExpenses(0); // 첫 페이지 로드
     }
-  }, [year, month, userId, sortOrder]); //
-
-  const handleSortChange = (event, newSortOrder) => {
-    if (newSortOrder !== null) {
-      setSortOrder(newSortOrder); // <==============수정: 정렬 상태 업데이트
-    }
-  };
+  }, [year, month, userId]); //
 
   useEffect(() => {
     if (!loading && hasMore) {
@@ -223,12 +198,6 @@ const GetExpensesLog = ({ year, month, onAddExpense }) => {
     fetchExpenses(0);
   };
 
-  const handleSaveExpense = () => {
-    setExpenses([]); // 지출 목록 초기화
-    setCurrentPage(0); // 페이지 번호 초기화 (첫 페이지부터 다시 로드)
-    setHasMore(true); // 더 가져올 데이터가 있음을 초기화
-    fetchExpenses(0); // 첫 페이지 데이터를 새로 가져옴
-  };
   // 금액 포맷 함수
   const formatAmount = (amount) => `${amount.toLocaleString()} 원`; // toLocaleString(): 천단위 구분자 삽입
 
@@ -239,61 +208,13 @@ const GetExpensesLog = ({ year, month, onAddExpense }) => {
         setShowModal={setShowLoginModal}
         required={true}
       />
-
-      <div
-        className="cashbook-monthly-total"
-        style={{
-          marginTop: "20px", // 상단 여백
-          display: "flex", // 정렬을 위해 flex 사용
-          justifyContent: "space-between", // 양쪽 끝으로 배치
-          alignItems: "center", // 세로 중앙 정렬
-        }}
-      >
-        {/* 월간 지출 총액 */}
-        <h2
-          style={{
-            margin: 0, // 여백 제거
-            fontFamily: "Ownglyph_ParkDaHyun", // 폰트 통일
-            fontSize: "24px", // 적당한 크기
-            textAlign: "center", // 텍스트 가운데 정렬
-          }}
-        >
+      <div className="cashbook-monthly-total">
+        <h2>
           월간 지출 총액:{" "}
-          <strong style={{ color: "#FF6347" }}>
+          <strong style={{ color: "#FF6347  " }}>
             {formatAmount(monthlyTotal)}
           </strong>
         </h2>
-
-        {/* 정렬 버튼 */}
-        <ToggleButtonGroup
-          value={sortOrder}
-          exclusive
-          onChange={handleSortChange}
-          aria-label="Sort order"
-          style={{
-            marginLeft: "auto", // 오른쪽 끝에 배치
-            fontFamily: "Ownglyph_ParkDaHyun", // 폰트 통일
-          }}
-        >
-          <ToggleButton
-            value="newest"
-            style={{
-              fontSize: "14px", // 글자 크기 조정
-              fontFamily: "Ownglyph_ParkDaHyun", // 폰트 통일
-            }}
-          >
-            최신순
-          </ToggleButton>
-          <ToggleButton
-            value="oldest"
-            style={{
-              fontSize: "14px", // 글자 크기 조정
-              fontFamily: "Ownglyph_ParkDaHyun", // 폰트 통일
-            }}
-          >
-            과거순
-          </ToggleButton>
-        </ToggleButtonGroup>
       </div>
 
       {loading && expenses.length === 0 ? ( // 초기 로딩 상태 확인

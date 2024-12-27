@@ -53,7 +53,7 @@ const HeaderCashbook = ({ currentYear, currentMonth, setYear, setMonth }) => {
   };
 
   return (
-    <div className="header-cashbook">
+    <div className="header-cashbook-container">
       <div className="cashbook-header-row">
         <button className="cashbook-nav-btn" onClick={handlePrevMonth}>
           <PlayArrow style={{ transform: "scaleX(-1)" }} />
@@ -78,7 +78,9 @@ const HeaderCashbook = ({ currentYear, currentMonth, setYear, setMonth }) => {
 
       <div className="cashbook-navigation-menu">
         <button className="cashbook-nav-btn">
-          <Link to="/cashbook">일일</Link>
+          <Link to="/cashbook" className="daily-link">
+            일일
+          </Link>
         </button>
 
         <button className="cashbook-nav-btn">

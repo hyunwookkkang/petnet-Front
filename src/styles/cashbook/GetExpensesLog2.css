@@ -16,19 +16,8 @@
   margin-bottom: 0; /* 하단 여백을 10px로 설정하여 밑공간 줄이기 */
 }
 
-cashbook-monthly-total strong {
-  min-width: 80px; /* 필요에 따라 숫자를 조정 */
-  display: inline-block;
-  flex-shrink: 0;
-  text-align: right; /* 숫자가 정렬되도록 설정 */
-}
-
-.cashbook-monthly-total + hr {
-  margin-top: 5px; /* hr 태그 위 여백을 5px로 설정 */
-  margin-bottom: 5px; /* hr 태그 아래 여백을 5px로 설정 */
-}
 .custom-hr {
-  margin-top: 10px !important; /* hr 태그 위 여백을 5px로 설정 */
+  margin-top: 0 !important; /* hr 태그 위 여백을 5px로 설정 */
   margin-bottom: 10px !important; /* hr 태그 아래 여백을 5px로 설정 */
   padding: 0 !important;
 }
@@ -115,7 +104,7 @@ cashbook-monthly-total strong {
   color: #ffffff; /* 글자 색상 */
   background-color: #dc3545; /* 배경색 (Bootstrap danger 색상) */
   padding: 8px 12px; /* 안쪽 여백 */
-  margin: 1px 0 15px 0; /* 여백 설정 */
+  margin: 5px 0 1px 0; /* 여백 설정 */
   border-radius: 5px; /* 모서리 둥글게 */
   text-align: center; /* 텍스트 중앙 정렬 */
 }

@@ -1,7 +1,8 @@
 .expense-buttons {
   display: flex; /* Flexbox를 활성화하여 버튼들을 가로로 배치 */
+  font-size: 1.2em;
   justify-content: center; /* 버튼들을 가로 중앙 정렬 */
-  gap: 60px; /* 버튼 간의 간격을 80px로 설정 */
+  gap: 40px; /* 버튼 간의 간격을 80px로 설정 */
   margin-bottom: 15px; /* 컨테이너 아래쪽에 15px 여백 추가 */
 }
 
