@@ -5,7 +5,6 @@ import "../../styles/Main.css";
 // Import Components
 import PopularPlacesTop3 from "./../map/place/PopularPlacesTop3";
 import MainImage from "./MainImage";
-import ViewHotTopicsCard from "../../components/community/topic/ViewHotTopicsCard";
 import ViewTopicsCard from "../../components/community/topic/ViewTopicsCard";
 
 function AdBanner({ onAdEnd }) {
@@ -230,7 +229,11 @@ function Main() {
             <br/>
 
             <br/>
-            <ViewTopicsCard category='hot' title="금주의 인기 게시글" description="반려인들의 궁금증, 여기에 다 있다!" />
+            <ViewTopicsCard 
+              category='all' 
+              title="금주의 인기 게시글" 
+              description="반려인들의 궁금증, 여기에 다 있다!" 
+            />
             <br/>
 
             {/* <h2 style= {{textAlign: "left"}}>포인트 상점</h2> */}

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import useFetchGetHotTopics from "./useFetchGetHotTopics";
 
 import "../../../styles/Main.css"; // 기존 스타일 재사용
+import { FaThumbsUp } from "react-icons/fa";
 
 
 const ViewHotTopics = () => {
@@ -23,6 +24,18 @@ const ViewHotTopics = () => {
   },[fetchGetHotTopics]);
 
 
+  const TopicLikeCount = ({likeCount}) => {
+    return (
+      <span className="comment-likes">
+        <FaThumbsUp style={{ fontSize: '12' }}/>
+        <div>
+          { likeCount < 10000 ?
+            likeCount : '9999+' }
+        </div>
+      </span>
+    );
+  }
+
   const topicsView = topics.map((topic) => (
     <div key={topic.topicId}>
 
@@ -33,7 +46,9 @@ const ViewHotTopics = () => {
             <span className="topics-comments">댓글 {topic.commentCount}</span>
           </div>
           <div className="topics-footer">
-            <span className="topics-author">{topic.author.nickname}</span>
+            <span className="topics-author">
+              <TopicLikeCount likeCount={topic.likeCount} />
+            </span>
             <span className="topics-date">{topic.addDateStr}</span>
           </div>
         </li>
