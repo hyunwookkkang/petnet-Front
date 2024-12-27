@@ -76,6 +76,19 @@ const Purchases = () => {
     }
   };
 
+    // 날짜 포맷 함수 추가
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
+
+
   // 스크롤 이벤트 처리
   const handleScroll = (e) => {
     const bottom =
@@ -118,6 +131,8 @@ const Purchases = () => {
       </div>
     );
   }
+
+  
 
   return (
     <div style={{ padding: "20px", backgroundColor: "#FFF5EF", border: "2px solid #FF7826" }}>
@@ -164,7 +179,7 @@ const Purchases = () => {
                 <strong>구매 수량: </strong> {purchase.orderQuantity}
               </Card.Text>
               <Card.Text>
-                <strong>결제일: </strong> {purchase.paidDate}
+                <strong>결제일: </strong> {formatDate(purchase.paidDate)}
               </Card.Text>
               <Card.Text>
                 <strong>상태: </strong> {getPurchaseStatus(purchase.purchaseStatus)}

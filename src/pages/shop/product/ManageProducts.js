@@ -1,140 +1,132 @@
 import React, { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { useNavigate } from "react-router-dom";
+import { Card, Row, Button } from "antd";
+import { DeleteOutlined, SwapOutlined, FileImageOutlined, EditOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { Spinner, Button } from "react-bootstrap";
-import "../../../styles/pointshop/point.css";
+import { useNavigate } from "react-router-dom";
+import { showSuccessToast, showErrorToast } from "../../../components/common/alert/CommonToast";
+import CommonModal from "../../../components/common/modal/CommonModal";
 
 const ManageProducts = () => {
-  const [products, setProducts] = useState([]); // 상품 데이터
-  const [loading, setLoading] = useState(true); // 로딩 상태
-  const [hasMore, setHasMore] = useState(true); // 무한 스크롤 여부
-  const [currentPage, setCurrentPage] = useState(0); // 현재 페이지
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const navigate = useNavigate();
 
-  // API 엔드포인트
-  const apiEndpoint = () => `/api/shop/products`;
-
-  // 상품 데이터 가져오기
-  const fetchProducts = async (page) => {
-    if (!hasMore) return; // 더 이상 데이터가 없으면 실행 안 함
-    setLoading(true); // 로딩 시작
-  
-    try {
-      const response = await axios.get(
-        `${apiEndpoint()}?currentPage=${page}&pageSize=10`
-      );
-      const data = response.data;
-  
-      if (data.length === 0) {
-        setHasMore(false); // 더 이상 데이터가 없을 때
-      } else {
-        // 중복 제거 로직
-        setProducts((prevProducts) => {
-          const newProducts = data.map((product) => ({
-            ...product,
-            id: product.productId, // 각 상품에 고유 id 추가
-          }));
-          // 기존 데이터와 비교하여 중복 제거
-          const uniqueProducts = newProducts.filter(
-            (newProduct) => !prevProducts.some((product) => product.id === newProduct.id)
-          );
-          return [...prevProducts, ...uniqueProducts];
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      setHasMore(false); // 에러가 발생하면 더 이상 데이터가 없다고 처리
-    } finally {
-      setLoading(false); // 로딩 종료
-    }
-  };
-  
-
-  // 스크롤 이벤트 처리
-  const handleScroll = (e) => {
-    const bottom =
-      e.target.scrollHeight === e.target.scrollTop + e.target.clientHeight;
-
-    if (bottom && !loading && hasMore) {
-      setCurrentPage((prevPage) => prevPage + 1); // 페이지 증가
-    }
-  };
-
   useEffect(() => {
-    setProducts([]); // 상품 리스트 초기화
-    setCurrentPage(0); // 페이지 번호 초기화
-    setHasMore(true); // 더 불러올 데이터가 있다고 설정
-    fetchProducts(0); // 초기 데이터 로드 (0 페이지부터)
-
-    // 스크롤 이벤트 리스너 등록
-    window.addEventListener("scroll", handleScroll);
-
-    // 컴포넌트 언마운트 시 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    fetchProducts();
   }, []);
 
-  useEffect(() => {
-    if (currentPage > 0) {
-      fetchProducts(currentPage); // 페이지가 변경되면 데이터 로드
+  const apiEndpoint = () => `/api/shop/products`;
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(`${apiEndpoint()}?currentPage=0&pageSize=100`);
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
     }
-  }, [currentPage]);
-
-  // 로딩 중 표시
-  if (loading && currentPage === 0) {
-    return (
-      <div className="text-center py-5">
-        <Spinner animation="border" variant="secondary" />
-        <p className="mt-3" style={{ fontSize: "1.5rem", color: "#888" }}>
-          상품 목록을 불러오는 중입니다...
-        </p>
-      </div>
-    );
-  }
-
-  // DataGrid 열 정의
-  const columns = [
-    { field: "id", headerName: "순번", width: 100 },
-    { field: "image", headerName: "이미지", width: 150, renderCell: (params) => <img src={params.value} alt="Product" style={{ width: "50px", height: "50px" }} /> },
-    { field: "productName", headerName: "상품명", width: 200 },
-    { field: "price", headerName: "가격", width: 150 },
-    { field: "discount", headerName: "할인율", width: 150 }
-  ];
-
-  // 상품 추가 버튼 클릭 이벤트
-  const handleAddProduct = () => {
-    navigate("/shop/products/form");
   };
 
-  // 상품 행 클릭 이벤트
-  const handleRowClick = (params) => {
-    navigate(`/shop/products/form/${params.id}`);
+  const handleDelete = async () => {
+    if (!selectedProduct) return;
+
+    try {
+      await axios.delete(`/api/shop/products/${selectedProduct.productId}`);
+      setProducts((prevProducts) => prevProducts.filter((product) => product.productId !== selectedProduct.productId));
+      showSuccessToast("상품이 성공적으로 삭제되었습니다.");
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      showErrorToast("삭제가 불가능합니다");
+    } finally {
+      setShowDeleteModal(false);
+    }
   };
+
 
   return (
-    <div style={{ padding: "20px", backgroundColor: "#FFF5EF", border: "2px solid #FF7826" }}>
-      <div style={{ marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1 style={{ color: "#FF7826" }}>상품 목록</h1>
-        <Button variant="primary" onClick={handleAddProduct}>상품 추가</Button>
+    <div style={{ padding: "20px" }}>
+      <h1 style={{ textAlign: "center", color: "#FEBE98" }}>상품 관리</h1>
+
+      <div style={{ textAlign: "right", marginBottom: "10px" }}>
+        <Button
+          type="primary"
+          style={{
+            backgroundColor: "#FEBE98",
+            borderColor: "#FEBE98",
+          }}
+          onClick={() => navigate("/shop/products/form")}
+        >
+        상품 추가
+        </Button>
       </div>
 
-      <div style={{ height: 600, width: "100%" }}>
-        <DataGrid
-          rows={products}
-          columns={columns}
-          pageSize={10}
-          onRowClick={handleRowClick}
-        />
-      </div>
-
-      {loading && hasMore && (
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <Spinner animation="border" variant="secondary" />
-          <p>데이터를 불러오는 중입니다...</p>
-        </div>
+      {loading ? (
+        <p style={{ textAlign: "center", width: "100%" }}>로딩 중...</p>
+      ) : (
+        <Row gutter={[0, 16]} style={{ flexDirection: "column" }}>
+          {products.map((product) => (
+            <Card
+              key={product.productId}
+              hoverable
+              style={{
+                border: "1px solid #bfbfbf", // 카드 테두리
+              }}
+              title={
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span
+                    onClick={() => navigate(`/shop/products/form/${product.productId}`)}
+                    style={{ cursor: "pointer", color: "#FEBE98", fontWeight: "bold" }}
+                  >
+                    {product.productName}
+                  </span>
+                </div>
+              }
+              actions={[
+                <DeleteOutlined
+                  style={{ color: "#FF6347", cursor: "pointer" }}
+                  onClick={() => {
+                    setSelectedProduct(product);
+                    setShowDeleteModal(true);
+                  }}
+                />,
+                <EditOutlined
+                  style={{ color: "#FF8000", cursor: "pointer" }}
+                  onClick={() => navigate(`/shop/products/form/${product.productId}`)}
+                />
+              ]}
+            >
+              <p>상품 ID: {product.productId}</p>
+              <p>상품명: {product.productName}</p>
+              <p>등록일: {new Date(product.productAddDate).toLocaleDateString().replace(/\.$/, "")}</p>
+              <p>가격: {product.price}P</p>
+              <p>할인율: {product.discount}</p>
+              <p>재고 수량: {product.productStock}</p>
+            </Card>
+          ))}
+        </Row>
       )}
+
+      <CommonModal
+        show={showDeleteModal}
+        onHide={() => setShowDeleteModal(false)}
+        title="삭제 확인"
+        body={<div>{selectedProduct?.productName}을(를) 삭제하시겠습니까?</div>}
+        footer={
+          <Button
+            style={{
+              backgroundColor: "#FF6347",
+              color: "#FFFFFF",
+              border: "none",
+            }}
+            onClick={handleDelete}
+          >
+            확인
+          </Button>
+        }
+      />
     </div>
   );
 };

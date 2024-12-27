@@ -5,9 +5,9 @@ import { Cart3, Heart, HeartFill } from "react-bootstrap-icons";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "../../../components/contexts/UserContext";
 import "../../../styles/place/Place.css";
-import ProductPost from "../productPost/GetProductPosts";
+import GetProductPost from "../productPost/GetProductPosts";
 import ProductImage from "./GetProductImage";
-import ProductPosts from "../productPost/GetProductPosts";
+import GetProductPosts from "../productPost/GetProductPosts";
 
 const GetProduct = () => {
   const { productId } = useParams();
@@ -132,15 +132,22 @@ const GetProduct = () => {
       alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
       return;
     }
-
+  
     try {
-      await axios.post("/api/shop/purchase", { userId, productId });
-      alert("구매가 완료되었습니다!");
+      // 장바구니에 상품이 있는지 확인
+      if (!cartList.includes(Number(productId))) {
+        // 장바구니에 상품을 추가
+        await addToCart(Number(productId));  // 이미 있는 addToCart 함수 호출
+      }
+  
+      // 장바구니 페이지로 이동
+      navigate("/shop/products/cart/${userId}");
     } catch (error) {
       console.error("구매 처리 오류:", error);
       alert("구매 처리에 실패했습니다.");
     }
   };
+  
 
   if (loading) {
     return (
@@ -223,7 +230,7 @@ const GetProduct = () => {
           </div>
         </Tab>
         <Tab eventKey="posts" title="리뷰">
-          <ProductPosts productId={productId} />
+          <GetProductPosts productId={productId} />
         </Tab>
       </Tabs>
     </Container>

@@ -21,7 +21,7 @@ const ProductPostModal = ({ title, isOpen, onClose, onSubmit, post, productId })
   // 모달이 열릴 때 초기화
   useEffect(() => {
     if (isOpen) {
-      setNewPost({ content: "", visitDate: "" }); // 입력 필드 초기화
+      setNewPost({ content: ""}); // 입력 필드 초기화
       setFileList([]); // 업로드된 이미지 초기화
       setPreviewImage(""); // 이미지 프리뷰 초기화
     }
@@ -47,7 +47,7 @@ const ProductPostModal = ({ title, isOpen, onClose, onSubmit, post, productId })
     formData.append("content", newPost.content);
 
     fileList.forEach((file) => {
-      formData.append("images", file.originFileObj || file);
+      formData.append("imageFiles", file.originFileObj || file);
     });
 
     try {

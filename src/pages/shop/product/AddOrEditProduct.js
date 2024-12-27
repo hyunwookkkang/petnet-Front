@@ -89,7 +89,7 @@ const AddOrEditProduct = () => {
       })
       .then(() => {
         alert(productId ? "상품이 수정되었습니다!" : "상품이 추가되었습니다!");
-        navigate("/admin");
+        navigate("/shop/products/manage");
       })
       .catch((err) => {
         console.error(err);

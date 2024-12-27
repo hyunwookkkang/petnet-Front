@@ -211,6 +211,7 @@ const AddPurchase = () => {
           <Table striped bordered hover >
             <thead>
               <tr>
+                <th>상품 이미지</th>
                 <th>구매 상품</th>
                 <th>카테고리</th>
                 <th>구매 가격</th>
@@ -221,14 +222,17 @@ const AddPurchase = () => {
               {items.map((item) => (
                 <tr key={item.itemId}>
                   <td>
+                    <Col xs={3}>
+                      <Card.Img
+                        variant="top"
+                        src={item.product.image || "https://via.placeholder.com/64"}
+                        style={{ width: "64px", height: "64px", objectFit: "cover" }}
+                      />
+                    </Col>
+                  </td>
+                  <td>
                     <Row>
-                      <Col xs={3}>
-                        <Card.Img
-                          variant="top"
-                          src={item.product.image || "https://via.placeholder.com/64"}
-                          style={{ width: "64px", height: "64px", objectFit: "cover" }}
-                        />
-                      </Col>
+                      
                       <Col>
                         <strong>{item.product.productName}</strong>
                       </Col>

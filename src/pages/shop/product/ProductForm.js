@@ -122,7 +122,7 @@ const ProductForm = ({ formData = {}, onChange, onSubmit, isEditMode, onFileChan
         <Button
             variant="secondary"
             style={{ marginLeft: "10px" }}
-            onClick={() => (window.location.href = "/admin")}
+            onClick={() => (window.location.href = "/shop/products/manage")}
         >
             취소하기
         </Button>
