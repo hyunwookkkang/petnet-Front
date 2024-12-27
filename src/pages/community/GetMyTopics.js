@@ -96,20 +96,25 @@ const GetMyTopics = () => {
 
     <Container>
       
+      <h1 style={{ textAlign: "center", margin: "5px" }}>
+        내가 쓴 게시글
+      </h1>
+      
       <TopicSearchBar setSearch={setSearch}/>
       <br/>
       
       <div>
-        <h1>View My Topics</h1>
-        <br/>
         { topics.length === 0 ? (
-          <p>내가 작성한 게시글이 없습니다</p> // topics가 빈 배열일 경우
+          <h5 className="community-empty-list">
+            아직 작성한 게시글이 없습니다
+          </h5> // topics가 빈 배열일 경우
         ) : (
           <ul style={{ paddingInlineStart: '0' }}>
-            {topicsView}
+            { topicsView }
           </ul> // topics 배열에 데이터가 있을 경우
         )}
       </div>
+      
 
       <LoginModal 
         showModal={showLoginModal} 

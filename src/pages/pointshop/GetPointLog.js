@@ -92,7 +92,7 @@ const GetPointLog = () => {
       key: "key",
     },
     {
-      title: "이유",
+      title: "적립/사용 내역",
       dataIndex: "reasonText",
       key: "reasonText",
     },

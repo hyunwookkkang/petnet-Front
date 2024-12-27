@@ -8,7 +8,7 @@ import "../../../styles/Main.css"; // 기존 스타일 재사용
 
 const ViewHotTopics = () => {
 
-  const { fetchGetHotTopics, loading, error } = useFetchGetHotTopics();
+  const { fetchGetHotTopics /*, loading, error */ } = useFetchGetHotTopics();
     
   const [topics, setTopics] = useState([]);
 
@@ -21,17 +21,6 @@ const ViewHotTopics = () => {
     };
     fetchTopics();
   },[fetchGetHotTopics]);
-  
-
-  // 로딩 중일 때 표시할 메시지
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  // 에러가 발생했을 때 표시할 메시지
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
 
   const topicsView = topics.map((topic) => (
@@ -58,10 +47,16 @@ const ViewHotTopics = () => {
 
     <div>
 
-      <h1>금주의 인기글</h1>
-      <br/>
+      <h1 style={{ margin: "15px" }}>
+        금주의 인기 게시글
+      </h1>
+      
+      
       { topics.length === 0 ? (
-        <p>아직 인기 게시글이 없습니다</p> // topics가 빈 배열일 경우
+        <h5 className="community-empty-list">
+          <br/>
+          아직 금주의 인기 게시글이 없어요
+        </h5>      
       ) : (
         <ul style={{ paddingInlineStart: '0' }}>
           { topicsView }

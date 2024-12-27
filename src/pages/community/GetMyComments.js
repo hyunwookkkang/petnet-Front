@@ -54,14 +54,25 @@ const GetMyComments = () => {
   return (
 
     <Container>
+            
+      <h1 style={{ textAlign: "center", margin: "5px" }}>
+        내가 쓴 댓글
+      </h1>
+
+      <br/>
       
       <div>
-        <h1>View My Comments</h1>
-        <br/>
         { comments.length === 0 ? (
-          <p>내가 작성한 댓글이 없습니다</p>
+          <h5 className="community-empty-list">
+            아직 작성한 댓글이 없습니다
+          </h5>
         ) : (
-          <ul>{ commentsView }</ul>
+          <ul style={{ 
+            paddingInlineStart: '0',
+            borderTop: '1px solid #DCDCDC'
+          }}>
+            { commentsView }
+          </ul>
         )}
       </div>
 

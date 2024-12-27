@@ -81,16 +81,22 @@ const GetScrapTopics = () => {
   return (
 
     <Container>
+
+      <h1 style={{ textAlign: "center", margin: "5px" }}>
+        내 스크랩 게시글
+      </h1>
       
       <TopicSearchBar setSearch={setSearch}/>
+      <br/>
 
       <div>
-        <br/>
         { topics.length === 0 ? (
-          <p>내 스크랩 게시글이 없습니다</p> // topics가 빈 배열일 경우
+          <h5 className="community-empty-list">
+            아직 스크랩한 게시글이 없습니다
+          </h5> // topics가 빈 배열일 경우
         ) : (
           <ul style={{ paddingInlineStart: '0' }}>
-            {topicsView}
+            { topicsView }
           </ul> // topics 배열에 데이터가 있을 경우
         )}
       </div>

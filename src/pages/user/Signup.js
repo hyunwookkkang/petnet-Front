@@ -5,6 +5,8 @@ import React, { useCallback, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import { showSuccessToast, showErrorToast } from "../../components/common/alert/CommonToast";
+
 
 function Signup() {
   const [userId, setUserId] = useState(""); // 사용자 ID
@@ -86,7 +88,7 @@ function Signup() {
         e.preventDefault();
 
         if (!isPasswordValid || !isPasswordConfirmValid) {
-        alert("비밀번호를 올바르게 입력해주세요.");
+            showErrorToast("비밀번호를 올바르게 입력해주세요.");
         return;
         }
 
@@ -105,17 +107,17 @@ function Signup() {
         });
 
         if (response.status === 200) {
-            alert("회원가입이 성공적으로 완료되었습니다.");
+            showSuccessToast("회원가입이 성공적으로 완료되었습니다.");
             navigate("/login"); // 회원가입 후 로그인 페이지로 이동
         }
         } catch (error) {
         if (error.response) {
             // 서버 응답 에러 처리
-            alert(`회원가입 실패: ${error.response.data}`);
+            showErrorToast(`회원가입 실패: ${error.response.data}`);
         } else {
             // 네트워크 또는 기타 에러 처리
             console.error("회원가입 중 오류:", error);
-            alert("입력하신 정보를 다시 확인해주세요.");
+            showErrorToast("입력하신 정보를 다시 확인해주세요.");
         }
         }
     };

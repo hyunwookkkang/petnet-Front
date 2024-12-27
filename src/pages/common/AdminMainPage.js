@@ -44,6 +44,23 @@ const AdminMainPage = () => {
         <hr style={{ border: "0.5px solid #FEBE98" }} />
         {/* Sections */}
         <Row xs={1} md={1} lg={1} className="g-4">
+          {/* getUsers */}
+          <Col>
+            <Card className="my-section">
+              <Card.Body>
+                <Card.Title className="my-section-title">회원관리</Card.Title>
+                <ListGroup>
+                  <ListGroup.Item
+                    className="my-flex-between"
+                    onClick={() => navigate("/users")}
+                  >
+                    회원관리
+                    <ArrowForwardIosIcon style={{ color: "#DCDCDC" }} />
+                  </ListGroup.Item>
+                </ListGroup>
+              </Card.Body>
+            </Card>
+          </Col>
           {/* 포인트상점 */}
           <Col>
             <Card className="my-section">

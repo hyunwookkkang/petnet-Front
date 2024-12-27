@@ -10,7 +10,7 @@ import TopicDeleteModal from "../../components/community/topic/TopicDeleteModal"
 import ViewTopicCommentsBox from "../../components/community/comment/ViewTopicCommentsBox";
 
 import { useUser } from "../../components/contexts/UserContext";
-import useFetchTopicInfo from "../../components/community/topic/useFetchGetTopic";
+import useFetchGetTopic from "../../components/community/topic/useFetchGetTopic";
 
 import "../../styles/Main.css"; // 기존 스타일 재사용
 import "../../styles/community/TopicInfo.css";
@@ -24,26 +24,41 @@ const GetTopicInfo = () => {
   const { topicId } = useParams(); // URL에서 topicId를 추출 (수정 시에 필요)
 
   const { userId } = useUser(); // 사용자 ID 가져오기
-  const { topic, loading, error } = useFetchTopicInfo(topicId); // 페이지 초기화
+  const { fetchGetTopic /* , loading , error */ } = useFetchGetTopic();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isAuthor, setIsAutor] = useState(false); // 로그인 = 작성자? 확인
 
+  const [topic, setTopic] = useState({
+    "topicId": topicId,
+    "author": { "userId": '', "nickname": '' },
+    "hashtags": []
+  });
+
   
   useEffect(() => {
-    if (topic) {
-      // 조회수 증가 axios patch 요청 보내기
-      const fetchIncreaseViewCount = async () => {
-        await axios.patch(`/api/topics/${topic.topicId}`)
-          .catch(err => {
-            console.log('axios fetch increase view count error : ', err);
-          });
-      };
-      fetchIncreaseViewCount();
-      
-      setIsAutor(topic.author.userId === userId);
-    }
-  }, [topic, userId]);
+    // 페이지 초기화
+    const fetchTopic = async () => {
+      const response = await fetchGetTopic(topic.topicId);
+      setTopic(response);
+    };
+    fetchTopic();
+
+    // 조회수 증가 axios patch 요청 보내기
+    const fetchIncreaseViewCount = async () => {
+      await axios.patch(`/api/topics/${topic.topicId}`)
+        .catch(err => {
+          console.log('axios fetch increase view count error : ', err);
+        });
+    };
+    fetchIncreaseViewCount();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 사용자 == 작성자 비교
+  useEffect(() => {
+    setIsAutor(topic.author.userId === userId);
+  }, [topic.author.userId, userId]);
 
 
   const hashtagClickHandler = (tag) => {
@@ -55,22 +70,15 @@ const GetTopicInfo = () => {
     navigate('/searchTopics', { state: search });
   }
 
+
+  // // 에러가 발생했을 때 표시할 메시지
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
+
   
-  // 로딩 중일 때 표시할 메시지
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  // 에러가 발생했을 때 표시할 메시지
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-
-  return (
-
-    <div className="topic-view">
-
+  const TopicView = () => (
+    <>
       {/* 제목과 스크랩 */}
       <div className="post-header topic-title">
         <h1>
@@ -157,12 +165,19 @@ const GetTopicInfo = () => {
           </button>
         )) }
       </div>
-
+      
       {/* 댓글 목록 */}
-      <div>
-        <ViewTopicCommentsBox targetTopic={topic} />
-      </div>
+      <ViewTopicCommentsBox targetTopic={topic} />
+    </>
+  );
 
+
+  return (
+
+    <div className="topic-view">
+      
+      <TopicView />
+    
 
       <TopicDeleteModal 
         showModal={showDeleteModal} 

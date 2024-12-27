@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card } from "react-bootstrap";
 import { FaThumbsUp } from "react-icons/fa";
 
@@ -13,6 +13,9 @@ const ViewHotTopicsCard = () => {
   const { fetchGetHotTopics, loading, error } = useFetchGetHotTopics();
     
   const [topics, setTopics] = useState([]);
+
+  const navigate = useNavigate();
+
 
 
   // 페이지 초기화

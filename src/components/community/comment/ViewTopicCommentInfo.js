@@ -10,6 +10,7 @@ import { useUser } from "../../contexts/UserContext";
 
 import "../../../styles/Main.css";
 import "../../../styles/community/Comment.css";
+import { Image } from "react-bootstrap";
 
 
 const ViewTopicCommentInfo = ({comment, setComments, setReComments, reCommentCount}) => {
@@ -100,10 +101,11 @@ const ViewTopicCommentInfo = ({comment, setComments, setReComments, reCommentCou
       {/* Content */}
       <div>
         { comment.imageId ? (
-          <img 
+          <Image
             className="comment-image"
             src={`/api/images/${comment.imageId}`} 
             alt="&nbsp; < failed to load img file >"
+            rounded 
           />
         ) : (
           <span>{comment.content}</span>

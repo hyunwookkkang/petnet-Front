@@ -17,7 +17,6 @@ function MainImage() {
         { src: '/assets/main/pointshop-image-size.jpg', path: '/pointshop-page' },
         { src: '/assets/main/commu-image-size.jpg', path: '/community' },
         { src: '/assets/main/cashbook-image-size.jpg', path: '/cashbook' },
-
     ];
 
     const handleImageClick = (path) => {

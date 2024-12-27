@@ -10,7 +10,7 @@ import useFetchAddVote from './useFetchAddVote';
 import LoginModal from '../../common/modal/LoginModal';
 
 import "../../../styles/Main.css";
-import "../../../styles/community/Comment.css";
+import "../../../styles/community/TopicButton.css";
 
 
 const TopicVoteButton = ({ topicId, voteCount, isLike }) => {

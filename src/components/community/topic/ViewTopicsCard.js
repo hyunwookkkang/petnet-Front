@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
-import { Container, Card } from "react-bootstrap";
-
-import useFetchGetTopics from "./useFetchGetTopics";
-
-import "../../../styles/Main.css"; // 기존 스타일 재사용
-import useFetchGetHotTopics from "./useFetchGetHotTopics";
+import { Link, useNavigate } from 'react-router-dom';
+import { Card } from "react-bootstrap";
 import { FaThumbsUp } from "react-icons/fa";
 
+import useFetchGetTopics from "./useFetchGetTopics";
+import useFetchGetHotTopics from "./useFetchGetHotTopics";
 
-const ViewTopicsCard = ({category, title}) => {
+import "../../../styles/Main.css"; // 기존 스타일 재사용
 
-  const { fetchGetTopics, loading: cLoading, error: cError } = useFetchGetTopics();
-  const { fetchGetHotTopics, loading: hLoading, error: hError } = useFetchGetHotTopics();
+
+const ViewTopicsCard = ({category, title, description}) => {
+
+  const { fetchGetTopics /* , loading: cLoading, error: cError */ } = useFetchGetTopics();
+  const { fetchGetHotTopics /* , loading: hLoading, error: hError */ } = useFetchGetHotTopics();
 
   const [topics, setTopics] = useState([]);
+
+  const navigate = useNavigate();
+  
 
 
   // 페이지 초기화
   useEffect(() => {
     const search = {
-      "category": category
+      "category": category,
+      "offset": 4
     }
     const fetchTopics = (category === 'hot') ? fetchGetHotTopics : fetchGetTopics;
 
@@ -83,17 +87,6 @@ const ViewTopicsCard = ({category, title}) => {
     </ul>
   ));
 
-  
-  // 로딩 중일 때 표시할 메시지
-  if (cLoading || hLoading) {
-    return <div>Loading...</div>;
-  }
-
-  // 에러가 발생했을 때 표시할 메시지
-  if (cError || hError) {
-    return <div>Error: { cError || hError }</div>;
-  }
-
 
   return (
 
@@ -101,12 +94,39 @@ const ViewTopicsCard = ({category, title}) => {
 
         <Card.Body>
 
-          <Card.Title className="section-title">
-            { title }
+          <Card.Title className="section-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom:"0px" }}>
+            <h3 style={{marginBottom:"0px"}}>{ title }</h3>
+            <span
+                onClick={() => navigate("/community")}
+                style={{
+                  cursor: "pointer",
+                  color: "#FF6347",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  }}
+              >
+                더 보러가기 &gt;
+              </span>
           </Card.Title>
 
-          {/* topics 배열을 순회하며 각 topic을 출력 */}
-          { topicsCardView }
+            {description && (
+            <div
+              style={{
+                textAlign: "left",
+                paddingLeft: "4px",
+                margin: "0px 0 15px 0",
+                fontSize: "12px",
+              }}
+            >
+              {description}
+            </div>
+            )}
+
+          { topics.length === 0 ? ( 
+            <h6><br/>아직 {title}이 없어요</h6>
+          ) : (
+            topicsCardView
+          )}
 
         </Card.Body>
         

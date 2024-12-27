@@ -9,14 +9,19 @@ function useFetchAddComment() {
   const [error, setError] = useState();
 
   // 비동기 함수로 API 호출
-  const fetchAddComment = useCallback(async (comment) => {
+  const fetchAddComment = useCallback(async (comment, imageFile) => {
     // 상태 초기화
     setLoading(true);
     setError(null);
 
+    // 전송 데이터 전처리 (폼 데이터)
+    const formData = new FormData();
+    formData.append('comment', JSON.stringify(comment));
+    formData.append('imageFile', imageFile);
+
     try {
       // axios로 post 요청 보내기
-      const response = await axios.post(`/api/comments`, comment);
+      const response = await axios.post(`/api/comments`, formData);
       return response.data;
     } 
     catch (err) {

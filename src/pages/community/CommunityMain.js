@@ -28,7 +28,8 @@ const CommunityMain = () => {
   const [search, setSearch] = useState({
     category: '',
     condition: '',
-    keyword: ''
+    keyword: '',
+    categoryStr: ''
   });
   
 
@@ -36,7 +37,7 @@ const CommunityMain = () => {
     switch (topicTab) {
       case 'all': setTopicsComponent(<ViewAllTopics />); break;
       case 'hot': setTopicsComponent(<ViewHotTopics />); break;
-      default: setTopicsComponent(<ViewTopics search={search}/>); 
+      default: setTopicsComponent(<ViewTopics search={search} />); 
     }
   }, [search, topicTab]); // search & topicTab 변경될 때마다 실행
 
@@ -53,7 +54,7 @@ const CommunityMain = () => {
   }
 
   
-  const categoryChangehandler = (tab) => {
+  const categoryChangehandler = (e, tab) => {
     if (!Number.isNaN(tab)) {
       setSearch(prevSearch => ({ ...prevSearch, category: tab }));
     }
@@ -61,6 +62,7 @@ const CommunityMain = () => {
       setSearch(prevSearch => ({ ...prevSearch, category: '' }));
     }
     setTopicTab(tab);
+    setSearch(prevSearch => ({ ...prevSearch, categoryStr: e.target.textContent }));
   }
 
   
@@ -84,27 +86,27 @@ const CommunityMain = () => {
       <ButtonGroup className="topic-tap-group" >
         <Button 
           className="topic-tap" 
-          onClick={() => categoryChangehandler('all')}
+          onClick={(e) => categoryChangehandler(e, 'all')}
         > 전체 
         </Button>
         <Button 
           className="topic-tap" 
-          onClick={() => categoryChangehandler('hot')}
+          onClick={(e) => categoryChangehandler(e, 'hot')}
         > 인기 
         </Button>
         <Button 
           className="topic-tap" 
-          onClick={() => categoryChangehandler('1')}
+          onClick={(e) => categoryChangehandler(e, '1')}
         > 잡담 
         </Button>
         <Button 
           className="topic-tap" 
-          onClick={() => categoryChangehandler('2')}
+          onClick={(e) => categoryChangehandler(e, '2')}
         > 질문 
         </Button>
         <Button 
           className="topic-tap" 
-          onClick={() => categoryChangehandler('3')}
+          onClick={(e) => categoryChangehandler(e, '3')}
         > 후기 
         </Button>
       </ButtonGroup>
