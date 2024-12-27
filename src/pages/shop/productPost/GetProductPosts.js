@@ -114,7 +114,7 @@ const GetProductPosts = ({ productId }) => {
             key={post.productPostId}
             post={post}
             onClick={() => openInfoModal(post)}
-            isUserPost={post.userId === userId}
+            isUserPost={post.user_id === userId}
             onEdit={() => {
               setUpdatePost(post);
               setIsModalOpen(true);
