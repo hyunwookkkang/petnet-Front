@@ -1,20 +1,48 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/cashbook/GetBudgetSettings.css";
+import { useUser } from "../../components/contexts/UserContext";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBowlFood,
+  faBone,
+  faBath,
+  faPumpMedical,
+  faScissors,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons";
+import { faHospital } from "@fortawesome/free-regular-svg-icons";
+import { faWalking } from "@fortawesome/free-solid-svg-icons"; // 산책용품 아이콘 추가
+import { faFutbol } from "@fortawesome/free-regular-svg-icons"; // 장난감 아이콘 추가
+import {
+  showSuccessToast,
+  showErrorToast,
+} from "../../components/common/alert/CommonToast";
 
 const GetBudgetSettings = () => {
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const { userId } = useUser();
+  const navigate = useNavigate();
+
+  // 로그인 확인
+  useEffect(() => {
+    if (!userId) {
+      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      navigate("/login");
+    }
+  }, [userId, navigate]);
+
   // 예산 데이터 가져오기
   useEffect(() => {
     const fetchBudgets = async () => {
       try {
-        const userId = "user01"; // 로그인 사용자 ID
         const response = await axios.get(
           `/api/cashbook/budget/getAllBudgets/${userId}`
         );
-        setBudgets(response.data);
+        setBudgets(response.data); // <==============수정: 서버에서 받아온 데이터를 budgets 상태에 설정
       } catch (error) {
         console.error("예산 데이터를 가져오는데 실패했습니다.", error);
       } finally {
@@ -22,26 +50,55 @@ const GetBudgetSettings = () => {
       }
     };
     fetchBudgets();
-  }, []);
+  }, [userId]);
 
-  // 입력 필드 변경 처리
-  const handleBudgetChange = (index, field, value) => {
+  // 예산 금액 변경 시 서버로 전송
+  const handleBudgetChange = async (index, value) => {
     const updatedBudgets = [...budgets];
-    updatedBudgets[index][field] = value;
+    updatedBudgets[index].budgetAmount = value;
     setBudgets(updatedBudgets);
+
+    try {
+      const budget = updatedBudgets[index];
+      await axios.put(`/api/cashbook/budget/budgetUpdate/${budget.budgetId}`, {
+        budgetAmount: value,
+      });
+      showSuccessToast("예산이 등록되었습니다!");
+    } catch (error) {
+      console.error("예산 금액 업데이트 실패:", error);
+      showErrorToast("예산등록에 실패했습니다.");
+    }
   };
 
-  // 예산 저장
-  const handleSave = async () => {
+  // 토글 상태 변경 시 서버로 전송
+  const handleToggle = async (index) => {
+    const updatedBudgets = [...budgets];
+    updatedBudgets[index].isNotification =
+      !updatedBudgets[index].isNotification;
+    setBudgets(updatedBudgets);
+
     try {
-      for (const budget of budgets) {
-        await axios.post(`/api/cashbook/budget/saveBudget`, budget);
-      }
-      alert("예산이 성공적으로 저장되었습니다!");
+      const budget = updatedBudgets[index];
+      await axios.put(`/api/cashbook/budget/budgetToggle/${budget.budgetId}`, {
+        isNotification: budget.isNotification,
+      });
     } catch (error) {
-      console.error("예산 저장 중 오류 발생:", error);
-      alert("예산 저장에 실패했습니다.");
+      console.error("토글 상태 업데이트 실패:", error);
     }
+  };
+
+  // 아이콘을 expenseCategory에 맞게 매핑
+  const categoryIcons = {
+    사료: <FontAwesomeIcon icon={faBowlFood} />,
+    간식: <FontAwesomeIcon icon={faBone} />,
+    장난감: <FontAwesomeIcon icon={faFutbol} />,
+    산책용품: <FontAwesomeIcon icon={faWalking} />,
+    의류: <FontAwesomeIcon icon={faHeart} />,
+    미용용품: <FontAwesomeIcon icon={faBath} />,
+    위생용품: <FontAwesomeIcon icon={faPumpMedical} />,
+    병원비: <FontAwesomeIcon icon={faHospital} />,
+    미용비: <FontAwesomeIcon icon={faScissors} />,
+    기타: <FontAwesomeIcon icon={faHeart} />,
   };
 
   if (loading) {
@@ -49,53 +106,42 @@ const GetBudgetSettings = () => {
   }
 
   return (
-    <div className="budget-settings-container">
-      <h2>예산 설정</h2>
-      <div className="budget-list">
+    <div className="cashbook-budget-settings-container">
+      <h2 className="cashbook-budget-h2">예산 설정</h2>
+      <div className="cashbook-budget-list">
         {budgets.map((budget, index) => (
-          <div className="budget-item" key={budget.expenseCategory}>
-            <div className="budget-icon">{/* 카테고리 아이콘 */}</div>
-            <div className="budget-category">{budget.expenseCategory}</div>
-            <div className="budget-amount">
+          <div
+            className="cashbook-budgetsetting-item"
+            key={budget.expenseCategory}
+          >
+            <div className="cashbook-budget-category">
+              {categoryIcons[budget.expenseCategory] || null}{" "}
+              {/* 아이콘 표시 */}
+              {budget.expenseCategory}
+            </div>
+            <div className="cashbook-budget-amount">
               <input
                 type="number"
                 value={budget.budgetAmount}
                 onChange={(e) =>
-                  handleBudgetChange(index, "budgetAmount", e.target.value)
+                  handleBudgetChange(index, parseInt(e.target.value, 10))
                 }
               />
               원
             </div>
-            <div className="budget-edit">
-              <button
-                className="edit-icon"
-                onClick={() => alert("수정 버튼 클릭")}
-              >
-                ✏️
-              </button>
-            </div>
-            <div className="budget-toggle">
-              <label className="switch">
+            <div className="cashbook-budget-toggle">
+              <label className="cashbook-switch">
                 <input
                   type="checkbox"
-                  checked={budget.isNotification}
-                  onChange={(e) =>
-                    handleBudgetChange(
-                      index,
-                      "isNotification",
-                      e.target.checked
-                    )
-                  }
+                  checked={budget.isNotification || false} // <==============수정: 서버 상태 기반으로 초기 토글 상태 설정
+                  onChange={() => handleToggle(index)}
                 />
-                <span className="slider round"></span>
+                <span className="cashbook-slider round"></span>
               </label>
             </div>
           </div>
         ))}
       </div>
-      <button className="save-button" onClick={handleSave}>
-        저장
-      </button>
     </div>
   );
 };

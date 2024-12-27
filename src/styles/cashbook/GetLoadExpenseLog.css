@@ -3,8 +3,17 @@
 }
 
 .cashbook-title {
-  font-size: 1.5em;
+  font-size: 1.1em;
   margin-bottom: 10px;
+  text-align: center;
+  display: block; /* 블록 요소로 표시 */
+
+  font-weight: bold; /* 글자 굵기 */
+  color: #ffffff; /* 글자 색상 */
+  background-color: #dc3545; /* 배경색 (Bootstrap danger 색상) */
+  padding: 8px 12px; /* 안쪽 여백 */
+  margin: 10px 0 15px 0; /* 여백 설정 */
+  border-radius: 5px; /* 모서리 둥글게 */
 }
 
 .cashbook-purchase-list {

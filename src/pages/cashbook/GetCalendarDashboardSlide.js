@@ -16,7 +16,7 @@ import {
   faCashRegister,
 } from "@fortawesome/free-solid-svg-icons"; // 필요한 아이콘들 추가
 import "../../styles/cashbook/GetCalendarDashboardSlide.css";
-import SlideDrawers from "../../components/cashbook/SlideDrawers"; // 슬라이드 컴포넌트 import
+import GetExpenseLog from "./GetExpenseLog"; // 슬라이드 컴포넌트 import
 
 // 아이콘을 매핑하기 위한 객체
 const categoryIcons = {
@@ -45,11 +45,13 @@ function GetCalendarDashboardSlide({ selectedDate, expenses, onClose }) {
     setSelectedExpenseId(expenseId); // 클릭한 지출 ID 저장
     setIsDrawerOpen(true); // 슬라이드 열기
   };
-
+  const closeExpenseLog = () => {
+    setSelectedExpenseId(null); // 수정됨: 지출 상세 슬라이드 닫기
+  };
   return (
     <div className="cashbook-Calendar-slide-drawer">
       {/* 슬라이드 상세보기 컴포넌트 */}
-      <SlideDrawers
+      <GetExpenseLog
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         expenseId={selectedExpenseId}

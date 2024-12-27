@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/cashbook/SlideDrawers.css";
 import {
   showSuccessToast,
   showErrorToast,
 } from "../../components/common/alert/CommonToast";
 import CommonModal from "../../components/common/modal/CommonModal";
+import "../../styles/cashbook/GetExpenseLog.css";
 
-const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
+const GetExpenseLog = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
+  // <----------수정
   const [expense, setExpense] = useState(null); // 지출 상세 데이터
   const [loading, setLoading] = useState(false); // 로딩 상태
   const [showDeleteModal, setShowDeleteModal] = useState(false); // 삭제 모달 상태
 
   useEffect(() => {
-    console.log("SlideDrawers isOpen:", isOpen);
-    console.log("SlideDrawers expenseId:", expenseId);
+    console.log("GetExpenseLog isOpen:", isOpen); // <----------수정
+    console.log("GetExpenseLog expenseId:", expenseId); // <----------수정
 
     if (isOpen && expenseId) {
       console.log("Fetching data for expenseId:", expenseId);
@@ -33,6 +34,9 @@ const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
         });
     } else {
       console.log("Slide is closed or expenseId is invalid");
+    }
+    if (!isOpen) {
+      setShowDeleteModal(false); // 삭제 모달 초기화
     }
   }, [isOpen, expenseId]);
 
@@ -310,4 +314,4 @@ const SlideDrawers = ({ isOpen, onClose, expenseId, onUpdate = () => {} }) => {
   );
 };
 
-export default SlideDrawers;
+export default GetExpenseLog;

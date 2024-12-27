@@ -4,24 +4,25 @@ import "chart.js/auto";
 import "../../styles/cashbook/GetAnnualExpenseStats.css";
 import { useUser } from "../../components/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import GetAnnualExpenseStatsModal from "./GetAnnualExpenseStatsModal";
 
 const GetAnnualExpenseStats = ({ year, setYear }) => {
   const [stats, setStats] = useState([]); // 월별 지출 데이터 상태
   const [chartData, setChartData] = useState(null); // Chart.js 데이터 상태
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // 선택된 연도
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // 선택된 월 (1부터 시작)
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
   const { userId } = useUser(""); // 사용자 ID 가져오기
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (!userId) {
-  //     alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-  //     navigate("/login"); // 로그인 페이지로 리다이렉트
-  //     return;
-  //   }
-  // }, [userId, navigate]);
+  // Chart.js 옵션 설정 <============
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false, // 그래프 비율 유지 비활성화 <============
+    scales: {
+      y: {
+        beginAtZero: true, // Y축이 0부터 시작
+      },
+    },
+  };
 
   // API 호출 함수
   const fetchAnnualExpenseStats = async () => {
@@ -65,7 +66,7 @@ const GetAnnualExpenseStats = ({ year, setYear }) => {
   // 컴포넌트 마운트 시 데이터 가져오기
   useEffect(() => {
     fetchAnnualExpenseStats();
-  }, [year]); // year와 month가 변경되면 데이터를 새로 가져옵니다.
+  }, [year]); // year가 변경되면 데이터를 새로 가져옵니다.
 
   // 합계 계산
   const calculateTotalExpense = () => {
@@ -81,11 +82,6 @@ const GetAnnualExpenseStats = ({ year, setYear }) => {
   // 총합 색상
   const totalExpenseColor = "#0500FF";
 
-  // 모달 열기/닫기
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
   return (
     <div className="cashbook-annual-expense-stats">
       <h3 className="cashbook-annual-expense-statsh2">
@@ -95,7 +91,8 @@ const GetAnnualExpenseStats = ({ year, setYear }) => {
       {/* Chart.js 막대그래프 */}
       {chartData && (
         <div className="cashbook-chart-container">
-          <Bar data={chartData} options={{ responsive: true }} />
+          <Bar data={chartData} options={options} />{" "}
+          {/* options 재사용 <============ */}
         </div>
       )}
 
