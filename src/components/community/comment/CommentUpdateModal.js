@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import { showErrorToast, showSuccessToast } from '../../common/alert/CommonToast';
 import CommentEditModal from "./CommentEditModal";
 
 import useFetchUpdateComment from "./useFetchUpdateComment";
-import axios from "axios";
 
 
 const CommentUpdateModal = ({showModal, setShowModal, prevComment, setPrevComment}) => {
