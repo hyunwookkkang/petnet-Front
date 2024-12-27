@@ -5,28 +5,28 @@ import { useNavigate } from "react-router-dom";
 import GetLoadExpenseLog from "../../pages/cashbook/GetLoadExpenseLog";
 
 // activeButton, setActiveButton를 props로 받아오는 형태
-const ExpenseButtons = ({ activeButton, setActiveButton }) => {
+const ExpenseButtons = ({ activeScreen, setActiveScreen }) => {
   const { userId } = useUser("");
 
   return (
     <div className="expense-buttons">
       <button
-        className={`expense-btn ${activeButton === "manual" ? "active" : ""}`}
+        className={`expense-btn ${activeScreen === "manual" ? "active" : ""}`}
         onClick={() => {
           console.log("지출 버튼 클릭됨!");
-          setActiveButton("manual");
+          setActiveScreen("manual");
         }}
       >
         지출
       </button>
       <button
-        className={`expense-btn ${activeButton === "auto" ? "active" : ""}`}
+        className={`expense-btn ${activeScreen === "auto" ? "active" : ""}`}
         onClick={() => {
           console.log("펫넷 상점 지출내역 버튼 클릭됨!");
-          setActiveButton("auto");
+          setActiveScreen("auto");
         }}
       >
-        펫넷 상점 지출내역
+        펫넷 상점 지출등록
       </button>
     </div>
   );
