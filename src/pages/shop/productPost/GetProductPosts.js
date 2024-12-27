@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "../../../components/contexts/UserContext";
 import "../../../styles/place/PlacePosts.css";
-import { useNavigate } from "react-router-dom";
 import LoginModal from "../../../components/common/modal/LoginModal";
 import ProductPostInfoModal from "./ProductPostInfoModal";
 import ProductPostItem from "./ProductPostItem";
@@ -10,7 +9,6 @@ import ProductPostModal from "./ProductPostModal";
 
 const GetProductPosts = ({ productId }) => {
   const { userId } = useUser();
-  const navigate = useNavigate();
 
   const [posts, setPosts] = useState([]);
   const [product, setProduct] = useState(null);
@@ -63,9 +61,8 @@ const GetProductPosts = ({ productId }) => {
   };
 
   useEffect(() => {
-    if (userId) fetchPosts();
-    else navigate("/login");
-  }, [productId, userId, navigate]);
+    fetchPosts();
+  }, []);
 
   // 폼 초기화
   const resetForm = () => {

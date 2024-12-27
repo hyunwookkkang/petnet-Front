@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import ProductForm from "./ProductForm";
+import { showErrorToast, showSuccessToast } from '../../../components/common/alert/CommonToast';
 
 const AddOrEditProduct = () => {
   const { productId } = useParams();
@@ -40,7 +41,7 @@ const AddOrEditProduct = () => {
         })
         .catch((err) => {
           console.error("상품 정보를 불러오는 중 오류 발생:", err);
-          alert("상품 정보를 불러오는 중 오류가 발생했습니다.");
+          showErrorToast("상품 정보를 불러오는 중 오류가 발생했습니다.");
         });
     }
   }, [productId]); // productId가 변경될 때마다 상품 정보를 새로 불러옵니다.
@@ -50,7 +51,7 @@ const AddOrEditProduct = () => {
     if (files.length + imageFiles.length <= 3) {
       setImageFiles([...imageFiles, ...files]);
     } else {
-      alert("이미지는 최대 3개까지 등록할 수 있습니다.");
+      showErrorToast("이미지는 최대 3개까지 등록할 수 있습니다.");
     }
   };
 
@@ -88,12 +89,12 @@ const AddOrEditProduct = () => {
         },
       })
       .then(() => {
-        alert(productId ? "상품이 수정되었습니다!" : "상품이 추가되었습니다!");
+        showSuccessToast(productId ? "상품이 수정되었습니다!" : "상품이 추가되었습니다!");
         navigate("/shop/products/manage");
       })
       .catch((err) => {
         console.error(err);
-        alert("상품 처리 중 오류가 발생했습니다.");
+        showErrorToast("상품 처리 중 오류가 발생했습니다.");
       });
   };
   

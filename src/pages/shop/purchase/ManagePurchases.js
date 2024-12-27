@@ -55,11 +55,9 @@ const ManagePurchases = () => {
         });
         console.log(response.data);
       }
-      //alert("배송상태가 변경되었습니다.");
       showSuccessToast("배송상태가 변경되었습니다.");
     } catch (error) {
       console.error("Error updating purchase status:", error);
-      //alert("배송상태 변경에 실패했습니다.");
       showErrorToast("배송상태 변경에 실패했습니다.");
     }
   };
@@ -162,7 +160,6 @@ const ManagePurchases = () => {
         {purchases.map((purchase) => (
           <Card
             key={purchase.id}
-            onClick={() => navigate(`/shop/purchase/${purchase.id}`)}
             style={{
               width: "100%",
               padding: "20px",
@@ -177,7 +174,7 @@ const ManagePurchases = () => {
               onChange={(e) => handleCheckboxChange(purchase.id, e.target.checked)}
               style={{ position: "absolute", top: "50%", right: "10px", transform: "translateY(-50%)" }}
             />
-            <Card.Body style={{ textAlign: "left" }}>
+            <Card.Body style={{ textAlign: "left" }}  onClick={() => navigate(`/shop/purchase/${purchase.id}`)}>
               <Card.Title>{purchase.productName}</Card.Title>
               <Card.Text>
                 <strong>결제 금액: </strong> {purchase.paymentAmount} 원

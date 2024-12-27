@@ -7,7 +7,7 @@ const AddPlaceAddress = ({ onAddressSelected }) => {
 
     const handleSearch = async () => {
         if (!address.trim()) {
-            alert("주소를 입력해주세요.");
+            showErrorToast("주소를 입력해주세요.");
             return;
         }
 

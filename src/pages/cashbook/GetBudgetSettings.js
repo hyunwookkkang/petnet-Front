@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/cashbook/GetBudgetSettings.css";
 import { useUser } from "../../components/contexts/UserContext";
-import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBowlFood,
@@ -19,21 +18,23 @@ import {
   showSuccessToast,
   showErrorToast,
 } from "../../components/common/alert/CommonToast";
+import LoginModal from "../../components/common/modal/LoginModal";
 
 const GetBudgetSettings = () => {
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const { userId } = useUser();
-  const navigate = useNavigate();
 
   // 로그인 확인
   useEffect(() => {
     if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
+      setShowLoginModal(true);
+      return;
     }
-  }, [userId, navigate]);
+  }, [userId]);
 
   // 예산 데이터 가져오기
   useEffect(() => {
@@ -142,6 +143,13 @@ const GetBudgetSettings = () => {
           </div>
         ))}
       </div>
+
+
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+      />
+
     </div>
   );
 };

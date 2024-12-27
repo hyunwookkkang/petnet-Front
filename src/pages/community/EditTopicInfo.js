@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { Alert, Button, Container, Form, ListGroup } from "react-bootstrap";
+import { Snackbar } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 
 import LoginModal from "../../components/common/modal/LoginModal";
@@ -32,6 +33,8 @@ const EditTopicInfo = () => {
   const { fetchGetHashtags, /*loading: tagloading, error: tagError*/ } = useFetchGetHashtags();
 
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const [topic, setTopic] = useState();
   const [category, setCategory] = useState('');
@@ -42,10 +45,10 @@ const EditTopicInfo = () => {
   const [isDownloadable, setIsDownloadable] = useState(false);
 
   const [isAuthor, setIsAutor] = useState(false); // 로그인 = 작성자? 확인
-  const [hashtagTemp, setHashtagTemp] = useState('');
   const [tagSuggestions, setTagSuggestions] = useState([]); // 해시태그 자동완성
+  const [hashtagTemp, setHashtagTemp] = useState('');
   const [required, setRequired] = useState('');
-
+  
   
   // 폼 초기화
   useEffect(() => {
@@ -54,6 +57,7 @@ const EditTopicInfo = () => {
       setShowLoginModal(true);
       return;
     }
+
     // topicId가 있으면 기존 정보 불러오기
     if (topicId) {
       const fetchTopic = async () => {
@@ -100,9 +104,21 @@ const EditTopicInfo = () => {
   }, [hashtagTemp, fetchGetHashtags]);
 
 
-  const appendHashtag = () => {
-    setHashtags(prevHahstag => [...prevHahstag, hashtagTemp]);
-    setHashtagTemp('');
+  const appendHashtag = (e) => {
+    e.preventDefault();
+
+    if (hashtags.includes(hashtagTemp)) {
+      setSnackbarMessage('중복된 해시태그입니다.');
+      setShowSnackbar(true);
+    } 
+    else if (hashtags.length >= 10) {
+      setSnackbarMessage('최대 해시태그 갯수는 10개입니다.');
+      setShowSnackbar(true);
+    }
+    else {
+      setHashtags(prevHahstag => [...prevHahstag, hashtagTemp]);
+      setHashtagTemp('');
+    }
   }
 
   const removeHashtag = (tag) => {
@@ -202,7 +218,7 @@ const EditTopicInfo = () => {
           <Form.Group>
             <Form.Control
               type="text"
-              placeholder="제목 (500자 이내)"
+              placeholder="제목 (50자 이내)"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               maxLength={50}
@@ -223,11 +239,12 @@ const EditTopicInfo = () => {
             />
           </Form.Group>
 
-          <br/>
-          {/* 해시태그 입력 */}
-          <Form.Group className="d-flex position-relative">
+        </Form>
 
-            <Form.Label></Form.Label>
+        <br/>
+        {/* 해시태그 입력 */}
+        <Form onSubmit={appendHashtag}>
+          <Form.Group className="d-flex position-relative">
             <Form.Control 
               id="input-hashtag" 
               type="text" 
@@ -235,8 +252,9 @@ const EditTopicInfo = () => {
               value={hashtagTemp} 
               onChange={(e) => setHashtagTemp(e.target.value)} 
               style={{ width: '250px' }} 
+              required
             />
-            
+
             <ListGroup className="dropdown-suggestions">
               {tagSuggestions.map((tagSuggestion, index) => (
                 <ListGroup.Item
@@ -248,15 +266,11 @@ const EditTopicInfo = () => {
               ))}
             </ListGroup>
 
-            <Button 
-              className="ms-2 addTag-btn"
-              onClick={() => {appendHashtag()}}
-            > 
+            <Button className="ms-2 addTag-btn" type="submit"> 
               <AddIcon fontSize="small" />
             </Button>
-            
           </Form.Group>
-          
+
           <br/>
           {/* 해시태그 출력 */}
           <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
@@ -272,6 +286,13 @@ const EditTopicInfo = () => {
         showModal={showLoginModal} 
         setShowModal={setShowLoginModal}
         required={true}
+      />
+
+      <Snackbar
+        open={showSnackbar}
+        message={snackbarMessage}
+        onClose={() => setShowSnackbar(false)}
+        autoHideDuration={1200}
       />
 
     </Container>

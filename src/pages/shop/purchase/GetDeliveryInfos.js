@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Button, Spinner } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { showErrorToast, showSuccessToast } from '../../../components/common/alert/CommonToast';
 
 const DeliveryInfos = () => {
   const [deliveryList, setDeliveryList] = useState([]); // 배송지 목록
@@ -45,11 +46,11 @@ const DeliveryInfos = () => {
   const handleDeleteDelivery = async (deliveryInfoId) => {
     try {
       await axios.delete(`/api/deliveryInfo/${deliveryInfoId}`);
-      alert("배송지가 삭제되었습니다.");
+      showSuccessToast("배송지가 삭제되었습니다.");
       fetchDeliveryInfo(); // 데이터 갱신
     } catch (error) {
       console.error("배송지 삭제 중 오류 발생:", error);
-      alert("배송지 삭제 중 오류가 발생했습니다.");
+      showErrorToast("배송지 삭제 중 오류가 발생했습니다.");
     }
   };
 

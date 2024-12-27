@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Spinner, Button, Form, Card } from "react-bootstrap";
+import { showSuccessToast } from '../../../components/common/alert/CommonToast';
 import "../../../styles/pointshop/point.css";
 
 const Purchases = () => {
@@ -139,7 +140,7 @@ const Purchases = () => {
       <div style={{ marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1 style={{ color: "#FF7826" }}>구매 목록</h1>
         <Button
-          onClick={() => alert("배송 상태 변경")}
+          onClick={() => showSuccessToast("배송상태가 변경되었습니다.")}
           disabled={selectedPurchases.length === 0}
           style={{ backgroundColor: "#FF7826", border: "none" }}
         >
@@ -151,7 +152,7 @@ const Purchases = () => {
         {purchases.map((purchase) => (
           <Card
             key={purchase.id}
-            onClick={() => navigate(`/shop/purchase/${purchase.id}`)}
+            
             style={{
               width: "100%",
               padding: "20px",
@@ -170,7 +171,7 @@ const Purchases = () => {
               onChange={(e) => handleCheckboxChange(purchase.id, e.target.checked)}
               style={{ position: "absolute", top: "50%", right: "10px", transform: "translateY(-50%)" }}
             />
-            <Card.Body style={{ textAlign: "left" }}>
+            <Card.Body style={{ textAlign: "left" }} onClick={() => navigate(`/shop/purchase/${purchase.id}`)}>
               <Card.Title>{purchase.productName}</Card.Title>
               <Card.Text>
                 <strong>결제 금액: </strong> {purchase.paymentAmount} 원
