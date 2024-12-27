@@ -8,18 +8,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBowlFood,
   faBone,
+  faFutbol,
+  faWalking,
+  faHeart,
   faBath,
   faPumpMedical,
   faScissors,
-  faHeart,
-  faWalking,
-  faFutbol,
+  faHospital,
 } from "@fortawesome/free-solid-svg-icons";
-import { faHospital } from "@fortawesome/free-regular-svg-icons";
 import {
   showSuccessToast,
   showErrorToast,
 } from "../../components/common/alert/CommonToast";
+import CommonModal from "../../components/common/modal/CommonModal";
 
 const GetBudgets = () => {
   const categoryIcons = {
@@ -40,6 +41,8 @@ const GetBudgets = () => {
   const [totalBudget, setTotalBudget] = useState(0);
   const [totalUsed, setTotalUsed] = useState(0);
   const [overBudget, setOverBudget] = useState(0);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false); // <=============수정
   const { userId } = useUser();
   const navigate = useNavigate();
 
@@ -90,6 +93,7 @@ const GetBudgets = () => {
       );
       setTotalUsed(0);
       setOverBudget(0);
+      setShowResetModal(false); // 초기화 후 모달 닫기
     } catch (error) {
       console.error("초기화 실패:", error);
       showErrorToast("초기화 실패");
@@ -104,11 +108,24 @@ const GetBudgets = () => {
     return <p>로딩 중...</p>;
   }
 
+  // 초기화 모달에 사용할 내용
+  const resetModalFooter = (
+    <>
+      <button onClick={handleReset}>예</button>
+      <button onClick={() => setShowResetModal(false)}>아니오</button>
+    </>
+  );
+
   return (
     <div className="cashbook-budgets-container">
       <div className="cashbook-budgets-header">
         <h2>예산금액</h2>
-        <button className="cashbook-reset-button" onClick={handleReset}>
+        <button
+          className="cashbook-reset-button"
+          onClick={() => setShowResetModal(true)}
+        >
+          {" "}
+          {/* <=============수정 */}
           초기화
         </button>
         <button className="cashbook-settings-button">
@@ -198,6 +215,15 @@ const GetBudgets = () => {
             );
           })}
       </div>
+
+      {/* 초기화 모달 */}
+      <CommonModal
+        show={showResetModal}
+        onHide={() => setShowResetModal(false)}
+        title="초기화 확인"
+        body="초기화하시겠습니까?"
+        footer={resetModalFooter}
+      />
     </div>
   );
 };

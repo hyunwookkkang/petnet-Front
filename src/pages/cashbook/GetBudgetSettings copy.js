@@ -28,12 +28,12 @@ const GetBudgetSettings = () => {
   const navigate = useNavigate();
 
   // 로그인 확인
-  useEffect(() => {
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
-    }
-  }, [userId, navigate]);
+  // useEffect(() => {
+  //   if (!userId) {
+  //     alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+  //     navigate("/login");
+  //   }
+  // }, [userId, navigate]);
 
   // 예산 데이터 가져오기
   useEffect(() => {
@@ -42,7 +42,7 @@ const GetBudgetSettings = () => {
         const response = await axios.get(
           `/api/cashbook/budget/getAllBudgets/${userId}`
         );
-        setBudgets(response.data); // <==============수정: 서버에서 받아온 데이터를 budgets 상태에 설정
+        setBudgets(response.data);
       } catch (error) {
         console.error("예산 데이터를 가져오는데 실패했습니다.", error);
       } finally {
@@ -63,7 +63,7 @@ const GetBudgetSettings = () => {
       await axios.put(`/api/cashbook/budget/budgetUpdate/${budget.budgetId}`, {
         budgetAmount: value,
       });
-      //showSuccessToast("예산이 등록되었습니다!");
+      showSuccessToast("예산이 등록되었습니다!");
     } catch (error) {
       console.error("예산 금액 업데이트 실패:", error);
       showErrorToast("예산등록에 실패했습니다.");
@@ -82,7 +82,6 @@ const GetBudgetSettings = () => {
       await axios.put(`/api/cashbook/budget/budgetToggle/${budget.budgetId}`, {
         isNotification: budget.isNotification,
       });
-      showSuccessToast("예산이 등록되었습니다!");
     } catch (error) {
       console.error("토글 상태 업데이트 실패:", error);
     }
@@ -134,7 +133,7 @@ const GetBudgetSettings = () => {
               <label className="cashbook-switch">
                 <input
                   type="checkbox"
-                  checked={budget.isNotification || false} // <==============수정: 서버 상태 기반으로 초기 토글 상태 설정
+                  checked={budget.isNotification || false}
                   onChange={() => handleToggle(index)}
                 />
                 <span className="cashbook-slider round"></span>
