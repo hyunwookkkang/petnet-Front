@@ -51,6 +51,7 @@ const ViewHotTopics = () => {
         금주의 인기 게시글
       </h1>
       
+      
       { topics.length === 0 ? (
         <h5 className="community-empty-list">
           <br/>
