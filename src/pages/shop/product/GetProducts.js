@@ -81,11 +81,11 @@ const GetProducts = () => {
       let productsResponse;
       if (categoryParam === "상품 전체" && animalCategoryParam === "동물 전체") {
         // "상품 전체"와 "동물 전체"일 경우 파라미터 없이 기본 데이터 가져오기
-        productsResponse = await axios.get(`/api/shop/products?currentPage=0&pageSize=6`);
+        productsResponse = await axios.get(`/api/shop/products?currentPage=0&pageSize=1000`);
       } else {
         // 필요한 카테고리 파라미터만 추가
         productsResponse = await axios.get(
-          `/api/shop/products?currentPage=0&pageSize=6&${categoryParam !== "상품 전체" ? `searchCategory1=${categoryParam}` : ""}${animalCategoryParam !== "동물 전체" ? `&searchCategory2=${animalCategoryParam}` : ""}`
+          `/api/shop/products?currentPage=0&pageSize=1000&${categoryParam !== "상품 전체" ? `searchCategory1=${categoryParam}` : ""}${animalCategoryParam !== "동물 전체" ? `&searchCategory2=${animalCategoryParam}` : ""}`
         );
       }
 
