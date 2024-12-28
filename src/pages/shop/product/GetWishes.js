@@ -156,14 +156,14 @@ const Wishes = () => {
         }}
       >
         {products.map((productItem) => (
-          <Col key={productItem.product.productId}>
+          <Col key={productItem.itemId}>
             <Card
               className="h-100 shadow-sm"
               style={{ cursor: "pointer", border: "none" }}
               onClick={() => navigate(`/shop/products/${productItem.product.productId}`)}
             >
               <div className="overflow-hidden" style={{ height: "200px" }}>
-                <Card.Img
+              <Card.Img
                   variant="top"
                   src={productItem.product.images && productItem.product.images.length > 0 ? `/api/images/${productItem.product.images[0]}` : "https://via.placeholder.com/150"}
                   alt={productItem.product.productName}
