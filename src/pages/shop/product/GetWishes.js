@@ -156,7 +156,7 @@ const Wishes = () => {
         }}
       >
         {products.map((productItem) => (
-          <Col key={productItem.itemId}>
+          <Col key={productItem.product.productId}>
             <Card
               className="h-100 shadow-sm"
               style={{ cursor: "pointer", border: "none" }}
