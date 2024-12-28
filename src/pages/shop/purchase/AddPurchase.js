@@ -226,7 +226,7 @@ const AddPurchase = () => {
                     <Col xs={3}>
                       <Card.Img
                         variant="top"
-                        src={item.product.image || "https://via.placeholder.com/64"}
+                        src={item.product.images && item.product.images.length > 0 ? `/api/images/${item.product.images[0]}`: "https://via.placeholder.com/64"}
                         style={{ width: "64px", height: "64px", objectFit: "cover" }}
                       />
                     </Col>

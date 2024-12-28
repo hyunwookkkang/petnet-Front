@@ -165,7 +165,7 @@ const Wishes = () => {
               <div className="overflow-hidden" style={{ height: "200px" }}>
                 <Card.Img
                   variant="top"
-                  src={productItem.product.image || "https://via.placeholder.com/150"}
+                  src={productItem.product.images && productItem.product.images.length > 0 ? `/api/images/${productItem.product.images[0]}` : "https://via.placeholder.com/150"}
                   alt={productItem.product.productName}
                   style={{ objectFit: "cover", height: "100%" }}
                 />
