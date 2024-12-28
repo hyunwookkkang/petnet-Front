@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Image } from "react-bootstrap";
 
 import LoginModal from "../../common/modal/LoginModal";
 import CommentAddModal from "./CommentAddModal";
@@ -10,7 +11,6 @@ import { useUser } from "../../contexts/UserContext";
 
 import "../../../styles/Main.css";
 import "../../../styles/community/Comment.css";
-import { Image } from "react-bootstrap";
 
 
 const ViewTopicCommentInfo = ({comment, setComments, setReComments, reCommentCount}) => {
@@ -61,7 +61,7 @@ const ViewTopicCommentInfo = ({comment, setComments, setReComments, reCommentCou
   // 댓글 삭제 버튼 클릭 시 처리
   const deleteCommentHandler = () => {
     // 작성자 검사
-    if ( !( ["0","1"].includes(userRole) || isAuthor ) ) {
+    if ( !( ["0","1"].includes(userRole) || isAuthor) ) {
       console.log("잘못된 요청입니다.");
       return;
     }

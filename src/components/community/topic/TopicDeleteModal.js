@@ -20,7 +20,7 @@ const TopicDeleteModal = ({showModal, setShowModal, topic}) => {
   const deleteTopicHandler = async () => {
     try {
       await fetchDeleteTopic(topic.topicId);
-      navigate(-1);
+      navigate(`/community`);
       showSuccessToast(`게시글이 삭제되었습니다`);
     }
     catch(err) {
