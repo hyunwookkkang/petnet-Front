@@ -23,7 +23,7 @@ const GetTopicInfo = () => {
 
   const { topicId } = useParams(); // URL에서 topicId를 추출 (수정 시에 필요)
 
-  const { userId } = useUser(); // 사용자 ID 가져오기
+  const { userId, userRole } = useUser(); // 사용자 ID 가져오기
   const { fetchGetTopic /* , loading , error */ } = useFetchGetTopic();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -94,8 +94,9 @@ const GetTopicInfo = () => {
             <FaUser style={{ marginRight: '5px', fontSize: '20px' }} /> 
             {topic.author.nickname}
           </span>
-          { isAuthor ? (
-            <div>
+          <div>
+            {/* 게시글 수정 버튼 */}
+            { isAuthor && (
               <Button 
                 as={Link} 
                 to={`/editTopic/${topicId}`} 
@@ -104,6 +105,9 @@ const GetTopicInfo = () => {
               >
                 수정
               </Button>
+            )}
+            {/* 게시글 삭제 버튼 */}
+            { (["0","1"].includes(userRole) || isAuthor) && (
               <Button 
                 variant='link'
                 className="topic-text-button"
@@ -111,8 +115,8 @@ const GetTopicInfo = () => {
               >
                 삭제
               </Button>
+            )}
             </div>
-          ) : "" }
         </div>
         {/* 날짜 및 조회수 */}
         <div className="topic-meta">
