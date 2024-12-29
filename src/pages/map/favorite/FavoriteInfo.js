@@ -98,9 +98,6 @@ const FavoriteInfo = () => {
                 <div>
                     <h2><strong>장소 이름:</strong> {place.placeName || "정보 없음"}</h2>
                 </div>
-                <div>
-                    <h2><strong>운영 시간:</strong> {place.operTime || "정보 없음"}</h2>
-                </div>
                 </div>
                 <Button
                 style={{
