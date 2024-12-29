@@ -246,7 +246,10 @@ if (!place) return <div>...🐾🐾🐾🐾조금만 기다려주세용</div>;
               🐈 반려동물 제한 몸무게: 
               {place.entrnPosblPetSizeValue}
             </p>
-            <p>
+            <p
+            style={{
+              fontSize: '15px'
+            }}>
               🖥️ 홈페이지: 
               {place.hmpgUrl}
             </p>

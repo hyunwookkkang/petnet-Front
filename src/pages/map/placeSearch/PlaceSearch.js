@@ -304,7 +304,7 @@ const PlaceSearch = () => {
 
             return (
               <Grid item xs={12} key={place.placeId}>
-                <Link to={`/place/${place.placeId}`} style={{ textDecoration: "none" }}>
+                <Link to={`/placeInfo/${place.placeId}`} style={{ textDecoration: "none" }}>
                   <Card className="common-card" sx={{ display: "flex", mb: 3 }}>
                     <CardMedia
                       component="img"
