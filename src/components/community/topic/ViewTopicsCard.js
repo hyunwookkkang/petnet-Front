@@ -11,12 +11,13 @@ import "../../../styles/Main.css"; // 기존 스타일 재사용
 
 const ViewTopicsCard = ({category, title, description}) => {
 
-  const navigate = useNavigate();
-
   const { fetchGetTopics /* , loading: cLoading, error: cError */ } = useFetchGetTopics();
   const { fetchGetHotTopics /* , loading: hLoading, error: hError */ } = useFetchGetHotTopics();
 
   const [topics, setTopics] = useState([]);
+
+  const navigate = useNavigate();
+  
 
 
   // 페이지 초기화
@@ -25,7 +26,7 @@ const ViewTopicsCard = ({category, title, description}) => {
       "category": category,
       "offset": 4
     }
-    const fetchTopics = !isNaN(category) ? fetchGetTopics : fetchGetHotTopics
+    const fetchTopics = (category === 'hot') ? fetchGetHotTopics : fetchGetTopics;
 
     const callFetchTopics = async () => {
       const response = await fetchTopics(search);
@@ -70,16 +71,15 @@ const ViewTopicsCard = ({category, title, description}) => {
           <div className="topics-footer">
             { category === 'hot' ? ( 
               <TopicLikeCount likeCount={topic.likeCount} />
-            ) : (
+            ): (
               <span className="topics-author">
-                {topic.author.nickname}
+                  {topic.author && topic.author.nickname ? topic.author.nickname : '익명'}
               </span>
             )}
             <span className="topics-date">
               {topic.addDateYMD}
             </span>
           </div>
-
         </li>
       </Link>
       
@@ -96,19 +96,19 @@ const ViewTopicsCard = ({category, title, description}) => {
           <Card.Title className="section-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom:"0px" }}>
             <h3 style={{marginBottom:"0px"}}>{ title }</h3>
             <span
-              onClick={() => navigate("/community", { state: { 'category': category } })}
-              style={{
-                cursor: "pointer",
-                color: "#FF6347",
-                fontSize: "14px",
-                fontWeight: "bold",
-              }}
-            >
-              더 보러가기 &gt;
-            </span>
+                onClick={() => navigate("/community")}
+                style={{
+                  cursor: "pointer",
+                  color: "#FF6347",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  }}
+              >
+                더 보러가기 &gt;
+              </span>
           </Card.Title>
 
-          { description && (
+            {description && (
             <div
               style={{
                 textAlign: "left",
@@ -119,7 +119,7 @@ const ViewTopicsCard = ({category, title, description}) => {
             >
               {description}
             </div>
-          )}
+            )}
 
           { topics.length === 0 ? ( 
             <h6><br/>아직 {title}이 없어요</h6>
