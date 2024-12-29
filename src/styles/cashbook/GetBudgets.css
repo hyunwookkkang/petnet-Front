@@ -1,149 +1,117 @@
-.budgets-container {
-  padding: 40px;
+.cashbook-budgets-container {
+  padding: 20px;
   background-color: #f9f9f9;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
 }
 
-.budgets-header {
+.cashbook-budgets-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.budgets-header h2 {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-}
-
-.reset-button,
-.settings-button {
-  padding: 10px 20px;
+.cashbook-budgets-header h2 {
+  margin: 0;
+  background-color: #eea092;
+  color: white;
+  padding: 8px 16px;
   border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.reset-button {
-  background-color: #f44336;
-  color: white;
-  margin-right: 15px;
-}
-
-.reset-button:hover {
-  background-color: #d32f2f;
-}
-
-.settings-button {
-  background-color: #4caf50;
-  color: white;
-}
-
-.settings-button:hover {
-  background-color: #388e3c;
-}
-
-.budgets-summary {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
+  border-radius: 4px;
   font-size: 20px;
-  font-weight: bold;
-}
-
-.budgets-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.budget-item {
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  padding: 20px 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.budget-category {
-  display: flex;
-  align-items: center;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.budget-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.budget-info div {
-  flex: 1;
+  width: 100px;
   text-align: center;
 }
 
-.budget-info .progress-container {
-  flex: 2;
-  margin-top: 10px;
+.cashbook-reset-button,
+.cashbook-settings-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.cashbook-reset-button {
+  background-color: #f44336;
+  color: white;
+  margin-right: 10px;
+}
+
+.cashbook-settings-button {
+  background-color: #ecb392;
+  color: white;
+  margin-right: 10px;
+  padding: 8px 16px;
+}
+
+.cashbook-budgets-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 17px;
+}
+
+.cashbook-budgets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cashbook-budget-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.cashbook-budget-category {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
 }
 
 .progress-container {
+  display: flex;
+  align-items: center;
   width: 100%;
   margin-top: 10px;
 }
 
-progress {
+.progress {
+  height: 20px;
   width: 100%;
-  height: 30px;
-  border-radius: 10px;
-}
-
-progress[value] {
-  background-color: #e0e0e0;
-}
-
-progress[value]::-webkit-progress-bar {
-  background-color: #e0e0e0;
-  border-radius: 10px;
-}
-
-progress[value]::-webkit-progress-value {
-  border-radius: 10px;
-  background-color: #4caf50;
 }
 
 .progress-bar {
-  height: 30px;
+  font-size: 12px;
+  color: white;
+  text-align: center;
+  line-height: 20px;
   border-radius: 10px;
 }
 
-.progress-text {
+.bg-success {
+  background-color: #4caf50 !important;
+}
+
+.bg-danger {
+  background-color: #f44336 !important;
+}
+
+.cashbook-budget-details {
   display: flex;
-  justify-content: space-between;
+  gap: 20px;
   font-size: 14px;
-  margin-top: 5px;
+  color: #333;
 }
 
-.budget-details {
-  font-size: 16px;
-  margin-bottom: 20px;
-}
-
-.budget-details div:last-child {
-  margin-top: 10px;
-  font-size: 18px;
+.cashbook-budget-details > div {
+  text-align: center;
 }

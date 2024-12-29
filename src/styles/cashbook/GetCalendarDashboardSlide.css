@@ -7,7 +7,7 @@
   background-color: white;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
   overflow-y: auto;
-  z-index: 1500;
+  z-index: 1100;
   transform: translateX(0); /* 강제로 화면에 표시 */
   padding: 20px; /* 패널 내 여백 */
   border-top-right-radius: 0; /* 오른쪽 상단 모서리는 둥글지 않게 */
@@ -16,8 +16,11 @@
   border-bottom-left-radius: 20px; /* 왼쪽 하단 모서리만 둥글게 */
   margin-bottom: 20px; /* 각 필드의 아래 여백 */
   transition: transform 100s ease-in-out; /* 슬라이드 열고 닫을 때 애니메이션 적용 */
+  overflow-y: auto;
 }
-
+.cashbook-Calendar-slide-drawer.hidden {
+  display: none; /* 숨김 처리 */
+}
 .cashbook-Calendar-slide-header {
   padding: 20px;
   border-bottom: 1px solid #ddd;

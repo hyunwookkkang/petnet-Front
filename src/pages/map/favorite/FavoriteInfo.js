@@ -92,7 +92,7 @@ const FavoriteInfo = () => {
                 }} // Flexbox 추가
             >
                 <div
-                onClick={() => navigate(`/place/${place.placeId}`)}
+                onClick={() => navigate(`/placeInfo/${place.placeId}`)}
                 style={{ cursor: "pointer", flex: 1 }}
                 >
                 <div>

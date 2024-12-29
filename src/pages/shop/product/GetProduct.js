@@ -5,9 +5,12 @@ import { Cart3, Heart, HeartFill } from "react-bootstrap-icons";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "../../../components/contexts/UserContext";
 import "../../../styles/place/Place.css";
-import ProductPost from "../productPost/GetProductPosts";
+import GetProductPost from "../productPost/GetProductPosts";
 import ProductImage from "./GetProductImage";
-import ProductPosts from "../productPost/GetProductPosts";
+import GetProductPosts from "../productPost/GetProductPosts";
+import { showErrorToast, showSuccessToast } from '../../../components/common/alert/CommonToast';
+import { Snackbar } from "@mui/material";
+import LoginModal from "../../../components/common/modal/LoginModal";
 
 const GetProduct = () => {
   const { productId } = useParams();
@@ -19,6 +22,10 @@ const GetProduct = () => {
   const [loading, setLoading] = useState(true);
   const [wishList, setWishList] = useState([]);
   const [cartList, setCartList] = useState([]);
+  
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   // 상품 정보 및 위시리스트, 장바구니 정보 가져오기
   useEffect(() => {
@@ -63,7 +70,7 @@ const GetProduct = () => {
   // 위시리스트 추가/제거
   const toggleWish = async (productId) => {
     if (!userId) {
-      alert("로그인이 필요합니다.");
+      setShowLoginModal(true);
       return;
     }
 
@@ -74,12 +81,12 @@ const GetProduct = () => {
         // 위시리스트에서 제거
         await axios.delete(`/api/shop/products/wish/${productId}`);
         updatedWishList = wishList.filter((id) => id !== productId);
-        alert("찜 목록에서 제거되었습니다.");
+        showSuccessToast("찜 목록에서 제거되었습니다.");
       } else {
         // 위시리스트에 추가
         await axios.post(`/api/shop/products/wish/${productId}`);
         updatedWishList = [...wishList, productId];
-        alert("찜 목록에 물건이 추가되었습니다.");
+        showSuccessToast("찜 목록에 물건이 추가되었습니다.");
       }
 
       setWishList(updatedWishList);
@@ -97,13 +104,13 @@ const GetProduct = () => {
   // 장바구니 추가
   const addToCart = async (productId) => {
     if (!userId) {
-      alert("로그인이 필요합니다.");
-      navigate("/login");
+      setShowLoginModal(true);
       return;
     }
 
     if (cartList.includes(productId)) {
-      alert("이미 장바구니에 있는 상품입니다.");
+      setSnackbarMessage("이미 장바구니에 있는 상품입니다.");
+      setShowSnackbar(true);
       return;
     }
 
@@ -120,7 +127,7 @@ const GetProduct = () => {
         isInCart: true,
       }));
 
-      alert("장바구니에 물건이 추가되었습니다.");
+      showSuccessToast("장바구니에 물건이 추가되었습니다.");
     } catch (error) {
       console.error("장바구니 추가 오류:", error);
     }
@@ -129,18 +136,25 @@ const GetProduct = () => {
   // 구매 처리
   const handlePurchase = async () => {
     if (!userId) {
-      alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
+      setShowLoginModal(true);
       return;
     }
-
+  
     try {
-      await axios.post("/api/shop/purchase", { userId, productId });
-      alert("구매가 완료되었습니다!");
+      // 장바구니에 상품이 있는지 확인
+      if (!cartList.includes(Number(productId))) {
+        // 장바구니에 상품을 추가
+        await addToCart(Number(productId));  // 이미 있는 addToCart 함수 호출
+      }
+  
+      // 장바구니 페이지로 이동
+      navigate(`/shop/products/cart/${userId}`);
     } catch (error) {
       console.error("구매 처리 오류:", error);
-      alert("구매 처리에 실패했습니다.");
+      showErrorToast("구매 처리에 실패했습니다.");
     }
   };
+  
 
   if (loading) {
     return (
@@ -223,9 +237,23 @@ const GetProduct = () => {
           </div>
         </Tab>
         <Tab eventKey="posts" title="리뷰">
-          <ProductPosts productId={productId} />
+          <GetProductPosts productId={productId} />
         </Tab>
       </Tabs>
+
+
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+      />
+
+      <Snackbar
+        open={showSnackbar}
+        message={snackbarMessage}
+        onClose={() => setShowSnackbar(false)}
+        autoHideDuration={1200}
+      />
+
     </Container>
   );
 };

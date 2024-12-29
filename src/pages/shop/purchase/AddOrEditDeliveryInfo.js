@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Container, Form, Button, Spinner } from "react-bootstrap";
 import AddDeliveryAddress from "./AddDeliveryAddress";
+import { showErrorToast, showSuccessToast } from '../../../components/common/alert/CommonToast';
 
 const AddOrEditDeliveryInfo = () => {
   const { deliveryInfoId } = useParams(); // 배송지 ID 파라미터
@@ -33,7 +34,7 @@ const AddOrEditDeliveryInfo = () => {
         })
         .catch((err) => {
           console.error("배송지 정보를 불러오는 중 오류 발생:", err);
-          alert("배송지 정보를 불러오는 중 오류가 발생했습니다.");
+          showErrorToast("배송지 정보를 불러오는 중 오류가 발생했습니다.");
         })
         .finally(() => setLoading(false)); // 로딩 종료
     }
@@ -63,12 +64,12 @@ const AddOrEditDeliveryInfo = () => {
 
     axios[httpMethod](apiUrl, formData)
       .then(() => {
-        alert(deliveryInfoId ? "배송지가 수정되었습니다!" : "배송지가 추가되었습니다!");
+        showSuccessToast(deliveryInfoId ? "배송지가 수정되었습니다!" : "배송지가 추가되었습니다!");
         navigate("/deliveryInfo");
       })
       .catch((err) => {
         console.error("배송지 처리 중 오류 발생:", err);
-        alert("배송지 처리 중 오류가 발생했습니다.");
+        showErrorToast("배송지 처리 중 오류가 발생했습니다.");
       });
   };
 

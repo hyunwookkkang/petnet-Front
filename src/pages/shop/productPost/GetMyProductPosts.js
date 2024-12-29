@@ -1,108 +1,121 @@
-import React, { useEffect, useState } from "react";
-import { Card, Button, Spinner } from "react-bootstrap";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { Modal, Upload, DatePicker, Input, Image, Button, Card } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { useUser } from "../../../components/contexts/UserContext";
+import { showErrorToast, showSuccessToast } from "../../../components/common/alert/CommonToast";
+import UpdateProductPostModal from "./UpdateProductPostModal"
 import { useNavigate } from "react-router-dom";
 
-const MyProductPosts = () => {
-  const [posts, setPosts] = useState([]); // 리뷰 목록
-  const [loading, setLoading] = useState(true); // 로딩 상태
+const GetMyPlacePosts = () => {
+  const { userId } = useUser();
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [currentPost, setCurrentPost] = useState(null);
   const navigate = useNavigate();
 
-  // API 엔드포인트
-  const apiEndpoint = "/api/shop/productPost/myProductPost";
+  // 리뷰 목록 가져오기
+  useEffect(() => {
+    if (userId) fetchMyPlacePosts();
+  }, [userId]);
 
-  // 사용자 리뷰 데이터 가져오기
-  const fetchMyProductPosts = async () => {
-    setLoading(true); // 로딩 시작
+  const fetchMyPlacePosts = async () => {
     try {
-      const response = await axios.get(apiEndpoint);
-      setPosts(response.data); // 리뷰 데이터 저장
+      setLoading(true);
+      const response = await fetch(`/api/shop/productPost/myProductPost`);
+      const data = await response.json();
+
+      // postId로 중복 제거
+      const uniquePosts = data.reduce((acc, post) => {
+        if (!acc.find((item) => item.productPostId === post.productPostId)) {
+          acc.push(post);
+        }
+        return acc;
+      }, []);
+
+      setPosts(uniquePosts);
+      setLoading(false);
     } catch (error) {
-      console.error("Error fetching product posts:", error);
-    } finally {
-      setLoading(false); // 로딩 종료
+      console.error("Error fetching place posts:", error);
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchMyProductPosts(); // 컴포넌트 로드 시 데이터 가져오기
-  }, []);
+  const handleEdit = (post) => {
+    setCurrentPost(post);
+    setShowModal(true);
+  };
 
-  // 로딩 중 표시
-  if (loading) {
-    return (
-      <div className="text-center py-5">
-        <Spinner animation="border" variant="secondary" />
-        <p className="mt-3" style={{ fontSize: "1.5rem", color: "#888" }}>
-          리뷰 정보를 불러오는 중입니다...
-        </p>
-      </div>
-    );
-  }
+  const handleDelete = async (productPostId) => {
+    try {
+      const response = await fetch(`/api/shop/productPost/${productPostId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        showSuccessToast("게시물이 성공적으로 삭제되었습니다.");
+        fetchMyPlacePosts();
+      } else {
+        throw new Error("삭제 요청 실패");
+      }
+    } catch (error) {
+      console.error("Error deleting place post:", error);
+      showErrorToast("게시물 삭제에 실패했습니다.");
+    }
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setCurrentPost(null);
+  };
+
+  const handleNavigation = (productId) => {
+    navigate(`/shop/products/${productId}`);
+  };
+
+  if (loading) return <p>리뷰 목록을 불러오는 중입니다...</p>;
+  if (posts.length === 0) return <p>작성한 리뷰가 없습니다.</p>;
 
   return (
-    <div style={{ padding: "20px", backgroundColor: "#FFF5EF", border: "2px solid #FF7826" }}>
-      <h1 style={{ color: "#FF7826", marginBottom: "20px" }}>내가 작성한 리뷰</h1>
+    <div style={{ maxWidth: "800px", margin: "auto" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>내가 쓴 리뷰</h2>
+      {posts.map((post) => (
+        <Card key={post.postId} style={{ marginBottom: "20px" }}>
+          <Card.Meta
+            title={
+              <span
+                onClick={() => handleNavigation(post.product.productId)}
+                style={{ cursor: "pointer", color: "#1890ff" }}
+              >
+                {post.product.productName || "상품 이름 없음"}
+              </span>
+            }
+            description={
+              <>
+                <p>작성일: {new Date(post.addDate).toLocaleDateString()}</p>
+                <p>최종 수정일: {new Date(post.updateDate).toLocaleDateString()}</p>
+                <p>{post.content}</p>
+              </>
+            }
+          />
+          <div style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
+            <Button onClick={() => handleEdit(post)}>수정</Button>
+            <Button danger onClick={() => handleDelete(post.productPostId)}>
+              삭제
+            </Button>
+          </div>
+        </Card>
+      ))}
 
-      {/* 리뷰 목록 출력 */}
-      {posts.length === 0 ? (
-        <p style={{ textAlign: "center", color: "#888" }}>작성한 리뷰가 없습니다.</p>
-      ) : (
-        posts.map((post) => (
-          <Card
-            key={post.productPostId}
-            style={{ marginBottom: "15px", padding: "15px", position: "relative" }}
-          >
-            <Card.Body>
-              <Card.Text>
-                <strong>작성자:</strong> {post.userId || "익명"}
-              </Card.Text>
-              <Card.Text>
-                <strong>상품명:</strong> {post.product.productName}
-              </Card.Text>
-              <Card.Text>
-                <strong>작성일:</strong> {new Date(post.addDate).toLocaleDateString()}
-              </Card.Text>
-              <Card.Text>
-                <strong>리뷰 내용:</strong> {post.content}
-              </Card.Text>
-
-              {/* 이미지가 있을 경우 이미지 표시 */}
-              {post.images && post.images.length > 0 && (
-                <div>
-                  <strong>리뷰 이미지:</strong>
-                  <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                    {post.images.map((image, index) => (
-                         <img
-                           key={index}
-                            src={`/api/images/${image}`} // 이미지 URL 동적 생성
-                            alt={`Review Image ${index}`}
-                            style={{ width: "100px", height: "100px", objectFit: "cover" }}
-                          />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </Card.Body>
-          </Card>
-        ))
-      )}
-
-      {/* 리뷰가 없을 경우 */}
-      {posts.length > 0 && (
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <Button
-            style={{ backgroundColor: "#FF6347", borderColor: "#FF6347" }}
-            size="lg"
-            className="d-block w-100"
-            onClick={() => navigate("/productPosts")} // 다른 페이지로 이동하는 버튼
-          >
-            다른 리뷰 보기
-          </Button>
-        </div>
-      )}
+      {/* 수정 모달 */}
+      <UpdateProductPostModal
+        isOpen={showModal}
+        onClose={handleModalClose}
+        onSubmit={fetchMyPlacePosts}
+        post={currentPost}
+      />
     </div>
   );
 };
 
-export default MyProductPosts;
+export default GetMyPlacePosts;

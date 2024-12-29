@@ -94,7 +94,7 @@ const RefundPurchases = () => {
 
   // 상태 텍스트 반환 함수
   const getPurchaseStatus = (status) => {
-    switch (status) {
+    switch (Number(status)) {
       case 0: return "상품 준비중";
       case 1: return "배송중";
       case 2: return "배송완료";

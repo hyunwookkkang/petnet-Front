@@ -4,24 +4,24 @@
   max-width: 900px; /* 최대 너비를 900px로 제한 */
   margin: 0 auto; /* 가로로 중앙 정렬 */
   text-align: center; /* 텍스트를 가운데 정렬 */
-  margin-top: 20px; /* 상단 여백을 20px로 설정 */
+  margin-top: 10px; /* 상단 여백을 20px로 설정 */
 }
 
 /* 연간 지출 통계 제목 */
 .cashbook-annual-expense-statsh2 {
-  margin-top: 30px; /* 제목 위에 여백을 30px로 설정 */
+  margin-top: 10px; /* 제목 위에 여백을 30px로 설정 */
 }
 
 /* 차트 컨테이너 */
 .cashbook-chart-container {
   margin: 20px 0; /* 상하 여백을 20px로 설정 */
-  width: 100%; /* 부모 요소에 맞게 100% 너비로 설정 */
   max-width: 100%; /* 최대 너비를 100%로 설정 */
+  height: 200px; /* 높이를 400px로 설정 */
 }
 
 /* 월별 지출 리스트 스타일 */
 .cashbook-monthly-expense-list {
-  margin-top: 20px; /* 리스트 상단 여백을 20px로 설정 */
+  margin-top: 10px; /* 리스트 상단 여백을 20px로 설정 */
 }
 
 /* 월별 지출 항목 스타일 */

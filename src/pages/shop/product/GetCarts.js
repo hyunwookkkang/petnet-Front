@@ -4,6 +4,9 @@ import axios from "axios";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
 import { useUser } from "../../../components/contexts/UserContext";
 import { Cart3, Heart } from "react-bootstrap-icons";
+import { showErrorToast, showSuccessToast } from '../../../components/common/alert/CommonToast';
+import { Snackbar } from "@mui/material";
+import LoginModal from "../../../components/common/modal/LoginModal";
 
 const Carts = () => {
   const { userId } = useUser();
@@ -12,14 +15,16 @@ const Carts = () => {
   const [error, setError] = useState(null); // 에러 상태
   const [selectedItems, setSelectedItems] = useState(new Set()); // 선택된 항목 관리
   const navigate = useNavigate();
+    
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   // 장바구니 데이터 가져오기
   useEffect(() => {
-    // userId가 null일 경우 로그인 페이지로 네비게이션
-    if (userId === null) {
-      setError("로그인이 필요합니다.");
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
+    // 로그인 검사
+    if (!userId) {
+      setShowLoginModal(true);
       return;
     }
 
@@ -45,7 +50,8 @@ const Carts = () => {
   // 수량 변경 처리 함수
   const handleQuantityChange = async (itemId, newQuantity) => {
     if (newQuantity < 1) {
-      alert("최소 수량은 1개입니다.");
+      setSnackbarMessage("최소 수량은 1개입니다.");
+      setShowSnackbar(true);
       return;
     }
 
@@ -65,7 +71,7 @@ const Carts = () => {
       });
     } catch (error) {
       console.error("수량 업데이트 오류:", error);
-      alert("수량 변경 중 오류가 발생했습니다.");
+      showErrorToast("수량 변경 중 오류가 발생했습니다.");
     }
   };
 
@@ -86,14 +92,14 @@ const Carts = () => {
       for (let itemId of selectedItems) {
         await axios.delete(`/api/shop/products/cart/${itemId}`);
       }
-      alert("선택된 상품이 장바구니에서 삭제되었습니다.");
+      showSuccessToast("선택된 상품이 장바구니에서 삭제되었습니다.");
       // 삭제 후 다시 장바구니 항목을 업데이트
       const response = await axios.get(`/api/shop/products/cart/${userId}`);
       setProducts(response.data);
       setSelectedItems(new Set()); // 선택된 항목 초기화
     } catch (error) {
       console.error("장바구니에서 삭제하는 데 실패했습니다.", error);
-      alert("장바구니에서 삭제하는 데 실패했습니다.");
+      showErrorToast("장바구니에서 삭제하는 데 실패했습니다.");
     }
   };
 
@@ -164,7 +170,7 @@ const Carts = () => {
               <div className="overflow-hidden" style={{ height: "200px" }}>
                 <Card.Img
                   variant="top"
-                  src={productItem.product.image || "https://via.placeholder.com/150"}
+                  src={productItem.product.images && productItem.product.images.length > 0 ? `/api/images/${productItem.product.images[0]}` : "https://via.placeholder.com/150"}
                   alt={productItem.product.productName}
                   style={{ objectFit: "cover", height: "100%" }}
                 />
@@ -270,6 +276,21 @@ const Carts = () => {
           구매하기
         </Button>
       </div>
+
+
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+        required={true}
+      />
+
+      <Snackbar
+        open={showSnackbar}
+        message={snackbarMessage}
+        onClose={() => setShowSnackbar(false)}
+        autoHideDuration={1200}
+      />
+
     </Container>
   );
 };

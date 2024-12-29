@@ -9,13 +9,16 @@ function useFetchGetHotTopics() {
   const [error, setError] = useState(null);
 
   // 비동기 함수로 API 호출
-  const fetchGetHotTopics = useCallback(async () => {
+  const fetchGetHotTopics = useCallback(async (search) => {
     // 상태 초기화
     setLoading(true);
     setError(null);
 
+    const offset = search ? search.offset : 0;
+
     // set query string
-    const request = `/api/topics/hot`;
+    const request = `/api/topics/hot`
+                  + `?offset=${offset}`;
     try {
       // axios로 get 요청 보내기
       const response = await axios.get(request);

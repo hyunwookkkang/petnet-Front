@@ -1,22 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/cashbook/GetLoadExpenseLog.css";
 import { useUser } from "../../components/contexts/UserContext";
-import { useNavigate } from "react-router-dom";
 import { fetchPurchaseLogs } from "./GetLoadExpenseLogAPI"; // API 함수 가져오기
 
-const GetLoadExpenseLog = ({ onSelectPurchase }) => {
+const GetLoadExpenseLog = ({ onSelectPurchase, isOpen }) => {
   const [purchaseLogs, setPurchaseLogs] = useState([]);
   const { userId } = useUser(""); // 사용자 ID 가져오기
-  const navigate = useNavigate();
-
-  // userId 유효성 확인 및 리다이렉트
-  useEffect(() => {
-    console.log("현재 userId:", userId);
-    if (!userId) {
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
-    }
-  }, [userId, navigate]);
 
   // 데이터 가져오기
   useEffect(() => {
@@ -26,9 +15,20 @@ const GetLoadExpenseLog = ({ onSelectPurchase }) => {
     }
   }, [userId]);
 
+  const handleSelectPurchase = (log) => {
+    // <--=================수정
+    if (onSelectPurchase) {
+      console.log("onSelectPurchase 호출됨:", log); // 선택된 데이터 로그
+      onSelectPurchase(log); // 상위 컴포넌트로 데이터 전달 <--=================수정
+    } else {
+      console.error("onSelectPurchase가 정의되지 않았습니다.");
+    }
+  };
+
   return (
     <div className="cashbook-get-load-expense-log">
       <h3 className="cashbook-title">펫넷 상점 주문 내역</h3>
+      {/* 주문 내역 */}
       <ul className="cashbook-purchase-list">
         {purchaseLogs.length === 0 ? (
           <p className="cashbook-empty-message">주문 내역이 없습니다.</p>
@@ -36,14 +36,7 @@ const GetLoadExpenseLog = ({ onSelectPurchase }) => {
           purchaseLogs.map((log, index) => (
             <li
               key={index}
-              onClick={() => {
-                if (onSelectPurchase) {
-                  console.log("onSelectPurchase 호출됨:", log);
-                  onSelectPurchase(log); // 부모의 handleOpenSlideWithData 호출
-                } else {
-                  console.error("onSelectPurchase가 정의되지 않았습니다.");
-                }
-              }}
+              onClick={() => handleSelectPurchase(log)} // <--=================수정
               className="cashbook-purchase-item"
             >
               {/* 지출 내용 */}
@@ -100,3 +93,6 @@ const GetLoadExpenseLog = ({ onSelectPurchase }) => {
 };
 
 export default GetLoadExpenseLog;
+//CashbookMain 내부에 handleSelectPurchase 함수가 선언되어 있습니다.
+//이 함수는 GetLoadExpenseLog 컴포넌트의 onSelectPurchase prop으로 전달됩니다.
+//**GetLoadExpenseLog**에서 onSelectPurchase를 호출하면, 실제로 CashbookMain의 handleSelectPurchase가 실행됩니다.

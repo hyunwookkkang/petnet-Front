@@ -4,6 +4,8 @@ import axios from "axios";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
 import { useUser } from "../../../components/contexts/UserContext";
 import { Heart, HeartFill, Cart3 } from "react-bootstrap-icons";
+import { showErrorToast, showSuccessToast } from '../../../components/common/alert/CommonToast';
+import LoginModal from "../../../components/common/modal/LoginModal";
 
 const Wishes = () => {
   const { userId } = useUser();
@@ -11,13 +13,13 @@ const Wishes = () => {
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState(null); // 에러 상태
   const navigate = useNavigate();
+  
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // 위시리스트 데이터 가져오기
   useEffect(() => {
-    if (userId === null) {
-      setError("로그인이 필요합니다.");
-      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-      navigate("/login");
+    if (!userId) {
+      setShowLoginModal(true);
       return;
     }
 
@@ -48,7 +50,7 @@ const Wishes = () => {
       setProducts(products.filter((productItem) => productItem.product.productId !== productId));
     } catch (error) {
       console.error("위시리스트 제거 오류:", error);
-      alert("위시리스트에서 제거 중 오류가 발생했습니다.");
+      showErrorToast("위시리스트에서 제거 중 오류가 발생했습니다.");
     }
   };
 
@@ -57,10 +59,10 @@ const Wishes = () => {
       // 장바구니에 추가 요청 (POST)
       await axios.post(`/api/shop/products/cart/${productId}`, { productId });
 
-      alert("장바구니에 추가되었습니다.");
+      showSuccessToast("장바구니에 추가되었습니다.");
     } catch (error) {
       console.error("장바구니 추가 오류:", error);
-      alert("장바구니에 추가 중 오류가 발생했습니다.");
+      showErrorToast("장바구니에 추가 중 오류가 발생했습니다.");
     }
   };
 
@@ -154,16 +156,16 @@ const Wishes = () => {
         }}
       >
         {products.map((productItem) => (
-          <Col key={productItem.product.productId}>
+          <Col key={productItem.itemId}>
             <Card
               className="h-100 shadow-sm"
               style={{ cursor: "pointer", border: "none" }}
               onClick={() => navigate(`/shop/products/${productItem.product.productId}`)}
             >
               <div className="overflow-hidden" style={{ height: "200px" }}>
-                <Card.Img
+              <Card.Img
                   variant="top"
-                  src={productItem.product.image || "https://via.placeholder.com/150"}
+                  src={productItem.product.images && productItem.product.images.length > 0 ? `/api/images/${productItem.product.images[0]}` : "https://via.placeholder.com/150"}
                   alt={productItem.product.productName}
                   style={{ objectFit: "cover", height: "100%" }}
                 />
@@ -224,6 +226,14 @@ const Wishes = () => {
           </Col>
         ))}
       </Row>
+
+
+      <LoginModal 
+        showModal={showLoginModal} 
+        setShowModal={setShowLoginModal}
+        required={true}
+      />
+
     </Container>
   );
 };

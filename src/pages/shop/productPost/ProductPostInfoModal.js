@@ -59,6 +59,9 @@ const ProductPostInfoModal = ({ isOpen, post, onClose }) => {
                 <p>
                   <strong>작성일:</strong> {post.addDate}
                 </p>
+                <p>
+                  <strong>최종 수정일:</strong> {post.updateDate}
+                </p>
               </div>
   
               {/* 리뷰 내용 */}

@@ -1,85 +1,78 @@
 /* SlideDrawer.css */
-
-/* 지출 등록 슬라이드 스타일 */
-.cashbook-slide-drawer-add {
-  position: fixed; /* 화면에 고정된 위치 */
-  top: 0; /* 화면 상단부터 시작 */
-  right: 0; /* 화면 우측에 붙음 */
-  width: 390px; /* 슬라이드 패널의 너비 설정 */
-  height: 100%; /* 화면 전체 높이 */
-  background-color: white; /* 배경색을 흰색으로 설정 */
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5); /* 좌측에 그림자 추가 */
-  padding: 20px; /* 내부 여백 설정 */
-  z-index: 1500; /* 다른 요소보다 위에 위치하지만 모달보다는 낮게 설정 */
-  transform: translateX(100%); /* 기본적으로 화면 오른쪽 밖으로 숨김 */
-  overflow-y: auto; /* 세로 방향 스크롤 추가 (내용이 많을 경우) */
-  transition: transform 0.3s ease-in-out; /* 슬라이드 열고 닫을 때 애니메이션 적용 */
-  border-top-right-radius: 0; /* 오른쪽 상단 모서리는 둥글지 않게 */
-  border-bottom-right-radius: 0; /* 오른쪽 하단 모서리도 둥글지 않게 */
-  border-top-left-radius: 30px; /* 왼쪽 상단 모서리만 둥글게 */
-  border-bottom-left-radius: 30px; /* 왼쪽 하단 모서리만 둥글게 */
+.slide-drawer {
+  position: fixed;
+  top: 0;
+  right: -100%; /* 슬라이드가 닫히면 화면 밖으로 사라짐 */
+  width: 400px; /* 모바일 화면에 맞게 조정 */
+  height: 100%;
+  background-color: white;
+  box-shadow: -4px 0 6px rgba(0, 0, 0, 0.2);
+  transform: translateX(100%); /* 기본적으로 오른쪽 밖에 위치 */
+  transition: transform 0.4s ease-in-out; /* 애니메이션 속도를 다소 느리게 설정 */
+  padding: 30px;
+  z-index: 1300;
+  overflow-y: auto; /* 스크롤 추가 */
+  border-top-left-radius: 20px; /* 왼쪽 상단 둥글게 */
+  border-bottom-left-radius: 20px; /* 왼쪽 하단 둥글게 */
+  border-top-right-radius: 0; /* 오른쪽 상단 둥글지 않게 */
+  border-bottom-right-radius: 0; /* 오른쪽 하단 둥글지 않게 */
 }
 
-.cashbook-slide-drawer-add.open {
-  transform: translateX(0); /* 슬라이드를 화면 안으로 가져옴 (열림 상태) */
+/*슬라이드가 열렸을 때 적용되는 스타일로 */
+.slide-drawer.open {
+  transform: translateX(0);
+  /* 슬라이드가 열릴 때 transform: translateX(0);으로 슬라이드를 화면 안으로 끌어온다.*/
+  right: 0; /* 슬라이드가 열릴 때 오른쪽에 위치 */
 }
 
-/* 슬라이드 닫기 버튼 스타일 */
-.cashbook-slide-drawer-add .close-button {
-  position: absolute; /* 부모 요소를 기준으로 위치 설정 */
-  top: 15px; /* 상단에서 15px 위치 */
-  right: 40px; /* 오른쪽에서 40px 위치 */
-  background-color: #ff6347; /* 닫기 버튼 배경색 */
-  color: #fff; /* 텍스트 색상은 흰색 */
-  border: none; /* 테두리 제거 */
-  border-radius: 50%; /* 버튼을 원형으로 설정 */
-  width: 30px; /* 버튼 너비 */
-  height: 30px; /* 버튼 높이 */
-  cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+/* SlideDrawer의 닫기 버튼 스타일 */
+.cashbook-close-button {
+  position: absolute; /* 부모 요소에서 상대적으로 위치 */
+  top: 15px; /* 화면 상단에서 15px 떨어지게 위치 */
+  right: 40px; /* 오른쪽에서 40px 떨어지게 위치 */
+  font-size: 1.4rem; /* 글씨 크기 */
+  color: black; /* 글씨 색상은 검정색 */
+  border: none; /* 기본 버튼 테두리 제거 */
+  border-radius: 50%; /* 둥근 모양의 버튼 */
+  width: 30px; /* 버튼의 너비 */
+  height: 30px; /* 버튼의 높이 */
+  cursor: pointer; /* 마우스를 올렸을 때 클릭할 수 있음을 표시하는 포인터 모양 */
 }
 
-/* 슬라이드 내부 콘텐츠 스타일 */
-.cashbook-slide-drawer-add .slide-content {
-  padding-top: 40px; /* 닫기 버튼과 콘텐츠 사이의 여백 설정 */
+.cashbook-close-button:hover {
+  background-color: #f0f0f0; /* 버튼에 마우스를 올렸을 때 배경색 변경 */
 }
 
-/* 입력 필드 스타일 */
-.cashbook-field {
-  margin-bottom: 20px; /* 입력 필드 간의 아래 여백 설정 */
+/*슬라이드가 열렸을 때 적용되는 스타일로 transform: translateX(0);으로 슬라이드를 화면 안으로 끌어온다.*/
+.drawer-content {
+  padding: 20px;
+  overflow-y: auto;
+  font-size: 16px; /* 모바일에서는 글자 크기를 줄여줌 */
 }
 
-.cashbook-field label {
-  display: block; /* 라벨을 블록 요소로 설정 (줄바꿈 적용) */
-  font-weight: bold; /* 글자를 굵게 설정 */
-  margin-bottom: 5px; /* 라벨과 입력 필드 사이의 여백 설정 */
-}
-
-.cashbook-field input {
-  width: 100%; /* 입력 필드 너비를 부모 요소에 맞게 설정 */
-  padding: 8px; /* 내부 여백 설정 */
-  border: 1px solid #ccc; /* 테두리 색상 설정 */
-  border-radius: 4px; /* 테두리를 둥글게 만듦 */
-}
-
-.floating-action-button {
-  position: flex;
-  bottom: 100px;
-  left: 50px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background-color: #ff6347;
-  color: #fff;
-  font-size: 30px;
+.drawer-content button {
+  background-color: #ff6b6b;
+  color: white;
+  padding: 12px 24px; /* 버튼 크기 조정 */
   border: none;
+  border-radius: 5px;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 9999;
+  font-size: 16px;
 }
 
-/* 모바일 화면에서 플로팅 버튼 보이도록 설정 
+.drawer-content button:hover {
+  background-color: #ff4f4f;
+}
+
+/* 모바일 화면에서 슬라이드 크기 조정 */
 @media (max-width: 768px) {
-  .floating-action-button {
-    left: 50px; /* 화면 왼쪽에 가까운 위치로 변경 */
-/*}*/
-/*}*/
+  .slide-drawer {
+    width: 90%; /* 모바일 화면에서는 너비를 90%로 설정 */
+  }
+}
+
+@media (max-width: 480px) {
+  .slide-drawer {
+    width: 100%; /* 작은 모바일 화면에서는 너비를 100%로 설정 */
+  }
+}

@@ -3,8 +3,8 @@
   position: fixed; /* 화면에 고정된 위치에 배치 */
   top: 0; /* 화면 상단에 위치 */
   right: 0; /* 화면 오른쪽에 위치 */
-  width: 400px !important; /* 패널 너비를 400px로 설정 */
-  height: 100%; /* 화면 높이에 맞게 높이 설정 */
+  width: 400px; /* 패널 너비를 400px로 설정 */
+  height: 150%; /* 화면 높이에 맞게 높이 설정 */
   background-color: white; /* 배경색을 흰색으로 설정 */
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5); /* 왼쪽에서 우측으로 그림자 추가 */
   transform: translateX(100%); /* 슬라이드가 오른쪽으로 벗어나 있는 상태 */
@@ -39,8 +39,8 @@
 
 /* 폼 필드 스타일 */
 .cashbook-field {
-  margin-bottom: 20px; /* 각 필드의 아래 여백 */
-  margin-top: 30px; /* 상단 여백 */
+  margin-bottom: 5px; /* 각 필드의 아래 여백 */
+  margin-top: 20px; /* 상단 여백 */
 }
 
 .cashbook-field label {
@@ -85,6 +85,7 @@
   border-radius: 4px; /* 둥근 모서리 */
   cursor: pointer; /* 클릭 가능한 포인터 커서 */
   width: 48%; /* 너비 48%로 설정 */
+  margin-top: 30px;
 }
 
 /* 삭제 버튼 스타일 */
@@ -96,6 +97,7 @@
   border-radius: 4px; /* 둥근 모서리 */
   cursor: pointer; /* 클릭 가능한 포인터 커서 */
   width: 48%; /* 너비 48%로 설정 */
+  margin-top: 30px;
 }
 
 /* 타이틀 박스 스타일 */
@@ -127,7 +129,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
   padding: 20px; /* 내부 여백 */
   text-align: center; /* 텍스트 중앙 정렬 */
-  z-index: 9999 !important; /* 다른 요소들보다 위에 표시 */
+  z-index: 1505 !important; /* 다른 요소들보다 위에 표시 */
 }
 
 /* 액션 버튼들을 가로로 배치 */

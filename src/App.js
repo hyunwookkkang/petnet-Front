@@ -70,13 +70,15 @@ import SearchTopics from "./pages/community/SearchTopics";
 
 // 가계부 관련 페이지
 import CashbookMain from "./pages/cashbook/CashbookMain";
+import HeaderCashbook from "./components/cashbook/HeaderCashbook";
+import SearchExpenses from "./pages/cashbook/SearchExpenses";
+
+import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
 import GetExpensesLog from "./pages/cashbook/GetExpensesLog";
 import GetCalendarsDashboard from "./pages/cashbook/GetCalendarsDashboard";
-import SlideDrawer from "./components/cashbook/SlideDrawer";
-
 import GetCalendarDashboard from "./pages/cashbook/GetCalendarDashboard";
-import GetstatisticsDashboards from "./pages/cashbook/GetstatisticsDashboards";
-import SearchExpenses from "./pages/cashbook/SearchExpenses";
+// import SlideDrawer from "./components/cashbook/SlideDrawer";
+
 import GetBudgets from "./pages/cashbook/GetBudgets";
 import GetBudgetSettings from "./pages/cashbook/GetBudgetSettings";
 
@@ -86,15 +88,6 @@ import AdminMainPage from "./pages/common/AdminMainPage";
 import PopularPlacesInfo from "./pages/map/place/PopularPlacesInfo";
 import GetUsers from "./pages/user/GetUsers";
 import UserDetails from "./pages/user/GetUserDetails";
-
-
-
-
-
-
-
-
-
 
 
 function App() {
@@ -192,30 +185,37 @@ function App() {
 
              {/* START : cashbook-page */}
              <Route path="/cashbook" element={<CashbookMain />} />
-              <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
-              <Route
-                path="/GetCalendarsDashboard"
-                element={<GetCalendarsDashboard />}
-              />
-              <Route path="/SlideDrawer" element={<SlideDrawer />} />
+              <Route path="/HeaderCashbook" element={<HeaderCashbook />} />
+              <Route path="/SearchExpenses" element={<SearchExpenses />} />
 
               <Route
                 path="/GetstatisticsDashboards"
                 element={<GetstatisticsDashboards />}
               />
+
+              <Route path="/GetExpensesLog" element={<GetExpensesLog />} />
+
               <Route
-                path="/GetCalendarDashboard"
-                element={<GetCalendarDashboard />}
+                path="/GetCalendarsDashboard"
+                element={<GetCalendarsDashboard />}
               />
               <Route path="/GetBudgets" element={<GetBudgets />} />
               <Route
                 path="/GetBudgetSettings"
                 element={<GetBudgetSettings />}
               />
-              <Route path="/SearchExpenses" element={<SearchExpenses />} />
+              <Route
+                path="/GetCalendarDashboard"
+                element={<GetCalendarDashboard />}
+              />
+              {/*<Route path="/SlideDrawer" element={<SlideDrawer />} />
+       
+     
 
+              
+     
+              
               {/* END : cashbook-page */}
-
           </Routes>
           </div>
         {/*하단 Nav 고정*/}

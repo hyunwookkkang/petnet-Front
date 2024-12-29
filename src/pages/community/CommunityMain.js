@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Container, ButtonGroup, Button } from "react-bootstrap";
 
 import { useUser } from "../../components/contexts/UserContext";
@@ -17,6 +17,7 @@ import "../../styles/community/TopicInfo.css";
 const CommunityMain = () => {
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { userId } = useUser();
 
@@ -32,6 +33,11 @@ const CommunityMain = () => {
     categoryStr: ''
   });
   
+  
+  useEffect(()=> {
+    categoryChangehandler(location.state?.category || 'all');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[location.state?.category]);
 
   useEffect(() => {
     switch (topicTab) {
@@ -54,7 +60,7 @@ const CommunityMain = () => {
   }
 
   
-  const categoryChangehandler = (e, tab) => {
+  const categoryChangehandler = (tab) => {
     if (!Number.isNaN(tab)) {
       setSearch(prevSearch => ({ ...prevSearch, category: tab }));
     }
@@ -62,7 +68,16 @@ const CommunityMain = () => {
       setSearch(prevSearch => ({ ...prevSearch, category: '' }));
     }
     setTopicTab(tab);
-    setSearch(prevSearch => ({ ...prevSearch, categoryStr: e.target.textContent }));
+    setSearch(prevSearch => ({ ...prevSearch, categoryStr: getCategoryStr(tab) }));
+  }
+
+  const getCategoryStr = (tab) => {
+    switch (tab) {
+      case '1': return "잡담";
+      case '2': return "질문";
+      case '3': return "후기";
+      default : return "???";
+    };
   }
 
   
@@ -86,27 +101,27 @@ const CommunityMain = () => {
       <ButtonGroup className="topic-tap-group" >
         <Button 
           className="topic-tap" 
-          onClick={(e) => categoryChangehandler(e, 'all')}
+          onClick={() => categoryChangehandler('all')}
         > 전체 
         </Button>
         <Button 
           className="topic-tap" 
-          onClick={(e) => categoryChangehandler(e, 'hot')}
+          onClick={() => categoryChangehandler('hot')}
         > 인기 
         </Button>
         <Button 
           className="topic-tap" 
-          onClick={(e) => categoryChangehandler(e, '1')}
+          onClick={() => categoryChangehandler('1')}
         > 잡담 
         </Button>
         <Button 
           className="topic-tap" 
-          onClick={(e) => categoryChangehandler(e, '2')}
+          onClick={() => categoryChangehandler('2')}
         > 질문 
         </Button>
         <Button 
           className="topic-tap" 
-          onClick={(e) => categoryChangehandler(e, '3')}
+          onClick={() => categoryChangehandler('3')}
         > 후기 
         </Button>
       </ButtonGroup>

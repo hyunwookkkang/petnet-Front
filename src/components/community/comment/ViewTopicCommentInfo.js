@@ -61,8 +61,8 @@ const ViewTopicCommentInfo = ({comment, setComments, setReComments, reCommentCou
   // 댓글 삭제 버튼 클릭 시 처리
   const deleteCommentHandler = () => {
     // 작성자 검사
-    if (!isAuthor) {
-      console.log("댓글의 작성자가 아닙니다.");
+    if ( !( ["0","1"].includes(userRole) || isAuthor ) ) {
+      console.log("잘못된 요청입니다.");
       return;
     }
     setShowDeleteModal(true);

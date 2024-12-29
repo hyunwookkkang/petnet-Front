@@ -1,12 +1,42 @@
 /* 월간 총액 스타일 설정 */
 .cashbook-monthly-total {
   text-align: center; /* 텍스트를 가운데 정렬 */
-  margin: 20px 0; /* 위아래 여백을 각각 20px 설정 */
+  margin: 0 auto; /* 좌우 여백 균등 */ /* 상단 10px, 하단 5px (선과의 간격을 줄임) */
   font-size: 1.5rem; /* 글자 크기를 1.5rem로 설정 */
-  margin-top: 35px;
-
+  margin-top: 15px;
   color: black;
+  display: flex; /* Flexbox 활성화 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  color: #ff5733; /* 강조 색상 */
+
+  width: 100%; /* 부모 컨테이너 크기와 일치 */
+  box-sizing: border-box; /* 패딩 포함 크기 계산 */
+
+  margin-bottom: 0; /* 하단 여백을 10px로 설정하여 밑공간 줄이기 */
 }
+
+cashbook-monthly-total strong {
+  min-width: 80px; /* 필요에 따라 숫자를 조정 */
+  display: inline-block;
+  flex-shrink: 0;
+  text-align: right; /* 숫자가 정렬되도록 설정 */
+}
+
+.cashbook-monthly-total + hr {
+  margin-top: 5px; /* hr 태그 위 여백을 5px로 설정 */
+  margin-bottom: 5px; /* hr 태그 아래 여백을 5px로 설정 */
+}
+.custom-hr {
+  margin-top: 10px !important; /* hr 태그 위 여백을 5px로 설정 */
+  margin-bottom: 10px !important; /* hr 태그 아래 여백을 5px로 설정 */
+  padding: 0 !important;
+}
+.mb-3 {
+  margin-top: 0px; /* hr 태그 위 여백을 5px로 설정 */
+  margin-bottom: 5px; /* hr 태그 아래 여백을 5px로 설정 */
+}
+
 /* 지출 카드의 전체 스타일 */
 .cashbook-expense-card {
   display: flex; /* 플렉스 박스 레이아웃 적용 */
@@ -39,6 +69,11 @@
   display: flex; /* 플렉스 박스를 사용해 내부 요소 배치 */
   flex-direction: column; /* 요소를 세로로 나열 */
   justify-content: center; /* 세로 방향으로 가운데 정렬 */
+  font-size: 15px;
+}
+
+.cashbook-expense-center {
+  font-size: 17px;
 }
 
 /* 카드 내부 왼쪽 영역 스타일 */
@@ -80,7 +115,7 @@
   color: #ffffff; /* 글자 색상 */
   background-color: #dc3545; /* 배경색 (Bootstrap danger 색상) */
   padding: 8px 12px; /* 안쪽 여백 */
-  margin: 10px 0 15px 0; /* 여백 설정 */
+  margin: 1px 0 15px 0; /* 여백 설정 */
   border-radius: 5px; /* 모서리 둥글게 */
   text-align: center; /* 텍스트 중앙 정렬 */
 }
@@ -88,6 +123,14 @@
 .custom-hr {
   border: none; /* 기본 border 제거 */
   border-top: 3px solid #e7162b; /* 구분선 두께와 색상 설정 */
-  margin: 10px 0; /* 상하 여백 */
+  margin: 30px 0; /* 상하 여백 */
   width: 100%; /* 구분선 너비 */
+}
+
+.cashbook-expense-category {
+  gap: 20px;
+}
+
+.infinite-scroll-component {
+  padding: 5px auto;
 }
