@@ -79,15 +79,10 @@
 ---
 
 ## 👨‍💻 담당 역할
-- 백엔드 API 설계 및 구현
-- 비즈니스 로직(Service Layer) 개발
-- MyBatis 기반 DB 연동
-- Spring Security + JWT 인증 처리
-- 일부 프론트엔드 연동 작업
-- AWS EC2 환경 배포 및 운영
+- 백엔드 API 설계 및 구현 (쇼핑몰, 포인트, 퀴즈 도메인)
+- Service Layer 중심의 비즈니스 로직 설계
+- MyBatis 기반 SQL 및 Mapper 작성
+- Spring Security + JWT 기반 인증/인가 구현
+- 프론트엔드와 REST API 연동
+- AWS EC2 + Docker 기반 배포 환경 구축
 
----
-
-## 🚀 실행 방법
-```bash
-./gradlew bootRun
